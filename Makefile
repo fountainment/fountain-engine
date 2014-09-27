@@ -1,7 +1,7 @@
-OBJS = main.o ft_time.o ft_3dmodel.o
+OBJS = main.o ft_time.o ft_3dmodel.o ft_render.o ft_input.o ft_data.o
 LIBS = -lGL -lX11
 CC = g++
-CFLAGS = -O
+CFLAGS = -Wall -O
 fountain: $(OBJS)
 	$(CC) $(OBJS) -o fountain $(LIBS)
 
@@ -14,5 +14,14 @@ ft_time.o: ft_time.cpp ft_time.h
 ft_3dmodel.o: ft_3dmodel.cpp ft_3dmodel.h
 	$(CC) $(CFLAGS) -c ft_3dmodel.cpp -o ft_3dmodel.o
 
+ft_render.o: ft_render.cpp ft_render.h
+	$(CC) $(CFLAGS) -c ft_render.cpp -o ft_render.o -lGL
+
+ft_input.o: ft_input.cpp ft_input.h ft_data.h
+	$(CC) $(CFLAGS) -c ft_input.cpp -o ft_input.o
+
+ft_data.o: ft_data.cpp ft_data.h
+	$(CC) $(CFLAGS) -c ft_data.cpp -o ft_data.o
+	
 clean:
 	rm -rf *.o fountain

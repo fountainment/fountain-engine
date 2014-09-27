@@ -1,9 +1,6 @@
 #ifndef _FT_3DMODEL_
 #define _FT_3DMODEL_
-
-typedef struct {
-	float xyz[3];
-} ftVec3;
+#include "ft_data.h"
 
 typedef struct {
 	int a, b, c;
@@ -22,8 +19,8 @@ namespace ft3DModel
 			ftVec3 v[100000];
 			ftVec3Index p[100000];
 		public:
-			explicit ObjModel(char *fileName);
-			void openFile(char *fileName);
+			explicit ObjModel(const char *fileName);
+			void openFile(const char *fileName);
 			void render();
 	};
 }

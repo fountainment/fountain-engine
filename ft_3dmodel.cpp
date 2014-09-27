@@ -9,12 +9,12 @@ void ft3DModel::init()
 
 using namespace ft3DModel;
 
-ObjModel::ObjModel(char *fileName)
+ObjModel::ObjModel(const char *fileName)
 {
 	ObjModel::openFile(fileName);
 }
 
-void ObjModel::openFile(char *fileName)
+void ObjModel::openFile(const char *fileName)
 {
 	char tmp;
 	int tmpInt;

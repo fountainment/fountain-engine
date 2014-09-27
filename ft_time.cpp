@@ -110,4 +110,3 @@ void Clock::Continue()
 	Clock::beginT = Clock::continueT = floatTime();
 	Clock::isPaused = 0;
 }
-

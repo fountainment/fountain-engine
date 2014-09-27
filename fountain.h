@@ -1,24 +1,19 @@
 #ifndef _FOUNTAIN_H_
 #define _FOUNTAIN_H_
 #include <string>
+#include "ft_data.h"
 #include "ft_time.h"
 #include "ft_3dmodel.h"
-
-typedef struct {
-	int w, h;
-	std::string title;
-} winState;
+#include "ft_render.h"
+#include "ft_input.h"
 
 namespace fountain
 {
-	winState mainWin;
-	ftTime::Clock mainClock();
-	
 	void checkSysState()
 	{
 
 	}
-	
+
 	void readSettingFile()
 	{
 
@@ -28,6 +23,8 @@ namespace fountain
 	{
 		mainWin.w = 800;
 		mainWin.h = 600;
+		mainWin.w4 = mainWin.w / 4;
+		mainWin.h4 = mainWin.h / 4;
 		mainWin.title = "fountain-prototype 0.03";
 	}
 
@@ -35,6 +32,8 @@ namespace fountain
 	{
 		ftTime::init();
 		ft3DModel::init();
+		ftRender::init();
+		ftInput::init();
 	}
 
 	void init()
