@@ -8,6 +8,10 @@ namespace ftRender
 {
 	void init();
 
+	void transformBegin();
+
+	void transformEnd();
+
 	class Camera
 	{
 		private:
@@ -20,6 +24,7 @@ namespace ftRender
 		public:
 			Camera(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 			void update();
+			void setPosition(float x, float y);
 			void setPosition(float x, float y, float z);
 			void setWinSize(int w, int h);
 			void setScale(float scale);

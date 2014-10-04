@@ -5,13 +5,42 @@
 
 typedef struct {
 	int w, h;
-	int w4, h4;
+	float w4, h4;
 	std::string title;
+	std::string icon;
+	bool isFullScreen;
+	bool hideCursor;
+
+	void setW(int wv)
+	{
+        w = wv;
+        w4 = w / 4.0f;
+	}
+
+	void setH(int hv)
+	{
+        h = hv;
+        h4 = h / 4.0f;
+	}
+
 }winState;
 
 typedef struct {
 	float x, y;
-}ftVec2;
+
+	float getX()
+	{
+		return x;
+	}
+
+	float getY()
+	{
+		return y;
+	}
+
+} ftVec2;
+
+extern const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b);
 
 typedef struct {
 	float xyz[3];
@@ -35,6 +64,7 @@ typedef struct {
 	{
 		return xyz;
 	}
+
 } ftVec3;
 
 namespace fountain

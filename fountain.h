@@ -19,13 +19,13 @@ namespace fountain
 
 	}
 
-	void setBasicVarible()
+	void setBasicVarible();
+
+	void basicSetting()
 	{
-		mainWin.w = 800;
-		mainWin.h = 600;
-		mainWin.w4 = mainWin.w / 4;
-		mainWin.h4 = mainWin.h / 4;
-		mainWin.title = "fountain-prototype 0.03";
+		checkSysState();
+		readSettingFile();
+		setBasicVarible();
 	}
 
 	void initAllSystem()
@@ -34,14 +34,6 @@ namespace fountain
 		ft3DModel::init();
 		ftRender::init();
 		ftInput::init();
-	}
-
-	void init()
-	{
-		checkSysState();
-		readSettingFile();
-		setBasicVarible();
-		initAllSystem();
 	}
 
 	void gameInit();

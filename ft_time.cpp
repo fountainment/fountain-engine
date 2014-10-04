@@ -74,8 +74,11 @@ void Clock::tick()
 		littleSleep();
 		Clock::endT = floatTime();
 	}
-	Clock::deltaT *= Clock::timeScale;
-	if (Clock::isPaused == 1) Clock::deltaT = 0.0;
+	if (Clock::deltaT > Clock::secondPerFrame * 10)
+        Clock::deltaT = Clock::secondPerFrame;
+    Clock::deltaT *= Clock::timeScale;
+    if (Clock::isPaused == 1)
+        Clock::deltaT = 0.0;
 	Clock::beginT = Clock::endT;
 }
 

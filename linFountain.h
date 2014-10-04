@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include <stdio.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
@@ -7,6 +6,8 @@
 
 static int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
 static int dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
+
+static int keymap[FT_KEYBOARDSTATE_SIZE] = {0};
 
 Display   *dpy;
 Window     win;
@@ -19,7 +20,8 @@ void fatalError(const char *s)
 
 int main(int argc, char **argv)
 {
-	fountain::gameInit();
+	fountain::basicSetting();
+
 	XVisualInfo         *vi;
 	Colormap             cmap;
 	XSetWindowAttributes swa;
@@ -52,7 +54,7 @@ int main(int argc, char **argv)
 	swa.colormap = cmap;
 	swa.border_pixel = 0;
 	swa.event_mask = KeyPressMask | KeyReleaseMask | ExposureMask
-		| ButtonPressMask | StructureNotifyMask | PointerMotionMask;
+		| ButtonPressMask | ButtonReleaseMask | StructureNotifyMask | PointerMotionMask;
 	win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
 			fountain::mainWin.w, fountain::mainWin.h, 0, vi->depth, InputOutput, vi->visual,
 			CWBorderPixel | CWColormap | CWEventMask, &swa);
@@ -62,15 +64,19 @@ int main(int argc, char **argv)
 
 	XMapWindow(dpy, win);
 
-	glEnable(GL_LINE_SMOOTH);
+	fountain::initAllSystem();
+	fountain::gameInit();
+
+	//TODO: move the outside OpenGL initialization to ft_render
+	//glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	for (;;) {
         	while (XPending(dpy) != 0) {
 			XNextEvent(dpy, &event);
-
-			switch (event.type) 
+			//FIXME: "XIO:  fatal IO error 11" when closing with x button or alt+f4
+			switch (event.type)
 			{
 				case KeymapNotify:
 					printf("keyMap\n");
@@ -81,11 +87,14 @@ int main(int argc, char **argv)
 					KeySym     keysym;
 					XKeyEvent *kevent;
 					printf("keyPress %d\n", kevent->keycode);
+					//TODO: set the sysKeyboard
+					//fountain::sysKeyboard.setState(kevent->keycode, 1);
 					char       buffer[1];
 					kevent = (XKeyEvent *) &event;
-					if ((XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1) 
+					if ((XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
 							&& (keysym == (KeySym)XK_Escape) )
-						exit(0);
+						return 0;
+                    printf("keysym = %lu\n", keysym & 0x000001ff);
 				}
 				break;
 
@@ -96,34 +105,32 @@ int main(int argc, char **argv)
 						XEvent nev;
 						XPeekEvent(dpy, &nev);
 
-						if (nev.type == KeyPress && nev.xkey.time == event.xkey.time 
+						if (nev.type == KeyPress && nev.xkey.time == event.xkey.time
 								  && nev.xkey.keycode == event.xkey.keycode) {
-							fprintf(stdout, "re\n");
+							printf("keyRetriggered\n");
+							//TODO: set the sysKeyboard
 							XNextEvent(dpy, &event);
 							is_retriggered = 1;
 						}
 					}
-					if (!is_retriggered)
+					if (!is_retriggered) {
 						printf("keyRelease %d\n", event.xkey.keycode);
+						//TODO: set the sysKeyboard
+						//fountain::sysKeyboard.setState(event.xkey.keycode, 0);
+					}
 				}
 				break;
-				
+
 				case ButtonPress:
-					switch (event.xbutton.button) 
-					{
-						case 1:
-						break;
+					fountain::sysMouse.setState(event.xbutton.button, 1);
+				break;
 
-						case 2:
-						break;
-
-						case 3:
-						break;
-					}
+				case ButtonRelease:
+					fountain::sysMouse.setState(event.xbutton.button, 0);
 				break;
 
 				case MotionNotify:
-					printf("%d %d\n", event.xmotion.x, event.xmotion.y);
+					fountain::sysMouse.update(event.xmotion.x, event.xmotion.y);
 				break;
 
 				case ConfigureNotify:
@@ -135,12 +142,10 @@ int main(int argc, char **argv)
 				break;
 			}
 		}
+		//TODO: move the outside OpenGL word to ft_render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
 		glColor3f(1.0, 1.0, 1.0);
 		glPushMatrix();
-		glScalef(45.0, 45.0, 45.0);
 		fountain::singleFrame();
 		glPopMatrix();
 		glXSwapBuffers(dpy, win);

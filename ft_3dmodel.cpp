@@ -47,7 +47,7 @@ void ObjModel::openFile(const char *fileName)
 void ObjModel::render()
 {
 	for (int i = 0; i < ObjModel::indexN; i++) {
-		glBegin(GL_LINE_LOOP);
+		glBegin(GL_TRIANGLES);
 		glVertex3fv(ObjModel::v[p[i].a].xyz);
 		glVertex3fv(ObjModel::v[p[i].b].xyz);
 		glVertex3fv(ObjModel::v[p[i].c].xyz);
