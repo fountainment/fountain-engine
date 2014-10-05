@@ -4,6 +4,10 @@
 #include <X11/X.h>
 #include <X11/keysym.h>
 
+#include <string.h>
+
+#define KS(x,y) keymap[(x)&FT_KEYBOARDSTATE_SIZE]=(y)
+
 static int snglBuf[] = {GLX_RGBA, GLX_DEPTH_SIZE, 16, None};
 static int dblBuf[]  = {GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None};
 
@@ -12,6 +16,14 @@ static int keymap[FT_KEYBOARDSTATE_SIZE] = {0};
 Display   *dpy;
 Window     win;
 GLboolean  doubleBuffer = GL_TRUE;
+
+void keyMapSetting()
+{
+	KS(XK_w,FT_W);
+	KS(XK_a,FT_A);
+	KS(XK_s,FT_S);
+	KS(XK_d,FT_D);
+}
 
 void fatalError(const char *s)
 {
@@ -22,6 +34,8 @@ int main(int argc, char **argv)
 {
 	fountain::basicSetting();
 
+	keyMapSetting();
+
 	XVisualInfo         *vi;
 	Colormap             cmap;
 	XSetWindowAttributes swa;
@@ -30,6 +44,7 @@ int main(int argc, char **argv)
 	int                  dummy;
 
 	dpy = XOpenDisplay(NULL);
+
 	if (dpy == NULL)
 		fatalError("could not open display");
 
@@ -53,6 +68,7 @@ int main(int argc, char **argv)
 	cmap = XCreateColormap(dpy, RootWindow(dpy, vi->screen), vi->visual, AllocNone);
 	swa.colormap = cmap;
 	swa.border_pixel = 0;
+	swa.override_redirect = False;
 	swa.event_mask = KeyPressMask | KeyReleaseMask | ExposureMask
 		| ButtonPressMask | ButtonReleaseMask | StructureNotifyMask | PointerMotionMask;
 	win = XCreateWindow(dpy, RootWindow(dpy, vi->screen), 0, 0,
@@ -62,39 +78,88 @@ int main(int argc, char **argv)
 
 	glXMakeCurrent(dpy, win, cx);
 
+	Atom wmDeleteMessage = XInternAtom(dpy, "WM_DELETE_WINDOW", false);
+
 	XMapWindow(dpy, win);
+
+	if (fountain::mainWin.isFullScreen) {
+        XWindowAttributes xwa;
+        XGetWindowAttributes(dpy, DefaultRootWindow(dpy), &xwa);
+        fountain::mainWin.w = xwa.width;
+        fountain::mainWin.h = xwa.height;
+
+        XEvent xev;
+        Atom wm_state = XInternAtom(dpy, "_NET_WM_STATE", False);
+        Atom fullscreen = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
+
+        memset(&xev, 0, sizeof(xev));
+        xev.type = ClientMessage;
+        xev.xclient.window = win;
+        xev.xclient.message_type = wm_state;
+        xev.xclient.format = 32;
+        xev.xclient.data.l[0] = 1;
+        xev.xclient.data.l[1] = fullscreen;
+        xev.xclient.data.l[2] = 0;
+
+        XSendEvent(dpy, DefaultRootWindow(dpy), False,
+        SubstructureNotifyMask, &xev);
+	}
+
+	if (fountain::mainWin.hideCursor) {
+        Display *display = dpy;
+
+        Cursor invisibleCursor;
+        Pixmap bitmapNoData;
+        XColor black;
+        static char noData[] = { 0,0,0,0,0,0,0,0 };
+        black.red = black.green = black.blue = 0;
+
+        bitmapNoData = XCreateBitmapFromData(display, win, noData, 8, 8);
+        invisibleCursor = XCreatePixmapCursor(display, bitmapNoData, bitmapNoData,
+                                             &black, &black, 0, 0);
+        XDefineCursor(display,win, invisibleCursor);
+        XFreeCursor(display, invisibleCursor);
+	}
+
+    XSetWMProtocols(dpy, win, &wmDeleteMessage, 1);
 
 	fountain::initAllSystem();
 	fountain::gameInit();
 
 	//TODO: move the outside OpenGL initialization to ft_render
-	//glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	for (;;) {
-        	while (XPending(dpy) != 0) {
+        	while (XPending(dpy) > 0) {
 			XNextEvent(dpy, &event);
-			//FIXME: "XIO:  fatal IO error 11" when closing with x button or alt+f4
 			switch (event.type)
 			{
-				case KeymapNotify:
-					printf("keyMap\n");
-				break;
+                case ClientMessage:
+                    if(event.xclient.data.l[0] == (int)wmDeleteMessage)
+                    {
+                        XDestroyWindow(dpy,event.xclient.window);
+                        XCloseDisplay(dpy);
+                        return 0;
+                    }
+                break;
 
 				case KeyPress:
 				{
 					KeySym     keysym;
+					KeySym     keycodeSym;
 					XKeyEvent *kevent;
-					printf("keyPress %d\n", kevent->keycode);
-					//TODO: set the sysKeyboard
-					//fountain::sysKeyboard.setState(kevent->keycode, 1);
 					char       buffer[1];
 					kevent = (XKeyEvent *) &event;
 					if ((XLookupString((XKeyEvent *)&event,buffer,1,&keysym,NULL) == 1)
-							&& (keysym == (KeySym)XK_Escape) )
+							&& (keysym == (KeySym)XK_Escape) ) {
+                        XDestroyWindow(dpy,event.xclient.window);
+                        XCloseDisplay(dpy);
 						return 0;
-                    printf("keysym = %lu\n", keysym & 0x000001ff);
+					}
+					keycodeSym = XLookupKeysym(kevent, 0) & FT_KEYBOARDSTATE_SIZE;
+					fountain::sysKeyboard.setState(keymap[keycodeSym], 1);
 				}
 				break;
 
@@ -114,9 +179,11 @@ int main(int argc, char **argv)
 						}
 					}
 					if (!is_retriggered) {
-						printf("keyRelease %d\n", event.xkey.keycode);
-						//TODO: set the sysKeyboard
-						//fountain::sysKeyboard.setState(event.xkey.keycode, 0);
+						XKeyEvent *kevent;
+						KeySym     keycodeSym;
+						kevent = (XKeyEvent *) &event;
+						keycodeSym = XLookupKeysym(kevent, 0) & FT_KEYBOARDSTATE_SIZE;
+						fountain::sysKeyboard.setState(keymap[keycodeSym], 0);
 					}
 				}
 				break;
@@ -140,6 +207,7 @@ int main(int argc, char **argv)
 
 				case Expose:
 				break;
+
 			}
 		}
 		//TODO: move the outside OpenGL word to ft_render

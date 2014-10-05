@@ -1,8 +1,9 @@
 #ifndef FT_INPUT_H_
 #define FT_INPUT_H_
+#include "fountaindef.h"
 #include "ft_data.h"
 
-#define FT_KEYBOARDSTATE_SIZE 512
+#define FT_KEYBOARDSTATE_SIZE 0x01ff
 #define FT_MOUSESTATE_SIZE 5
 
 namespace ftInput
