@@ -1,11 +1,11 @@
 #include "fountain.h"
 
 namespace Game {
-	float xAngle = 0.0f;
-	float yAngle = 0.0f;
-	float scale = 1.0f;
+	double xAngle = 0.0f;
+	double yAngle = 0.0f;
+	double scale = 1.0f;
 	ftVec2 deltaV;
-	 ftTime::Clock mainClock(120.0);
+	 ftTime::Clock mainClock(60.0);
 	 ft3DModel::ObjModel simpleModel("first.obj");
 	 ftRender::Camera mainCamera(0, 0, 500);
 };

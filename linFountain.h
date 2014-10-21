@@ -162,8 +162,8 @@ int main(int argc, char **argv)
 					      &keysym, NULL) == 1)
 					    && (keysym == (KeySym) XK_Escape)) {
 						XDestroyWindow(dpy,
-							       event.
-							       xclient.window);
+							       event.xclient.
+							       window);
 						XCloseDisplay(dpy);
 						return 0;
 					}
@@ -171,10 +171,9 @@ int main(int argc, char **argv)
 					    XLookupKeysym(kevent,
 							  0) &
 					    FT_KEYBOARDSTATE_SIZE;
-					fountain::
-					    sysKeyboard.setState(keymap
-								 [keycodeSym],
-								 1);
+					fountain::sysKeyboard.setState(keymap
+								       [keycodeSym],
+								       1);
 				}
 				break;
 
@@ -206,22 +205,21 @@ int main(int argc, char **argv)
 						    XLookupKeysym(kevent,
 								  0) &
 						    FT_KEYBOARDSTATE_SIZE;
-						fountain::
-						    sysKeyboard.setState(keymap
-									 [keycodeSym],
-									 0);
+						fountain::sysKeyboard.
+						    setState(keymap[keycodeSym],
+							     0);
 					}
 				}
 				break;
 
 			case ButtonPress:
-				fountain::sysMouse.setState(event.
-							    xbutton.button, 1);
+				fountain::sysMouse.setState(event.xbutton.
+							    button, 1);
 				break;
 
 			case ButtonRelease:
-				fountain::sysMouse.setState(event.
-							    xbutton.button, 0);
+				fountain::sysMouse.setState(event.xbutton.
+							    button, 0);
 				break;
 
 			case MotionNotify:

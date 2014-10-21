@@ -2,8 +2,10 @@
 bin/
 obj/
 *~
+.*.swp
 *.o
 *.depend
 *.layout
 *.obj
 fountain
+
