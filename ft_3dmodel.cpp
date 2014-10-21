@@ -11,6 +11,7 @@ using namespace ft3DModel;
 ObjModel::ObjModel(const char *fileName)
 {
 	ObjModel::openFile(fileName);
+	ObjModel::neverRendered = 1;
 }
 
 void ObjModel::openFile(const char *fileName)
@@ -31,8 +32,8 @@ void ObjModel::openFile(const char *fileName)
 				for (int i = 0; i < 3; i++) {
 					tmpInt =
 					    std::fscanf(objFile, "%f",
-							&ObjModel::v[vecN].
-							xyz[i]);
+							&ObjModel::
+							v[vecN].xyz[i]);
 					if (tmpInt != 1)
 						break;
 				}
@@ -54,15 +55,24 @@ void ObjModel::openFile(const char *fileName)
 		std::printf("Open \"%s\" error!\n", fileName);
 	}
 	std::fclose(objFile);
+	ObjModel::neverRendered = 1;
 }
 
 void ObjModel::render()
 {
-	for (int i = 0; i < ObjModel::indexN; i++) {
-		glBegin(GL_LINE_LOOP);
-		glVertex3fv(ObjModel::v[p[i].a].xyz);
-		glVertex3fv(ObjModel::v[p[i].b].xyz);
-		glVertex3fv(ObjModel::v[p[i].c].xyz);
-		glEnd();
+	if (ObjModel::neverRendered) {
+		ObjModel::listIndex = glGenLists(1);
+		glNewList(ObjModel::listIndex, GL_COMPILE);
+		for (int i = 0; i < ObjModel::indexN; i++) {
+			glBegin(GL_LINE_LOOP);
+			glVertex3fv(ObjModel::v[p[i].a].xyz);
+			glVertex3fv(ObjModel::v[p[i].b].xyz);
+			glVertex3fv(ObjModel::v[p[i].c].xyz);
+			glEnd();
+		}
+		glEndList();
+		ObjModel::neverRendered = 0;
+	} else {
+		glCallList(ObjModel::listIndex);
 	}
 }

@@ -11,6 +11,8 @@ namespace ftRender {
 
 	void transformEnd();
 
+	void openLineSmooth();
+
 	class Camera {
 private:
 		float x, y, z;

@@ -26,7 +26,8 @@ typedef struct {
 
 	float getX() {
 		return x;
-	} float getY() {
+	}
+	float getY() {
 		return y;
 	}
 
@@ -41,7 +42,8 @@ typedef struct {
 
 	float getX() {
 		return xyz[0];
-	} float getY() {
+	}
+	float getY() {
 		return xyz[1];
 	}
 

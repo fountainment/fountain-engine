@@ -15,6 +15,13 @@ void ftRender::transformEnd()
 	glPopMatrix();
 }
 
+void ftRender::openLineSmooth()
+{
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 using namespace ftRender;
 
 Camera::Camera(float x, float y, float z)

@@ -16,6 +16,8 @@ private:
 		int indexN;
 		ftVec3 v[50000];
 		ftVec3Index p[50000];
+		int neverRendered;
+		int listIndex;
 public:
 		 explicit ObjModel(const char *fileName);
 		void openFile(const char *fileName);

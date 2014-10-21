@@ -5,10 +5,12 @@ namespace Game {
 	float yAngle = 0.0f;
 	float scale = 1.0f;
 	ftVec2 deltaV;
-	 ftTime::Clock mainClock(60.0);
+	 ftTime::Clock mainClock(120.0);
 	 ft3DModel::ObjModel simpleModel("first.obj");
 	 ftRender::Camera mainCamera(0, 0, 500);
-} void fountain::setBasicVarible()
+};
+
+void fountain::setBasicVarible()
 {
 	mainWin.setW(800);
 	mainWin.setH(600);
@@ -20,6 +22,7 @@ namespace Game {
 
 void fountain::gameInit()
 {
+	ftRender::openLineSmooth();
 	Game::mainClock.init();
 }
 
