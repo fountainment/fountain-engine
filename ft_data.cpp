@@ -1,11 +1,8 @@
 #include "ft_data.h"
 
-namespace fountain
-{
+namespace fountain {
 	winState mainWin;
-}
-
-const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b)
+} const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b)
 {
 	ftVec2 ans;
 	ans.x = a.x - b.x;

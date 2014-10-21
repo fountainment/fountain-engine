@@ -6,70 +6,58 @@
 typedef struct {
 	int w, h;
 	float w4, h4;
-	std::string title;
-	std::string icon;
+	 std::string title;
+	 std::string icon;
 	bool isFullScreen;
 	bool hideCursor;
 
-	void setW(int wv)
-	{
+	void setW(int wv) {
 		w = wv;
 		w4 = w / 4.0f;
-	}
-
-	void setH(int hv)
-	{
+	} void setH(int hv) {
 		h = hv;
 		h4 = h / 4.0f;
 	}
 
-}winState;
+} winState;
 
 typedef struct {
 	float x, y;
 
-	float getX()
-	{
+	float getX() {
 		return x;
-	}
-
-	float getY()
-	{
+	} float getY() {
 		return y;
 	}
 
-} ftVec2;
+}
+
+ftVec2;
 
 extern const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b);
 
 typedef struct {
 	float xyz[3];
 
-	float getX()
-	{
+	float getX() {
 		return xyz[0];
-	}
-
-	float getY()
-	{
+	} float getY() {
 		return xyz[1];
 	}
 
-	float getZ()
-	{
+	float getZ() {
 		return xyz[2];
 	}
 
-	float* getV()
-	{
+	float *getV() {
 		return xyz;
 	}
 
-} ftVec3;
-
-namespace fountain
-{
-	extern winState mainWin;
 }
 
+ftVec3;
+
+namespace fountain {
+	extern winState mainWin;
+}
 #endif

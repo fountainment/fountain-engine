@@ -7,29 +7,22 @@
 #include "ft_render.h"
 #include "ft_input.h"
 
-namespace fountain
-{
-	void checkSysState()
-	{
+namespace fountain {
+	void checkSysState() {
 
-	}
-
-	void readSettingFile()
-	{
+	} void readSettingFile() {
 
 	}
 
 	void setBasicVarible();
 
-	void basicSetting()
-	{
+	void basicSetting() {
 		checkSysState();
 		readSettingFile();
 		setBasicVarible();
 	}
 
-	void initAllSystem()
-	{
+	void initAllSystem() {
 		ftTime::init();
 		ft3DModel::init();
 		ftRender::init();

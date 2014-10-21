@@ -21,6 +21,7 @@ double floatTime()
 	gettimeofday(&now, NULL);
 	return (1000000 * now.tv_sec + now.tv_usec) / 1000000.0 - allStartT;
 }
+
 // Linux end
 
 #else
@@ -40,6 +41,7 @@ double floatTime()
 	QueryPerformanceCounter(&tick);
 	return tick.QuadPart / (double)tickPerSecond.QuadPart - allStartT;
 }
+
 // Win32 end
 
 #endif
@@ -54,8 +56,10 @@ using namespace ftTime;
 
 Clock::Clock(double fps)
 {
-	if (fps == 0.0) Clock::secondPerFrame = 0.0;
-	else Clock::secondPerFrame = 1.0 / fps;
+	if (fps == 0.0)
+		Clock::secondPerFrame = 0.0;
+	else
+		Clock::secondPerFrame = 1.0 / fps;
 	Clock::isPaused = 1;
 	Clock::deltaT = 0.0;
 	Clock::timeScale = 1.0;
@@ -63,22 +67,24 @@ Clock::Clock(double fps)
 
 void Clock::init()
 {
-	Clock::firstT = Clock::beginT = Clock::continueT = Clock::pauseT = floatTime();
+	Clock::firstT = Clock::beginT = Clock::continueT = Clock::pauseT =
+	    floatTime();
 	Clock::isPaused = 0;
 }
 
 void Clock::tick()
 {
 	Clock::endT = floatTime();
-	while ((Clock::deltaT = Clock::endT - Clock::beginT) < Clock::secondPerFrame) {
+	while ((Clock::deltaT =
+		Clock::endT - Clock::beginT) < Clock::secondPerFrame) {
 		littleSleep();
 		Clock::endT = floatTime();
 	}
 	if (Clock::deltaT > Clock::secondPerFrame * 10)
-        Clock::deltaT = Clock::secondPerFrame;
-    Clock::deltaT *= Clock::timeScale;
-    if (Clock::isPaused == 1)
-        Clock::deltaT = 0.0;
+		Clock::deltaT = Clock::secondPerFrame;
+	Clock::deltaT *= Clock::timeScale;
+	if (Clock::isPaused == 1)
+		Clock::deltaT = 0.0;
 	Clock::beginT = Clock::endT;
 }
 

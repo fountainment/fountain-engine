@@ -20,7 +20,7 @@ using namespace ftRender;
 Camera::Camera(float x, float y, float z)
 {
 	Camera::setPosition(x, y, z);
-	Camera::setWinSize(fountain::mainWin.w , fountain::mainWin.h);
+	Camera::setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Camera::setScale(1.0f);
 	Camera::setAngle(0.0f, 0.0f, 0.0f);
 }
@@ -35,7 +35,8 @@ void Camera::setPosition(float x, float y, float z)
 {
 	Camera::x = x;
 	Camera::y = y;
-	if (z < FT_CAMERA_NEAR) z = FT_CAMERA_NEAR;
+	if (z < FT_CAMERA_NEAR)
+		z = FT_CAMERA_NEAR;
 	Camera::z = z;
 }
 
@@ -57,16 +58,21 @@ void Camera::setWinSize(int w, int h)
 
 void Camera::setScale(float scale)
 {
-	if (scale < 0) scale = 0.01;
+	if (scale < 0)
+		scale = 0.01;
 	Camera::scale = scale;
 }
 
 void Camera::update()
 {
-	Camera::setWinSize(fountain::mainWin.w , fountain::mainWin.h);
+	Camera::setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-Camera::nearW2 / Camera::scale, Camera::nearW2 / Camera::scale, -Camera::nearH2 / Camera::scale, Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR, FT_CAMERA_FAR);
+	glFrustum(-Camera::nearW2 / Camera::scale,
+		  Camera::nearW2 / Camera::scale,
+		  -Camera::nearH2 / Camera::scale,
+		  Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR,
+		  FT_CAMERA_FAR);
 	glRotatef(Camera::xAngle, 1.0f, 0.0f, 0.0f);
 	glRotatef(Camera::yAngle, 0.0f, 1.0f, 0.0f);
 	glRotatef(Camera::zAngle, 0.0f, 0.0f, 1.0f);

@@ -17,28 +17,40 @@ void ObjModel::openFile(const char *fileName)
 {
 	char tmp;
 	int tmpInt;
-	std::FILE *objFile = std::fopen(fileName, "rb");
+	std::FILE * objFile = std::fopen(fileName, "rb");
 	ObjModel::vecN = 1;
 	ObjModel::indexN = 0;
 	if (objFile != NULL) {
 		for (;;) {
-			while(tmpInt = std::fscanf(objFile, "%c", &tmp), tmpInt != EOF && tmp != '\n');
-			if (std::fscanf(objFile, "%c", &tmp) == EOF) break;
+			while (tmpInt =
+			       std::fscanf(objFile, "%c", &tmp), tmpInt != EOF
+			       && tmp != '\n') ;
+			if (std::fscanf(objFile, "%c", &tmp) == EOF)
+				break;
 			if (tmp == 'v') {
 				for (int i = 0; i < 3; i++) {
-					tmpInt = std::fscanf(objFile, "%f", &ObjModel::v[vecN].xyz[i]);
-					if (tmpInt != 1) break;
+					tmpInt =
+					    std::fscanf(objFile, "%f",
+							&ObjModel::v[vecN].
+							xyz[i]);
+					if (tmpInt != 1)
+						break;
 				}
 				ObjModel::vecN++;
 			} else {
-				if (tmp == 'f'){
-					tmpInt = std::fscanf(objFile, "%d%d%d", &ObjModel::p[indexN].a, &ObjModel::p[indexN].b, &ObjModel::p[indexN].c);
-					if (tmpInt != 3) continue;
+				if (tmp == 'f') {
+					tmpInt =
+					    std::fscanf(objFile, "%d%d%d",
+							&ObjModel::p[indexN].a,
+							&ObjModel::p[indexN].b,
+							&ObjModel::p[indexN].c);
+					if (tmpInt != 3)
+						continue;
 					ObjModel::indexN++;
 				}
 			}
 		}
-	}else {
+	} else {
 		std::printf("Open \"%s\" error!\n", fileName);
 	}
 	std::fclose(objFile);
@@ -54,4 +66,3 @@ void ObjModel::render()
 		glEnd();
 	}
 }
-

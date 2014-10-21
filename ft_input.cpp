@@ -44,17 +44,17 @@ const ftVec2 Mouse::getDeltaV()
 
 void Mouse::setState(int button, int st)
 {
-    Mouse::state[button] = st;
+	Mouse::state[button] = st;
 }
 
 int Mouse::getState(int button)
 {
-    return Mouse::state[button];
+	return Mouse::state[button];
 }
 
 void Mouse::clearState()
 {
-    std::memset(state, 0, sizeof(state));
+	std::memset(state, 0, sizeof(state));
 }
 
 Keyboard::Keyboard()
@@ -74,11 +74,10 @@ int Keyboard::getState(int ch)
 
 void Keyboard::clearState()
 {
-    std::memset(state, 0, sizeof(state));
+	std::memset(state, 0, sizeof(state));
 }
 
-namespace fountain
-{
+namespace fountain {
 	ftInput::Mouse sysMouse;
 	ftInput::Keyboard sysKeyboard;
 }
