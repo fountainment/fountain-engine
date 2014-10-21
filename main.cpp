@@ -3,7 +3,6 @@
 namespace Game {
 	float xAngle = 0.0f;
 	float yAngle = 0.0f;
-	float zAngle = 0.0f;
 	float scale = 1.0f;
 	ftVec2 deltaV;
 	ftTime::Clock mainClock(60.0);

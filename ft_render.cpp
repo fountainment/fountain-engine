@@ -12,7 +12,7 @@ void ftRender::transformBegin()
 
 void ftRender::transformEnd()
 {
-    glPopMatrix();
+	glPopMatrix();
 }
 
 using namespace ftRender;
@@ -63,7 +63,7 @@ void Camera::setScale(float scale)
 
 void Camera::update()
 {
-    Camera::setWinSize(fountain::mainWin.w , fountain::mainWin.h);
+	Camera::setWinSize(fountain::mainWin.w , fountain::mainWin.h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glFrustum(-Camera::nearW2 / Camera::scale, Camera::nearW2 / Camera::scale, -Camera::nearH2 / Camera::scale, Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR, FT_CAMERA_FAR);

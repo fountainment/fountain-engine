@@ -1,5 +1,5 @@
-#ifndef FOUNTAINDEF_H_
-#define FOUNTAINDEF_H_
+#ifndef _FOUNTAINDEF_H_
+#define _FOUNTAINDEF_H_
 
 #define FT_A 0x0001
 #define FT_B 0x0002

@@ -1,0 +1,9 @@
+!.gitignore
+bin/
+obj/
+*~
+*.o
+*.depend
+*.layout
+*.obj
+fountain

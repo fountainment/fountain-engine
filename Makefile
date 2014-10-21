@@ -15,7 +15,7 @@ ft_3dmodel.o: ft_3dmodel.cpp ft_3dmodel.h
 	$(CC) $(CFLAGS) -c ft_3dmodel.cpp -o ft_3dmodel.o
 
 ft_render.o: ft_render.cpp ft_render.h
-	$(CC) $(CFLAGS) -c ft_render.cpp -o ft_render.o -lGL
+	$(CC) $(CFLAGS) -c ft_render.cpp -o ft_render.o
 
 ft_input.o: ft_input.cpp ft_input.h ft_data.h
 	$(CC) $(CFLAGS) -c ft_input.cpp -o ft_input.o

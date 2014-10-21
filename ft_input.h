@@ -1,5 +1,5 @@
-#ifndef FT_INPUT_H_
-#define FT_INPUT_H_
+#ifndef _FT_INPUT_H_
+#define _FT_INPUT_H_
 #include "fountaindef.h"
 #include "ft_data.h"
 

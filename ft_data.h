@@ -1,5 +1,5 @@
-#ifndef FT_DATA_H_
-#define FT_DATA_H_
+#ifndef _FT_DATA_H_
+#define _FT_DATA_H_
 
 #include <string>
 
@@ -13,14 +13,14 @@ typedef struct {
 
 	void setW(int wv)
 	{
-        w = wv;
-        w4 = w / 4.0f;
+		w = wv;
+		w4 = w / 4.0f;
 	}
 
 	void setH(int hv)
 	{
-        h = hv;
-        h4 = h / 4.0f;
+		h = hv;
+		h4 = h / 4.0f;
 	}
 
 }winState;

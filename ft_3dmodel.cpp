@@ -1,7 +1,6 @@
 #include "ft_3dmodel.h"
 #include <cstdio>
 #include <GL/gl.h>
-#include <GL/glu.h>
 
 void ft3DModel::init()
 {
@@ -31,11 +30,12 @@ void ObjModel::openFile(const char *fileName)
 					if (tmpInt != 1) break;
 				}
 				ObjModel::vecN++;
-			} else
-			if (tmp == 'f'){
-				tmpInt = std::fscanf(objFile, "%d%d%d", &ObjModel::p[indexN].a, &ObjModel::p[indexN].b, &ObjModel::p[indexN].c);
-				if (tmpInt != 3) continue;
-				ObjModel::indexN++;
+			} else {
+				if (tmp == 'f'){
+					tmpInt = std::fscanf(objFile, "%d%d%d", &ObjModel::p[indexN].a, &ObjModel::p[indexN].b, &ObjModel::p[indexN].c);
+					if (tmpInt != 3) continue;
+					ObjModel::indexN++;
+				}
 			}
 		}
 	}else {

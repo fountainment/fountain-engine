@@ -1,5 +1,5 @@
-#ifndef FT_RENDER_H_
-#define FT_RENDER_H_
+#ifndef _FT_RENDER_H_
+#define _FT_RENDER_H_
 
 #define FT_CAMERA_NEAR 100.0f
 #define FT_CAMERA_FAR 1000.0f
