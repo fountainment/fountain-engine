@@ -4,6 +4,9 @@
 #define FT_CAMERA_NEAR 100.0f
 #define FT_CAMERA_FAR 1000.0f
 
+#define FT_PLANE 1
+#define FT_PERSPECTIVE 2
+
 namespace ftRender {
 	void init();
 
@@ -17,10 +20,12 @@ namespace ftRender {
 private:
 		float x, y, z;
 		float winW, winH;
+		float W2, H2;
 		float nearW2, nearH2;
 		float scale;
 		float xAngle, yAngle, zAngle;
 		float ratio;
+		int projectionType;
 public:
 		 Camera(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 		void update();
@@ -29,6 +34,7 @@ public:
 		void setWinSize(int w, int h);
 		void setScale(float scale);
 		void setAngle(float x, float y, float z);
+		void setProjectionType(int type);
 	};
 }
 #endif

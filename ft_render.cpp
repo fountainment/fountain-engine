@@ -4,10 +4,12 @@
 
 void ftRender::init()
 {
+
 }
 
 void ftRender::transformBegin()
 {
+
 }
 
 void ftRender::transformEnd()
@@ -30,6 +32,7 @@ Camera::Camera(float x, float y, float z)
 	Camera::setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Camera::setScale(1.0f);
 	Camera::setAngle(0.0f, 0.0f, 0.0f);
+	Camera::setProjectionType(FT_PLANE);
 }
 
 void Camera::setPosition(float x, float y)
@@ -58,6 +61,8 @@ void Camera::setWinSize(int w, int h)
 {
 	Camera::winW = (float)w;
 	Camera::winH = (float)h;
+	Camera::W2 = Camera::winW / 2.0f;
+	Camera::H2 = Camera::winH / 2.0f;
 	Camera::ratio = Camera::z / FT_CAMERA_NEAR;
 	Camera::nearW2 = Camera::winW / Camera::ratio / 2.0f;
 	Camera::nearH2 = Camera::winH / Camera::ratio / 2.0f;
@@ -70,16 +75,26 @@ void Camera::setScale(float scale)
 	Camera::scale = scale;
 }
 
+void Camera::setProjectionType(int type)
+{
+	Camera::projectionType = type;
+}
+
 void Camera::update()
 {
 	Camera::setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glFrustum(-Camera::nearW2 / Camera::scale,
-		  Camera::nearW2 / Camera::scale,
-		  -Camera::nearH2 / Camera::scale,
-		  Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR,
-		  FT_CAMERA_FAR);
+	if (Camera::projectionType == FT_PLANE) {
+		glOrtho(-Camera::W2, Camera::W2, -Camera::H2, Camera::H2, -99999, 99999);
+	}
+	else if (Camera::projectionType == FT_PERSPECTIVE) {
+		glFrustum(-Camera::nearW2 / Camera::scale,
+			  Camera::nearW2 / Camera::scale,
+			  -Camera::nearH2 / Camera::scale,
+			  Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR,
+			  FT_CAMERA_FAR);
+	}
 	glRotatef(Camera::xAngle, 1.0f, 0.0f, 0.0f);
 	glRotatef(Camera::yAngle, 0.0f, 1.0f, 0.0f);
 	glRotatef(Camera::zAngle, 0.0f, 0.0f, 1.0f);
