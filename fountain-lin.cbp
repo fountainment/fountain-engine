@@ -34,9 +34,12 @@
 		<Linker>
 			<Add library="GL" />
 			<Add library="X11" />
+			<Add library="freeimage" />
 		</Linker>
 		<Unit filename="ft_3dmodel.cpp" />
 		<Unit filename="ft_3dmodel.h" />
+		<Unit filename="ft_algorithm.cpp" />
+		<Unit filename="ft_algorithm.h" />
 		<Unit filename="ft_data.cpp" />
 		<Unit filename="ft_data.h" />
 		<Unit filename="ft_input.cpp" />
