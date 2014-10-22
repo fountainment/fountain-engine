@@ -7,6 +7,11 @@
 #define FT_PLANE 1
 #define FT_PERSPECTIVE 2
 
+typedef struct {
+	int id;
+	int w, h;
+}texInfo;
+
 namespace ftRender {
 	void init();
 
@@ -15,6 +20,12 @@ namespace ftRender {
 	void transformEnd();
 
 	void openLineSmooth();
+
+	int getPicture(const char *filename);
+
+	void drawPic(int picID);
+
+	void drawAlphaPic(int picID);
 
 	class Camera {
 private:

@@ -1,6 +1,8 @@
 #ifndef _FOUNTAINDEF_H_
 #define _FOUNTAINDEF_H_
 
+#define FOUNTAIN_VERSION 0.03
+
 #define FT_A 0x0001
 #define FT_B 0x0002
 #define FT_C 0x0003
@@ -63,5 +65,8 @@
 #define FT_Down 0x0037
 #define FT_Left 0x0038
 #define FT_Right 0x0039
+
+#define FT_ON 1
+#define FT_OFF 0
 
 #endif
