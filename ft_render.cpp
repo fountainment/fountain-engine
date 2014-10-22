@@ -2,10 +2,11 @@
 #include "ft_data.h"
 #include "ft_algorithm.h"
 #include <GL/gl.h>
+#include <GL/glext.h>
 #include <FreeImage.h>
 #include <map>
 
-std::map<int, int> Hash2PicID; 
+std::map<int, int> Hash2PicID;
 std::map<int, texInfo> PicID2TexInfo;
 int curPicID = 1;
 
@@ -79,8 +80,8 @@ int ftRender::getPicture(const char *filename)
 		texIf = loadTexture(filename);
 		PicID2TexInfo[curPicID] = texIf;
 		Hash2PicID[hash] = curPicID;
-		return curPicID++;	
-	} else 
+		return curPicID++;
+	} else
 		return Hash2PicID[hash];
 }
 

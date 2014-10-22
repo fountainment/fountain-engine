@@ -35,10 +35,13 @@
 			<Add library="opengl32" />
 			<Add library="glu32" />
 			<Add library="gdi32" />
+			<Add library="FreeImage" />
 		</Linker>
 		<Unit filename="fountain.h" />
 		<Unit filename="ft_3dmodel.cpp" />
 		<Unit filename="ft_3dmodel.h" />
+		<Unit filename="ft_algorithm.cpp" />
+		<Unit filename="ft_algorithm.h" />
 		<Unit filename="ft_data.cpp" />
 		<Unit filename="ft_data.h" />
 		<Unit filename="ft_input.cpp" />
