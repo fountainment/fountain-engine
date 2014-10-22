@@ -10,7 +10,7 @@
 typedef struct {
 	int id;
 	int w, h;
-}texInfo;
+} texInfo;
 
 namespace ftRender {
 	void init();

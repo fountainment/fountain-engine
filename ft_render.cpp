@@ -6,8 +6,8 @@
 #include <FreeImage.h>
 #include <map>
 
-std::map<int, int> Hash2PicID;
-std::map<int, texInfo> PicID2TexInfo;
+std::map < int, int >Hash2PicID;
+std::map < int, texInfo > PicID2TexInfo;
 int curPicID = 1;
 
 void ftRender::init()
