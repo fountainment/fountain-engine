@@ -2,17 +2,45 @@
 #include <GL/gl.h>
 #include <windows.h>
 
+#define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
+
 POINT mousePos;
+static int keymap[FT_KEYBOARDSTATE_SIZE] = { 0 };
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
 void DisableOpenGL(HWND, HDC, HGLRC);
+
+void keyMapSetting()
+{
+    for (int i = 'A'; i <= 'Z'; i++)
+		KS(i, i - 'A' + FT_A);
+    for (int i = VK_F1; i <= VK_F12; i++)
+        KS(i, i - VK_F1 + FT_F1);
+    KS(VK_ESCAPE, FT_Esc);
+    for (int i = 0; i <= 9; i++)
+		KS(i, i - 0 + FT_0);
+	KS(VK_RETURN, FT_Enter);
+	KS(VK_SPACE, FT_Space);
+	KS(VK_CONTROL, FT_Ctrl);
+	//KS(VK_, FT_Alt);
+	//KS(XK_, FT_Alt);
+	KS(VK_LSHIFT, FT_Shift);
+	KS(VK_RSHIFT, FT_Shift);
+	KS(VK_UP, FT_Up);
+	KS(VK_DOWN, FT_Down);
+	KS(VK_LEFT, FT_Left);
+	KS(VK_RIGHT, FT_Right);
+}
 
 int WINAPI
 WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	fountain::basicSetting();
+
+	keyMapSetting();
+
 	DWORD winStyle =
 	    WS_OVERLAPPEDWINDOW & (~WS_MAXIMIZEBOX) & (~WS_SIZEBOX);
 
@@ -67,22 +95,23 @@ WinMain(HINSTANCE hInstance,
 
 	while (!bQuit) {
 
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				bQuit = TRUE;
 			} else {
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
-		} else {
-
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glColor3f(1.0, 1.0, 1.0);
-			glPushMatrix();
-			fountain::singleFrame();
-			glPopMatrix();
-			SwapBuffers(hDC);
 		}
+		GetCursorPos(&mousePos);
+		ScreenToClient(hwnd, &mousePos);
+		fountain::sysMouse.update(mousePos.x, mousePos.y);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glColor3f(1.0, 1.0, 1.0);
+        glPushMatrix();
+        fountain::singleFrame();
+        glPopMatrix();
+        SwapBuffers(hDC);
 	}
 
 	DisableOpenGL(hwnd, hDC, hRC);
@@ -145,23 +174,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				PostQuitMessage(0);
 				break;
 			default:
-				break;
+				fountain::sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE], 1);
 			}
 		}
 		break;
 
 	case WM_KEYUP:
-
-		break;
-
-	case WM_CHAR:
-
-		break;
-
-	case WM_MOUSEMOVE:
-		GetCursorPos(&mousePos);
-		ScreenToClient(hwnd, &mousePos);
-		fountain::sysMouse.update(mousePos.x, mousePos.y);
+            fountain::sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE], 0);
 		break;
 
 	case WM_KILLFOCUS:
