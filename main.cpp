@@ -44,16 +44,14 @@ void fountain::singleFrame()
 	if (fountain::sysKeyboard.getState(FT_S))
 		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
 
-	ftRender::transformBegin();
-	glRotatef(Game::xAngle, 1.0f, 0.0f, 0.0f);
-	glRotatef(Game::yAngle, 0.0f, 1.0f, 0.0f);
-	glScalef(Game::scale, Game::scale, Game::scale);
-	Game::simpleModel.render();
-	ftRender::transformEnd();
+//	ftRender::transformBegin();
+//	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
+//	ftRender::ftScale(Game::scale);
+//	Game::simpleModel.render();
+//	ftRender::transformEnd();
 
 	ftRender::transformBegin();
-	glRotatef(Game::xAngle, 1.0f, 0.0f, 0.0f);
-	glRotatef(Game::yAngle, 0.0f, 1.0f, 0.0f);
+	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::drawPic(Game::testPic);
 	ftRender::transformEnd();
 

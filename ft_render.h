@@ -16,15 +16,14 @@ namespace ftRender {
 	void init();
 
 	void transformBegin();
-
 	void transformEnd();
+	void ftRotate(float xAngle, float yAngle, float zAngle);
+	void ftScale(float scale);
 
 	void openLineSmooth();
 
 	int getPicture(const char *filename);
-
 	void drawPic(int picID);
-
 	void drawAlphaPic(int picID);
 
 	class Camera {

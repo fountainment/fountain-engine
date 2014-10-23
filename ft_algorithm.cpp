@@ -1,5 +1,9 @@
 #include "ft_algorithm.h"
 
+void ftAlgorithm::init()
+{
+}
+
 int ftAlgorithm::bkdrHash(const char *str)
 {
 	int seed = 131;

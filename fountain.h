@@ -6,6 +6,7 @@
 #include "ft_3dmodel.h"
 #include "ft_render.h"
 #include "ft_input.h"
+#include "ft_algorithm.h"
 
 namespace fountain {
 	void checkSysState() {
@@ -27,6 +28,7 @@ namespace fountain {
 		ft3DModel::init();
 		ftRender::init();
 		ftInput::init();
+		ftAlgorithm::init();
 	}
 
 	void gameInit();

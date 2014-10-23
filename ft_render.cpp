@@ -25,6 +25,18 @@ void ftRender::transformEnd()
 	glPopMatrix();
 }
 
+void ftRender::ftRotate(float xAngle, float yAngle, float zAngle)
+{
+	glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
+	glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
+	glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
+}
+
+void ftRender::ftScale(float scale)
+{
+	glScalef(scale, scale, scale);
+}
+
 void ftRender::openLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);
