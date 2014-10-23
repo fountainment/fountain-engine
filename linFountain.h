@@ -16,6 +16,7 @@ static int keymap[FT_KEYBOARDSTATE_SIZE] = { 0 };
 Display *dpy;
 Window win;
 GLboolean doubleBuffer = GL_TRUE;
+int mouseX = 0, mouseY = 0;
 
 void keyMapSetting()
 {
@@ -238,8 +239,8 @@ int main(int argc, char **argv)
 				break;
 
 			case MotionNotify:
-				fountain::sysMouse.update(event.xmotion.x,
-							  event.xmotion.y);
+				mouseX = event.xmotion.x;
+				mouseY = event.xmotion.y;
 				break;
 
 			case ConfigureNotify:
@@ -252,6 +253,7 @@ int main(int argc, char **argv)
 
 			}
 		}
+		fountain::sysMouse.update(mouseX, mouseY);
 		//TODO: move the outside OpenGL word to ft_render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glColor3f(1.0, 1.0, 1.0);
