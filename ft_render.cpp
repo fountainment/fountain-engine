@@ -87,7 +87,7 @@ int ftRender::getPicture(const char *filename)
 
 void ftRender::drawPic(int picID)
 {
-	static texInfo tex = PicID2TexInfo[picID];
+	texInfo tex = PicID2TexInfo[picID];
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
@@ -106,6 +106,24 @@ void ftRender::drawPic(int picID)
 
 void ftRender::drawAlphaPic(int picID)
 {
+	texInfo tex = PicID2TexInfo[picID];
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, tex.id);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex2f(-tex.w / 2.0f, -tex.h / 2.0f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex2f(tex.w / 2.0f, -tex.h / 2.0f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex2f(tex.w / 2.0f, tex.h / 2.0f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex2f(-tex.w / 2.0f, tex.h / 2.0f);
+	glEnd();
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
 }
 
 using namespace ftRender;

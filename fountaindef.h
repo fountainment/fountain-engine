@@ -60,7 +60,7 @@
 #define FT_Space 0x0032
 #define FT_Ctrl 0x0033
 #define FT_Alt 0x0034
-#define FT_Shit 0x0035
+#define FT_Shift 0x0035
 #define FT_Up 0x0036
 #define FT_Down 0x0037
 #define FT_Left 0x0038

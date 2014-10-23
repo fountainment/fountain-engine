@@ -1,12 +1,12 @@
-#include <stdio.h>
+#include <cstdio>
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <X11/X.h>
 #include <X11/keysym.h>
 
-#include <string.h>
+#include <cstring>
 
-#define KS(x,y) keymap[(x)&FT_KEYBOARDSTATE_SIZE]=(y)
+#define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
 
 static int snglBuf[] = { GLX_RGBA, GLX_DEPTH_SIZE, 16, None };
 static int dblBuf[] = { GLX_RGBA, GLX_DEPTH_SIZE, 16, GLX_DOUBLEBUFFER, None };
@@ -19,15 +19,30 @@ GLboolean doubleBuffer = GL_TRUE;
 
 void keyMapSetting()
 {
-	KS(XK_w, FT_W);
-	KS(XK_a, FT_A);
-	KS(XK_s, FT_S);
-	KS(XK_d, FT_D);
+	for (int i = XK_a; i <= XK_z; i++)
+		KS(i, i - XK_a + FT_A);
+	for (int i = XK_F1; i <= XK_F12; i++)
+		KS(i, i - XK_F1 + FT_F1);
+	KS(XK_Escape, FT_Esc);
+	for (int i = XK_0; i <= XK_9; i++)
+		KS(i, i - XK_0 + FT_0);
+	KS(XK_Return, FT_Enter);
+	KS(XK_space, FT_Space);
+	KS(XK_Control_L, FT_Ctrl);
+	KS(XK_Control_R, FT_Ctrl);
+	KS(XK_Alt_L, FT_Alt);
+	KS(XK_Alt_R, FT_Alt);
+	KS(XK_Shift_L, FT_Shift);
+	KS(XK_Shift_R, FT_Shift);
+	KS(XK_Up, FT_Up);
+	KS(XK_Down, FT_Down);
+	KS(XK_Left, FT_Left);
+	KS(XK_Right, FT_Right);
 }
 
 void fatalError(const char *s)
 {
-	printf("%s", s);
+	std::printf("%s", s);
 }
 
 int main(int argc, char **argv)
@@ -100,7 +115,7 @@ int main(int argc, char **argv)
 		Atom fullscreen =
 		    XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
 
-		memset(&xev, 0, sizeof(xev));
+		std::memset(&xev, 0, sizeof(xev));
 		xev.type = ClientMessage;
 		xev.xclient.window = win;
 		xev.xclient.message_type = wm_state;
