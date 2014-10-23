@@ -26,7 +26,8 @@ typedef struct {
 
 	float getX() {
 		return x;
-	} float getY() {
+	}
+	float getY() {
 		return y;
 	}
 
@@ -41,7 +42,8 @@ typedef struct {
 
 	float getX() {
 		return xyz[0];
-	} float getY() {
+	}
+	float getY() {
 		return xyz[1];
 	}
 
@@ -57,7 +59,21 @@ typedef struct {
 
 ftVec3;
 
+class ftRect {
+private:
+	float x;
+	float y;
+	float w;
+	float h;
+public:
+	 ftRect(float x, float y, float w, float h);
+	ftVec2 getCenter();
+	void setCenter(ftVec2 p);
+	void setCenter(float x, float y);
+};
+
 namespace fountain {
 	extern winState mainWin;
-}
+};
+
 #endif

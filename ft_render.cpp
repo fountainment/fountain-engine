@@ -6,9 +6,9 @@
 #include <FreeImage.h>
 #include <map>
 
-std::map < int, int >Hash2PicID;
-std::map < int, texInfo > PicID2TexInfo;
-int curPicID = 1;
+static std::map < int, int >Hash2PicID;
+static std::map < int, texInfo > PicID2TexInfo;
+static int curPicID = 1;
 
 void ftRender::init()
 {
@@ -23,6 +23,11 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
+}
+
+void ftRender::ftTranslate(float x, float y, float z)
+{
+	glTranslatef(x, y, z);
 }
 
 void ftRender::ftRotate(float xAngle, float yAngle, float zAngle)
@@ -196,7 +201,7 @@ void Camera::setProjectionType(int type)
 
 void Camera::update()
 {
-	Camera::setWinSize(fountain::mainWin.w, fountain::mainWin.h);
+	glViewport(0, 0, Camera::winW, Camera::winH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	if (Camera::projectionType == FT_PLANE) {

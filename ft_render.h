@@ -1,6 +1,8 @@
 #ifndef _FT_RENDER_H_
 #define _FT_RENDER_H_
 
+#include "ft_data.h"
+
 #define FT_CAMERA_NEAR 100.0f
 #define FT_CAMERA_FAR 1000.0f
 
@@ -17,6 +19,7 @@ namespace ftRender {
 
 	void transformBegin();
 	void transformEnd();
+	void ftTranslate(float x, float y, float z = 0.0f);
 	void ftRotate(float xAngle, float yAngle, float zAngle);
 	void ftScale(float scale);
 

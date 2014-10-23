@@ -13,12 +13,12 @@ void DisableOpenGL(HWND, HDC, HGLRC);
 
 void keyMapSetting()
 {
-    for (int i = 'A'; i <= 'Z'; i++)
+	for (int i = 'A'; i <= 'Z'; i++)
 		KS(i, i - 'A' + FT_A);
-    for (int i = VK_F1; i <= VK_F12; i++)
-        KS(i, i - VK_F1 + FT_F1);
-    KS(VK_ESCAPE, FT_Esc);
-    for (int i = 0; i <= 9; i++)
+	for (int i = VK_F1; i <= VK_F12; i++)
+		KS(i, i - VK_F1 + FT_F1);
+	KS(VK_ESCAPE, FT_Esc);
+	for (int i = 0; i <= 9; i++)
 		KS(i, i - 0 + FT_0);
 	KS(VK_RETURN, FT_Enter);
 	KS(VK_SPACE, FT_Space);
@@ -106,12 +106,12 @@ WinMain(HINSTANCE hInstance,
 		GetCursorPos(&mousePos);
 		ScreenToClient(hwnd, &mousePos);
 		fountain::sysMouse.update(mousePos.x, mousePos.y);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glColor3f(1.0, 1.0, 1.0);
-        glPushMatrix();
-        fountain::singleFrame();
-        glPopMatrix();
-        SwapBuffers(hDC);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glColor3f(1.0, 1.0, 1.0);
+		glPushMatrix();
+		fountain::singleFrame();
+		glPopMatrix();
+		SwapBuffers(hDC);
 	}
 
 	DisableOpenGL(hwnd, hDC, hRC);
@@ -174,13 +174,17 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				PostQuitMessage(0);
 				break;
 			default:
-				fountain::sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE], 1);
+				fountain::sysKeyboard.
+				    setState(keymap
+					     [wParam & FT_KEYBOARDSTATE_SIZE],
+					     1);
 			}
 		}
 		break;
 
 	case WM_KEYUP:
-            fountain::sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE], 0);
+		fountain::sysKeyboard.
+		    setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE], 0);
 		break;
 
 	case WM_KILLFOCUS:
