@@ -25,6 +25,7 @@ void fountain::gameInit()
 {
 	ftRender::openLineSmooth();
 	Game::mainCamera.setProjectionType(FT_PERSPECTIVE);
+	glLineWidth(1.5f);
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
@@ -44,16 +45,21 @@ void fountain::singleFrame()
 		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
 	if (fountain::sysKeyboard.getState(FT_S))
 		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
-
-//      ftRender::transformBegin();
-//      ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
-//      ftRender::ftScale(Game::scale);
-//      Game::simpleModel.render();
-//      ftRender::transformEnd();
+/*
+	ftRender::transformBegin();	
+	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
+	ftRender::ftScale(Game::scale);
+	Game::simpleModel.render();
+	ftRender::transformEnd();
 
 	ftRender::transformBegin();
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::drawPic(Game::testPic);
+	ftRender::transformEnd();
+*/
+	ftRender::transformBegin();
+	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
+	ftRender::drawLine(-100, -100, 100, 100);
 	ftRender::transformEnd();
 
 	Game::mainClock.tick();

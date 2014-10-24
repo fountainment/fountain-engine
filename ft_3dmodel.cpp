@@ -51,11 +51,11 @@ void ObjModel::openFile(const char *fileName)
 				}
 			}
 		}
+		std::fclose(objFile);
+		ObjModel::neverRendered = 1;
 	} else {
 		std::printf("Open \"%s\" error!\n", fileName);
 	}
-	std::fclose(objFile);
-	ObjModel::neverRendered = 1;
 }
 
 void ObjModel::render()

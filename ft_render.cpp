@@ -49,6 +49,11 @@ void ftRender::openLineSmooth()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void ftRender::setClearColor(int r, int g, int b)
+{
+	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
+}
+
 texInfo loadTexture(const char *filename)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
@@ -100,6 +105,19 @@ int ftRender::getPicture(const char *filename)
 		return curPicID++;
 	} else
 		return Hash2PicID[hash];
+}
+
+void ftRender::drawLine(float x1, float y1, float x2, float y2)
+{
+	glBegin(GL_LINES);
+	glVertex2f(x1, y1);
+	glVertex2f(x2, y2);
+	glEnd();
+}
+
+void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
+{
+	ftRender::drawLine(p1.x, p1.y, p2.x, p2.y);
 }
 
 void ftRender::drawPic(int picID)
