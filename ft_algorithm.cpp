@@ -1,4 +1,5 @@
 #include "ft_algorithm.h"
+#include <cstdlib>
 
 void ftAlgorithm::init()
 {
@@ -11,5 +12,13 @@ int ftAlgorithm::bkdrHash(const char *str)
 	while (*str) {
 		hash = hash * seed + (*str++);
 	}
-	return hash;
+	return (hash & 0x7fffffff);
+}
+
+float ftAlgorithm::randRangef(float l, float r)
+{
+	float zerone = (float)std::rand() / (float)RAND_MAX;
+	zerone *= r - l;
+	zerone += l;
+	return zerone;
 }

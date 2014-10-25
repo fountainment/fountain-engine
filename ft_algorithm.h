@@ -4,6 +4,7 @@
 namespace ftAlgorithm {
 	void init();
 	int bkdrHash(const char *str);
+	float randRangef(float l, float r);
 };
 
 #endif
