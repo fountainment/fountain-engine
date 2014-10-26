@@ -37,11 +37,11 @@ namespace fountain {
 }
 
 #ifdef linux
-#include "linFountain.h"
+#include <fountain/linFountain.h>
 #endif
 
 #ifdef _WIN32
-#include "winFountain.h"
+#include <fountain/winFountain.h>
 #endif
 
 #endif

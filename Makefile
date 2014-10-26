@@ -1,30 +1,14 @@
-OBJS = main.o ft_time.o ft_3dmodel.o ft_render.o ft_input.o ft_data.o ft_algorithm.o
-LIBS = -lGL -lfreeimage -lX11
+CPPS = ft_time.cpp ft_3dmodel.cpp ft_render.cpp ft_input.cpp ft_data.cpp ft_algorithm.cpp
 CC = g++
 CFLAGS = -Wall -O
-fountain: $(OBJS)
-	$(CC) $(OBJS) -o fountain $(LIBS)
+LIBS = -lX11 -lGL -lfreeimage
 
-main.o: main.cpp fountain.h
-	$(CC) $(CFLAGS) -c main.cpp -o main.o
+libfountain.so:
+	$(CC) $(CPPS) -fPIC -shared -o libfountain.so $(LIBS)
 
-ft_time.o: ft_time.cpp ft_time.h
-	$(CC) $(CFLAGS) -c ft_time.cpp -o ft_time.o
+install: libfountain.so
+	cp include/* /usr/include/ -r
+	cp libfountain.so /usr/lib/
 
-ft_3dmodel.o: ft_3dmodel.cpp ft_3dmodel.h
-	$(CC) $(CFLAGS) -c ft_3dmodel.cpp -o ft_3dmodel.o
-
-ft_render.o: ft_render.cpp ft_render.h
-	$(CC) $(CFLAGS) -c ft_render.cpp -o ft_render.o
-
-ft_input.o: ft_input.cpp ft_input.h ft_data.h
-	$(CC) $(CFLAGS) -c ft_input.cpp -o ft_input.o
-
-ft_data.o: ft_data.cpp ft_data.h
-	$(CC) $(CFLAGS) -c ft_data.cpp -o ft_data.o
-
-ft_algorithm.o: ft_algorithm.cpp ft_algorithm.cpp
-	$(CC) $(CFLAGS) -c ft_algorithm.cpp -o ft_algorithm.o
-	
 clean:
-	rm -rf *.o fountain
+	rm -rf *.so

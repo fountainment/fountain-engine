@@ -10,4 +10,4 @@ obj/
 *.exe
 *.so
 *.dll
-./fountain
+main

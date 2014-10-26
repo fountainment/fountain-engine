@@ -1,4 +1,4 @@
-#include "fountain.h"
+#include <fountain.h>
 
 namespace Game {
 	double xAngle = 0.0f;
