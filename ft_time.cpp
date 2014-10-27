@@ -1,4 +1,4 @@
-#include "ft_time.h"
+#include <fountain/ft_time.h>
 
 static double allStartT = 0.0;
 

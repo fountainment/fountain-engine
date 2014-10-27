@@ -1,5 +1,5 @@
-#include "ft_input.h"
-#include "ft_data.h"
+#include <fountain/ft_input.h>
+#include <fountain/ft_data.h>
 #include <cstring>
 
 void ftInput::init()

@@ -45,7 +45,7 @@ void fountain::singleFrame()
 		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
 	if (fountain::sysKeyboard.getState(FT_S))
 		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
-/*
+
 	ftRender::transformBegin();	
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::ftScale(Game::scale);
@@ -56,10 +56,10 @@ void fountain::singleFrame()
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::drawPic(Game::testPic);
 	ftRender::transformEnd();
-*/
+
 	ftRender::transformBegin();
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
-	ftRender::drawLine(-100, -100, 100, 100);
+	ftRender::drawLine(ftAlgorithm::randRangef(-110, -90), -100, 100, 100);
 	ftRender::transformEnd();
 
 	Game::mainClock.tick();

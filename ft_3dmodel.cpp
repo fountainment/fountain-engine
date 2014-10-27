@@ -1,4 +1,4 @@
-#include "ft_3dmodel.h"
+#include <fountain/ft_3dmodel.h>
 #include <cstdio>
 #include <GL/gl.h>
 

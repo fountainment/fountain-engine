@@ -1,4 +1,4 @@
-#include "ft_data.h"
+#include <fountain/ft_data.h>
 
 namespace fountain {
 	winState mainWin;

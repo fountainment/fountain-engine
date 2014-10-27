@@ -1,4 +1,4 @@
-#include "ft_algorithm.h"
+#include <fountain/ft_algorithm.h>
 #include <cstdlib>
 
 void ftAlgorithm::init()

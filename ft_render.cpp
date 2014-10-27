@@ -1,6 +1,6 @@
-#include "ft_render.h"
-#include "ft_data.h"
-#include "ft_algorithm.h"
+#include <fountain/ft_render.h>
+#include <fountain/ft_data.h>
+#include <fountain/ft_algorithm.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <FreeImage.h>

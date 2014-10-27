@@ -37,24 +37,16 @@
 			<Add library="gdi32" />
 			<Add library="FreeImage" />
 		</Linker>
-		<Unit filename="fountain.h" />
 		<Unit filename="ft_3dmodel.cpp" />
-		<Unit filename="ft_3dmodel.h" />
 		<Unit filename="ft_algorithm.cpp" />
-		<Unit filename="ft_algorithm.h" />
 		<Unit filename="ft_data.cpp" />
-		<Unit filename="ft_data.h" />
 		<Unit filename="ft_input.cpp" />
-		<Unit filename="ft_input.h" />
 		<Unit filename="ft_render.cpp" />
-		<Unit filename="ft_render.h" />
 		<Unit filename="ft_time.cpp" />
-		<Unit filename="ft_time.h" />
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="main.cpp" />
-		<Unit filename="winFountain.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
