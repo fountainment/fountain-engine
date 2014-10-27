@@ -29,6 +29,8 @@ void fountain::gameInit()
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
+	container<int, 1000> con;
+	con.add(100);
 }
 
 void fountain::singleFrame()
