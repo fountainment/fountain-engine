@@ -48,6 +48,15 @@
 		<Unit filename="ft_input.cpp" />
 		<Unit filename="ft_render.cpp" />
 		<Unit filename="ft_time.cpp" />
+		<Unit filename="include/fountain.h" />
+		<Unit filename="include/fountain/fountaindef.h" />
+		<Unit filename="include/fountain/ft_3dmodel.h" />
+		<Unit filename="include/fountain/ft_algorithm.h" />
+		<Unit filename="include/fountain/ft_data.h" />
+		<Unit filename="include/fountain/ft_input.h" />
+		<Unit filename="include/fountain/ft_render.h" />
+		<Unit filename="include/fountain/ft_time.h" />
+		<Unit filename="include/fountain/winFountain.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
