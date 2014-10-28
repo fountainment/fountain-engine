@@ -1,5 +1,16 @@
 #include <fountain.h>
 
+container<ftVec2, 10000> con;
+
+void drawPot(ftVec2 vec)
+{
+	glPointSize(3.0f);
+	glColor3f(ftAlgorithm::randRangef(0.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f));
+	glBegin(GL_POINTS);
+	glVertex3f(vec.x, vec.y, ftAlgorithm::randRangef(-100, 100));
+	glEnd();
+}
+
 namespace Game {
 	double xAngle = 0.0f;
 	double yAngle = 0.0f;
@@ -29,8 +40,9 @@ void fountain::gameInit()
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
-	container<int, 1000> con;
-	con.add(100);
+	for (int i = 0; i < 10000; i++) {
+		con.add(ftVec2(ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100)));
+	}
 }
 
 void fountain::singleFrame()
@@ -51,6 +63,13 @@ void fountain::singleFrame()
 	ftRender::transformBegin();	
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::ftScale(Game::scale);
+	con.doWith(drawPot);
+	ftRender::transformEnd();
+
+/*
+	ftRender::transformBegin();	
+	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
+	ftRender::ftScale(Game::scale);
 	Game::simpleModel.render();
 	ftRender::transformEnd();
 
@@ -63,6 +82,6 @@ void fountain::singleFrame()
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::drawLine(ftAlgorithm::randRangef(-110, -90), -100, 100, 100);
 	ftRender::transformEnd();
-
+*/
 	Game::mainClock.tick();
 }

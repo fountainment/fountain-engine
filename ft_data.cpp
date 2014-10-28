@@ -4,6 +4,16 @@ namespace fountain {
 	winState mainWin;
 };
 
+ftVec2::ftVec2()
+{
+}
+
+ftVec2::ftVec2(float x, float y)
+{
+	ftVec2::x = x;
+	ftVec2::y = y;
+}
+
 const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b)
 {
 	ftVec2 ans;

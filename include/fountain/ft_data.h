@@ -21,19 +21,12 @@ typedef struct {
 
 } winState;
 
-typedef struct {
+class ftVec2 {
+	public:
 	float x, y;
-
-	float getX() {
-		return x;
-	}
-	float getY() {
-		return y;
-	}
-
-}
-
-ftVec2;
+	ftVec2();
+	ftVec2(float x, float y);
+};
 
 extern const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b);
 
@@ -88,6 +81,7 @@ class container
 		void add(_tp node);
 		void update();
 		void draw();
+		void doWith(void(*func)(_tp));
 };
 
 template<typename _tp, int _size>
@@ -136,6 +130,16 @@ void container<_tp, _size>::draw()
 	int cur = container<_tp, _size>::head;
 	while (cur != -1) {
 		container<_tp, _size>::list[cur].draw();
+		cur = container<_tp, _size>::next[cur];
+	}
+}
+
+template<typename _tp, int _size>
+void container<_tp, _size>::doWith(void(*func)(_tp))
+{
+	int cur = container<_tp, _size>::head;
+	while (cur != -1) {
+		func(container<_tp, _size>::list[cur]);
 		cur = container<_tp, _size>::next[cur];
 	}
 }
