@@ -1,11 +1,11 @@
 #include <fountain.h>
 
-container<ftVec2, 10000> con;
+container<ftVec2, 100000> con;
 
 void drawPot(ftVec2 vec)
 {
 	glPointSize(3.0f);
-	glColor3f(ftAlgorithm::randRangef(0.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f));
+	glColor3f(ftAlgorithm::randRangef(vec.x / 100.0f, 1.0f), ftAlgorithm::randRangef(vec.y / 100.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f));
 	glBegin(GL_POINTS);
 	glVertex3f(vec.x, vec.y, ftAlgorithm::randRangef(-100, 100));
 	glEnd();
@@ -40,7 +40,8 @@ void fountain::gameInit()
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
-	for (int i = 0; i < 10000; i++) {
+	glEnable(GL_DEPTH_TEST);
+	for (int i = 0; i < 100000; i++) {
 		con.add(ftVec2(ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100)));
 	}
 }
