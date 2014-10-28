@@ -2,7 +2,7 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="Test" />
+		<Option title="test" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
@@ -37,7 +37,7 @@
 			<Add library="X11" />
 			<Add library="freeimage" />
 			<Add library="fountain" />
-			<Add directory="./" />
+			<Add directory="./bin/Debug" />
 		</Linker>
 		<Unit filename="main.cpp" />
 		<Extensions>

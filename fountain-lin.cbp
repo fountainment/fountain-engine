@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/libfountain" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/fountain" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -18,7 +18,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/libfountain" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/fountain" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="3" />
 				<Option compiler="gcc" />
@@ -38,6 +38,8 @@
 			<Add directory="./include/" />
 		</Compiler>
 		<Linker>
+			<Add library="GL" />
+			<Add library="freeimage" />
 			<Add directory="./" />
 		</Linker>
 		<Unit filename="ft_3dmodel.cpp" />
@@ -46,6 +48,15 @@
 		<Unit filename="ft_input.cpp" />
 		<Unit filename="ft_render.cpp" />
 		<Unit filename="ft_time.cpp" />
+		<Unit filename="include/fountain.h" />
+		<Unit filename="include/fountain/fountaindef.h" />
+		<Unit filename="include/fountain/ft_3dmodel.h" />
+		<Unit filename="include/fountain/ft_algorithm.h" />
+		<Unit filename="include/fountain/ft_data.h" />
+		<Unit filename="include/fountain/ft_input.h" />
+		<Unit filename="include/fountain/ft_render.h" />
+		<Unit filename="include/fountain/ft_time.h" />
+		<Unit filename="include/fountain/linFountain.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

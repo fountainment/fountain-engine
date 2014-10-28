@@ -4,7 +4,7 @@ container<ftVec2, 100000> con;
 
 void drawPot(ftVec2 vec)
 {
-	glPointSize(3.0f);
+	glPointSize(2.0f);
 	glColor3f(ftAlgorithm::randRangef(vec.x / 100.0f, 1.0f), ftAlgorithm::randRangef(vec.y / 100.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f));
 	glBegin(GL_POINTS);
 	glVertex3f(vec.x, vec.y, ftAlgorithm::randRangef(-100, 100));
@@ -36,7 +36,6 @@ void fountain::gameInit()
 {
 	ftRender::openLineSmooth();
 	Game::mainCamera.setProjectionType(FT_PERSPECTIVE);
-	glLineWidth(1.5f);
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
@@ -53,22 +52,22 @@ void fountain::singleFrame()
 	Game::xAngle -= Game::deltaV.y;
 	Game::yAngle += Game::deltaV.x;
 	if (fountain::sysMouse.getState(1))
-		Game::scale += 40.0f * Game::mainClock.getDeltaT();
+		Game::scale *= 1.1f;
 	if (fountain::sysKeyboard.getState(FT_W))
-		Game::scale += 40.0f * Game::mainClock.getDeltaT();
+		Game::scale += 5.0f * Game::mainClock.getDeltaT();
 	if (fountain::sysMouse.getState(3))
-		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
+		Game::scale /= 1.1f;
 	if (fountain::sysKeyboard.getState(FT_S))
-		Game::scale -= 40.0f * Game::mainClock.getDeltaT();
+		Game::scale -= 5.0f * Game::mainClock.getDeltaT();
 
-	ftRender::transformBegin();	
+	ftRender::transformBegin();
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::ftScale(Game::scale);
 	con.doWith(drawPot);
 	ftRender::transformEnd();
 
 /*
-	ftRender::transformBegin();	
+	ftRender::transformBegin();
 	ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
 	ftRender::ftScale(Game::scale);
 	Game::simpleModel.render();
