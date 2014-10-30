@@ -1,13 +1,14 @@
 #include <fountain.h>
+#define abs(x) ((x)>0?(x):-(x))
 
-container<ftVec2, 100000> con;
+container<ftVec3, 100000> con;
 
-void drawPot(ftVec2 vec)
+void drawPot(ftVec3 vec)
 {
 	glPointSize(2.0f);
-	glColor3f(ftAlgorithm::randRangef(vec.x / 100.0f, 1.0f), ftAlgorithm::randRangef(vec.y / 100.0f, 1.0f), ftAlgorithm::randRangef(0.0f, 1.0f));
+	glColor3f(abs(vec.xyz[0] / 100.0f), abs(vec.xyz[1] / 100.0f), abs(vec.xyz[2] / 100.0f));
 	glBegin(GL_POINTS);
-	glVertex3f(vec.x, vec.y, ftAlgorithm::randRangef(-100, 100));
+	glVertex3fv(vec.xyz);
 	glEnd();
 }
 
@@ -28,20 +29,21 @@ void fountain::setBasicVarible()
 	mainWin.setH(600);
 	mainWin.title = "fountain-prototype 0.03";
 	mainWin.icon = "fountain.ico";
-	mainWin.isFullScreen = true;
+	mainWin.isFullScreen = false;
 	mainWin.hideCursor = true;
 }
 
 void fountain::gameInit()
 {
-	ftRender::openLineSmooth();
+	//ftRender::openLineSmooth();
+	//ftRender::openPointSmooth();
 	Game::mainCamera.setProjectionType(FT_PERSPECTIVE);
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
 	glEnable(GL_DEPTH_TEST);
 	for (int i = 0; i < 100000; i++) {
-		con.add(ftVec2(ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100)));
+		con.add(ftVec3(ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100)));
 	}
 }
 

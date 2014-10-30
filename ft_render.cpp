@@ -49,6 +49,13 @@ void ftRender::openLineSmooth()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void ftRender::openPointSmooth()
+{
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void ftRender::setClearColor(int r, int g, int b)
 {
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);

@@ -30,27 +30,12 @@ class ftVec2 {
 
 extern const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b);
 
-typedef struct {
-	float xyz[3];
-
-	float getX() {
-		return xyz[0];
-	}
-	float getY() {
-		return xyz[1];
-	}
-
-	float getZ() {
-		return xyz[2];
-	}
-
-	float *getV() {
-		return xyz;
-	}
-
-}
-
-ftVec3;
+class ftVec3 {
+public:
+    float xyz[3];
+    ftVec3();
+    ftVec3(float x, float y, float z);
+};
 
 class ftRect {
 private:
