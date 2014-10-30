@@ -32,8 +32,8 @@ void ObjModel::openFile(const char *fileName)
 				for (int i = 0; i < 3; i++) {
 					tmpInt =
 					    std::fscanf(objFile, "%f",
-							&ObjModel::
-							v[vecN].xyz[i]);
+							&ObjModel::v[vecN].
+							xyz[i]);
 					if (tmpInt != 1)
 						break;
 				}

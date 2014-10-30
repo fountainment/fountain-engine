@@ -20,9 +20,9 @@ ftVec3::ftVec3()
 
 ftVec3::ftVec3(float x, float y, float z)
 {
-    ftVec3::xyz[0] = x;
-    ftVec3::xyz[1] = y;
-    ftVec3::xyz[2] = z;
+	ftVec3::xyz[0] = x;
+	ftVec3::xyz[1] = y;
+	ftVec3::xyz[2] = z;
 }
 
 const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b)

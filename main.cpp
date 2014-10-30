@@ -1,12 +1,13 @@
 #include <fountain.h>
 #define abs(x) ((x)>0?(x):-(x))
 
-container<ftVec3, 100000> con;
+container < ftVec3, 100000 > con;
 
 void drawPot(ftVec3 vec)
 {
 	glPointSize(2.0f);
-	glColor3f(abs(vec.xyz[0] / 100.0f), abs(vec.xyz[1] / 100.0f), abs(vec.xyz[2] / 100.0f));
+	glColor3f(abs(vec.xyz[0] / 100.0f), abs(vec.xyz[1] / 100.0f),
+		  abs(vec.xyz[2] / 100.0f));
 	glBegin(GL_POINTS);
 	glVertex3fv(vec.xyz);
 	glEnd();
@@ -43,7 +44,10 @@ void fountain::gameInit()
 	Game::mainClock.init();
 	glEnable(GL_DEPTH_TEST);
 	for (int i = 0; i < 100000; i++) {
-		con.add(ftVec3(ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100), ftAlgorithm::randRangef(-100, 100)));
+		con.add(ftVec3
+			(ftAlgorithm::randRangef(-100, 100),
+			 ftAlgorithm::randRangef(-100, 100),
+			 ftAlgorithm::randRangef(-100, 100)));
 	}
 }
 

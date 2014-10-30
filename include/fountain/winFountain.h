@@ -174,17 +174,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				PostQuitMessage(0);
 				break;
 			default:
-				fountain::sysKeyboard.
-				    setState(keymap
-					     [wParam & FT_KEYBOARDSTATE_SIZE],
-					     1);
+				fountain::sysKeyboard.setState(keymap
+							       [wParam &
+								FT_KEYBOARDSTATE_SIZE],
+							       1);
 			}
 		}
 		break;
 
 	case WM_KEYUP:
-		fountain::sysKeyboard.
-		    setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE], 0);
+		fountain::
+		    sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE],
+					 0);
 		break;
 
 	case WM_KILLFOCUS:

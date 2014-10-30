@@ -22,19 +22,19 @@ typedef struct {
 } winState;
 
 class ftVec2 {
-	public:
+public:
 	float x, y;
-	ftVec2();
-	ftVec2(float x, float y);
+	 ftVec2();
+	 ftVec2(float x, float y);
 };
 
 extern const ftVec2 operator-(const ftVec2 & a, const ftVec2 & b);
 
 class ftVec3 {
 public:
-    float xyz[3];
-    ftVec3();
-    ftVec3(float x, float y, float z);
+	float xyz[3];
+	 ftVec3();
+	 ftVec3(float x, float y, float z);
 };
 
 class ftRect {
@@ -50,82 +50,78 @@ public:
 	void setCenter(float x, float y);
 };
 
-template <typename _tp, int _size>
-class container
-{
-	private:
-		_tp list[_size];
-		int head;
-		int tail;
-		int avail[_size];
-		int availN;
-		int prev[_size];
-		int next[_size];
-	public:
-		container();
-		void add(_tp node);
-		void update();
-		void draw();
-		void doWith(void(*func)(_tp));
+template < typename _tp, int _size > class container {
+private:
+	_tp list[_size];
+	int head;
+	int tail;
+	int avail[_size];
+	int availN;
+	int prev[_size];
+	int next[_size];
+public:
+	 container();
+	void add(_tp node);
+	void update();
+	void draw();
+	void doWith(void (*func) (_tp));
 };
 
-template<typename _tp, int _size>
-container<_tp, _size>::container()
+template < typename _tp, int _size > container < _tp, _size >::container()
 {
-	container<_tp, _size>::head = -1;
-	container<_tp, _size>::tail = -1;
+	container < _tp, _size >::head = -1;
+	container < _tp, _size >::tail = -1;
 	for (int i = 0; i < _size; i++) {
-		container<_tp, _size>::avail[i] = i;
+		container < _tp, _size >::avail[i] = i;
 	}
-	container<_tp, _size>::availN = _size;
+	container < _tp, _size >::availN = _size;
 }
 
-template<typename _tp, int _size>
-void container<_tp, _size>::add(_tp node)
+template < typename _tp, int _size >
+    void container < _tp, _size >::add(_tp node)
 {
-	int aN = container<_tp, _size>::availN;
-	int tail = container<_tp, _size>::tail;
-	if (!aN) return;
-	int cur = container<_tp, _size>::avail[aN - 1];
-	container<_tp, _size>::list[cur] = node;
-	if (container<_tp, _size>::head == -1) {
-		container<_tp, _size>::head = cur;
+	int aN = container < _tp, _size >::availN;
+	int tail = container < _tp, _size >::tail;
+	if (!aN)
+		return;
+	int cur = container < _tp, _size >::avail[aN - 1];
+	container < _tp, _size >::list[cur] = node;
+	if (container < _tp, _size >::head == -1) {
+		container < _tp, _size >::head = cur;
 	} else {
-		container<_tp, _size>::next[tail] = cur;
+		container < _tp, _size >::next[tail] = cur;
 	}
-	container<_tp, _size>::prev[cur] = tail;
-	container<_tp, _size>::next[cur] = -1;
-	container<_tp, _size>::tail = cur;
-	container<_tp, _size>::availN--;
+	container < _tp, _size >::prev[cur] = tail;
+	container < _tp, _size >::next[cur] = -1;
+	container < _tp, _size >::tail = cur;
+	container < _tp, _size >::availN--;
 }
 
-template<typename _tp, int _size>
-void container<_tp, _size>::update()
+template < typename _tp, int _size > void container < _tp, _size >::update()
 {
-	int cur = container<_tp, _size>::head;
+	int cur = container < _tp, _size >::head;
 	while (cur != -1) {
-		container<_tp, _size>::list[cur].update();
-		cur = container<_tp, _size>::next[cur];
-	}
-}
-
-template<typename _tp, int _size>
-void container<_tp, _size>::draw()
-{
-	int cur = container<_tp, _size>::head;
-	while (cur != -1) {
-		container<_tp, _size>::list[cur].draw();
-		cur = container<_tp, _size>::next[cur];
+		container < _tp, _size >::list[cur].update();
+		cur = container < _tp, _size >::next[cur];
 	}
 }
 
-template<typename _tp, int _size>
-void container<_tp, _size>::doWith(void(*func)(_tp))
+template < typename _tp, int _size > void container < _tp, _size >::draw()
 {
-	int cur = container<_tp, _size>::head;
+	int cur = container < _tp, _size >::head;
 	while (cur != -1) {
-		func(container<_tp, _size>::list[cur]);
-		cur = container<_tp, _size>::next[cur];
+		container < _tp, _size >::list[cur].draw();
+		cur = container < _tp, _size >::next[cur];
+	}
+}
+
+template < typename _tp, int _size >
+    void container < _tp, _size >::doWith(void (*func) (_tp))
+{
+	int cur = container < _tp, _size >::head;
+	while (cur != -1) {
+		func(container < _tp, _size >::list[cur]);
+		cur = container < _tp, _size >::next[cur];
 	}
 }
 
