@@ -1,7 +1,8 @@
 #ifndef _FOUNTAINDEF_H_
 #define _FOUNTAINDEF_H_
 
-#define FOUNTAIN_VERSION 0.03
+#define FOUNTAIN_VERSION "0.05"
+#define FOUNTAIN_VERSION_NUM 0.05
 
 #define FT_A 0x0001
 #define FT_B 0x0002

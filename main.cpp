@@ -1,4 +1,5 @@
 #include <fountain.h>
+#include <string>
 #include <Box2D/Box2D.h>
 #include <utility>
 #define abs(x) ((x)>0?(x):-(x))
@@ -48,7 +49,7 @@ void fountain::setBasicVarible()
 {
 	mainWin.setW(800);
 	mainWin.setH(600);
-	mainWin.title = "fountain-prototype 0.03";
+	mainWin.title = std::string("fountain-prototype ") + std::string(FOUNTAIN_VERSION);
 	mainWin.icon = "fountain.ico";
 	mainWin.isFullScreen = false;
 	mainWin.hideCursor = false;
@@ -97,12 +98,12 @@ void fountain::singleFrame()
 		Game::scale /= 1.1f;
 	if (fountain::sysKeyboard.getState(FT_S))
 		Game::scale -= 5.0f * Game::mainClock.getDeltaT();
-	//Game::mainCamera.setScale(Game::scale);
+	Game::mainCamera.setScale(Game::scale);
 	Game::mainCamera.update();
 
 	ftRender::transformBegin();
 	//ftRender::ftRotate(Game::xAngle, Game::yAngle, 0.0f);
-	ftRender::ftScale(Game::scale);
+	//ftRender::ftScale(Game::scale);
 	ftRender::drawLine(-50.0f, 0.0f, 50.0f, 0.0f);
 	con.doWith(drawPot);
 	ftRender::transformEnd();

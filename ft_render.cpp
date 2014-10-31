@@ -230,7 +230,7 @@ void Camera::update()
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	if (Camera::projectionType == FT_PLANE) {
-		glOrtho(-Camera::W2, Camera::W2, -Camera::H2, Camera::H2,
+		glOrtho(-Camera::W2 / Camera::scale, Camera::W2 / Camera::scale, -Camera::H2 / Camera::scale, Camera::H2 / Camera::scale,
 			-99999, 99999);
 	} else if (Camera::projectionType == FT_PERSPECTIVE) {
 		glFrustum(-Camera::nearW2 / Camera::scale,
