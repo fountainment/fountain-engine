@@ -48,6 +48,7 @@ public:
 		void update();
 		void setPosition(float x, float y);
 		void setPosition(float x, float y, float z);
+		void move(float x, float y);
 		void setWinSize(int w, int h);
 		void setScale(float scale);
 		void setAngle(float x, float y, float z);

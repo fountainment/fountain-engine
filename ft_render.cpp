@@ -194,6 +194,12 @@ void Camera::setPosition(float x, float y, float z)
 	Camera::z = z;
 }
 
+void Camera::move(float x, float y)
+{
+	Camera::x += x;
+	Camera::y += y;
+}
+
 void Camera::setAngle(float x, float y, float z)
 {
 	Camera::xAngle = x;

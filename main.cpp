@@ -92,12 +92,16 @@ void fountain::singleFrame()
 	Game::yAngle += Game::deltaV.x;
 	if (fountain::sysMouse.getState(1))
 		Game::scale *= 1.1f;
-	if (fountain::sysKeyboard.getState(FT_W))
-		Game::scale += 5.0f * Game::mainClock.getDeltaT();
 	if (fountain::sysMouse.getState(3))
 		Game::scale /= 1.1f;
+	if (fountain::sysKeyboard.getState(FT_W))
+		Game::mainCamera.move(0, 3);
 	if (fountain::sysKeyboard.getState(FT_S))
-		Game::scale -= 5.0f * Game::mainClock.getDeltaT();
+		Game::mainCamera.move(0, -3);
+	if (fountain::sysKeyboard.getState(FT_A))
+		Game::mainCamera.move(-3, 0);
+	if (fountain::sysKeyboard.getState(FT_D))
+		Game::mainCamera.move(3, 0);
 	Game::mainCamera.setScale(Game::scale);
 	Game::mainCamera.update();
 
@@ -107,7 +111,6 @@ void fountain::singleFrame()
 	ftRender::drawLine(-50.0f, 0.0f, 50.0f, 0.0f);
 	con.doWith(drawPot);
 	ftRender::transformEnd();
-
 
 /*
 	ftRender::transformBegin();
