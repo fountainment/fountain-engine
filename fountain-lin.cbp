@@ -35,12 +35,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions -fPIC" />
-			<Add directory="./include/" />
+			<Add directory="include/" />
 		</Compiler>
 		<Linker>
 			<Add library="GL" />
 			<Add library="freeimage" />
-			<Add directory="./" />
 		</Linker>
 		<Unit filename="ft_3dmodel.cpp" />
 		<Unit filename="ft_algorithm.cpp" />
