@@ -2,11 +2,11 @@
 #include <cstdio>
 #include <GL/gl.h>
 
+using ft3DModel::ObjModel;
+
 void ft3DModel::init()
 {
 }
-
-using namespace ft3DModel;
 
 ObjModel::ObjModel(const char *fileName)
 {
@@ -24,16 +24,16 @@ void ObjModel::openFile(const char *fileName)
 	if (objFile != NULL) {
 		for (;;) {
 			while (tmpInt =
-			       std::fscanf(objFile, "%c", &tmp), tmpInt != EOF
-			       && tmp != '\n') ;
+			            std::fscanf(objFile, "%c", &tmp), tmpInt != EOF
+			        && tmp != '\n') ;
 			if (std::fscanf(objFile, "%c", &tmp) == EOF)
 				break;
 			if (tmp == 'v') {
 				for (int i = 0; i < 3; i++) {
 					tmpInt =
 					    std::fscanf(objFile, "%f",
-							&ObjModel::v[vecN].
-							xyz[i]);
+					                &ObjModel::v[vecN].
+					                xyz[i]);
 					if (tmpInt != 1)
 						break;
 				}
@@ -42,9 +42,9 @@ void ObjModel::openFile(const char *fileName)
 				if (tmp == 'f') {
 					tmpInt =
 					    std::fscanf(objFile, "%d%d%d",
-							&ObjModel::p[indexN].a,
-							&ObjModel::p[indexN].b,
-							&ObjModel::p[indexN].c);
+					                &ObjModel::p[indexN].a,
+					                &ObjModel::p[indexN].b,
+					                &ObjModel::p[indexN].c);
 					if (tmpInt != 3)
 						continue;
 					ObjModel::indexN++;

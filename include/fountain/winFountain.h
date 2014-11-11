@@ -35,7 +35,7 @@ void keyMapSetting()
 
 int WINAPI
 WinMain(HINSTANCE hInstance,
-	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+        HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	fountain::basicSetting();
 
@@ -59,14 +59,14 @@ WinMain(HINSTANCE hInstance,
 	wcex.hInstance = hInstance;
 	wcex.hIcon =
 	    (HICON) LoadImage(NULL, fountain::mainWin.icon.c_str(), IMAGE_ICON,
-			      0, 0, LR_LOADFROMFILE);
+	                      0, 0, LR_LOADFROMFILE);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH) GetStockObject(BLACK_BRUSH);
 	wcex.lpszMenuName = NULL;
 	wcex.lpszClassName = "fountain";
 	wcex.hIconSm =
 	    (HICON) LoadImage(NULL, fountain::mainWin.icon.c_str(), IMAGE_ICON,
-			      0, 0, LR_LOADFROMFILE);
+	                      0, 0, LR_LOADFROMFILE);
 
 	if (!RegisterClassEx(&wcex))
 		return 0;
@@ -77,13 +77,13 @@ WinMain(HINSTANCE hInstance,
 		fountain::mainWin.h = GetSystemMetrics(SM_CYSCREEN);
 	}
 	hwnd = CreateWindowEx(0,
-			      "fountain",
-			      fountain::mainWin.title.c_str(),
-			      winStyle,
-			      CW_USEDEFAULT,
-			      CW_USEDEFAULT,
-			      fountain::mainWin.w,
-			      fountain::mainWin.h, NULL, NULL, hInstance, NULL);
+	                      "fountain",
+	                      fountain::mainWin.title.c_str(),
+	                      winStyle,
+	                      CW_USEDEFAULT,
+	                      CW_USEDEFAULT,
+	                      fountain::mainWin.w,
+	                      fountain::mainWin.h, NULL, NULL, hInstance, NULL);
 
 	if (fountain::mainWin.hideCursor)
 		ShowCursor(false);
@@ -168,24 +168,24 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		return 0;
 
 	case WM_KEYDOWN:
-		{
-			switch (wParam) {
-			case VK_ESCAPE:
-				PostQuitMessage(0);
-				break;
-			default:
-				fountain::sysKeyboard.setState(keymap
-							       [wParam &
-								FT_KEYBOARDSTATE_SIZE],
-							       1);
-			}
+	{
+		switch (wParam) {
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+		default:
+			fountain::sysKeyboard.setState(keymap
+			                               [wParam &
+			                                FT_KEYBOARDSTATE_SIZE],
+			                               1);
 		}
-		break;
+	}
+	break;
 
 	case WM_KEYUP:
 		fountain::
-		    sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE],
-					 0);
+		sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE],
+		                     0);
 		break;
 
 	case WM_KILLFOCUS:

@@ -15,44 +15,44 @@ typedef struct {
 } texInfo;
 
 namespace ftRender {
-	void init();
+void init();
 
-	void transformBegin();
-	void transformEnd();
-	void ftTranslate(float x, float y, float z = 0.0f);
-	void ftRotate(float xAngle, float yAngle, float zAngle);
-	void ftScale(float scale);
+void transformBegin();
+void transformEnd();
+void ftTranslate(float x, float y, float z = 0.0f);
+void ftRotate(float xAngle, float yAngle, float zAngle);
+void ftScale(float scale);
 
-	void openLineSmooth();
-	void openPointSmooth();
-	void setClearColor(int r, int g, int b);
+void openLineSmooth();
+void openPointSmooth();
+void setClearColor(int r, int g, int b);
 
-	void drawLine(float x1, float y1, float x2, float y2);
-	void drawLine(ftVec2 p1, ftVec2 p2);
-	int getPicture(const char *filename);
-	void drawPic(int picID);
-	void drawAlphaPic(int picID);
+void drawLine(float x1, float y1, float x2, float y2);
+void drawLine(ftVec2 p1, ftVec2 p2);
+int getPicture(const char *filename);
+void drawPic(int picID);
+void drawAlphaPic(int picID);
 
-	class Camera {
+class Camera {
 private:
-		float x, y, z;
-		float winW, winH;
-		float W2, H2;
-		float nearW2, nearH2;
-		float scale;
-		float xAngle, yAngle, zAngle;
-		float ratio;
-		int projectionType;
+	float x, y, z;
+	float winW, winH;
+	float W2, H2;
+	float nearW2, nearH2;
+	float scale;
+	float xAngle, yAngle, zAngle;
+	float ratio;
+	int projectionType;
 public:
-		 Camera(float x = 0.0f, float y = 0.0f, float z = 0.0f);
-		void update();
-		void setPosition(float x, float y);
-		void setPosition(float x, float y, float z);
-		void move(float x, float y);
-		void setWinSize(int w, int h);
-		void setScale(float scale);
-		void setAngle(float x, float y, float z);
-		void setProjectionType(int type);
-	};
+	Camera(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	void update();
+	void setPosition(float x, float y);
+	void setPosition(float x, float y, float z);
+	void move(float x, float y);
+	void setWinSize(int w, int h);
+	void setScale(float scale);
+	void setAngle(float x, float y, float z);
+	void setProjectionType(int type);
+};
 }
 #endif

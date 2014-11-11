@@ -1,8 +1,10 @@
 #include <fountain/ft_time.h>
 
+using ftTime::Clock;
+
 static double allStartT = 0.0;
 
-#ifndef _WIN32
+#ifdef linux
 
 // Linux
 #ifndef _BSD_SOURCE
@@ -23,9 +25,9 @@ double floatTime()
 }
 
 // Linux end
+#endif
 
-#else
-
+#ifdef _WIN32
 // Win32
 #include <time.h>
 #include <windows.h>
@@ -43,7 +45,6 @@ double floatTime()
 }
 
 // Win32 end
-
 #endif
 
 void ftTime::init()
@@ -51,8 +52,6 @@ void ftTime::init()
 	allStartT = 0.0;
 	allStartT = floatTime();
 }
-
-using namespace ftTime;
 
 Clock::Clock(double fps)
 {
@@ -68,7 +67,7 @@ Clock::Clock(double fps)
 void Clock::init()
 {
 	Clock::firstT = Clock::beginT = Clock::continueT = Clock::pauseT =
-	    floatTime();
+	                                    floatTime();
 	Clock::isPaused = 0;
 }
 
@@ -76,7 +75,7 @@ void Clock::tick()
 {
 	Clock::endT = floatTime();
 	while ((Clock::deltaT =
-		Clock::endT - Clock::beginT) < Clock::secondPerFrame) {
+	            Clock::endT - Clock::beginT) < Clock::secondPerFrame) {
 		littleSleep();
 		Clock::endT = floatTime();
 	}

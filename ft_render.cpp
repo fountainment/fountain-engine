@@ -6,8 +6,10 @@
 #include <FreeImage.h>
 #include <map>
 
-static std::map < int, int >Hash2PicID;
-static std::map < int, texInfo > PicID2TexInfo;
+using ftRender::Camera;
+
+static std::map<int, int> Hash2PicID;
+static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
 
 void ftRender::init()
@@ -90,10 +92,10 @@ texInfo loadTexture(const char *filename)
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	if (fif == FIF_PNG)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-			     GL_BGRA, GL_UNSIGNED_BYTE, bits);
+		             GL_BGRA, GL_UNSIGNED_BYTE, bits);
 	else
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR,
-			     GL_UNSIGNED_BYTE, bits);
+		             GL_UNSIGNED_BYTE, bits);
 	FreeImage_Unload(dib);
 	tex.id = gl_texID;
 	tex.w = width;
@@ -168,8 +170,6 @@ void ftRender::drawAlphaPic(int picID)
 	glDisable(GL_TEXTURE_2D);
 }
 
-using namespace ftRender;
-
 Camera::Camera(float x, float y, float z)
 {
 	Camera::setPosition(x, y, z);
@@ -237,13 +237,13 @@ void Camera::update()
 	glLoadIdentity();
 	if (Camera::projectionType == FT_PLANE) {
 		glOrtho(-Camera::W2 / Camera::scale, Camera::W2 / Camera::scale, -Camera::H2 / Camera::scale, Camera::H2 / Camera::scale,
-			-99999, 99999);
+		        -99999, 99999);
 	} else if (Camera::projectionType == FT_PERSPECTIVE) {
 		glFrustum(-Camera::nearW2 / Camera::scale,
-			  Camera::nearW2 / Camera::scale,
-			  -Camera::nearH2 / Camera::scale,
-			  Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR,
-			  FT_CAMERA_FAR);
+		          Camera::nearW2 / Camera::scale,
+		          -Camera::nearH2 / Camera::scale,
+		          Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR,
+		          FT_CAMERA_FAR);
 	}
 	glRotatef(Camera::xAngle, 1.0f, 0.0f, 0.0f);
 	glRotatef(Camera::yAngle, 0.0f, 1.0f, 0.0f);

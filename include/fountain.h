@@ -5,35 +5,41 @@
 #include <fountain/ft_time.h>
 #include <fountain/ft_3dmodel.h>
 #include <fountain/ft_render.h>
+#include <fountain/ft_physics.h>
 #include <fountain/ft_input.h>
 #include <fountain/ft_algorithm.h>
 
 namespace fountain {
-	void checkSysState() {
 
-	} void readSettingFile() {
+void checkSysState() {
 
-	}
+}
 
-	void setBasicVarible();
+void readSettingFile() {
 
-	void basicSetting() {
-		checkSysState();
-		readSettingFile();
-		setBasicVarible();
-	}
+}
 
-	void initAllSystem() {
-		ftTime::init();
-		ft3DModel::init();
-		ftRender::init();
-		ftInput::init();
-		ftAlgorithm::init();
-	}
+void setBasicVarible();
 
-	void gameInit();
+void basicSetting() {
+	checkSysState();
+	readSettingFile();
+	setBasicVarible();
+}
 
-	void singleFrame();
+void initAllSystem() {
+	ftTime::init();
+	ft3DModel::init();
+	ftRender::init();
+	ftPhysics::init();
+	ftInput::init();
+	ftAlgorithm::init();
+}
+
+void gameInit();
+
+void singleFrame();
+
 }
 
 #ifdef linux

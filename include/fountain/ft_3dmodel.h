@@ -8,20 +8,21 @@ typedef struct {
 
 namespace ft3DModel {
 
-	void init();
+void init();
 
-	class ObjModel {
+class ObjModel {
 private:
-		int vecN;
-		int indexN;
-		ftVec3 v[50000];
-		ftVec3Index p[50000];
-		int neverRendered;
-		int listIndex;
+	int vecN;
+	int indexN;
+	ftVec3 v[50000];
+	ftVec3Index p[50000];
+	int neverRendered;
+	int listIndex;
 public:
-		 explicit ObjModel(const char *fileName);
-		void openFile(const char *fileName);
-		void render();
-	};
+	explicit ObjModel(const char *fileName);
+	void openFile(const char *fileName);
+	void render();
+};
+
 }
 #endif

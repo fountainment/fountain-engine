@@ -2,14 +2,16 @@
 #include <fountain/ft_data.h>
 #include <cstring>
 
+using ftInput::Mouse;
+using ftInput::Keyboard;
+
 void ftInput::init()
 {
 }
 
-using namespace ftInput;
-
 Mouse::Mouse()
 {
+	Mouse::clearState();
 	Mouse::coor.x = 0;
 	Mouse::coor.y = 0;
 	Mouse::coorNor = Mouse::coor;
@@ -54,12 +56,12 @@ int Mouse::getState(int button)
 
 void Mouse::clearState()
 {
-	std::memset(state, 0, sizeof(state));
+	std::memset(Mouse::state, 0, sizeof(Mouse::state));
 }
 
 Keyboard::Keyboard()
 {
-	std::memset(state, 0, sizeof(state));
+	Keyboard::clearState();
 }
 
 void Keyboard::setState(int ch, int st)
@@ -74,10 +76,12 @@ int Keyboard::getState(int ch)
 
 void Keyboard::clearState()
 {
-	std::memset(state, 0, sizeof(state));
+	std::memset(Keyboard::state, 0, sizeof(Keyboard::state));
 }
 
 namespace fountain {
-	ftInput::Mouse sysMouse;
-	ftInput::Keyboard sysKeyboard;
-}
+
+ftInput::Mouse sysMouse;
+ftInput::Keyboard sysKeyboard;
+
+};

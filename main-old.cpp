@@ -1,25 +1,41 @@
 #include <fountain.h>
 #include <string>
+#include <Box2D/Box2D.h>
 #include <utility>
 #define abs(x) ((x)>0?(x):-(x))
 
-void Sprite::draw()
-{
-	ftRender::transformBegin();
-	ftRender::ftTranslate(Sprite::getPosition().x, Sprite::getPosition().y);
-	ftRender::ftRotate(0.0f, 0.0f, Sprite::getAngle());
-	ftRender::drawLine(ftVec2(-0.5, -0.5), ftVec2(-0.5, 0.5));
-	ftRender::drawLine(ftVec2(-0.5, 0.5),  ftVec2(0.5, 0.5));
-	ftRender::drawLine(ftVec2(0.5, 0.5),   ftVec2(0.5, -0.5));
-	ftRender::drawLine(ftVec2(0.5, -0.5),  ftVec2(-0.5, -0.5));
-	ftRender::transformEnd();
-}
+container < std::pair<ftVec2, b2Body*>, 1000 > con;
+b2Vec2 gravity(0.0f, -100.0f);
+b2World world(gravity);
+b2BodyDef groundBodyDef;
+b2Body* groundBody;
+b2PolygonShape groundBox;
+b2BodyDef bodyDef;
+b2PolygonShape dynamicBox;
+b2FixtureDef fixtureDef;
+b2Body* body;
 
-void Sprite::update()
+void drawPot(std::pair<ftVec2, b2Body*> pp)
 {
+	//getBasicInfo
+	ftVec2 color = pp.first;
+	b2Body* body = pp.second;
+	b2Vec2 vec = body->GetPosition();
+	//setOpenGLState
+	glPointSize(2.0f);
+	glColor3f(color.x, color.y, 0.3f);
+	glPushMatrix();
+	ftRender::ftTranslate(vec.x, vec.y);
+	glRotatef(body->GetAngle() * 180.0f / 3.14159f, 0.0f, 0.0f, 1.0f);
+	//drawQuad
+	glBegin(GL_QUADS);
+	glVertex2f(-0.5f, -0.5f);
+	glVertex2f(0.5f, -0.5f);
+	glVertex2f(0.5f, 0.5f);
+	glVertex2f(-0.5f, 0.5f);
+	glEnd();
+	glPopMatrix();
 }
-
-ftPhysics::Body* bdPoint;
 
 namespace Game {
 double xAngle = 0.0f;
@@ -58,25 +74,36 @@ void fountain::gameInit()
 	glEnable(GL_DEPTH_TEST);
 
 	//TODO: move this internal(ftPhysics)
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0 - i; j <= i; j++) {
-			bdPoint = new ftPhysics::Body(j, -i, false);
-			fountain::mainWorld.addBody(bdPoint);
-		}
-	}
+
+	groundBodyDef.position.Set(0.0f, -5.0f);
+	groundBody = world.CreateBody(&groundBodyDef);
+
+	groundBox.SetAsBox(50.0f, 5.0f);
+	groundBody->CreateFixture(&groundBox, 0.0f);
+
+	bodyDef.type = b2_dynamicBody;
+
+	dynamicBox.SetAsBox(0.5f, 0.5f);
+
+	fixtureDef.shape = &dynamicBox;
+	fixtureDef.density = 1.0f;
+	fixtureDef.friction = 0.3f;
+
 	//TODO: add particle generater to do this
 	for (int i = 0; i < 1000; i++) {
 		float xx = ftAlgorithm::randRangef(-100, 100);
 		float yy = ftAlgorithm::randRangef(100, 1000);
-		bdPoint = new ftPhysics::Body(xx, yy);
-		fountain::mainWorld.addBody(bdPoint);
+		bodyDef.position.Set(xx, yy);
+		body = world.CreateBody(&bodyDef);
+		body->CreateFixture(&fixtureDef);
+		con.add(std::make_pair(ftVec2(ftAlgorithm::randRangef(0.0, 1.0), ftAlgorithm::randRangef(0.0, 1.0)), body));
 	}
 }
 
 void fountain::singleFrame()
 {
 	//TODO: move this internal
-	fountain::mainWorld.update();
+	world.Step(1.0f / 60.0f, 6, 2);
 
 	//TODO: move this to update(ftScene hook)
 	if (fountain::sysMouse.getState(4)) {
@@ -101,7 +128,10 @@ void fountain::singleFrame()
 	Game::mainCamera.setScale(Game::scale);
 	Game::mainCamera.update();
 
-	fountain::mainWorld.draw();
+	ftRender::transformBegin();
+	ftRender::drawLine(-50.0f, 0.0f, 50.0f, 0.0f);
+	con.doWith(drawPot);
+	ftRender::transformEnd();
 
 	//TODO: move this internal(fountainMain)
 	Game::mainClock.tick();
