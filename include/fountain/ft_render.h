@@ -29,6 +29,8 @@ void setClearColor(int r, int g, int b);
 
 void drawLine(float x1, float y1, float x2, float y2);
 void drawLine(ftVec2 p1, ftVec2 p2);
+void drawQuad(float w, float h);
+void drawRect(ftRect rct, float angle = 0.0f);
 int getPicture(const char *filename);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
@@ -53,6 +55,7 @@ public:
 	void setScale(float scale);
 	void setAngle(float x, float y, float z);
 	void setProjectionType(int type);
+	ftVec2 mouseToWorld(ftVec2 mPos);
 };
 }
 #endif

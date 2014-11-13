@@ -69,7 +69,8 @@ int main(int argc, char **argv)
 		fatalError("X server has no OpenGL GLX extension");
 
 	vi = glXChooseVisual(dpy, DefaultScreen(dpy), dblBuf);
-	if (vi == NULL) {
+	if (vi == NULL)
+	{
 		vi = glXChooseVisual(dpy, DefaultScreen(dpy), snglBuf);
 		if (vi == NULL)
 			fatalError("no RGB visual with depth buffer");
@@ -106,7 +107,8 @@ int main(int argc, char **argv)
 
 	XMapWindow(dpy, win);
 
-	if (fountain::mainWin.isFullScreen) {
+	if (fountain::mainWin.isFullScreen)
+	{
 		XWindowAttributes xwa;
 		XGetWindowAttributes(dpy, DefaultRootWindow(dpy), &xwa);
 		fountain::mainWin.w = xwa.width;
@@ -130,7 +132,8 @@ int main(int argc, char **argv)
 		           SubstructureNotifyMask, &xev);
 	}
 
-	if (fountain::mainWin.hideCursor) {
+	if (fountain::mainWin.hideCursor)
+	{
 		Display *display = dpy;
 
 		Cursor invisibleCursor;
@@ -153,15 +156,21 @@ int main(int argc, char **argv)
 	fountain::initAllSystem();
 	fountain::gameInit();
 
-	for (;;) {
+	for (;;)
+	{
+		//TODO: use a better way to solve it
 		fountain::sysMouse.setState(4, 0);
 		fountain::sysMouse.setState(5, 0);
-		while (XPending(dpy) > 0) {
+
+		while (XPending(dpy) > 0)
+		{
 			XNextEvent(dpy, &event);
-			switch (event.type) {
+			switch (event.type)
+			{
 			case ClientMessage:
 				if (event.xclient.data.l[0] ==
-				        (int)wmDeleteMessage) {
+				        (int)wmDeleteMessage)
+				{
 					XDestroyWindow(dpy,
 					               event.xclient.window);
 					XCloseDisplay(dpy);
@@ -179,7 +188,8 @@ int main(int argc, char **argv)
 				if ((XLookupString
 				        ((XKeyEvent *) & event, buffer, 1,
 				         &keysym, NULL) == 1)
-				        && (keysym == (KeySym) XK_Escape)) {
+				        && (keysym == (KeySym) XK_Escape))
+				{
 					XDestroyWindow(dpy,
 					               event.xclient.
 					               window);
@@ -200,7 +210,8 @@ int main(int argc, char **argv)
 			{
 				unsigned short is_retriggered = 0;
 				if (XEventsQueued
-				        (dpy, QueuedAfterReading)) {
+				        (dpy, QueuedAfterReading))
+				{
 					XEvent nev;
 					XPeekEvent(dpy, &nev);
 
@@ -208,7 +219,8 @@ int main(int argc, char **argv)
 					        && nev.xkey.time ==
 					        event.xkey.time
 					        && nev.xkey.keycode ==
-					        event.xkey.keycode) {
+					        event.xkey.keycode)
+					{
 						printf
 						("keyRetriggered\n");
 						//TODO: set the sysKeyboard
@@ -216,7 +228,8 @@ int main(int argc, char **argv)
 						is_retriggered = 1;
 					}
 				}
-				if (!is_retriggered) {
+				if (!is_retriggered)
+				{
 					XKeyEvent *kevent;
 					KeySym keycodeSym;
 					kevent = (XKeyEvent *) & event;

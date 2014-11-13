@@ -48,14 +48,20 @@ private:
 	float h;
 public:
 	ftRect(float x, float y, float w, float h);
+	ftRect();
+	ftRect(ftVec2 pos, ftVec2 rSize);
 	ftVec2 getCenter();
 	void setCenter(ftVec2 p);
-	void setCenter(float x, float y);
+	ftVec2 getXY();
+	void setXY(ftVec2 XY);
+	ftVec2 getSize();
+	void setSize(ftVec2 sz);
 };
 
 class Sprite {
 private:
 	ftVec2 position;
+	ftVec2 rectSize;
 	float angle;
 public:
 	Sprite();
@@ -64,6 +70,9 @@ public:
 	ftVec2 getPosition();
 	void setAngle(float agl);
 	float getAngle();
+	void setRectSize(ftVec2 rts);
+	void setRect(ftRect rct);
+	ftRect getRect();
 	void draw();
 	void update();
 };
@@ -80,7 +89,7 @@ private:
 	int next[_size];
 public:
 	container();
-	void add(_tp node);
+	bool add(_tp node);
 	void update();
 	void draw();
 	void doWith(void(*func)(_tp));
@@ -98,12 +107,12 @@ container<_tp, _size>::container()
 }
 
 template <typename _tp, int _size>
-void container<_tp, _size>::add(_tp node)
+bool container<_tp, _size>::add(_tp node)
 {
 	int aN = container<_tp, _size>::availN;
 	int tail = container<_tp, _size>::tail;
 	if (!aN)
-		return;
+		return false;
 	int cur = container<_tp, _size>::avail[aN - 1];
 	container<_tp, _size>::list[cur] = node;
 	if (container<_tp, _size>::head == -1) {
@@ -115,6 +124,7 @@ void container<_tp, _size>::add(_tp node)
 	container<_tp, _size>::next[cur] = -1;
 	container<_tp, _size>::tail = cur;
 	container<_tp, _size>::availN--;
+	return true;
 }
 
 template <typename _tp, int _size>

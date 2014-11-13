@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Box2D" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Option virtualFolders="./;" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/libBox2D.a" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="" />
+				<Option object_output="obj/Debug/Box2D" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="../.." />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/libBox2D.a" prefix_auto="0" extension_auto="0" />
+				<Option working_dir="" />
+				<Option object_output="obj/Release/Box2D" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DNDEBUG" />
+					<Add directory="../.." />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Unit filename="../../Box2D/Box2D.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2ChainShape.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2ChainShape.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2CircleShape.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2CircleShape.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2EdgeShape.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2EdgeShape.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2PolygonShape.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2PolygonShape.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/Shapes/b2Shape.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2BroadPhase.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2BroadPhase.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2CollideCircle.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2CollideEdge.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2CollidePolygon.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2Collision.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2Collision.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2Distance.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2Distance.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2DynamicTree.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2DynamicTree.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2TimeOfImpact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Collision/b2TimeOfImpact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2BlockAllocator.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2BlockAllocator.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Draw.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Draw.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2GrowableStack.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Math.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Math.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Settings.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Settings.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2StackAllocator.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2StackAllocator.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Timer.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Common/b2Timer.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2ChainAndCircleContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2ChainAndCircleContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2ChainAndPolygonContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2CircleContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2CircleContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2Contact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2Contact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2ContactSolver.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2ContactSolver.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2EdgeAndCircleContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2EdgeAndPolygonContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2PolygonAndCircleContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2PolygonContact.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Contacts/b2PolygonContact.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2DistanceJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2DistanceJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2FrictionJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2FrictionJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2GearJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2GearJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2Joint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2Joint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2MotorJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2MotorJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2MouseJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2MouseJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2PrismaticJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2PrismaticJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2PulleyJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2PulleyJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2RevoluteJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2RevoluteJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2RopeJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2RopeJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2WeldJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2WeldJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2WheelJoint.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/Joints/b2WheelJoint.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2Body.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2Body.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2ContactManager.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2ContactManager.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2Fixture.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2Fixture.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2Island.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2Island.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2TimeStep.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2World.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2World.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2WorldCallbacks.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Dynamics/b2WorldCallbacks.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Rope/b2Rope.cpp">
+			<Option virtualFolder="." />
+		</Unit>
+		<Unit filename="../../Box2D/Rope/b2Rope.h">
+			<Option virtualFolder="." />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

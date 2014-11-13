@@ -31,11 +31,11 @@ private:
 	container<Body*, BODY_MAXNUM> bodyCon;
 public:
 	World(ftVec2 gravity);
-	void addBody(Body* bd);
+	bool addBody(Body* bd);
 	void update();
 	void update(float timeStep);
 	void draw();
-}; 
+};
 
 };
 

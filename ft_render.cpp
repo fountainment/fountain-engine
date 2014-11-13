@@ -129,6 +129,27 @@ void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
 	ftRender::drawLine(p1.x, p1.y, p2.x, p2.y);
 }
 
+void ftRender::drawQuad(float w, float h)
+{
+	float w2 = w / 2.0f;
+	float h2 = h / 2.0f;
+	ftRender::drawLine(ftVec2(-w2, -h2), ftVec2(-w2, h2));
+	ftRender::drawLine(ftVec2(-w2, h2),  ftVec2(w2, h2));
+	ftRender::drawLine(ftVec2(w2, h2),   ftVec2(w2, -h2));
+	ftRender::drawLine(ftVec2(w2, -h2),  ftVec2(-w2, -h2));
+}
+
+void ftRender::drawRect(ftRect rct, float angle)
+{
+	ftVec2 rSize = rct.getSize();
+	ftVec2 rPos = rct.getCenter();
+	ftRender::transformBegin();
+	ftRender::ftTranslate(rPos.x, rPos.y);
+	ftRender::ftRotate(0.0f, 0.0f, angle);
+	ftRender::drawQuad(rSize.x, rSize.y);
+	ftRender::transformEnd();
+}
+
 void ftRender::drawPic(int picID)
 {
 	texInfo tex = PicID2TexInfo[picID];
@@ -250,4 +271,17 @@ void Camera::update()
 	glRotatef(Camera::zAngle, 0.0f, 0.0f, 1.0f);
 	glTranslatef(-Camera::x, -Camera::y, -Camera::z);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+ftVec2 Camera::mouseToWorld(ftVec2 mPos)
+{
+	float l, b, w2, h2;
+	w2 = Camera::W2 / Camera::scale;
+	h2 = Camera::H2 / Camera::scale;
+	l = Camera::x - w2;
+	b = Camera::y - h2;
+	ftVec2 ans;
+	ans.x = mPos.x / Camera::scale + l;
+	ans.y = mPos.y / Camera::scale + b;
+	return ans;
 }

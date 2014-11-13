@@ -10,4 +10,5 @@ obj/
 *.exe
 *.so
 *.dll
+*.orig
 main

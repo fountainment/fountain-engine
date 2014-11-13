@@ -1,4 +1,5 @@
 #include <fountain/ft_data.h>
+#include <fountain/ft_render.h>
 
 namespace fountain {
 
@@ -56,6 +57,22 @@ ftRect::ftRect(float x, float y, float w, float h)
 	ftRect::h = h;
 }
 
+ftRect::ftRect()
+{
+	ftRect::x = 0;
+	ftRect::y = 0;
+	ftRect::w = 0;
+	ftRect::h = 0;
+}
+
+ftRect::ftRect(ftVec2 pos, ftVec2 rSize)
+{
+	ftRect::x = pos.x;
+	ftRect::y = pos.y;
+	ftRect::w = rSize.x;
+	ftRect::h = rSize.y;
+}
+
 ftVec2 ftRect::getCenter()
 {
 	ftVec2 p;
@@ -70,10 +87,27 @@ void ftRect::setCenter(ftVec2 p)
 	ftRect::y = p.y - ftRect::h / 2.0f;
 }
 
-void ftRect::setCenter(float x, float y)
+ftVec2 ftRect::getSize()
 {
-	ftRect::x = x - ftRect::w / 2.0f;
-	ftRect::y = y - ftRect::h / 2.0f;
+	ftVec2 p(ftRect::w, ftRect::h);
+	return p;
+}
+
+void ftRect::setSize(ftVec2 sz)
+{
+	ftRect::w = sz.x;
+	ftRect::h = sz.y;
+}
+
+ftVec2 ftRect::getXY()
+{
+	return ftVec2(ftRect::x, ftRect::y);
+}
+
+void ftRect::setXY(ftVec2 XY)
+{
+	ftRect::x = XY.x;
+	ftRect::y = XY.y;
 }
 
 Sprite::Sprite()
@@ -108,6 +142,24 @@ float Sprite::getAngle()
 	return Sprite::angle;
 }
 
+void Sprite::setRectSize(ftVec2 rts)
+{
+	Sprite::rectSize = rts;
+}
+
+void Sprite::setRect(ftRect rct)
+{
+	Sprite::setPosition(rct.getCenter());
+	Sprite::setRectSize(rct.getSize());
+}
+
+ftRect Sprite::getRect()
+{
+	ftRect rct(Sprite::position, Sprite::rectSize);
+	return rct;
+}
+
 void Sprite::draw()
 {
+	ftRender::drawRect(Sprite::getRect(), Sprite::angle);
 }

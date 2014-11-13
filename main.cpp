@@ -1,22 +1,17 @@
 #include <fountain.h>
 #include <string>
-#include <utility>
 #define abs(x) ((x)>0?(x):-(x))
 
-void Sprite::draw()
+void SpriteDraw(Sprite* sp)
 {
 	ftRender::transformBegin();
-	ftRender::ftTranslate(Sprite::getPosition().x, Sprite::getPosition().y);
-	ftRender::ftRotate(0.0f, 0.0f, Sprite::getAngle());
+	ftRender::ftTranslate(sp->getPosition().x, sp->getPosition().y);
+	ftRender::ftRotate(0.0f, 0.0f, sp->getAngle());
 	ftRender::drawLine(ftVec2(-0.5, -0.5), ftVec2(-0.5, 0.5));
 	ftRender::drawLine(ftVec2(-0.5, 0.5),  ftVec2(0.5, 0.5));
 	ftRender::drawLine(ftVec2(0.5, 0.5),   ftVec2(0.5, -0.5));
 	ftRender::drawLine(ftVec2(0.5, -0.5),  ftVec2(-0.5, -0.5));
 	ftRender::transformEnd();
-}
-
-void Sprite::update()
-{
 }
 
 ftPhysics::Body* bdPoint;
@@ -27,6 +22,7 @@ double yAngle = 0.0f;
 double scale = 1.0f;
 int testPic;
 ftVec2 deltaV;
+
 
 //TODO: move this internal(ftTime)
 ftTime::Clock mainClock(60.0);
@@ -57,35 +53,54 @@ void fountain::gameInit()
 	Game::mainClock.init();
 	glEnable(GL_DEPTH_TEST);
 
-	//TODO: move this internal(ftPhysics)
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0 - i; j <= i; j++) {
 			bdPoint = new ftPhysics::Body(j, -i, false);
-			fountain::mainWorld.addBody(bdPoint);
+			if (!fountain::mainWorld.addBody(bdPoint)) {
+				delete bdPoint;
+			}
 		}
 	}
-	//TODO: add particle generater to do this
+
+	for (int i = -50; i <= 50; i++) {
+		bdPoint = new ftPhysics::Body(i, -100, false);
+		if (!fountain::mainWorld.addBody(bdPoint)) {
+			delete bdPoint;
+		}
+	}
+
 	for (int i = 0; i < 1000; i++) {
 		float xx = ftAlgorithm::randRangef(-100, 100);
 		float yy = ftAlgorithm::randRangef(100, 1000);
 		bdPoint = new ftPhysics::Body(xx, yy);
-		fountain::mainWorld.addBody(bdPoint);
+		if (!fountain::mainWorld.addBody(bdPoint)) {
+			delete bdPoint;
+		}
 	}
 }
 
 void fountain::singleFrame()
 {
-	//TODO: move this internal
-	fountain::mainWorld.update();
+	ftVec2 mPos = fountain::sysMouse.getPos();
+	mPos = Game::mainCamera.mouseToWorld(mPos);
 
-	//TODO: move this to update(ftScene hook)
+	//TODO: move this internal
+	fountain::mainWorld.update(Game::mainClock.getDeltaT());
+
+	//TODO: move these to update(ftScene hook)
+	if (fountain::sysMouse.getState(1)) {
+		bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
+		if (!fountain::mainWorld.addBody(bdPoint)) {
+			delete bdPoint;
+		}
+	}
 	if (fountain::sysMouse.getState(4)) {
 		Game::scale *= 1.15f;
 	}
 	if (fountain::sysMouse.getState(5)) {
 		Game::scale /= 1.15f;
 	}
-	if (fountain::sysMouse.getState(1)) {
+	if (fountain::sysMouse.getState(3)) {
 		Game::deltaV = fountain::sysMouse.getDeltaV();
 		Game::mainCamera.move(-Game::deltaV.x / Game::scale, -Game::deltaV.y / Game::scale);
 	}

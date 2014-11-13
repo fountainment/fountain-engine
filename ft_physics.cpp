@@ -16,6 +16,7 @@ Body::Body()
 {
 	Body::body = NULL;
 	Body::setPosition(0.0f, 0.0f);
+	Body::setRectSize(ftVec2(1.0f, 1.0f));
 	Body::isDynamic = true;
 }
 
@@ -23,6 +24,7 @@ Body::Body(float x, float y, bool dynamic)
 {
 	Body::body = NULL;
 	Body::setPosition(x, y);
+	Body::setRectSize(ftVec2(1.0f, 1.0f));
 	Body::isDynamic = dynamic;
 }
 
@@ -62,7 +64,7 @@ World::World(ftVec2 gravity)
 	World::world = new b2World(g);
 }
 
-void World::addBody(Body* bd)
+bool World::addBody(Body* bd)
 {
 	//TODO: set defaultBodyDef
 	ftVec2 pos = bd->getPosition();
@@ -72,9 +74,13 @@ void World::addBody(Body* bd)
 	} else {
 		defaultBodyDef.type = b2_staticBody;
 	}
-	bd->setBody(World::world->CreateBody(&defaultBodyDef));
-	bd->autoCreateFixtures();
-	World::bodyCon.add(bd);
+	if (World::bodyCon.add(bd) == true) {
+		bd->setBody(World::world->CreateBody(&defaultBodyDef));
+		bd->autoCreateFixtures();
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void bodyUpdate(Body* bd)

@@ -1,7 +1,7 @@
 CPPS = ft_time.cpp ft_3dmodel.cpp ft_render.cpp ft_input.cpp ft_data.cpp ft_algorithm.cpp ft_physics.cpp
 CC = g++
-CFLAGS = -Wall -O2
-LIBS = -lX11 -lGL -lfreeimage -lBox2D
+CFLAGS = -Wall -O2 -fexception
+LIBS = -lX11 -lGL -lfreeimage
 
 libfountain.so:
 	$(CC) $(CPPS) -I ./include -L . -fPIC -shared -o libfountain.so $(LIBS)
