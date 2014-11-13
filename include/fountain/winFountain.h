@@ -6,6 +6,7 @@
 
 POINT mousePos;
 static int keymap[FT_KEYBOARDSTATE_SIZE] = { 0 };
+int zDelta;
 
 LRESULT CALLBACK WindowProc(HWND, UINT, WPARAM, LPARAM);
 void EnableOpenGL(HWND hwnd, HDC *, HGLRC *);
@@ -95,6 +96,8 @@ WinMain(HINSTANCE hInstance,
 
 	while (!bQuit) {
 
+        fountain::sysMouse.setState(4, 0);
+        fountain::sysMouse.setState(5, 0);
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				bQuit = TRUE;
@@ -208,6 +211,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_RBUTTONUP:
 		fountain::sysMouse.setState(3, 0);
 		break;
+
+    case WM_MOUSEWHEEL:
+        zDelta = (short)HIWORD(wParam);
+        if (zDelta > 0) fountain::sysMouse.setState(4, 1);
+        else fountain::sysMouse.setState(5, 1);
+        break;
 
 	case WM_SYSCOMMAND:
 		switch (wParam) {
