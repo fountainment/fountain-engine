@@ -80,7 +80,8 @@ void fountain::singleFrame()
 			delete bdPoint;
 		}
 	}
-	if (fountain::sysMouse.getState(2)) {
+
+	if (fountain::sysMouse.getState(3)) {
 		bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
 		if (!fountain::mainWorld.addBody(bdPoint)) {
 			delete bdPoint;
@@ -92,18 +93,10 @@ void fountain::singleFrame()
 	if (fountain::sysMouse.getState(5)) {
 		Game::scale /= 1.15f;
 	}
-	if (fountain::sysMouse.getState(3)) {
+	if (fountain::sysMouse.getState(2)) {
 		Game::deltaV = fountain::sysMouse.getDeltaV();
 		Game::mainCamera.move(-Game::deltaV.x / Game::scale, -Game::deltaV.y / Game::scale);
 	}
-	if (fountain::sysKeyboard.getState(FT_W))
-		Game::mainCamera.move(0, 3);
-	if (fountain::sysKeyboard.getState(FT_S))
-		Game::mainCamera.move(0, -3);
-	if (fountain::sysKeyboard.getState(FT_A))
-		Game::mainCamera.move(-3, 0);
-	if (fountain::sysKeyboard.getState(FT_D))
-		Game::mainCamera.move(3, 0);
 
 	Game::mainCamera.setScale(Game::scale);
 	Game::mainCamera.update();
