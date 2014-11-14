@@ -2,32 +2,20 @@
 #include <string>
 #define abs(x) ((x)>0?(x):-(x))
 
-void SpriteDraw(Sprite* sp)
-{
-	ftRender::transformBegin();
-	ftRender::ftTranslate(sp->getPosition().x, sp->getPosition().y);
-	ftRender::ftRotate(0.0f, 0.0f, sp->getAngle());
-	ftRender::drawLine(ftVec2(-0.5, -0.5), ftVec2(-0.5, 0.5));
-	ftRender::drawLine(ftVec2(-0.5, 0.5),  ftVec2(0.5, 0.5));
-	ftRender::drawLine(ftVec2(0.5, 0.5),   ftVec2(0.5, -0.5));
-	ftRender::drawLine(ftVec2(0.5, -0.5),  ftVec2(-0.5, -0.5));
-	ftRender::transformEnd();
-}
-
 ftPhysics::Body* bdPoint;
 
 namespace Game {
+
 double xAngle = 0.0f;
 double yAngle = 0.0f;
 double scale = 1.0f;
-int testPic;
+//int testPic;
 ftVec2 deltaV;
-
 
 //TODO: move this internal(ftTime)
 ftTime::Clock mainClock(60.0);
 
-ft3DModel::ObjModel simpleModel("first.obj");
+//ft3DModel::ObjModel simpleModel("first.obj");
 
 //TODO: move this internal(ftRender)
 ftRender::Camera mainCamera(0, 0, 500);
@@ -46,12 +34,12 @@ void fountain::setBasicVarible()
 void fountain::gameInit()
 {
 	ftRender::openLineSmooth();
-	glLineWidth(2.0f);
+	glLineWidth(1.5f);
 	ftRender::openPointSmooth();
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
-	Game::testPic = ftRender::getPicture("test.jpg");
+	//Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
 
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0 - i; j <= i; j++) {
@@ -62,21 +50,19 @@ void fountain::gameInit()
 		}
 	}
 
-	for (int i = -50; i <= 50; i++) {
-		bdPoint = new ftPhysics::Body(i, -100, false);
-		if (!fountain::mainWorld.addBody(bdPoint)) {
-			delete bdPoint;
-		}
-	}
+    bdPoint = new ftPhysics::Body(0, -100, false);
+    bdPoint->setRectSize(ftVec2(100, 1));
+    if (!fountain::mainWorld.addBody(bdPoint)) {
+        delete bdPoint;
+    }
 
-	for (int i = 0; i < 1000; i++) {
-		float xx = ftAlgorithm::randRangef(-100, 100);
-		float yy = ftAlgorithm::randRangef(100, 1000);
-		bdPoint = new ftPhysics::Body(xx, yy);
-		if (!fountain::mainWorld.addBody(bdPoint)) {
-			delete bdPoint;
-		}
-	}
+    for (int i = -50; i <= 50; i+=2) {
+        bdPoint = new ftPhysics::Body(i, -100 + 3.6);
+        bdPoint->setRectSize(ftVec2(0.5, 3));
+        if (!fountain::mainWorld.addBody(bdPoint)) {
+            delete bdPoint;
+        }
+    }
 }
 
 void fountain::singleFrame()
@@ -90,6 +76,12 @@ void fountain::singleFrame()
 	//TODO: move these to update(ftScene hook)
 	if (fountain::sysMouse.getState(1)) {
 		bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
+		if (!fountain::mainWorld.addBody(bdPoint)) {
+			delete bdPoint;
+		}
+	}
+	if (fountain::sysMouse.getState(2)) {
+		bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
 		if (!fountain::mainWorld.addBody(bdPoint)) {
 			delete bdPoint;
 		}

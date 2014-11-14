@@ -38,7 +38,7 @@ void Body::autoCreateFixtures()
 {
 	//Test Code
 	b2PolygonShape aBox;
-	aBox.SetAsBox(0.5f, 0.5f);
+	aBox.SetAsBox(Body::getRectSize().x / 2.0f, Body::getRectSize().y / 2.0f);
 	if (Body::isDynamic) {
 		defaultFixtureDef.shape = &aBox;
 		defaultFixtureDef.density = 1.0f;

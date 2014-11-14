@@ -34,6 +34,17 @@ void keyMapSetting()
 	KS(VK_RIGHT, FT_Right);
 }
 
+void SetWindowSize(HWND hWnd)
+{
+    RECT WindowRect;
+    RECT ClientRect;
+    GetWindowRect(hWnd, &WindowRect);
+    GetClientRect(hWnd, &ClientRect);
+    WindowRect.right += (fountain::mainWin.w - ClientRect.right);
+    WindowRect.bottom += (fountain::mainWin.h - ClientRect.bottom);
+    MoveWindow(hWnd, WindowRect.left, WindowRect.top, WindowRect.right-WindowRect.left, WindowRect.bottom-WindowRect.top, true);
+}
+
 int WINAPI
 WinMain(HINSTANCE hInstance,
         HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -83,14 +94,17 @@ WinMain(HINSTANCE hInstance,
 	                      winStyle,
 	                      CW_USEDEFAULT,
 	                      CW_USEDEFAULT,
-	                      fountain::mainWin.w,
-	                      fountain::mainWin.h, NULL, NULL, hInstance, NULL);
+	                      0,
+	                      0, NULL, NULL, hInstance, NULL);
+    SetWindowSize(hwnd);
 
 	if (fountain::mainWin.hideCursor)
 		ShowCursor(false);
+
 	ShowWindow(hwnd, nCmdShow);
 
 	EnableOpenGL(hwnd, &hDC, &hRC);
+
 	fountain::initAllSystem();
 	fountain::gameInit();
 
@@ -202,6 +216,14 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_LBUTTONUP:
 		fountain::sysMouse.setState(1, 0);
+		break;
+
+    case WM_MBUTTONDOWN:
+		fountain::sysMouse.setState(2, 1);
+		break;
+
+	case WM_MBUTTONUP:
+		fountain::sysMouse.setState(2, 0);
 		break;
 
 	case WM_RBUTTONDOWN:

@@ -71,6 +71,7 @@ public:
 	void setAngle(float agl);
 	float getAngle();
 	void setRectSize(ftVec2 rts);
+	ftVec2 getRectSize();
 	void setRect(ftRect rct);
 	ftRect getRect();
 	void draw();

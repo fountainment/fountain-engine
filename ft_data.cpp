@@ -147,6 +147,11 @@ void Sprite::setRectSize(ftVec2 rts)
 	Sprite::rectSize = rts;
 }
 
+ftVec2 Sprite::getRectSize()
+{
+    return Sprite::rectSize;
+}
+
 void Sprite::setRect(ftRect rct)
 {
 	Sprite::setPosition(rct.getCenter());
@@ -155,7 +160,9 @@ void Sprite::setRect(ftRect rct)
 
 ftRect Sprite::getRect()
 {
-	ftRect rct(Sprite::position, Sprite::rectSize);
+	ftRect rct;
+	rct.setSize(Sprite::rectSize);
+	rct.setCenter(Sprite::position);
 	return rct;
 }
 
