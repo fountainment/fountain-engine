@@ -50,19 +50,19 @@ void fountain::gameInit()
 		}
 	}
 
-    bdPoint = new ftPhysics::Body(0, -100, false);
-    bdPoint->setRectSize(ftVec2(100, 1));
-    if (!fountain::mainWorld.addBody(bdPoint)) {
-        delete bdPoint;
-    }
+	bdPoint = new ftPhysics::Body(0, -100, false);
+	bdPoint->setRectSize(ftVec2(100, 1));
+	if (!fountain::mainWorld.addBody(bdPoint)) {
+		delete bdPoint;
+	}
 
-    for (int i = -50; i <= 50; i+=2) {
-        bdPoint = new ftPhysics::Body(i, -100 + 3.6);
-        bdPoint->setRectSize(ftVec2(0.5, 3));
-        if (!fountain::mainWorld.addBody(bdPoint)) {
-            delete bdPoint;
-        }
-    }
+	for (int i = -50; i <= 50; i+=2) {
+		bdPoint = new ftPhysics::Body(i, -100 + 3.6);
+		bdPoint->setRectSize(ftVec2(0.5, 3));
+		if (!fountain::mainWorld.addBody(bdPoint)) {
+			delete bdPoint;
+		}
+	}
 }
 
 void fountain::singleFrame()

@@ -36,13 +36,13 @@ void keyMapSetting()
 
 void SetWindowSize(HWND hWnd)
 {
-    RECT WindowRect;
-    RECT ClientRect;
-    GetWindowRect(hWnd, &WindowRect);
-    GetClientRect(hWnd, &ClientRect);
-    WindowRect.right += (fountain::mainWin.w - ClientRect.right);
-    WindowRect.bottom += (fountain::mainWin.h - ClientRect.bottom);
-    MoveWindow(hWnd, WindowRect.left, WindowRect.top, WindowRect.right-WindowRect.left, WindowRect.bottom-WindowRect.top, true);
+	RECT WindowRect;
+	RECT ClientRect;
+	GetWindowRect(hWnd, &WindowRect);
+	GetClientRect(hWnd, &ClientRect);
+	WindowRect.right += (fountain::mainWin.w - ClientRect.right);
+	WindowRect.bottom += (fountain::mainWin.h - ClientRect.bottom);
+	MoveWindow(hWnd, WindowRect.left, WindowRect.top, WindowRect.right-WindowRect.left, WindowRect.bottom-WindowRect.top, true);
 }
 
 int WINAPI
@@ -96,7 +96,7 @@ WinMain(HINSTANCE hInstance,
 	                      CW_USEDEFAULT,
 	                      0,
 	                      0, NULL, NULL, hInstance, NULL);
-    SetWindowSize(hwnd);
+	SetWindowSize(hwnd);
 
 	if (fountain::mainWin.hideCursor)
 		ShowCursor(false);
@@ -110,8 +110,8 @@ WinMain(HINSTANCE hInstance,
 
 	while (!bQuit) {
 
-        fountain::sysMouse.setState(4, 0);
-        fountain::sysMouse.setState(5, 0);
+		fountain::sysMouse.setState(4, 0);
+		fountain::sysMouse.setState(5, 0);
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				bQuit = TRUE;
@@ -218,7 +218,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		fountain::sysMouse.setState(1, 0);
 		break;
 
-    case WM_MBUTTONDOWN:
+	case WM_MBUTTONDOWN:
 		fountain::sysMouse.setState(2, 1);
 		break;
 
@@ -234,11 +234,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		fountain::sysMouse.setState(3, 0);
 		break;
 
-    case WM_MOUSEWHEEL:
-        zDelta = (short)HIWORD(wParam);
-        if (zDelta > 0) fountain::sysMouse.setState(4, 1);
-        else fountain::sysMouse.setState(5, 1);
-        break;
+	case WM_MOUSEWHEEL:
+		zDelta = (short)HIWORD(wParam);
+		if (zDelta > 0) fountain::sysMouse.setState(4, 1);
+		else fountain::sysMouse.setState(5, 1);
+		break;
 
 	case WM_SYSCOMMAND:
 		switch (wParam) {

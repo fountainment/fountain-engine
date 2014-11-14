@@ -141,7 +141,7 @@ void ftRender::drawQuad(float w, float h)
 
 void ftRender::drawRect(ftRect rct, float angle)
 {
-    ftVec2 rPos = rct.getCenter();
+	ftVec2 rPos = rct.getCenter();
 	ftVec2 rSize = rct.getSize();
 	ftRender::transformBegin();
 	ftRender::ftTranslate(rPos.x, rPos.y);

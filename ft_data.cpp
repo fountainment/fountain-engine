@@ -149,7 +149,7 @@ void Sprite::setRectSize(ftVec2 rts)
 
 ftVec2 Sprite::getRectSize()
 {
-    return Sprite::rectSize;
+	return Sprite::rectSize;
 }
 
 void Sprite::setRect(ftRect rct)
