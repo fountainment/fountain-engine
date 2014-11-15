@@ -90,7 +90,10 @@ private:
 	int next[_size];
 public:
 	container();
+	_tp getHead();
 	bool add(_tp node);
+	bool del(int x);
+	bool delHead();
 	void update();
 	void draw();
 	void doWith(void(*func)(_tp));
@@ -105,6 +108,12 @@ container<_tp, _size>::container()
 		container<_tp, _size>::avail[i] = i;
 	}
 	container<_tp, _size>::availN = _size;
+}
+
+template <typename _tp, int _size>
+_tp container<_tp, _size>::getHead()
+{
+	return container<_tp, _size>::list[container<_tp, _size>::head];
 }
 
 template <typename _tp, int _size>
@@ -126,6 +135,31 @@ bool container<_tp, _size>::add(_tp node)
 	container<_tp, _size>::tail = cur;
 	container<_tp, _size>::availN--;
 	return true;
+}
+
+template <typename _tp, int _size>
+bool container<_tp, _size>::del(int x)
+{
+	if (container<_tp, _size>::head == -1) return false;
+	container<_tp, _size>::avail[container<_tp, _size>::availN] = x;
+	container<_tp, _size>::availN++;
+	int prev = container<_tp, _size>::prev[x];
+	int next = container<_tp, _size>::next[x];
+	if (prev != -1)
+		container<_tp, _size>::next[prev] = next;
+	else
+		container<_tp, _size>::head = next;
+	if (next != -1)
+		container<_tp, _size>::prev[next] = prev;
+	else
+		container<_tp, _size>::tail = prev;
+	return true;
+}
+
+template <typename _tp, int _size>
+bool container<_tp, _size>::delHead()
+{
+	return container<_tp, _size>::del(container<_tp, _size>::head);
 }
 
 template <typename _tp, int _size>

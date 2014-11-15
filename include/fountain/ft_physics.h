@@ -13,10 +13,9 @@ void init();
 class Body : public Sprite
 {
 private:
-	b2Body* body;
 public:
+	b2Body* body;
 	bool isDynamic;
-
 	Body();
 	Body(float x, float y, bool dynamic = true);
 	void setBody(b2Body* b2bd);
@@ -32,6 +31,7 @@ private:
 public:
 	World(ftVec2 gravity);
 	bool addBody(Body* bd);
+	void delHeadBody();
 	void update();
 	void update(float timeStep);
 	void draw();

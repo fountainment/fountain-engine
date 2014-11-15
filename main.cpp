@@ -45,7 +45,8 @@ void fountain::gameInit()
 		for (int j = 0 - i; j <= i; j++) {
 			bdPoint = new ftPhysics::Body(j, -i, false);
 			if (!fountain::mainWorld.addBody(bdPoint)) {
-				delete bdPoint;
+				fountain::mainWorld.delHeadBody();
+				fountain::mainWorld.addBody(bdPoint);
 			}
 		}
 	}
@@ -53,14 +54,16 @@ void fountain::gameInit()
 	bdPoint = new ftPhysics::Body(0, -100, false);
 	bdPoint->setRectSize(ftVec2(100, 1));
 	if (!fountain::mainWorld.addBody(bdPoint)) {
-		delete bdPoint;
+		fountain::mainWorld.delHeadBody();
+		fountain::mainWorld.addBody(bdPoint);
 	}
 
 	for (int i = -50; i <= 50; i+=2) {
 		bdPoint = new ftPhysics::Body(i, -100 + 3.6);
 		bdPoint->setRectSize(ftVec2(0.5, 3));
 		if (!fountain::mainWorld.addBody(bdPoint)) {
-			delete bdPoint;
+			fountain::mainWorld.delHeadBody();
+			fountain::mainWorld.addBody(bdPoint);
 		}
 	}
 }
@@ -77,14 +80,16 @@ void fountain::singleFrame()
 	if (fountain::sysMouse.getState(1)) {
 		bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
 		if (!fountain::mainWorld.addBody(bdPoint)) {
-			delete bdPoint;
+			fountain::mainWorld.delHeadBody();
+			fountain::mainWorld.addBody(bdPoint);
 		}
 	}
 
 	if (fountain::sysMouse.getState(3)) {
 		bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
 		if (!fountain::mainWorld.addBody(bdPoint)) {
-			delete bdPoint;
+			fountain::mainWorld.delHeadBody();
+			fountain::mainWorld.addBody(bdPoint);
 		}
 	}
 	if (fountain::sysMouse.getState(4)) {

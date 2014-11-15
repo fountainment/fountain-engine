@@ -83,6 +83,14 @@ bool World::addBody(Body* bd)
 	}
 }
 
+void World::delHeadBody()
+{
+	Body* bdPoint = World::bodyCon.getHead();
+	World::world->DestroyBody(bdPoint->body);
+	delete bdPoint;
+	World::bodyCon.delHead();
+}
+
 void bodyUpdate(Body* bd)
 {
 	bd->update();
