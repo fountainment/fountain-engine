@@ -5,16 +5,48 @@
 #include <GL/glext.h>
 #include <FreeImage.h>
 #include <map>
+#include <cmath>
 
 using ftRender::Camera;
 
 static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
+static ftVec2 circle8[8];
+static ftVec2 circle32[32];
+static ftVec2 circle128[128];
+
+void initCircleData(ftVec2 *v, int n)
+{
+	float d = 3.14159f * 2.0f / n;
+	for (int i = 0; i < n; i++) {
+		v[i].x = std::sin(d * i);
+		v[i].y = std::cos(d * i);
+	}
+}
+
+void glDrawArrayFloat2(float (*a)[2], int n, int glType)
+{
+	glBegin(glType);
+	for (int i = 0; i < n; i++)
+		glVertex2fv(a[i]);
+	glEnd();
+}
+
+void glDrawVectorVec2(std::vector<ftVec2> & v, int glType)
+{
+	glBegin(glType);
+	for (int i = 0; i < v.size(); i++) {
+		glVertex2f(v[i].x, v[i].y);
+	}
+	glEnd();
+}
 
 void ftRender::init()
 {
-
+	initCircleData(circle8, 8);
+	initCircleData(circle32, 32);
+	initCircleData(circle128, 128);
 }
 
 void ftRender::transformBegin()
@@ -25,6 +57,7 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
+	glColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
@@ -133,10 +166,12 @@ void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
 	float h2 = h / 2.0f;
-	ftRender::drawLine(ftVec2(-w2, -h2), ftVec2(-w2, h2));
-	ftRender::drawLine(ftVec2(-w2, h2),  ftVec2(w2, h2));
-	ftRender::drawLine(ftVec2(w2, h2),   ftVec2(w2, -h2));
-	ftRender::drawLine(ftVec2(w2, -h2),  ftVec2(-w2, -h2));
+	glBegin(GL_QUADS);
+	glVertex2f(-w2, -h2);
+	glVertex2f(-w2, h2);
+	glVertex2f(w2, h2);
+	glVertex2f(w2, -h2);
+	glEnd();
 }
 
 void ftRender::drawRect(ftRect rct, float angle)
@@ -148,6 +183,37 @@ void ftRender::drawRect(ftRect rct, float angle)
 	ftRender::ftRotate(0.0f, 0.0f, angle);
 	ftRender::drawQuad(rSize.x, rSize.y);
 	ftRender::transformEnd();
+}
+
+void ftRender::drawCircle()
+{
+	glBegin(GL_LINE_LOOP);
+	for (int i = 0; i < 32; i++) {
+		glVertex2f(circle32[i].x, circle32[i].y);
+	}
+	glEnd();
+}
+
+void ftRender::drawShape(Shape & shape, float angle)
+{
+	int type = shape.getType();
+	std::vector<ftVec2> v = shape.getData();
+	ftRender::ftRotate(0.0f, 0.0f, angle);
+	switch (type)
+	{
+		case FT_Circle:
+			ftRender::ftScale(shape.getR());
+			ftRender::drawCircle();
+		break;
+
+		case FT_Polygon:
+			glDrawVectorVec2(v, GL_TRIANGLE_FAN);
+		break;
+
+		case FT_Line:
+			glDrawVectorVec2(v, GL_LINE_STRIP);
+		break;
+	}
 }
 
 void ftRender::drawPic(int picID)

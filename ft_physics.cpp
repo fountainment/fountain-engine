@@ -31,7 +31,7 @@ Body::Body(float x, float y, bool dynamic)
 void Body::setBody(b2Body* b2bd)
 {
 	Body::body = b2bd;
-	Body::body->SetUserData(b2bd);
+	Body::body->SetUserData(Body::body);
 }
 
 void Body::autoCreateFixtures()

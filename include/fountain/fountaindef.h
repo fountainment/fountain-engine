@@ -4,6 +4,12 @@
 #define FOUNTAIN_VERSION "0.05"
 #define FOUNTAIN_VERSION_NUM 0.05
 
+#define FT_LButton 1
+#define FT_MButton 2
+#define FT_RButton 3
+#define FT_ScrollUp 4
+#define FT_ScrollDown 5
+
 #define FT_A 0x0001
 #define FT_B 0x0002
 #define FT_C 0x0003
@@ -69,5 +75,17 @@
 
 #define FT_ON 1
 #define FT_OFF 0
+
+#define FT_StartScene 0
+#define FT_Scene1 1
+#define FT_Scene2 2
+#define FT_Scene3 3
+#define FT_Scene4 4
+#define FT_Scene5 5
+#define FT_Scene6 6
+#define FT_Scene7 7
+#define FT_Scene8 8
+#define FT_Scene9 9
+#define FT_EndScene -1
 
 #endif

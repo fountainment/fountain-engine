@@ -7,6 +7,7 @@ winState mainWin;
 
 };
 
+//ftVec2
 ftVec2::ftVec2()
 {
 	ftVec2::x = 0;
@@ -35,6 +36,7 @@ const ftVec2 ftVec2::operator+(const ftVec2 & v)
 	return ans;
 }
 
+//ftVec3
 ftVec3::ftVec3()
 {
 	ftVec3::xyz[0] = 0;
@@ -49,6 +51,7 @@ ftVec3::ftVec3(float x, float y, float z)
 	ftVec3::xyz[2] = z;
 }
 
+//ftRect
 ftRect::ftRect(float x, float y, float w, float h)
 {
 	ftRect::x = x;
@@ -110,6 +113,96 @@ void ftRect::setXY(ftVec2 XY)
 	ftRect::y = XY.y;
 }
 
+ftVec2 ftRect::getLB()
+{
+	return ftVec2(ftRect::x, ftRect::y);
+}
+
+ftVec2 ftRect::getLT()
+{
+	return ftVec2(ftRect::x, ftRect::y + ftRect::h);
+}
+
+ftVec2 ftRect::getRT()
+{
+	return ftVec2(ftRect::x + ftRect::w, ftRect::y + ftRect::h);
+}
+
+ftVec2 ftRect::getRB()
+{
+	return ftVec2(ftRect::x + ftRect::w, ftRect::y);
+}
+
+//Shape
+Shape::Shape(ftRect rct)
+{
+	Shape::n = 4;
+	Shape::type = FT_Polygon;
+	Shape::loop = true;
+	Shape::data.clear();
+	Shape::data.push_back(rct.getLB());
+	Shape::data.push_back(rct.getLT());
+	Shape::data.push_back(rct.getRT());
+	Shape::data.push_back(rct.getRB());
+}
+
+Shape::Shape(float r)
+{
+	Shape::n = 0;
+	Shape::type = FT_Circle;
+	Shape::loop = true;
+	Shape::r = r;
+	Shape::data.clear();
+}
+
+Shape::Shape(const std::vector<ftVec2> & a, int n, bool loop = true)
+{
+	Shape::n = n;
+	if (loop == true)
+		Shape::type = FT_Polygon;
+	else
+		Shape::type = FT_Line;
+	Shape::loop = loop;
+	Shape::setData(a);
+	Shape::setN(n);
+}
+
+const std::vector<ftVec2> & Shape::getData()
+{
+	return Shape::data;
+}
+
+void Shape::setData(const std::vector<ftVec2> & a)
+{
+	Shape::data = a;
+}
+
+int Shape::getN()
+{
+	return Shape::n;
+}
+
+void Shape::setN(int n)
+{
+	Shape::n = n;
+}
+
+void Shape::setR(float r)
+{
+	Shape::r = r;
+}
+
+float Shape::getR()
+{
+	return Shape::r;
+}
+
+int Shape::getType()
+{
+	return Shape::type;
+}
+
+//Sprite
 Sprite::Sprite()
 {
 	Sprite::position.x = 0;
@@ -168,5 +261,9 @@ ftRect Sprite::getRect()
 
 void Sprite::draw()
 {
-	ftRender::drawRect(Sprite::getRect(), Sprite::angle);
+	ftVec2 pos = Sprite::getPosition();
+	ftRender::transformBegin();
+	ftRender::ftTranslate(pos.x, pos.y);
+	ftRender::drawShape(Sprite::shape, Sprite::getAngle());
+	ftRender::transformEnd();
 }

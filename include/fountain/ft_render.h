@@ -31,6 +31,9 @@ void drawLine(float x1, float y1, float x2, float y2);
 void drawLine(ftVec2 p1, ftVec2 p2);
 void drawQuad(float w, float h);
 void drawRect(ftRect rct, float angle = 0.0f);
+void drawCircle();
+void drawShape(Shape & shape, float angle = 0.0f);
+
 int getPicture(const char *filename);
 void drawPic(int picID);
 void drawAlphaPic(int picID);

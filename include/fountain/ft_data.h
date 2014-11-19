@@ -2,6 +2,12 @@
 #define _FT_DATA_H_
 
 #include <string>
+#include <vector>
+
+//Shape
+#define FT_Circle 1
+#define FT_Polygon 2
+#define FT_Line 3
 
 typedef struct {
 	int w, h;
@@ -51,11 +57,42 @@ public:
 	ftRect();
 	ftRect(ftVec2 pos, ftVec2 rSize);
 	ftVec2 getCenter();
+
 	void setCenter(ftVec2 p);
 	ftVec2 getXY();
 	void setXY(ftVec2 XY);
 	ftVec2 getSize();
 	void setSize(ftVec2 sz);
+
+	ftVec2 getLB();
+	ftVec2 getLT();
+	ftVec2 getRT();
+	ftVec2 getRB();
+
+};
+
+class Shape {
+private:
+	std::vector<ftVec2> data;
+	float r;
+	int n;
+	bool loop;
+	int type;
+public:
+	Shape(ftRect rct);
+	Shape(float r = 0.1f);
+	Shape(const std::vector<ftVec2> & a, int n, bool loop);
+
+	const std::vector<ftVec2> & getData();
+	void setData(const std::vector<ftVec2> & a);
+
+	int getN();
+	void setN(int n);
+
+	void setR(float r);
+	float getR();
+
+	int getType();
 };
 
 class Sprite {
@@ -64,6 +101,7 @@ private:
 	ftVec2 rectSize;
 	float angle;
 public:
+	Shape shape;
 	Sprite();
 	void setPosition(ftVec2 pos);
 	void setPosition(float x, float y);

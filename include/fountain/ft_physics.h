@@ -16,6 +16,7 @@ private:
 public:
 	b2Body* body;
 	bool isDynamic;
+
 	Body();
 	Body(float x, float y, bool dynamic = true);
 	void setBody(b2Body* b2bd);
