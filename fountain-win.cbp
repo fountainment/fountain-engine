@@ -39,14 +39,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
-			<Add directory="include/" />
+			<Add directory="include" />
 			<Add directory="." />
 		</Compiler>
 		<Linker>
 			<Add library="opengl32" />
 			<Add library="FreeImage" />
 			<Add library="Box2D" />
-			<Add directory="./" />
 		</Linker>
 		<Unit filename="ft_3dmodel.cpp" />
 		<Unit filename="ft_algorithm.cpp" />
