@@ -22,7 +22,7 @@ if [ ! -z "`cmp libfountain.so /usr/lib/libfountain.so`" ]; then
 	sudo make install
 fi
 
-g++ main.cpp -o main -I ./include/ -I ./Box2D -L ./Box2D/Build/bin/Release -lX11 -lGL -lfreeimage -lfountain -lBox2D
+g++ main.cpp -o main -I./include -I./Box2D -L ./Box2D/Build/bin/Release -lX11 -lGL -lfreeimage -lfountain -lBox2D
 
 if [ -f "main" ]; then
 	echo compilation finished!

@@ -8,6 +8,7 @@
 #define FT_Circle 1
 #define FT_Polygon 2
 #define FT_Line 3
+#define FT_Rect 4
 
 typedef struct {
 	int w, h;

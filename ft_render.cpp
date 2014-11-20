@@ -36,7 +36,7 @@ void glDrawArrayFloat2(float (*a)[2], int n, int glType)
 void glDrawVectorVec2(std::vector<ftVec2> & v, int glType)
 {
 	glBegin(glType);
-	for (int i = 0; i < v.size(); i++) {
+	for (unsigned int i = 0; i < v.size(); i++) {
 		glVertex2f(v[i].x, v[i].y);
 	}
 	glEnd();
@@ -213,24 +213,30 @@ void ftRender::drawShape(Shape & shape, float angle)
 		case FT_Line:
 			glDrawVectorVec2(v, GL_LINE_STRIP);
 		break;
+
+		case FT_Rect:
+			ftRender::drawRect(ftRect(v[0], v[1]));
+		break;
 	}
 }
 
 void ftRender::drawPic(int picID)
 {
 	texInfo tex = PicID2TexInfo[picID];
+	int w2 = tex.w / 2.0f;
+	int h2 = tex.h / 2.0f;
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
-	glBegin(GL_QUADS);
+	glBegin(GL_TRIANGLE_FAN);
 	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-tex.w / 2.0f, -tex.h / 2.0f);
+	glVertex2f(-w2, -h2);
 	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(tex.w / 2.0f, -tex.h / 2.0f);
+	glVertex2f(w2, -h2);
 	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(tex.w / 2.0f, tex.h / 2.0f);
+	glVertex2f(w2, h2);
 	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-tex.w / 2.0f, tex.h / 2.0f);
+	glVertex2f(-w2, h2);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 }
@@ -238,20 +244,22 @@ void ftRender::drawPic(int picID)
 void ftRender::drawAlphaPic(int picID)
 {
 	texInfo tex = PicID2TexInfo[picID];
+	int w2 = tex.w / 2.0f;
+	int h2 = tex.h / 2.0f;
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
-	glBegin(GL_QUADS);
+	glBegin(GL_TRIANGLE_FAN);
 	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-tex.w / 2.0f, -tex.h / 2.0f);
+	glVertex2f(-w2, -h2);
 	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(tex.w / 2.0f, -tex.h / 2.0f);
+	glVertex2f(w2, -h2);
 	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(tex.w / 2.0f, tex.h / 2.0f);
+	glVertex2f(w2, h2);
 	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-tex.w / 2.0f, tex.h / 2.0f);
+	glVertex2f(-w2, h2);
 	glEnd();
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);

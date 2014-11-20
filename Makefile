@@ -4,7 +4,7 @@ CFLAGS = -Wall -O2 -fexception
 LIBS = -lX11 -lGL -lfreeimage
 
 libfountain.so:
-	$(CC) $(CPPS) -I ./include -L . -fPIC -shared -o libfountain.so $(LIBS)
+	$(CC) $(CPPS) -I./include -fPIC -shared -o libfountain.so $(LIBS)
 
 install: libfountain.so
 	cp include/* /usr/include/ -r

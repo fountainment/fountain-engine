@@ -41,9 +41,9 @@ void fountain::gameInit()
 	glLineWidth(1.5f);
 	ftRender::openPointSmooth();
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
-	//Game::testPic = ftRender::getPicture("test.jpg");
 	Game::mainClock.init();
-	//glEnable(GL_DEPTH_TEST);
+//	Game::testPic = ftRender::getPicture("test.jpg");
+//	glEnable(GL_DEPTH_TEST);
 
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0 - i; j <= i; j++) {
@@ -99,6 +99,9 @@ void fountain::singleFrame()
 	//TODO: move this internal
 	fountain::mainWorld.update(Game::mainClock.getDeltaT());
 
+	if (fountain::sysKeyboard.getState(FT_W)) Game::mainClock.Pause();
+	if (fountain::sysKeyboard.getState(FT_R)) Game::mainClock.Continue();
+
 	//TODO: move these to update(ftScene hook)
 	if (fountain::sysMouse.getState(FT_LButton)) {
 		bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
@@ -136,6 +139,10 @@ void fountain::singleFrame()
 
 	Game::mainCamera.setScale(Game::scale);
 	Game::mainCamera.update();
+
+//	ftRender::transformBegin();
+//	ftRender::drawPic(Game::testPic);
+//	ftRender::transformEnd();
 
 	fountain::mainWorld.draw();
 
