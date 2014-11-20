@@ -35,7 +35,7 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add directory="include/" />
+			<Add directory="include" />
 		</Compiler>
 		<Linker>
 			<Add library="GL" />

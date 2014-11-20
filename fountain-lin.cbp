@@ -35,7 +35,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions -fPIC" />
-			<Add directory="include/" />
+			<Add directory="include" />
+			<Add directory="." />
 		</Compiler>
 		<Linker>
 			<Add library="GL" />
