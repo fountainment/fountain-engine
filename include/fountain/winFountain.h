@@ -110,8 +110,7 @@ WinMain(HINSTANCE hInstance,
 
 	while (!bQuit) {
 
-		fountain::sysMouse.setState(4, 0);
-		fountain::sysMouse.setState(5, 0);
+		ftInput::initPerFrame();
 		while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				bQuit = TRUE;

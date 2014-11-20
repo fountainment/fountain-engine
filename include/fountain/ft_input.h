@@ -11,6 +11,8 @@ namespace ftInput {
 
 void init();
 
+void initPerFrame();
+
 class Mouse {
 private:
 	ftVec2 coor;

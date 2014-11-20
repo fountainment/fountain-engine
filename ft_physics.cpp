@@ -1,4 +1,5 @@
 #include <fountain/ft_physics.h>
+#include <cstdio>
 
 using ftPhysics::Body;
 using ftPhysics::World;
@@ -37,15 +38,49 @@ void Body::setBody(b2Body* b2bd)
 void Body::autoCreateFixtures()
 {
 	//Test Code
-	b2PolygonShape aBox;
-	aBox.SetAsBox(Body::getRectSize().x / 2.0f, Body::getRectSize().y / 2.0f);
+	b2Shape *b2shape;
+	b2PolygonShape pshape;
+	b2CircleShape cshape;
+	b2EdgeShape eshape;
+	Shape shape = Body::shape;
+	int type = shape.getType();
+	std::vector<ftVec2> v;
+	b2Vec2 bv[10];
+	int n;
+	switch (type)
+	{
+		case FT_Circle:
+			cshape.m_radius = shape.getR();
+			b2shape = &cshape;
+		break;
+
+		case FT_Polygon:
+			v = shape.getData();
+			n = shape.getN();
+			for (int i = 0; i < n; i++) {
+				bv[i].Set(v[i].x, v[i].y);
+			}
+			pshape.Set(bv, n);
+			b2shape = &pshape;
+		break;
+
+		case FT_Line:
+
+		break;
+
+		case FT_Rect:
+			v = shape.getData();
+			pshape.SetAsBox(v[0].x / 2.0f, v[0].y / 2.0f);
+			b2shape = &pshape;
+		break;
+	}
 	if (Body::isDynamic) {
-		defaultFixtureDef.shape = &aBox;
+		defaultFixtureDef.shape = b2shape;
 		defaultFixtureDef.density = 1.0f;
 		defaultFixtureDef.friction = 0.3f;
 		Body::body->CreateFixture(&defaultFixtureDef);
 	} else {
-		Body::body->CreateFixture(&aBox, 0.0f);
+		Body::body->CreateFixture(b2shape, 0.0f);
 	}
 }
 

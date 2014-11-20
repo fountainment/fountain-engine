@@ -82,7 +82,7 @@ private:
 public:
 	Shape(ftRect rct);
 	Shape(float r = 0.1f);
-	Shape(const std::vector<ftVec2> & a, int n, bool loop);
+	Shape(const std::vector<ftVec2> & a, int n, bool loop = true);
 
 	const std::vector<ftVec2> & getData();
 	void setData(const std::vector<ftVec2> & a);

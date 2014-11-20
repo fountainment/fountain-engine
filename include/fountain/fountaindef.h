@@ -10,6 +10,16 @@
 #define FT_ScrollUp 4
 #define FT_ScrollDown 5
 
+#define FT_isUp 0
+#define FT_isDown 1
+
+#define FT_KeyDown 2
+#define FT_KeyUp 3
+
+#define FT_ButtonDown 2
+#define FT_ButtonUp 3
+
+
 #define FT_A 0x0001
 #define FT_B 0x0002
 #define FT_C 0x0003

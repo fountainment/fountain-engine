@@ -1,14 +1,45 @@
 #include <fountain/ft_input.h>
 #include <fountain/ft_data.h>
 #include <cstring>
+#include <stack>
 
 using ftInput::Mouse;
 using ftInput::Keyboard;
+
+static std::stack<int> buttonChangeList;
+static std::stack<int> keyChangeList;
 
 void ftInput::init()
 {
 }
 
+void ftInput::initPerFrame()
+{
+	int tmp;
+	int state;
+	fountain::sysMouse.setState(FT_ScrollUp, 0);
+	fountain::sysMouse.setState(FT_ScrollDown, 0);
+	while (!buttonChangeList.empty()) {
+		tmp = buttonChangeList.top();
+		state = fountain::sysMouse.getState(tmp);
+		if (state == FT_ButtonDown)
+			fountain::sysMouse.setState(tmp, FT_isDown);
+		if (state == FT_ButtonUp)
+			fountain::sysMouse.setState(tmp, FT_isUp);
+		buttonChangeList.pop();
+	}
+	while (!keyChangeList.empty()) {
+		tmp = keyChangeList.top();
+		state = fountain::sysKeyboard.getState(tmp);
+		if (state == FT_KeyDown)
+			fountain::sysKeyboard.setState(tmp, FT_isDown);
+		if (state == FT_KeyUp)
+			fountain::sysKeyboard.setState(tmp, FT_isUp);
+		keyChangeList.pop();
+	}
+}
+
+//Mouse
 Mouse::Mouse()
 {
 	Mouse::clearState();
@@ -47,6 +78,7 @@ const ftVec2 Mouse::getDeltaV()
 void Mouse::setState(int button, int st)
 {
 	Mouse::state[button] = st;
+	buttonChangeList.push(button);
 }
 
 int Mouse::getState(int button)
@@ -59,6 +91,7 @@ void Mouse::clearState()
 	std::memset(Mouse::state, 0, sizeof(Mouse::state));
 }
 
+//Keyboard
 Keyboard::Keyboard()
 {
 	Keyboard::clearState();
@@ -67,6 +100,7 @@ Keyboard::Keyboard()
 void Keyboard::setState(int ch, int st)
 {
 	Keyboard::state[ch] = st;
+	keyChangeList.push(ch);
 }
 
 int Keyboard::getState(int ch)

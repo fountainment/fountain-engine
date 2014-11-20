@@ -136,34 +136,32 @@ ftVec2 ftRect::getRB()
 //Shape
 Shape::Shape(ftRect rct)
 {
-	Shape::n = 2;
+	Shape::n = 1;
 	Shape::type = FT_Rect;
 	Shape::loop = true;
 	Shape::data.clear();
-	Shape::data.push_back(rct.getXY());
 	Shape::data.push_back(rct.getSize());
 }
 
 Shape::Shape(float r)
 {
 	Shape::data.clear();
-	Shape::n = 0;
+	Shape::setN(0);
 	Shape::type = FT_Circle;
 	Shape::loop = true;
 	Shape::r = r;
 }
 
-Shape::Shape(const std::vector<ftVec2> & a, int n, bool loop = true)
+Shape::Shape(const std::vector<ftVec2> & a, int n, bool loop)
 {
 	Shape::data.clear();
-	Shape::n = n;
+	Shape::setN(n);
 	if (loop == true)
 		Shape::type = FT_Polygon;
 	else
 		Shape::type = FT_Line;
 	Shape::loop = loop;
 	Shape::setData(a);
-	Shape::setN(n);
 }
 
 const std::vector<ftVec2> & Shape::getData()

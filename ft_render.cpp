@@ -187,7 +187,7 @@ void ftRender::drawRect(ftRect rct, float angle)
 
 void ftRender::drawCircle()
 {
-	glBegin(GL_LINE_LOOP);
+	glBegin(GL_TRIANGLE_FAN);
 	for (int i = 0; i < 32; i++) {
 		glVertex2f(circle32[i].x, circle32[i].y);
 	}
@@ -215,7 +215,7 @@ void ftRender::drawShape(Shape & shape, float angle)
 		break;
 
 		case FT_Rect:
-			ftRender::drawRect(ftRect(v[0], v[1]));
+			ftRender::drawQuad(v[0].x, v[0].y);
 		break;
 	}
 }

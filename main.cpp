@@ -1,12 +1,24 @@
 #include <fountain.h>
 #include <string>
+
 #define abs(x) ((x)>0?(x):-(x))
+#define max(a,b) ((a)>(b)?(a):(b))
+#define min(a,b) ((b)>(a)?(a):(b))
 
 ftPhysics::Body* bdPoint;
-ftRect rect;
-Shape* testShape;
+Shape* rect;
+Shape* testShape0;
 Shape* testShape1;
+Shape* testShape2;
+Shape* addShape;
+Shape* groundBox;
+Shape* card;
 Shape shape;
+
+ftVec2 aP, bP;
+ftRect makeRect;
+
+bool mode = true;
 
 namespace Game {
 
@@ -40,17 +52,29 @@ void fountain::gameInit()
 	ftRender::openLineSmooth();
 	glLineWidth(1.5f);
 	ftRender::openPointSmooth();
+
 	Game::mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	Game::mainClock.init();
 //	Game::testPic = ftRender::getPicture("test.jpg");
 //	glEnable(GL_DEPTH_TEST);
 
+	std::vector<ftVec2> v;
+	v.push_back(ftVec2(0,-2));
+	v.push_back(ftVec2(1,0));
+	v.push_back(ftVec2(0,2));
+	v.push_back(ftVec2(-1,0));
+	testShape0 = new Shape(v , 4, true);
+	testShape1 = new Shape();
+	testShape2 = new Shape(1);
+	groundBox = new Shape(ftRect(0, 0, 100, 1));
+	rect = new Shape(ftRect(0, 0, 1, 1));
+	card = new Shape(ftRect(0, 0, 0.3, 3));
+	addShape = rect;
+
 	for (int i = 0; i < 10; i++) {
 		for (int j = 0 - i; j <= i; j++) {
 			bdPoint = new ftPhysics::Body(j, -i, false);
-			rect.setSize(ftVec2(1, 1));
-			shape = Shape(rect);
-			bdPoint->shape = shape;
+			bdPoint->shape = *addShape;
 			if (!fountain::mainWorld.addBody(bdPoint)) {
 				fountain::mainWorld.delHeadBody();
 				fountain::mainWorld.addBody(bdPoint);
@@ -59,11 +83,7 @@ void fountain::gameInit()
 	}
 
 	bdPoint = new ftPhysics::Body(0, -100, false);
-	bdPoint->setRectSize(ftVec2(100, 1));
-	rect.setSize(ftVec2(100, 1));
-	rect.setCenter(ftVec2(0, 0));
-	shape = Shape(rect);
-	bdPoint->shape = shape;
+	bdPoint->shape = *groundBox;
 	if (!fountain::mainWorld.addBody(bdPoint)) {
 		fountain::mainWorld.delHeadBody();
 		fountain::mainWorld.addBody(bdPoint);
@@ -71,24 +91,12 @@ void fountain::gameInit()
 
 	for (int i = -50; i <= 50; i+=2) {
 		bdPoint = new ftPhysics::Body(i, -100 + 3.6);
-		bdPoint->setRectSize(ftVec2(0.5, 3));
-		rect.setSize(ftVec2(0.5, 3));
-		rect.setCenter(ftVec2(0, 0));
-		shape = Shape(rect);
-		bdPoint->shape = shape;
+		bdPoint->shape = *card;
 		if (!fountain::mainWorld.addBody(bdPoint)) {
 			fountain::mainWorld.delHeadBody();
 			fountain::mainWorld.addBody(bdPoint);
 		}
 	}
-	std::vector<ftVec2> v;
-	v.push_back(ftVec2(1,1));
-	v.push_back(ftVec2(2,2));
-	v.push_back(ftVec2(3,1));
-	v.push_back(ftVec2(2,-1));
-	v.push_back(ftVec2(1,0));
-	testShape = new Shape(v , 5, true);
-	testShape1 = new Shape();
 }
 
 void fountain::singleFrame()
@@ -102,30 +110,53 @@ void fountain::singleFrame()
 	if (fountain::sysKeyboard.getState(FT_W)) Game::mainClock.Pause();
 	if (fountain::sysKeyboard.getState(FT_R)) Game::mainClock.Continue();
 
+	if (fountain::sysKeyboard.getState(FT_1)) addShape = testShape0;
+	if (fountain::sysKeyboard.getState(FT_2)) addShape = testShape1;
+	if (fountain::sysKeyboard.getState(FT_3)) addShape = testShape2;
+	if (fountain::sysKeyboard.getState(FT_4)) addShape = rect;
+
+	if (fountain::sysKeyboard.getState(FT_M) == FT_KeyUp) mode = !mode;
+
 	//TODO: move these to update(ftScene hook)
-	if (fountain::sysMouse.getState(FT_LButton)) {
-		bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
-		rect.setSize(ftVec2(1, 1));
-		rect.setCenter(ftVec2(0, 0));
-		shape = Shape(rect);
-		bdPoint->shape = shape;
-		if (!fountain::mainWorld.addBody(bdPoint)) {
-			fountain::mainWorld.delHeadBody();
-			fountain::mainWorld.addBody(bdPoint);
+	if (mode) {
+		if (fountain::sysMouse.getState(FT_LButton)) {
+			bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
+			bdPoint->shape = *addShape;
+			if (!fountain::mainWorld.addBody(bdPoint)) {
+				fountain::mainWorld.delHeadBody();
+				fountain::mainWorld.addBody(bdPoint);
+			}
+		}
+
+		if (fountain::sysMouse.getState(FT_RButton)) {
+			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
+			bdPoint->shape = *addShape;
+			if (!fountain::mainWorld.addBody(bdPoint)) {
+				fountain::mainWorld.delHeadBody();
+				fountain::mainWorld.addBody(bdPoint);
+			}
+		}
+	}	
+	else {
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) {
+			aP = mPos;
+		}
+		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+			bP = mPos;
+			makeRect = ftRect(min(aP.x, bP.x), min(aP.y, bP.y), abs(aP.x - bP.x), abs(aP.y - bP.y));
+			ftRender::drawRect(makeRect);
+		}
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {				
+			ftVec2 tmpP = makeRect.getCenter();
+			bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
+			bdPoint->shape = Shape(makeRect);
+			if (!fountain::mainWorld.addBody(bdPoint)) {
+				fountain::mainWorld.delHeadBody();
+				fountain::mainWorld.addBody(bdPoint);
+			}
 		}
 	}
 
-	if (fountain::sysMouse.getState(FT_RButton)) {
-		bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
-		rect.setSize(ftVec2(1, 1));
-		rect.setCenter(ftVec2(0, 0));
-		shape = Shape(rect);
-		bdPoint->shape = shape;
-		if (!fountain::mainWorld.addBody(bdPoint)) {
-			fountain::mainWorld.delHeadBody();
-			fountain::mainWorld.addBody(bdPoint);
-		}
-	}
 	if (fountain::sysMouse.getState(FT_ScrollUp)) {
 		Game::scale *= 1.15f;
 	}
@@ -145,15 +176,6 @@ void fountain::singleFrame()
 //	ftRender::transformEnd();
 
 	fountain::mainWorld.draw();
-
-	ftRender::transformBegin();
-	ftRender::ftTranslate(10,10);
-	ftRender::drawShape(*testShape);
-	ftRender::transformEnd();
-
-	ftRender::transformBegin();
-	ftRender::drawShape(*testShape1);
-	ftRender::transformEnd();
 
 	//TODO: move this internal(fountainMain)
 	Game::mainClock.tick();

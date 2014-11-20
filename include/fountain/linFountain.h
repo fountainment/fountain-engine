@@ -159,8 +159,7 @@ int main(int argc, char **argv)
 	for (;;)
 	{
 		//TODO: use a better way to solve it
-		fountain::sysMouse.setState(4, 0);
-		fountain::sysMouse.setState(5, 0);
+		ftInput::initPerFrame();
 
 		while (XPending(dpy) > 0)
 		{
@@ -202,7 +201,7 @@ int main(int argc, char **argv)
 				    FT_KEYBOARDSTATE_SIZE;
 				fountain::sysKeyboard.setState(keymap
 				                               [keycodeSym],
-				                               1);
+				                               FT_KeyDown);
 			}
 			break;
 
@@ -239,18 +238,18 @@ int main(int argc, char **argv)
 					    FT_KEYBOARDSTATE_SIZE;
 					fountain::sysKeyboard.
 					setState(keymap[keycodeSym],
-					         0);
+					         FT_KeyUp);
 				}
 			}
 			break;
 
 			case ButtonPress:
-				fountain::sysMouse.setState(EXBUTTON, 1);
+				fountain::sysMouse.setState(EXBUTTON, FT_ButtonDown);
 				break;
 
 			case ButtonRelease:
 				if (EXBUTTON != 4 && EXBUTTON != 5)
-					fountain::sysMouse.setState(EXBUTTON, 0);
+					fountain::sysMouse.setState(EXBUTTON, FT_ButtonUp);
 				break;
 
 			case MotionNotify:
