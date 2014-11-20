@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
-		<Project filename="test-lin.cbp" />
+		<Project filename="Box2D/Build/Box2D.cbp" />
 		<Project filename="fountain-lin.cbp" />
+		<Project filename="test-lin.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
