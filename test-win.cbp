@@ -16,6 +16,7 @@
 				</Compiler>
 				<Linker>
 					<Add directory="bin/Debug" />
+					<Add directory="Box2D/Build/bin/Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -29,6 +30,7 @@
 				<Linker>
 					<Add option="-s" />
 					<Add directory="bin/Release" />
+					<Add directory="Box2D/Build/bin/Release" />
 				</Linker>
 			</Target>
 		</Build>
@@ -42,6 +44,7 @@
 			<Add library="gdi32" />
 			<Add library="FreeImage" />
 			<Add library="fountain" />
+			<Add library="Box2D" />
 		</Linker>
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
