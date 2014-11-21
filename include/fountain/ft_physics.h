@@ -40,10 +40,4 @@ public:
 
 };
 
-namespace fountain {
-
-extern ftPhysics::World mainWorld;
-
-};
-
 #endif

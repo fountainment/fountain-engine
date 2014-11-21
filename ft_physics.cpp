@@ -49,29 +49,29 @@ void Body::autoCreateFixtures()
 	int n;
 	switch (type)
 	{
-		case FT_Circle:
-			cshape.m_radius = shape.getR();
-			b2shape = &cshape;
+	case FT_Circle:
+		cshape.m_radius = shape.getR();
+		b2shape = &cshape;
 		break;
 
-		case FT_Polygon:
-			v = shape.getData();
-			n = shape.getN();
-			for (int i = 0; i < n; i++) {
-				bv[i].Set(v[i].x, v[i].y);
-			}
-			pshape.Set(bv, n);
-			b2shape = &pshape;
+	case FT_Polygon:
+		v = shape.getData();
+		n = shape.getN();
+		for (int i = 0; i < n; i++) {
+			bv[i].Set(v[i].x, v[i].y);
+		}
+		pshape.Set(bv, n);
+		b2shape = &pshape;
 		break;
 
-		case FT_Line:
+	case FT_Line:
 
 		break;
 
-		case FT_Rect:
-			v = shape.getData();
-			pshape.SetAsBox(v[0].x / 2.0f, v[0].y / 2.0f);
-			b2shape = &pshape;
+	case FT_Rect:
+		v = shape.getData();
+		pshape.SetAsBox(v[0].x / 2.0f, v[0].y / 2.0f);
+		b2shape = &pshape;
 		break;
 	}
 	if (Body::isDynamic) {
@@ -151,9 +151,3 @@ void World::draw()
 {
 	World::bodyCon.doWith(bodyDraw);
 }
-
-namespace fountain {
-
-World mainWorld(defaultGravity);
-
-};

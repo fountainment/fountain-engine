@@ -201,21 +201,21 @@ void ftRender::drawShape(Shape & shape, float angle)
 	ftRender::ftRotate(0.0f, 0.0f, angle);
 	switch (type)
 	{
-		case FT_Circle:
-			ftRender::ftScale(shape.getR());
-			ftRender::drawCircle();
+	case FT_Circle:
+		ftRender::ftScale(shape.getR());
+		ftRender::drawCircle();
 		break;
 
-		case FT_Polygon:
-			glDrawVectorVec2(v, GL_TRIANGLE_FAN);
+	case FT_Polygon:
+		glDrawVectorVec2(v, GL_TRIANGLE_FAN);
 		break;
 
-		case FT_Line:
-			glDrawVectorVec2(v, GL_LINE_STRIP);
+	case FT_Line:
+		glDrawVectorVec2(v, GL_LINE_STRIP);
 		break;
 
-		case FT_Rect:
-			ftRender::drawQuad(v[0].x, v[0].y);
+	case FT_Rect:
+		ftRender::drawQuad(v[0].x, v[0].y);
 		break;
 	}
 }

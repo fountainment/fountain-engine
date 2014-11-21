@@ -5,14 +5,17 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #define min(a,b) ((b)>(a)?(a):(b))
 
-ftPhysics::Body* bdPoint;
-Shape* rect;
-Shape* testShape0;
-Shape* testShape1;
-Shape* testShape2;
-Shape* addShape;
-Shape* groundBox;
-Shape* card;
+ftPhysics::Body *bdPoint;
+ftPhysics::World mainWorld(ftVec2(0, -10));
+
+Shape *rect;
+Shape *testShape0;
+Shape *testShape1;
+Shape *testShape2;
+Shape *addShape;
+Shape *groundBox;
+Shape *card;
+
 Shape shape;
 
 ftVec2 aP, bP;
@@ -75,26 +78,26 @@ void fountain::gameInit()
 		for (int j = 0 - i; j <= i; j++) {
 			bdPoint = new ftPhysics::Body(j, -i, false);
 			bdPoint->shape = *addShape;
-			if (!fountain::mainWorld.addBody(bdPoint)) {
-				fountain::mainWorld.delHeadBody();
-				fountain::mainWorld.addBody(bdPoint);
+			if (!mainWorld.addBody(bdPoint)) {
+				mainWorld.delHeadBody();
+				mainWorld.addBody(bdPoint);
 			}
 		}
 	}
 
 	bdPoint = new ftPhysics::Body(0, -100, false);
 	bdPoint->shape = *groundBox;
-	if (!fountain::mainWorld.addBody(bdPoint)) {
-		fountain::mainWorld.delHeadBody();
-		fountain::mainWorld.addBody(bdPoint);
+	if (!mainWorld.addBody(bdPoint)) {
+		mainWorld.delHeadBody();
+		mainWorld.addBody(bdPoint);
 	}
 
 	for (int i = -50; i <= 50; i+=2) {
 		bdPoint = new ftPhysics::Body(i, -100 + 3.6);
 		bdPoint->shape = *card;
-		if (!fountain::mainWorld.addBody(bdPoint)) {
-			fountain::mainWorld.delHeadBody();
-			fountain::mainWorld.addBody(bdPoint);
+		if (!mainWorld.addBody(bdPoint)) {
+			mainWorld.delHeadBody();
+			mainWorld.addBody(bdPoint);
 		}
 	}
 }
@@ -105,7 +108,7 @@ void fountain::singleFrame()
 	mPos = Game::mainCamera.mouseToWorld(mPos);
 
 	//TODO: move this internal
-	fountain::mainWorld.update(Game::mainClock.getDeltaT());
+	mainWorld.update(Game::mainClock.getDeltaT());
 
 	if (fountain::sysKeyboard.getState(FT_W)) Game::mainClock.Pause();
 	if (fountain::sysKeyboard.getState(FT_R)) Game::mainClock.Continue();
@@ -122,37 +125,58 @@ void fountain::singleFrame()
 		if (fountain::sysMouse.getState(FT_LButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
 			bdPoint->shape = *addShape;
-			if (!fountain::mainWorld.addBody(bdPoint)) {
-				fountain::mainWorld.delHeadBody();
-				fountain::mainWorld.addBody(bdPoint);
+			if (!mainWorld.addBody(bdPoint)) {
+				mainWorld.delHeadBody();
+				mainWorld.addBody(bdPoint);
 			}
 		}
 
 		if (fountain::sysMouse.getState(FT_RButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
 			bdPoint->shape = *addShape;
-			if (!fountain::mainWorld.addBody(bdPoint)) {
-				fountain::mainWorld.delHeadBody();
-				fountain::mainWorld.addBody(bdPoint);
+			if (!mainWorld.addBody(bdPoint)) {
+				mainWorld.delHeadBody();
+				mainWorld.addBody(bdPoint);
 			}
 		}
-	}	
+	}
 	else {
 		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) {
 			aP = mPos;
 		}
-		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+		else if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
 			bP = mPos;
 			makeRect = ftRect(min(aP.x, bP.x), min(aP.y, bP.y), abs(aP.x - bP.x), abs(aP.y - bP.y));
 			ftRender::drawRect(makeRect);
 		}
-		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {				
+		else if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {
 			ftVec2 tmpP = makeRect.getCenter();
-			bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
-			bdPoint->shape = Shape(makeRect);
-			if (!fountain::mainWorld.addBody(bdPoint)) {
-				fountain::mainWorld.delHeadBody();
-				fountain::mainWorld.addBody(bdPoint);
+			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
+				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
+				bdPoint->shape = Shape(makeRect);
+				if (!mainWorld.addBody(bdPoint)) {
+					mainWorld.delHeadBody();
+					mainWorld.addBody(bdPoint);
+				}
+			}
+		}
+		else if (fountain::sysMouse.getState(FT_RButton) == FT_ButtonDown) {
+			aP = mPos;
+		}
+		else if (fountain::sysMouse.getState(FT_RButton) == FT_isDown) {
+			bP = mPos;
+			makeRect = ftRect(min(aP.x, bP.x), min(aP.y, bP.y), abs(aP.x - bP.x), abs(aP.y - bP.y));
+			ftRender::drawRect(makeRect);
+		}
+		else if (fountain::sysMouse.getState(FT_RButton) == FT_ButtonUp) {
+			ftVec2 tmpP = makeRect.getCenter();
+			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
+				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, false);
+				bdPoint->shape = Shape(makeRect);
+				if (!mainWorld.addBody(bdPoint)) {
+					mainWorld.delHeadBody();
+					mainWorld.addBody(bdPoint);
+				}
 			}
 		}
 	}
@@ -175,7 +199,7 @@ void fountain::singleFrame()
 //	ftRender::drawPic(Game::testPic);
 //	ftRender::transformEnd();
 
-	fountain::mainWorld.draw();
+	mainWorld.draw();
 
 	//TODO: move this internal(fountainMain)
 	Game::mainClock.tick();
