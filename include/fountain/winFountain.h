@@ -19,8 +19,8 @@ void keyMapSetting()
 	for (int i = VK_F1; i <= VK_F12; i++)
 		KS(i, i - VK_F1 + FT_F1);
 	KS(VK_ESCAPE, FT_Esc);
-	for (int i = 0; i <= 9; i++)
-		KS(i, i - 0 + FT_0);
+	for (int i = '0'; i <= '9'; i++)
+		KS(i, i - '0' + FT_0);
 	KS(VK_RETURN, FT_Enter);
 	KS(VK_SPACE, FT_Space);
 	KS(VK_CONTROL, FT_Ctrl);
@@ -193,7 +193,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			fountain::sysKeyboard.setState(keymap
 			                               [wParam &
 			                                FT_KEYBOARDSTATE_SIZE],
-			                               1);
+			                               FT_KeyDown);
 		}
 	}
 	break;
@@ -201,7 +201,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_KEYUP:
 		fountain::
 		sysKeyboard.setState(keymap[wParam & FT_KEYBOARDSTATE_SIZE],
-		                     0);
+		                     FT_KeyUp);
 		break;
 
 	case WM_KILLFOCUS:
@@ -210,33 +210,33 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_LBUTTONDOWN:
-		fountain::sysMouse.setState(1, 1);
+		fountain::sysMouse.setState(FT_LButton, FT_ButtonDown);
 		break;
 
 	case WM_LBUTTONUP:
-		fountain::sysMouse.setState(1, 0);
+		fountain::sysMouse.setState(FT_LButton, FT_ButtonUp);
 		break;
 
 	case WM_MBUTTONDOWN:
-		fountain::sysMouse.setState(2, 1);
+		fountain::sysMouse.setState(FT_MButton, FT_ButtonDown);
 		break;
 
 	case WM_MBUTTONUP:
-		fountain::sysMouse.setState(2, 0);
+		fountain::sysMouse.setState(FT_MButton, FT_ButtonUp);
 		break;
 
 	case WM_RBUTTONDOWN:
-		fountain::sysMouse.setState(3, 1);
+		fountain::sysMouse.setState(FT_RButton, FT_ButtonDown);
 		break;
 
 	case WM_RBUTTONUP:
-		fountain::sysMouse.setState(3, 0);
+		fountain::sysMouse.setState(FT_RButton, FT_ButtonUp);
 		break;
 
 	case WM_MOUSEWHEEL:
 		zDelta = (short)HIWORD(wParam);
-		if (zDelta > 0) fountain::sysMouse.setState(4, 1);
-		else fountain::sysMouse.setState(5, 1);
+		if (zDelta > 0) fountain::sysMouse.setState(FT_ScrollUp, 1);
+		else fountain::sysMouse.setState(FT_ScrollDown, 1);
 		break;
 
 	case WM_SYSCOMMAND:
