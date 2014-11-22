@@ -41,7 +41,7 @@ void Body::autoCreateFixtures()
 	b2Shape *b2shape;
 	b2PolygonShape pshape;
 	b2CircleShape cshape;
-	b2EdgeShape eshape;
+	//b2EdgeShape eshape;
 	Shape shape = Body::shape;
 	int type = shape.getType();
 	std::vector<ftVec2> v;
@@ -64,9 +64,9 @@ void Body::autoCreateFixtures()
 		b2shape = &pshape;
 		break;
 
-	case FT_Line:
+	//case FT_Line:
 
-		break;
+		//break;
 
 	case FT_Rect:
 		v = shape.getData();

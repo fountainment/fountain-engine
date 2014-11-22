@@ -48,6 +48,7 @@
 		<Unit filename="ft_input.cpp" />
 		<Unit filename="ft_physics.cpp" />
 		<Unit filename="ft_render.cpp" />
+		<Unit filename="ft_scene.cpp" />
 		<Unit filename="ft_time.cpp" />
 		<Unit filename="include/fountain.h" />
 		<Unit filename="include/fountain/fountaindef.h" />
@@ -57,6 +58,7 @@
 		<Unit filename="include/fountain/ft_input.h" />
 		<Unit filename="include/fountain/ft_physics.h" />
 		<Unit filename="include/fountain/ft_render.h" />
+		<Unit filename="include/fountain/ft_scene.h" />
 		<Unit filename="include/fountain/ft_time.h" />
 		<Unit filename="include/fountain/linFountain.h" />
 		<Extensions>

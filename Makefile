@@ -1,4 +1,4 @@
-CPPS = ft_time.cpp ft_3dmodel.cpp ft_render.cpp ft_input.cpp ft_data.cpp ft_algorithm.cpp ft_physics.cpp
+CPPS = ft_time.cpp ft_3dmodel.cpp ft_render.cpp ft_input.cpp ft_data.cpp ft_algorithm.cpp ft_physics.cpp ft_scene.cpp
 CC = g++
 CFLAGS = -Wall -O2 -fexception
 LIBS = -lX11 -lGL -lfreeimage

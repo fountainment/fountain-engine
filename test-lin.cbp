@@ -45,6 +45,7 @@
 			<Add library="Box2D" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="testscene.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
