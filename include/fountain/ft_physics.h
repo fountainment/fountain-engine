@@ -10,7 +10,7 @@ namespace ftPhysics {
 
 void init();
 
-class Body : public Sprite
+class Body : public ftSprite
 {
 private:
 public:

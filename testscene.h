@@ -1,12 +1,12 @@
-Shape *rect;
-Shape *testShape0;
-Shape *testShape1;
-Shape *testShape2;
-Shape *addShape;
-Shape *groundBox;
-Shape *card;
+ftShape *rect;
+ftShape *testShape0;
+ftShape *testShape1;
+ftShape *testShape2;
+ftShape *addShape;
+ftShape *groundBox;
+ftShape *card;
 
-Shape shape;
+ftShape shape;
 
 ftVec2 aP, bP;
 ftRect makeRect;
@@ -118,7 +118,7 @@ void update(ftScene::Scene* sc)
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
 				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
-				bdPoint->shape = Shape(makeRect);
+				bdPoint->shape = ftShape(makeRect);
 				if (!mainWorld.addBody(bdPoint)) {
 					mainWorld.delHeadBody();
 					mainWorld.addBody(bdPoint);
@@ -137,7 +137,7 @@ void update(ftScene::Scene* sc)
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
 				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, false);
-				bdPoint->shape = Shape(makeRect);
+				bdPoint->shape = ftShape(makeRect);
 				if (!mainWorld.addBody(bdPoint)) {
 					mainWorld.delHeadBody();
 					mainWorld.addBody(bdPoint);

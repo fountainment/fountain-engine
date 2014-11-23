@@ -28,12 +28,12 @@ void fountain::gameInit()
 	v.push_back(ftVec2(1,0));
 	v.push_back(ftVec2(0,2));
 	v.push_back(ftVec2(-1,0));
-	testShape0 = new Shape(v , 4, true);
-	testShape1 = new Shape();
-	testShape2 = new Shape(1);
-	groundBox = new Shape(ftRect(0, 0, 100, 1));
-	rect = new Shape(ftRect(0, 0, 1, 1));
-	card = new Shape(ftRect(0, 0, 0.3, 3));
+	testShape0 = new ftShape(v , 4, true);
+	testShape1 = new ftShape();
+	testShape2 = new ftShape(1);
+	groundBox = new ftShape(ftRect(0, 0, 100, 1));
+	rect = new ftShape(ftRect(0, 0, 1, 1));
+	card = new ftShape(ftRect(0, 0, 0.3, 3));
 	addShape = rect;
 
 	for (int i = 0; i < 10; i++) {

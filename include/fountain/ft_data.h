@@ -72,7 +72,7 @@ public:
 
 };
 
-class Shape {
+class ftShape {
 private:
 	std::vector<ftVec2> data;
 	float r;
@@ -80,9 +80,9 @@ private:
 	bool loop;
 	int type;
 public:
-	Shape(ftRect rct);
-	Shape(float r = 0.1f);
-	Shape(const std::vector<ftVec2> & a, int n, bool loop = true);
+	ftShape(ftRect rct);
+	ftShape(float r = 0.1f);
+	ftShape(const std::vector<ftVec2> & a, int n, bool loop = true);
 
 	const std::vector<ftVec2> & getData();
 	void setData(const std::vector<ftVec2> & a);
@@ -96,14 +96,14 @@ public:
 	int getType();
 };
 
-class Sprite {
+class ftSprite {
 private:
 	ftVec2 position;
 	ftVec2 rectSize;
 	float angle;
 public:
-	Shape shape;
-	Sprite();
+	ftShape shape;
+	ftSprite();
 	void setPosition(ftVec2 pos);
 	void setPosition(float x, float y);
 	ftVec2 getPosition();
@@ -141,93 +141,93 @@ public:
 template <typename _tp, int _size>
 container<_tp, _size>::container()
 {
-	container<_tp, _size>::head = -1;
-	container<_tp, _size>::tail = -1;
+	head = -1;
+	tail = -1;
 	for (int i = 0; i < _size; i++) {
-		container<_tp, _size>::avail[i] = i;
+		avail[i] = i;
 	}
-	container<_tp, _size>::availN = _size;
+	availN = _size;
 }
 
 template <typename _tp, int _size>
 _tp container<_tp, _size>::getHead()
 {
-	return container<_tp, _size>::list[container<_tp, _size>::head];
+	return list[head];
 }
 
 template <typename _tp, int _size>
 bool container<_tp, _size>::add(_tp node)
 {
-	int aN = container<_tp, _size>::availN;
-	int tail = container<_tp, _size>::tail;
+	int aN = availN;
+	int tailT = tail;
 	if (!aN)
 		return false;
-	int cur = container<_tp, _size>::avail[aN - 1];
-	container<_tp, _size>::list[cur] = node;
-	if (container<_tp, _size>::head == -1) {
-		container<_tp, _size>::head = cur;
+	int cur = avail[aN - 1];
+	list[cur] = node;
+	if (head == -1) {
+		head = cur;
 	} else {
-		container<_tp, _size>::next[tail] = cur;
+		next[tailT] = cur;
 	}
-	container<_tp, _size>::prev[cur] = tail;
-	container<_tp, _size>::next[cur] = -1;
-	container<_tp, _size>::tail = cur;
-	container<_tp, _size>::availN--;
+	prev[cur] = tailT;
+	next[cur] = -1;
+	tail = cur;
+	availN--;
 	return true;
 }
 
 template <typename _tp, int _size>
 bool container<_tp, _size>::del(int x)
 {
-	if (container<_tp, _size>::head == -1) return false;
-	container<_tp, _size>::avail[container<_tp, _size>::availN] = x;
-	container<_tp, _size>::availN++;
-	int prev = container<_tp, _size>::prev[x];
-	int next = container<_tp, _size>::next[x];
-	if (prev != -1)
-		container<_tp, _size>::next[prev] = next;
+	if (head == -1) return false;
+	avail[availN] = x;
+	availN++;
+	int prevT = prev[x];
+	int nextT = next[x];
+	if (prevT != -1)
+		next[prevT] = nextT;
 	else
-		container<_tp, _size>::head = next;
-	if (next != -1)
-		container<_tp, _size>::prev[next] = prev;
+		head = nextT;
+	if (nextT != -1)
+		prev[nextT] = prevT;
 	else
-		container<_tp, _size>::tail = prev;
+		tail = prevT;
 	return true;
 }
 
 template <typename _tp, int _size>
 bool container<_tp, _size>::delHead()
 {
-	return container<_tp, _size>::del(container<_tp, _size>::head);
+	return del(head);
 }
 
 template <typename _tp, int _size>
 void container<_tp, _size>::update()
 {
-	int cur = container<_tp, _size>::head;
+	int cur = head;
 	while (cur != -1) {
-		container<_tp, _size>::list[cur].update();
-		cur = container<_tp, _size>::next[cur];
+		list[cur].update();
+		cur = next[cur];
 	}
 }
 
 template <typename _tp, int _size>
 void container<_tp, _size>::draw()
 {
-	int cur = container<_tp, _size>::head;
+	int cur = head;
 	while (cur != -1) {
-		container<_tp, _size>::list[cur].draw();
-		cur = container<_tp, _size>::next[cur];
+		list[cur].draw();
+		cur = next[cur];
 	}
 }
 
 template <typename _tp, int _size>
 void container<_tp, _size>::doWith(void (*func) (_tp))
 {
-	int cur = container<_tp, _size>::head;
+	int cur = head;
 	while (cur != -1) {
-		func(container<_tp, _size>::list[cur]);
-		cur = container<_tp, _size>::next[cur];
+		func(list[cur]);
+		cur = next[cur];
 	}
 }
 

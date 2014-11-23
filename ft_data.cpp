@@ -10,84 +10,78 @@ winState mainWin;
 //ftVec2
 ftVec2::ftVec2()
 {
-	ftVec2::x = 0;
-	ftVec2::y = 0;
+	x = 0;
+	y = 0;
 }
 
 ftVec2::ftVec2(float x, float y)
 {
-	ftVec2::x = x;
-	ftVec2::y = y;
+	this->x = x;
+	this->y = y;
 }
 
 const ftVec2 ftVec2::operator-(const ftVec2 & v)
 {
-	ftVec2 ans;
-	ans.x = ftVec2::x - v.x;
-	ans.y = ftVec2::y - v.y;
-	return ans;
+	return ftVec2(x - v.x, y - v.y);
 }
 
 const ftVec2 ftVec2::operator+(const ftVec2 & v)
 {
-	ftVec2 ans;
-	ans.x = ftVec2::x + v.x;
-	ans.y = ftVec2::y + v.y;
-	return ans;
+	return ftVec2(x + v.x, y + v.y);
 }
 
 //ftVec3
 ftVec3::ftVec3()
 {
-	ftVec3::xyz[0] = 0;
-	ftVec3::xyz[1] = 0;
-	ftVec3::xyz[2] = 0;
+	xyz[0] = 0;
+	xyz[1] = 0;
+	xyz[2] = 0;
 }
 
 ftVec3::ftVec3(float x, float y, float z)
 {
-	ftVec3::xyz[0] = x;
-	ftVec3::xyz[1] = y;
-	ftVec3::xyz[2] = z;
+	xyz[0] = x;
+	xyz[1] = y;
+	xyz[2] = z;
 }
 
 //ftRect
 ftRect::ftRect(float x, float y, float w, float h)
 {
-	ftRect::x = x;
-	ftRect::y = y;
-	ftRect::w = w;
-	ftRect::h = h;
+	this->x = x;
+	this->y = y;
+	this->w = w;
+	this->h = h;
 }
 
 ftRect::ftRect()
 {
-	ftRect::x = 0;
-	ftRect::y = 0;
-	ftRect::w = 0;
-	ftRect::h = 0;
+	x = 0;
+	y = 0;
+	w = 0;
+	h = 0;
 }
 
 ftRect::ftRect(ftVec2 pos, ftVec2 rSize)
 {
-	ftRect::x = pos.x;
-	ftRect::y = pos.y;
-	ftRect::w = rSize.x;
-	ftRect::h = rSize.y;
+	x = pos.x;
+	y = pos.y;
+	w = rSize.x;
+	h = rSize.y;
 }
 
 ftVec2 ftRect::getCenter()
 {
 	ftVec2 p;
-	p.x = ftRect::x + ftRect::w / 2.0f;
-	p.y = ftRect::y + ftRect::h / 2.0f;
+	p.x = x + w / 2.0f;
+	p.y = y + h / 2.0f;
 	return p;
 }
 
 void ftRect::setCenter(ftVec2 p)
 {
-	ftRect::x = p.x - ftRect::w / 2.0f;
-	ftRect::y = p.y - ftRect::h / 2.0f;
+	x = p.x - ftRect::w / 2.0f;
+	y = p.y - ftRect::h / 2.0f;
 }
 
 ftVec2 ftRect::getSize()
@@ -98,8 +92,8 @@ ftVec2 ftRect::getSize()
 
 void ftRect::setSize(ftVec2 sz)
 {
-	ftRect::w = sz.x;
-	ftRect::h = sz.y;
+	w = sz.x;
+	h = sz.y;
 }
 
 ftVec2 ftRect::getXY()
@@ -109,158 +103,158 @@ ftVec2 ftRect::getXY()
 
 void ftRect::setXY(ftVec2 XY)
 {
-	ftRect::x = XY.x;
-	ftRect::y = XY.y;
+	x = XY.x;
+	y = XY.y;
 }
 
 ftVec2 ftRect::getLB()
 {
-	return ftVec2(ftRect::x, ftRect::y);
+	return ftVec2(x, y);
 }
 
 ftVec2 ftRect::getLT()
 {
-	return ftVec2(ftRect::x, ftRect::y + ftRect::h);
+	return ftVec2(x, y + h);
 }
 
 ftVec2 ftRect::getRT()
 {
-	return ftVec2(ftRect::x + ftRect::w, ftRect::y + ftRect::h);
+	return ftVec2(x + w, y + h);
 }
 
 ftVec2 ftRect::getRB()
 {
-	return ftVec2(ftRect::x + ftRect::w, ftRect::y);
+	return ftVec2(x + w, y);
 }
 
 //Shape
-Shape::Shape(ftRect rct)
+ftShape::ftShape(ftRect rct)
 {
-	Shape::n = 1;
-	Shape::type = FT_Rect;
-	Shape::loop = true;
-	Shape::data.clear();
-	Shape::data.push_back(rct.getSize());
+	n = 1;
+	type = FT_Rect;
+	loop = true;
+	data.clear();
+	data.push_back(rct.getSize());
 }
 
-Shape::Shape(float r)
+ftShape::ftShape(float r)
 {
-	Shape::data.clear();
-	Shape::setN(0);
-	Shape::type = FT_Circle;
-	Shape::loop = true;
-	Shape::r = r;
+	data.clear();
+	setN(0);
+	type = FT_Circle;
+	loop = true;
+	this->r = r;
 }
 
-Shape::Shape(const std::vector<ftVec2> & a, int n, bool loop)
+ftShape::ftShape(const std::vector<ftVec2> & a, int n, bool loop)
 {
-	Shape::data.clear();
-	Shape::setN(n);
+	data.clear();
+	setN(n);
 	if (loop == true)
-		Shape::type = FT_Polygon;
+		type = FT_Polygon;
 	else
-		Shape::type = FT_Line;
-	Shape::loop = loop;
-	Shape::setData(a);
+		type = FT_Line;
+	this->loop = loop;
+	setData(a);
 }
 
-const std::vector<ftVec2> & Shape::getData()
+const std::vector<ftVec2> & ftShape::getData()
 {
-	return Shape::data;
+	return data;
 }
 
-void Shape::setData(const std::vector<ftVec2> & a)
+void ftShape::setData(const std::vector<ftVec2> & a)
 {
-	Shape::data = a;
+	data = a;
 }
 
-int Shape::getN()
+int ftShape::getN()
 {
-	return Shape::n;
+	return n;
 }
 
-void Shape::setN(int n)
+void ftShape::setN(int n)
 {
-	Shape::n = n;
+	this->n = n;
 }
 
-void Shape::setR(float r)
+void ftShape::setR(float r)
 {
-	Shape::r = r;
+	this->r = r;
 }
 
-float Shape::getR()
+float ftShape::getR()
 {
-	return Shape::r;
+	return r;
 }
 
-int Shape::getType()
+int ftShape::getType()
 {
-	return Shape::type;
+	return type;
 }
 
 //Sprite
-Sprite::Sprite()
+ftSprite::ftSprite()
 {
-	Sprite::position.x = 0;
-	Sprite::position.y = 0;
+	position.x = 0;
+	position.y = 0;
 }
 
-void Sprite::setPosition(ftVec2 pos)
+void ftSprite::setPosition(ftVec2 pos)
 {
-	Sprite::position = pos;
+	position = pos;
 }
 
-void Sprite::setPosition(float x, float y)
+void ftSprite::setPosition(float x, float y)
 {
-	Sprite::position = ftVec2(x, y);
+	position = ftVec2(x, y);
 }
 
-ftVec2 Sprite::getPosition()
+ftVec2 ftSprite::getPosition()
 {
-	return Sprite::position;
+	return position;
 }
 
-void Sprite::setAngle(float agl)
+void ftSprite::setAngle(float agl)
 {
 	agl *= 180.0f / 3.14159f;
-	Sprite::angle = agl;
+	angle = agl;
 }
 
-float Sprite::getAngle()
+float ftSprite::getAngle()
 {
-	return Sprite::angle;
+	return angle;
 }
 
-void Sprite::setRectSize(ftVec2 rts)
+void ftSprite::setRectSize(ftVec2 rts)
 {
-	Sprite::rectSize = rts;
+	rectSize = rts;
 }
 
-ftVec2 Sprite::getRectSize()
+ftVec2 ftSprite::getRectSize()
 {
-	return Sprite::rectSize;
+	return rectSize;
 }
 
-void Sprite::setRect(ftRect rct)
+void ftSprite::setRect(ftRect rct)
 {
-	Sprite::setPosition(rct.getCenter());
-	Sprite::setRectSize(rct.getSize());
+	setPosition(rct.getCenter());
+	setRectSize(rct.getSize());
 }
 
-ftRect Sprite::getRect()
+ftRect ftSprite::getRect()
 {
 	ftRect rct;
-	rct.setSize(Sprite::rectSize);
-	rct.setCenter(Sprite::position);
+	rct.setSize(rectSize);
+	rct.setCenter(position);
 	return rct;
 }
 
-void Sprite::draw()
+void ftSprite::draw()
 {
-	ftVec2 pos = Sprite::getPosition();
+	ftVec2 pos = getPosition();
 	ftRender::transformBegin();
 	ftRender::ftTranslate(pos.x, pos.y);
-	ftRender::drawShape(Sprite::shape, Sprite::getAngle());
+	ftRender::drawShape(shape, getAngle());
 	ftRender::transformEnd();
 }

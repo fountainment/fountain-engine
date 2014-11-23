@@ -42,75 +42,75 @@ void ftInput::initPerFrame()
 //Mouse
 Mouse::Mouse()
 {
-	Mouse::clearState();
-	Mouse::coor.x = 0;
-	Mouse::coor.y = 0;
-	Mouse::coorNor = Mouse::coor;
-	Mouse::lastCoorNor = Mouse::coorNor;
+	clearState();
+	coor.x = 0;
+	coor.y = 0;
+	coorNor = Mouse::coor;
+	lastCoorNor = Mouse::coorNor;
 }
 
 void Mouse::update(int x, int y)
 {
-	Mouse::lastCoorNor = Mouse::coorNor;
-	Mouse::coor.x = x;
-	Mouse::coor.y = y;
-	Mouse::coorNor.x = x;
-	Mouse::coorNor.y = fountain::mainWin.h - 1 - y;
+	lastCoorNor = Mouse::coorNor;
+	coor.x = x;
+	coor.y = y;
+	coorNor.x = x;
+	coorNor.y = fountain::mainWin.h - 1 - y;
 }
 
 const ftVec2 & Mouse::getOriPos()
 {
-	return Mouse::coor;
+	return coor;
 }
 
 const ftVec2 & Mouse::getPos()
 {
-	return Mouse::coorNor;
+	return coorNor;
 }
 
 const ftVec2 Mouse::getDeltaV()
 {
-	ftVec2 ans = Mouse::coorNor - Mouse::lastCoorNor;
-	Mouse::lastCoorNor = Mouse::coorNor;
+	ftVec2 ans = coorNor - lastCoorNor;
+	lastCoorNor = coorNor;
 	return ans;
 }
 
 void Mouse::setState(int button, int st)
 {
-	Mouse::state[button] = st;
+	state[button] = st;
 	buttonChangeList.push(button);
 }
 
 int Mouse::getState(int button)
 {
-	return Mouse::state[button];
+	return state[button];
 }
 
 void Mouse::clearState()
 {
-	std::memset(Mouse::state, 0, sizeof(Mouse::state));
+	std::memset(state, 0, sizeof(state));
 }
 
 //Keyboard
 Keyboard::Keyboard()
 {
-	Keyboard::clearState();
+	clearState();
 }
 
 void Keyboard::setState(int ch, int st)
 {
-	Keyboard::state[ch] = st;
+	state[ch] = st;
 	keyChangeList.push(ch);
 }
 
 int Keyboard::getState(int ch)
 {
-	return Keyboard::state[ch];
+	return state[ch];
 }
 
 void Keyboard::clearState()
 {
-	std::memset(Keyboard::state, 0, sizeof(Keyboard::state));
+	std::memset(state, 0, sizeof(state));
 }
 
 namespace fountain {

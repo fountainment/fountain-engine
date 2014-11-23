@@ -49,72 +49,69 @@ double floatTime()
 
 void ftTime::init()
 {
-	allStartT = 0.0;
-	allStartT = floatTime();
+	floatTime();
 }
 
 Clock::Clock(double fps)
 {
 	if (fps == 0.0)
-		Clock::secondPerFrame = 0.0;
+		secondPerFrame = 0.0;
 	else
-		Clock::secondPerFrame = 1.0 / fps;
-	Clock::isPaused = 1;
-	Clock::deltaT = 0.0;
-	Clock::timeScale = 1.0;
+		secondPerFrame = 1.0 / fps;
+	isPaused = 1;
+	deltaT = 0.0;
+	timeScale = 1.0;
 }
 
 void Clock::init()
 {
-	Clock::firstT = Clock::beginT = Clock::continueT = Clock::pauseT =
-	                                    floatTime();
-	Clock::isPaused = 0;
+	firstT = beginT = continueT = pauseT = floatTime();
+	isPaused = 0;
 }
 
 void Clock::tick()
 {
-	Clock::endT = floatTime();
-	while ((Clock::deltaT =
-	            Clock::endT - Clock::beginT) < Clock::secondPerFrame) {
+	endT = floatTime();
+	while ((deltaT = endT - beginT) < secondPerFrame) {
 		littleSleep();
-		Clock::endT = floatTime();
+		endT = floatTime();
 	}
-	if (Clock::secondPerFrame != 0 && Clock::deltaT > Clock::secondPerFrame)
-		Clock::deltaT = Clock::secondPerFrame;
-	Clock::deltaT *= Clock::timeScale;
-	if (Clock::isPaused == 1)
-		Clock::deltaT = 0.0;
-	Clock::beginT = Clock::endT;
+	if (secondPerFrame != 0 && deltaT > secondPerFrame)
+		deltaT = secondPerFrame;
+	deltaT *= timeScale;
+	if (isPaused == 1)
+		deltaT = 0.0;
+	beginT = endT;
 }
 
 double Clock::getDeltaT()
 {
-	return Clock::deltaT;
+	return deltaT;
 }
 
 double Clock::secondsFromInit()
 {
-	return floatTime() - Clock::firstT;
+	return floatTime() - firstT;
 }
 
 double Clock::secondsFromPause()
 {
-	return floatTime() - Clock::pauseT;
+	return floatTime() - pauseT;
 }
 
 double Clock::secondsFromContinue()
 {
-	return floatTime() - Clock::continueT;
+	return floatTime() - continueT;
 }
 
 void Clock::Pause()
 {
-	Clock::pauseT = floatTime();
-	Clock::isPaused = 1;
+	pauseT = floatTime();
+	isPaused = 1;
 }
 
 void Clock::Continue()
 {
-	Clock::beginT = Clock::continueT = floatTime();
-	Clock::isPaused = 0;
+	beginT = continueT = floatTime();
+	isPaused = 0;
 }

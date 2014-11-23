@@ -15,24 +15,24 @@ void ftPhysics::init()
 
 Body::Body()
 {
-	Body::body = NULL;
-	Body::setPosition(0.0f, 0.0f);
-	Body::setRectSize(ftVec2(1.0f, 1.0f));
-	Body::isDynamic = true;
+	body = NULL;
+	setPosition(0.0f, 0.0f);
+	setRectSize(ftVec2(1.0f, 1.0f));
+	isDynamic = true;
 }
 
 Body::Body(float x, float y, bool dynamic)
 {
-	Body::body = NULL;
-	Body::setPosition(x, y);
-	Body::setRectSize(ftVec2(1.0f, 1.0f));
-	Body::isDynamic = dynamic;
+	body = NULL;
+	setPosition(x, y);
+	setRectSize(ftVec2(1.0f, 1.0f));
+	isDynamic = dynamic;
 }
 
 void Body::setBody(b2Body* b2bd)
 {
-	Body::body = b2bd;
-	Body::body->SetUserData(Body::body);
+	body = b2bd;
+	body->SetUserData(body);
 }
 
 void Body::autoCreateFixtures()
@@ -42,7 +42,6 @@ void Body::autoCreateFixtures()
 	b2PolygonShape pshape;
 	b2CircleShape cshape;
 	//b2EdgeShape eshape;
-	Shape shape = Body::shape;
 	int type = shape.getType();
 	std::vector<ftVec2> v;
 	b2Vec2 bv[10];
@@ -64,7 +63,7 @@ void Body::autoCreateFixtures()
 		b2shape = &pshape;
 		break;
 
-	//case FT_Line:
+		//case FT_Line:
 
 		//break;
 
@@ -74,29 +73,29 @@ void Body::autoCreateFixtures()
 		b2shape = &pshape;
 		break;
 	}
-	if (Body::isDynamic) {
+	if (isDynamic) {
 		defaultFixtureDef.shape = b2shape;
 		defaultFixtureDef.density = 1.0f;
 		defaultFixtureDef.friction = 0.3f;
-		Body::body->CreateFixture(&defaultFixtureDef);
+		body->CreateFixture(&defaultFixtureDef);
 	} else {
-		Body::body->CreateFixture(b2shape, 0.0f);
+		body->CreateFixture(b2shape, 0.0f);
 	}
 }
 
 void Body::update()
 {
-	b2Vec2 bv = Body::body->GetPosition();
-	float angle = Body::body->GetAngle();
+	b2Vec2 bv = body->GetPosition();
+	float angle = body->GetAngle();
 	//TODO: add sprite class
-	Body::setPosition(bv.x, bv.y);
-	Body::setAngle(angle);
+	setPosition(bv.x, bv.y);
+	setAngle(angle);
 }
 
 World::World(ftVec2 gravity)
 {
 	b2Vec2 g(gravity.x, gravity.y);
-	World::world = new b2World(g);
+	world = new b2World(g);
 }
 
 bool World::addBody(Body* bd)
@@ -110,7 +109,7 @@ bool World::addBody(Body* bd)
 		defaultBodyDef.type = b2_staticBody;
 	}
 	if (World::bodyCon.add(bd) == true) {
-		bd->setBody(World::world->CreateBody(&defaultBodyDef));
+		bd->setBody(world->CreateBody(&defaultBodyDef));
 		bd->autoCreateFixtures();
 		return true;
 	} else {
@@ -120,10 +119,10 @@ bool World::addBody(Body* bd)
 
 void World::delHeadBody()
 {
-	Body* bdPoint = World::bodyCon.getHead();
-	World::world->DestroyBody(bdPoint->body);
+	Body* bdPoint = bodyCon.getHead();
+	world->DestroyBody(bdPoint->body);
 	delete bdPoint;
-	World::bodyCon.delHead();
+	bodyCon.delHead();
 }
 
 void bodyUpdate(Body* bd)
@@ -138,16 +137,16 @@ void bodyDraw(Body* bd)
 
 void World::update(float timeStep)
 {
-	World::world->Step(timeStep, 8, 3);
-	World::bodyCon.doWith(bodyUpdate);
+	world->Step(timeStep, 8, 3);
+	bodyCon.doWith(bodyUpdate);
 }
 
 void World::update()
 {
-	World::update(defaultTimeStep);
+	update(defaultTimeStep);
 }
 
 void World::draw()
 {
-	World::bodyCon.doWith(bodyDraw);
+	bodyCon.doWith(bodyDraw);
 }

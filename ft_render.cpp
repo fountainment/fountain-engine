@@ -194,7 +194,7 @@ void ftRender::drawCircle()
 	glEnd();
 }
 
-void ftRender::drawShape(Shape & shape, float angle)
+void ftRender::drawShape(ftShape & shape, float angle)
 {
 	int type = shape.getType();
 	std::vector<ftVec2> v = shape.getData();
@@ -267,95 +267,92 @@ void ftRender::drawAlphaPic(int picID)
 
 Camera::Camera(float x, float y, float z)
 {
-	Camera::setPosition(x, y, z);
-	Camera::setWinSize(fountain::mainWin.w, fountain::mainWin.h);
-	Camera::setScale(1.0f);
-	Camera::setAngle(0.0f, 0.0f, 0.0f);
-	Camera::setProjectionType(FT_PLANE);
+	setPosition(x, y, z);
+	setWinSize(fountain::mainWin.w, fountain::mainWin.h);
+	setScale(1.0f);
+	setAngle(0.0f, 0.0f, 0.0f);
+	setProjectionType(FT_PLANE);
 }
 
 void Camera::setPosition(float x, float y)
 {
-	Camera::x = x;
-	Camera::y = y;
+	this->x = x;
+	this->y = y;
 }
 
 void Camera::setPosition(float x, float y, float z)
 {
-	Camera::x = x;
-	Camera::y = y;
+	this->x = x;
+	this->y = y;
 	if (z < FT_CAMERA_NEAR)
 		z = FT_CAMERA_NEAR;
-	Camera::z = z;
+	this->z = z;
 }
 
 void Camera::move(float x, float y)
 {
-	Camera::x += x;
-	Camera::y += y;
+	this->x += x;
+	this->y += y;
 }
 
 void Camera::setAngle(float x, float y, float z)
 {
-	Camera::xAngle = x;
-	Camera::yAngle = y;
-	Camera::zAngle = z;
+	this->xAngle = x;
+	this->yAngle = y;
+	this->zAngle = z;
 }
 
 void Camera::setWinSize(int w, int h)
 {
-	Camera::winW = (float)w;
-	Camera::winH = (float)h;
-	Camera::W2 = Camera::winW / 2.0f;
-	Camera::H2 = Camera::winH / 2.0f;
-	Camera::ratio = Camera::z / FT_CAMERA_NEAR;
-	Camera::nearW2 = Camera::winW / Camera::ratio / 2.0f;
-	Camera::nearH2 = Camera::winH / Camera::ratio / 2.0f;
+	winW = (float)w;
+	winH = (float)h;
+	W2 = winW / 2.0f;
+	H2 = winH / 2.0f;
+	ratio = z / FT_CAMERA_NEAR;
+	nearW2 = winW / ratio / 2.0f;
+	nearH2 = winH / ratio / 2.0f;
 }
 
 void Camera::setScale(float scale)
 {
 	if (scale < 0)
-		scale = 0.01;
-	Camera::scale = scale;
+		this->scale = 0.01;
+	this->scale = scale;
 }
 
 void Camera::setProjectionType(int type)
 {
-	Camera::projectionType = type;
+	projectionType = type;
 }
 
 void Camera::update()
 {
-	glViewport(0, 0, Camera::winW, Camera::winH);
+	glViewport(0, 0, winW, winH);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	if (Camera::projectionType == FT_PLANE) {
-		glOrtho(-Camera::W2 / Camera::scale, Camera::W2 / Camera::scale, -Camera::H2 / Camera::scale, Camera::H2 / Camera::scale,
+	if (projectionType == FT_PLANE) {
+		glOrtho(-W2 / scale, W2 / scale, -H2 / scale, H2 / scale,
 		        -99999, 99999);
-	} else if (Camera::projectionType == FT_PERSPECTIVE) {
-		glFrustum(-Camera::nearW2 / Camera::scale,
-		          Camera::nearW2 / Camera::scale,
-		          -Camera::nearH2 / Camera::scale,
-		          Camera::nearH2 / Camera::scale, FT_CAMERA_NEAR,
-		          FT_CAMERA_FAR);
+	} else if (projectionType == FT_PERSPECTIVE) {
+		glFrustum(-nearW2 / scale, nearW2 / scale, -nearH2 / scale,
+		          nearH2 / scale, FT_CAMERA_NEAR, FT_CAMERA_FAR);
 	}
-	glRotatef(Camera::xAngle, 1.0f, 0.0f, 0.0f);
-	glRotatef(Camera::yAngle, 0.0f, 1.0f, 0.0f);
-	glRotatef(Camera::zAngle, 0.0f, 0.0f, 1.0f);
-	glTranslatef(-Camera::x, -Camera::y, -Camera::z);
+	glRotatef(xAngle, 1.0f, 0.0f, 0.0f);
+	glRotatef(yAngle, 0.0f, 1.0f, 0.0f);
+	glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
+	glTranslatef(-x, -y, -z);
 	glMatrixMode(GL_MODELVIEW);
 }
 
 ftVec2 Camera::mouseToWorld(ftVec2 mPos)
 {
 	float l, b, w2, h2;
-	w2 = Camera::W2 / Camera::scale;
-	h2 = Camera::H2 / Camera::scale;
-	l = Camera::x - w2;
-	b = Camera::y - h2;
+	w2 = W2 / scale;
+	h2 = H2 / scale;
+	l = x - w2;
+	b = y - h2;
 	ftVec2 ans;
-	ans.x = mPos.x / Camera::scale + l;
-	ans.y = mPos.y / Camera::scale + b;
+	ans.x = mPos.x / scale + l;
+	ans.y = mPos.y / scale + b;
 	return ans;
 }
