@@ -1,5 +1,4 @@
 #include <fountain/ft_physics.h>
-#include <cstdio>
 
 using ftPhysics::Body;
 using ftPhysics::World;
@@ -72,6 +71,11 @@ void Body::autoCreateFixtures()
 		pshape.SetAsBox(v[0].x / 2.0f, v[0].y / 2.0f);
 		b2shape = &pshape;
 		break;
+
+	default:
+		b2shape = NULL;
+		return;
+		break;
 	}
 	if (isDynamic) {
 		defaultFixtureDef.shape = b2shape;
@@ -123,6 +127,11 @@ void World::delHeadBody()
 	world->DestroyBody(bdPoint->body);
 	delete bdPoint;
 	bodyCon.delHead();
+}
+
+bool World::empty()
+{
+	return bodyCon.empty();
 }
 
 void bodyUpdate(Body* bd)

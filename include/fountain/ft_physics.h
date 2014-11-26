@@ -27,15 +27,16 @@ public:
 class World
 {
 private:
-	b2World* world;
 	container<Body*, BODY_MAXNUM> bodyCon;
 public:
+	b2World* world;
 	World(ftVec2 gravity);
 	bool addBody(Body* bd);
 	void delHeadBody();
 	void update();
 	void update(float timeStep);
 	void draw();
+	bool empty();
 };
 
 };

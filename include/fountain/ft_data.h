@@ -136,6 +136,7 @@ public:
 	void update();
 	void draw();
 	void doWith(void(*func)(_tp));
+	bool empty();
 };
 
 template <typename _tp, int _size>
@@ -229,6 +230,15 @@ void container<_tp, _size>::doWith(void (*func) (_tp))
 		func(list[cur]);
 		cur = next[cur];
 	}
+}
+
+template <typename _tp, int _size>
+bool container<_tp, _size>::empty()
+{
+	if (_size == availN)
+		return true;
+	else 
+		return false;
 }
 
 namespace fountain {

@@ -8,7 +8,7 @@ obj/
 *.layout
 *.obj
 *.exe
-*.so
+*.a
 *.dll
 *.orig
 main
