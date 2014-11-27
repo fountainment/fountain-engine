@@ -58,7 +58,7 @@ Clock::Clock(double fps)
 		secondPerFrame = 0.0;
 	else
 		secondPerFrame = 1.0 / fps;
-	isPaused = 1;
+	isPaused = true;
 	deltaT = 0.0;
 	timeScale = 1.0;
 }
@@ -66,7 +66,7 @@ Clock::Clock(double fps)
 void Clock::init()
 {
 	firstT = beginT = continueT = pauseT = floatTime();
-	isPaused = 0;
+	isPaused = false;
 }
 
 void Clock::tick()
@@ -79,7 +79,7 @@ void Clock::tick()
 	if (secondPerFrame != 0 && deltaT > secondPerFrame)
 		deltaT = secondPerFrame;
 	deltaT *= timeScale;
-	if (isPaused == 1)
+	if (isPaused == true)
 		deltaT = 0.0;
 	beginT = endT;
 }
@@ -107,11 +107,16 @@ double Clock::secondsFromContinue()
 void Clock::Pause()
 {
 	pauseT = floatTime();
-	isPaused = 1;
+	isPaused = true;
 }
 
 void Clock::Continue()
 {
 	beginT = continueT = floatTime();
-	isPaused = 0;
+	isPaused = false;
+}
+
+bool Clock::isPause()
+{
+	return isPaused;
 }

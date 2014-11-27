@@ -6,7 +6,7 @@ void init();
 class Clock {
 private:
 	double secondPerFrame;
-	int isPaused;
+	bool isPaused;
 	double firstT;
 	double beginT;
 	double pauseT;
@@ -20,6 +20,7 @@ public:
 	void tick();
 	void Pause();
 	void Continue();
+	bool isPause();
 	double getDeltaT();
 	double secondsFromInit();
 	double secondsFromPause();

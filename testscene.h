@@ -235,20 +235,37 @@ void update(ftScene::Scene* sc)
 	mPos = mainCamera.mouseToWorld(mPos);
 
 	if (fountain::sysKeyboard.getState(FT_P) == FT_KeyUp) sc->gotoScene(FT_Scene2, true);
-	if (fountain::sysKeyboard.getState(FT_Q)) mainClock.Pause();
-	if (fountain::sysKeyboard.getState(FT_W)) mainClock.Continue();
+	if (fountain::sysKeyboard.getState(FT_Space) == FT_KeyDown) {
+		if (mainClock.isPause())
+			mainClock.Continue();
+		else
+			mainClock.Pause();
+	}
 
-	if (fountain::sysKeyboard.getState(FT_1)) addShape = testShape0;
-	if (fountain::sysKeyboard.getState(FT_2)) addShape = testShape1;
-	if (fountain::sysKeyboard.getState(FT_3)) addShape = testShape2;
-	if (fountain::sysKeyboard.getState(FT_4)) addShape = rect;
 
-	if (fountain::sysKeyboard.getState(FT_E)) mode = 1;
-	if (fountain::sysKeyboard.getState(FT_R)) mode = 2;
-	if (fountain::sysKeyboard.getState(FT_T)) mode = 3;
+	int tmp = ftAlgorithm::randRangef(1, 5);
+
+	switch (tmp) {
+	case 1:
+		addShape = testShape0;
+		break;
+	case 2:
+		addShape = testShape2;
+		break;
+	case 3:
+		addShape = testShape1;
+		break;
+	case 4:
+		addShape = rect;
+		break;
+	}
+
+	if (fountain::sysKeyboard.getState(FT_1)) mode = 1;
+	if (fountain::sysKeyboard.getState(FT_2)) mode = 2;
+	if (fountain::sysKeyboard.getState(FT_3)) mode = 3;
 
 	if (mode == 1) {
-		if (!fountain::sysKeyboard.getState(FT_Space) && fountain::sysMouse.getState(FT_LButton)) {
+		if (fountain::sysMouse.getState(FT_LButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
 			bdPoint->shape = *addShape;
 			if (!mainWorld.addBody(bdPoint)) {
@@ -267,7 +284,6 @@ void update(ftScene::Scene* sc)
 		}
 	}
 	if (mode == 2) {
-        if (!fountain::sysKeyboard.getState(FT_Space))
 		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) {
 			aP = mPos;
 		}
@@ -308,9 +324,9 @@ void update(ftScene::Scene* sc)
 		}
 	}
 	if (mode == 3) {
-		if (!fountain::sysKeyboard.getState(FT_Space) && fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) MouseDown(mPos);
-		if (!fountain::sysKeyboard.getState(FT_Space) && fountain::sysMouse.getState(FT_LButton) == FT_isDown) MouseMove(mPos);
-		if (!fountain::sysKeyboard.getState(FT_Space) && fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) MouseUp();
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) MouseDown(mPos);
+		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) MouseMove(mPos);
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) MouseUp();
 	}
 
 	if (fountain::sysMouse.getState(FT_ScrollUp)) {
@@ -319,7 +335,7 @@ void update(ftScene::Scene* sc)
 	if (fountain::sysMouse.getState(FT_ScrollDown)) {
 		scale /= 1.15f;
 	}
-	if (fountain::sysMouse.getState(FT_LButton) && fountain::sysKeyboard.getState(FT_Space)) {
+	if (fountain::sysMouse.getState(FT_MButton)) {
 		deltaV = fountain::sysMouse.getDeltaV();
 		mainCamera.move(-deltaV.x / scale, -deltaV.y / scale);
 	}
@@ -337,7 +353,6 @@ void draw(ftScene::Scene* sc)
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
-
 }
 
 void destroy(ftScene::Scene* sc)
