@@ -3,6 +3,8 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #define min(a,b) ((b)>(a)?(a):(b))
 
+float ttt;
+
 class QueryCallback : public b2QueryCallback
 {
 public:
@@ -47,6 +49,7 @@ ftRender::Camera mainCamera(0, 0, 500);
 
 void init(ftScene::Scene* sc)
 {
+	ttt = 1;
 	pic1 = ftRender::getPicture("./logo.png");
 	pic2 = ftRender::getPicture("./title.png");
 	transp = 0.0;
@@ -57,12 +60,16 @@ void init(ftScene::Scene* sc)
 
 void update(ftScene::Scene* sc)
 {
-	if (transp > 1.0)
-		sc->gotoScene(FT_Scene2);
-    if (scale > 0.30) {
-        x -= 1.5;
-        scale -= 0.006;
-    } else transp += 0.008;
+	if (ttt > 0.01) ttt -= 0.01;
+	if (transp > 2.0) {
+		ttt += 0.02;
+		if (ttt > 1)
+			sc->gotoScene(FT_Scene2);
+	}
+	if (scale > 0.30) {
+		x -= 1.5;
+		scale -= 0.006;
+	} else transp += 0.008;
 }
 
 void draw(ftScene::Scene* sc)
@@ -76,8 +83,13 @@ void draw(ftScene::Scene* sc)
 
 	ftRender::transformBegin();
 	ftRender::ftTransparency(transp);
-	ftRender::ftTranslate(100, 0);
+	ftRender::ftTranslate(90, 0);
 	ftRender::drawAlphaPic(pic2);
+	ftRender::transformEnd();
+	
+	ftRender::transformBegin();
+	ftRender::ftColor4f(0, 0, 0, ttt);
+	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
 }
 
@@ -161,6 +173,7 @@ void MouseUp()
 
 void init(ftScene::Scene* sc)
 {
+	ttt = 1;
 	mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	mainCamera.setPosition(0, 0, 500);
 	scale = 2.0f;
@@ -216,6 +229,8 @@ void init(ftScene::Scene* sc)
 
 void update(ftScene::Scene* sc)
 {
+	if (ttt > 0.01) ttt -= 0.01;
+
 	ftVec2 mPos = fountain::sysMouse.getPos();
 	mPos = mainCamera.mouseToWorld(mPos);
 
@@ -316,6 +331,12 @@ void draw(ftScene::Scene* sc)
 {
 	mainCamera.update();
 	mainWorld.draw();
+
+	ftRender::transformBegin();
+	ftRender::ftColor4f(0, 0, 0, ttt);
+	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+	ftRender::transformEnd();
+
 }
 
 void destroy(ftScene::Scene* sc)

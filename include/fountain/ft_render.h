@@ -23,6 +23,7 @@ void ftTranslate(float x, float y, float z = 0.0f);
 void ftRotate(float xAngle, float yAngle, float zAngle);
 void ftScale(float scale);
 void ftTransparency(float tp);
+void ftColor4f(float r, float g, float b, float a);
 
 void openLineSmooth();
 void openPointSmooth();

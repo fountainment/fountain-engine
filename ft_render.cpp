@@ -82,6 +82,11 @@ void ftRender::ftTransparency(float tp)
     glColor4f(1.0, 1.0, 1.0, tp);
 }
 
+void ftRender::ftColor4f(float r, float g, float b, float a)
+{
+	glColor4f(r, g, b, a);
+}
+
 void ftRender::openLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);
@@ -171,12 +176,15 @@ void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
 	float h2 = h / 2.0f;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBegin(GL_QUADS);
 	glVertex2f(-w2, -h2);
 	glVertex2f(-w2, h2);
 	glVertex2f(w2, h2);
 	glVertex2f(w2, -h2);
 	glEnd();
+	glDisable(GL_BLEND);
 }
 
 void ftRender::drawRect(ftRect rct, float angle)
