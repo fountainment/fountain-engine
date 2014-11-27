@@ -77,6 +77,11 @@ void ftRender::ftScale(float scale)
 	glScalef(scale, scale, scale);
 }
 
+void ftRender::ftTransparency(float tp)
+{
+    glColor4f(1.0, 1.0, 1.0, tp);
+}
+
 void ftRender::openLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);

@@ -11,7 +11,7 @@ public:
                  m_point = point;
                  m_fixture = NULL;
          }
- 
+
          bool ReportFixture(b2Fixture* fixture)
          {
                  b2Body* body = fixture->GetBody();
@@ -21,12 +21,12 @@ public:
                          if (inside)
                          {
                                  m_fixture = fixture;
- 
+
                                  // We are done, terminate the query.
                                  return false;
                          }
                  }
- 
+
                  // Continue the query.
                  return true;
          }
@@ -39,24 +39,46 @@ public:
 namespace scene1 {
 
 int pic1;
+int pic2;
+float transp;
+float scale;
+float x = 0;
 ftRender::Camera mainCamera(0, 0, 500);
 
 void init(ftScene::Scene* sc)
 {
-	pic1 = ftRender::getPicture("./test.jpg");
+	pic1 = ftRender::getPicture("./logo.png");
+	pic2 = ftRender::getPicture("./title.png");
+	transp = 0.0;
+	scale = 1.0;
+	x = 0;
 	mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 }
 
 void update(ftScene::Scene* sc)
 {
-	if (fountain::sysKeyboard.getState(FT_Space) == FT_KeyUp)
+	if (transp > 1.0)
 		sc->gotoScene(FT_Scene2);
+    if (scale > 0.30) {
+        x -= 1.5;
+        scale -= 0.006;
+    } else transp += 0.008;
 }
 
 void draw(ftScene::Scene* sc)
 {
 	mainCamera.update();
-	ftRender::drawPic(pic1);
+	ftRender::transformBegin();
+	ftRender::ftTranslate(x, 0);
+	ftRender::ftScale(scale);
+	ftRender::drawAlphaPic(pic1);
+	ftRender::transformEnd();
+
+	ftRender::transformBegin();
+	ftRender::ftTransparency(transp);
+	ftRender::ftTranslate(100, 0);
+	ftRender::drawAlphaPic(pic2);
+	ftRender::transformEnd();
 }
 
 void destroy(ftScene::Scene* sc)
@@ -73,9 +95,9 @@ ftVec2 aP, bP;
 ftRect makeRect;
 ftScene::Scene *scene;
 
-int mode = 1;
+int mode;
 
-double scale = 1.0f;
+double scale;
 //int testPic;
 ftVec2 deltaV;
 ftShape *rect;
@@ -108,7 +130,7 @@ void MouseDown(ftVec2 p)
 
 	QueryCallback callback(b2Vec2(p.x, p.y));
 	world->QueryAABB(&callback, aabb);
-	
+
 	if (callback.m_fixture) {
 		b2Body* body = callback.m_fixture->GetBody();
 		b2MouseJointDef md;
@@ -141,7 +163,7 @@ void init(ftScene::Scene* sc)
 {
 	mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
 	mainCamera.setPosition(0, 0, 500);
-	scale = 1.0f;
+	scale = 2.0f;
 	mode = 1;
 
 	v.clear();
@@ -270,9 +292,9 @@ void update(ftScene::Scene* sc)
 		}
 	}
 	if (mode == 3) {
-		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) MouseDown(mPos);	
-		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) MouseMove(mPos);	
-		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) MouseUp();	
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) MouseDown(mPos);
+		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) MouseMove(mPos);
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) MouseUp();
 	}
 
 	if (fountain::sysMouse.getState(FT_ScrollUp)) {
@@ -298,9 +320,9 @@ void draw(ftScene::Scene* sc)
 
 void destroy(ftScene::Scene* sc)
 {
-	delete testShape0; 
-	delete testShape1; 
-	delete testShape2; 
+	delete testShape0;
+	delete testShape1;
+	delete testShape2;
 	delete card;
 	delete groundBox;
 	delete rect;
