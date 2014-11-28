@@ -24,6 +24,7 @@ void ftRotate(float xAngle, float yAngle, float zAngle);
 void ftScale(float scale);
 void ftTransparency(float tp);
 void ftColor4f(float r, float g, float b, float a);
+void useColor(ftColor c);
 
 void openLineSmooth();
 void openPointSmooth();

@@ -7,7 +7,7 @@ winState mainWin;
 
 };
 
-//ftVec2
+//class ftVec2
 ftVec2::ftVec2()
 {
 	x = 0;
@@ -30,7 +30,7 @@ const ftVec2 ftVec2::operator+(const ftVec2 & v)
 	return ftVec2(x + v.x, y + v.y);
 }
 
-//ftVec3
+//class ftVec3
 ftVec3::ftVec3()
 {
 	xyz[0] = 0;
@@ -45,7 +45,7 @@ ftVec3::ftVec3(float x, float y, float z)
 	xyz[2] = z;
 }
 
-//ftRect
+//class ftRect
 ftRect::ftRect(float x, float y, float w, float h)
 {
 	this->x = x;
@@ -127,7 +127,7 @@ ftVec2 ftRect::getRB()
 	return ftVec2(x + w, y);
 }
 
-//Shape
+//class ftShape
 ftShape::ftShape(ftRect rct)
 {
 	n = 1;
@@ -193,11 +193,22 @@ int ftShape::getType()
 	return type;
 }
 
-//Sprite
+//class ftSprite
 ftSprite::ftSprite()
 {
+	color = FT_White;
 	position.x = 0;
 	position.y = 0;
+}
+
+void ftSprite::setColor(const ftColor & c)
+{
+	color = c;
+}
+
+const ftColor & ftSprite::getColor()
+{
+	return color;
 }
 
 void ftSprite::setPosition(ftVec2 pos)
@@ -254,7 +265,88 @@ void ftSprite::draw()
 {
 	ftVec2 pos = getPosition();
 	ftRender::transformBegin();
+	ftRender::useColor(color);
 	ftRender::ftTranslate(pos.x, pos.y);
 	ftRender::drawShape(shape, getAngle());
 	ftRender::transformEnd();
+}
+
+//class ftColor
+float ftColor::checkValue(float v)
+{
+	if (v > 1.0f) v = 1.0f;
+	else if (v < 0.0f) v = 0.0f;
+	return v;
+}
+
+ftColor::ftColor()
+{
+	r = 1.0f;
+	g = 1.0f;
+	b = 1.0f;
+	a = 1.0f;
+}
+
+ftColor::ftColor(std::string s)
+{
+	
+}
+
+ftColor::ftColor(float r, float g, float b, float a)
+{
+	setR(r);
+	setG(g);
+	setB(b);
+	setAlpha(a);
+}
+
+void ftColor::inverse()
+{
+	r = 1.0f - r;
+	g = 1.0f - g;
+	b = 1.0f - b;
+}
+
+void ftColor::setR(float r)
+{
+	r = checkValue(r);
+	this->r = r;
+}
+
+void ftColor::setG(float g)
+{
+	g = checkValue(g);
+	this->g = g;
+}
+
+void ftColor::setB(float b)
+{
+	b = checkValue(b);
+	this->b = b;
+}
+
+void ftColor::setAlpha(float a)
+{
+	a = checkValue(a);
+	this->a = a;
+}
+
+float ftColor::getR()
+{
+	return r;
+}
+
+float ftColor::getG()
+{
+	return g;
+}
+
+float ftColor::getB()
+{
+	return b;
+}
+
+float ftColor::getAlpha()
+{
+	return a;
 }

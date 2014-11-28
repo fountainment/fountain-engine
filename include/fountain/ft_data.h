@@ -4,11 +4,21 @@
 #include <string>
 #include <vector>
 
-//Shape
+//ftShape::type
 #define FT_Circle 1
 #define FT_Polygon 2
 #define FT_Line 3
 #define FT_Rect 4
+
+//ftColor
+#define FT_Red    (ftColor(1.0f,0.0f,0.0f))
+#define FT_Green  (ftColor(0.0f,1.0f,0.0f))
+#define FT_Blue   (ftColor(0.0f,0.0f,1.0f))
+#define FT_Grey   (ftColor(0.5f,0.5f,0.5f))
+#define FT_White  (ftColor(1.0f,1.0f,1.0f))
+#define FT_Black  (ftColor(0.0f,0.0f,0.0f))
+#define FT_Yellow (ftColor(1.0f,1.0f,0.0f))
+#define FT_Orange (ftColor(1.0f,0.5f,0.0f))
 
 typedef struct {
 	int w, h;
@@ -96,11 +106,32 @@ public:
 	int getType();
 };
 
+class ftColor
+{
+private:
+	float r, g, b, a;
+	float checkValue(float v);
+public:
+	ftColor();
+	ftColor(std::string);
+	ftColor(float r, float g, float b, float a = 1.0f);
+	void inverse();
+	void setR(float r);
+	void setG(float g);
+	void setB(float b);
+	void setAlpha(float a);
+	float getR();
+	float getG();
+	float getB();
+	float getAlpha();
+};
+
 class ftSprite {
 private:
 	ftVec2 position;
 	ftVec2 rectSize;
 	float angle;
+	ftColor color;
 public:
 	ftShape shape;
 	ftSprite();
@@ -113,6 +144,8 @@ public:
 	ftVec2 getRectSize();
 	void setRect(ftRect rct);
 	ftRect getRect();
+	void setColor(const ftColor & c);
+	const ftColor & getColor();
 	void draw();
 	void update();
 };

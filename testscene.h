@@ -171,6 +171,14 @@ void MouseUp()
 	}
 }
 
+ftColor randColor()
+{
+	float r = ftAlgorithm::randRangef(0.5f, 1.0f);
+	float g = ftAlgorithm::randRangef(0.3f, 1.0f);
+	float b = ftAlgorithm::randRangef(0.5f, 1.0f);
+	return ftColor(r, g, b);
+}
+
 void init(ftScene::Scene* sc)
 {
 	ttt = 1;
@@ -202,6 +210,7 @@ void init(ftScene::Scene* sc)
 		for (int j = 0 - i; j <= i; j++) {
 			bdPoint = new ftPhysics::Body(j, -i, false);
 			bdPoint->shape = *addShape;
+			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
 				mainWorld.delHeadBody();
 				mainWorld.addBody(bdPoint);
@@ -211,6 +220,7 @@ void init(ftScene::Scene* sc)
 
 	bdPoint = new ftPhysics::Body(0, -100, false);
 	bdPoint->shape = *groundBox;
+	bdPoint->setColor(randColor());
 	if (!mainWorld.addBody(bdPoint)) {
 		mainWorld.delHeadBody();
 		mainWorld.addBody(bdPoint);
@@ -219,6 +229,7 @@ void init(ftScene::Scene* sc)
 	for (int i = -50; i <= 50; i+=2) {
 		bdPoint = new ftPhysics::Body(i, -100 + 3.6);
 		bdPoint->shape = *card;
+		bdPoint->setColor(randColor());
 		if (!mainWorld.addBody(bdPoint)) {
 			mainWorld.delHeadBody();
 			mainWorld.addBody(bdPoint);
@@ -268,6 +279,7 @@ void update(ftScene::Scene* sc)
 		if (fountain::sysMouse.getState(FT_LButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
 			bdPoint->shape = *addShape;
+			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
 				mainWorld.delHeadBody();
 				mainWorld.addBody(bdPoint);
@@ -277,6 +289,7 @@ void update(ftScene::Scene* sc)
 		if (fountain::sysMouse.getState(FT_RButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
 			bdPoint->shape = *addShape;
+			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
 				mainWorld.delHeadBody();
 				mainWorld.addBody(bdPoint);
@@ -294,9 +307,10 @@ void update(ftScene::Scene* sc)
 		}
 		else if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {
 			ftVec2 tmpP = makeRect.getCenter();
-			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
+			if (makeRect.getSize().x > 0.01 && makeRect.getSize().y > 0.01) {
 				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
 				bdPoint->shape = ftShape(makeRect);
+				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
 					mainWorld.delHeadBody();
 					mainWorld.addBody(bdPoint);
@@ -316,6 +330,7 @@ void update(ftScene::Scene* sc)
 			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
 				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, false);
 				bdPoint->shape = ftShape(makeRect);
+				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
 					mainWorld.delHeadBody();
 					mainWorld.addBody(bdPoint);
@@ -347,7 +362,10 @@ void update(ftScene::Scene* sc)
 void draw(ftScene::Scene* sc)
 {
 	mainCamera.update();
+	ftRender::transformBegin();
+	ftRender::useColor(FT_Orange);
 	mainWorld.draw();
+	ftRender::transformEnd();
 
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);

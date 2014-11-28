@@ -16,6 +16,8 @@ static ftVec2 circle8[8];
 static ftVec2 circle32[32];
 static ftVec2 circle128[128];
 
+static float globalR, globalG, globalB, globalA;
+
 void initCircleData(ftVec2 *v, int n)
 {
 	float d = 3.14159f * 2.0f / n;
@@ -79,12 +81,21 @@ void ftRender::ftScale(float scale)
 
 void ftRender::ftTransparency(float tp)
 {
-    glColor4f(1.0, 1.0, 1.0, tp);
+	glColor4f(1.0, 1.0, 1.0, tp);
 }
 
 void ftRender::ftColor4f(float r, float g, float b, float a)
 {
+	globalR = r;
+	globalG = g;
+	globalB = b;
+	globalA = a;
 	glColor4f(r, g, b, a);
+}
+
+void ftRender::useColor(ftColor c)
+{
+	ftRender::ftColor4f(c.getR(), c.getG(), c.getB(), c.getAlpha());
 }
 
 void ftRender::openLineSmooth()
@@ -278,6 +289,7 @@ void ftRender::drawAlphaPic(int picID)
 	glDisable(GL_TEXTURE_2D);
 }
 
+//class ftRender::Camera
 Camera::Camera(float x, float y, float z)
 {
 	setPosition(x, y, z);
