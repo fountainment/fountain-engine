@@ -15,6 +15,7 @@
 				<Option createDefFile="1" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
 					<Add directory="Box2D/Build/bin/Debug" />
@@ -28,7 +29,7 @@
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Compiler>
-					<Add option="-O2" />
+					<Add option="-O1" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
