@@ -2,8 +2,6 @@
 
 using ftTime::Clock;
 
-static double allStartT = 0.0;
-
 #ifdef linux
 
 // Linux
@@ -21,7 +19,7 @@ double floatTime()
 {
 	static struct timeval now;
 	gettimeofday(&now, NULL);
-	return (1000000 * now.tv_sec + now.tv_usec) / 1000000.0 - allStartT;
+	return (1000000 * now.tv_sec + now.tv_usec) / 1000000.0;
 }
 
 // Linux end
@@ -41,7 +39,7 @@ double floatTime()
 	LARGE_INTEGER tickPerSecond, tick;
 	QueryPerformanceFrequency(&tickPerSecond);
 	QueryPerformanceCounter(&tick);
-	return tick.QuadPart / (double)tickPerSecond.QuadPart - allStartT;
+	return tick.QuadPart / (double)tickPerSecond.QuadPart;
 }
 
 // Win32 end
@@ -49,7 +47,6 @@ double floatTime()
 
 void ftTime::init()
 {
-	floatTime();
 }
 
 Clock::Clock(double fps)
