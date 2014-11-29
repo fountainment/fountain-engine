@@ -80,6 +80,7 @@ public:
 	ftVec2 getRT();
 	ftVec2 getRB();
 
+	void move(float x, float y);
 };
 
 class ftShape {
@@ -270,7 +271,7 @@ bool container<_tp, _size>::empty()
 {
 	if (_size == availN)
 		return true;
-	else 
+	else
 		return false;
 }
 

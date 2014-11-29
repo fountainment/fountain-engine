@@ -127,6 +127,12 @@ ftVec2 ftRect::getRB()
 	return ftVec2(x + w, y);
 }
 
+void ftRect::move(float x, float y)
+{
+	this->x += x;
+	this->y += y;
+}
+
 //class ftShape
 ftShape::ftShape(ftRect rct)
 {
@@ -287,9 +293,9 @@ ftColor::ftColor()
 	a = 1.0f;
 }
 
+//TODO: complete this function("#FFF")
 ftColor::ftColor(std::string s)
 {
-	
 }
 
 ftColor::ftColor(float r, float g, float b, float a)

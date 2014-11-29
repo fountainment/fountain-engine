@@ -127,7 +127,6 @@ ftPhysics::World mainWorld(ftVec2(0, -10));
 
 //Test
 b2MouseJoint *mouseJoint;
-b2Body *groundBoxx;
 
 void MouseDown(ftVec2 p)
 {
@@ -146,7 +145,8 @@ void MouseDown(ftVec2 p)
 	if (callback.m_fixture) {
 		b2Body* body = callback.m_fixture->GetBody();
 		b2MouseJointDef md;
-		md.bodyA = groundBoxx;
+		//md.bodyA = groundBoxx;
+		md.bodyA = body;
 		md.bodyB = body;
 		md.target = b2Vec2(p.x, p.y);
 		md.maxForce = 1000.0f * body->GetMass();
@@ -201,9 +201,6 @@ void init(ftScene::Scene* sc)
 	addShape = rect;
 
 	//Test
-	bdPoint = new ftPhysics::Body(0, -1000, false);
-	mainWorld.addBody(bdPoint);
-	groundBoxx = bdPoint->body;
 	mouseJoint = NULL;
 
 	for (int i = 0; i < 10; i++) {

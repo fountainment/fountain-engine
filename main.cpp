@@ -6,7 +6,6 @@ ftScene::SceneSelector SS;
 #include "testscene.h"
 #include <string>
 
-
 void fountain::setBasicVarible()
 {
 	mainWin.setW(800);
@@ -32,10 +31,10 @@ void fountain::gameInit()
 
 void fountain::singleFrame()
 {
+	//TODO: move this internal(fountainMain)
+	mainClock.tick();
+
 	SS.sceneSolve();
 	SS.update();
 	SS.draw();
-
-	//TODO: move this internal(fountainMain)
-	mainClock.tick();
 }

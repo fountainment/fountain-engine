@@ -28,6 +28,7 @@ void Scene::init()
 
 void Scene::update()
 {
+	mainClock.tick();
 	if (updatePtr != NULL)
 		updatePtr(this);
 }

@@ -12,6 +12,7 @@ using ftRender::Camera;
 static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
+
 static ftVec2 circle8[8];
 static ftVec2 circle32[32];
 static ftVec2 circle128[128];
@@ -25,6 +26,10 @@ void initCircleData(ftVec2 *v, int n)
 		v[i].x = std::sin(d * i);
 		v[i].y = std::cos(d * i);
 	}
+	globalR = 1.0f;
+	globalG = 1.0f;
+	globalB = 1.0f;
+	globalA = 1.0f;
 }
 
 void glDrawArrayFloat2(float (*a)[2], int n, int glType)
@@ -59,7 +64,7 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
-	glColor4f(1.0f, 1.0, 1.0f, 1.0f);
+	ftColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
@@ -81,7 +86,7 @@ void ftRender::ftScale(float scale)
 
 void ftRender::ftTransparency(float tp)
 {
-	glColor4f(1.0, 1.0, 1.0, tp);
+	glColor4f(globalR, globalG, globalB, tp);
 }
 
 void ftRender::ftColor4f(float r, float g, float b, float a)
@@ -329,6 +334,7 @@ void Camera::setAngle(float x, float y, float z)
 
 void Camera::setWinSize(int w, int h)
 {
+	//TODO: use viewport to replace winW,winH
 	winW = (float)w;
 	winH = (float)h;
 	W2 = winW / 2.0f;

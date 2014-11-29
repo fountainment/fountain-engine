@@ -91,7 +91,7 @@ void Body::update()
 {
 	b2Vec2 bv = body->GetPosition();
 	float angle = body->GetAngle();
-	//TODO: add sprite class
+	//TODO: make ftSprite instance Body's member?
 	setPosition(bv.x, bv.y);
 	setAngle(angle);
 }

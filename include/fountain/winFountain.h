@@ -24,6 +24,7 @@ void keyMapSetting()
 	KS(VK_RETURN, FT_Enter);
 	KS(VK_SPACE, FT_Space);
 	KS(VK_CONTROL, FT_Ctrl);
+	//TODO: add Alt support
 	//KS(VK_, FT_Alt);
 	//KS(XK_, FT_Alt);
 	KS(VK_LSHIFT, FT_Shift);

@@ -24,6 +24,7 @@ void ftRotate(float xAngle, float yAngle, float zAngle);
 void ftScale(float scale);
 void ftTransparency(float tp);
 void ftColor4f(float r, float g, float b, float a);
+void ftColor3f(float r, float g, float b);
 void useColor(ftColor c);
 
 void openLineSmooth();
@@ -50,6 +51,7 @@ private:
 	float scale;
 	float xAngle, yAngle, zAngle;
 	float ratio;
+	ftRect viewport;
 	int projectionType;
 public:
 	Camera(float x = 0.0f, float y = 0.0f, float z = 0.0f);
