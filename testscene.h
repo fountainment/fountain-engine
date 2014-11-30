@@ -171,7 +171,7 @@ void MouseUp()
 ftColor randColor()
 {
 	float r = ftAlgorithm::randRangef(0.5f, 1.0f);
-	float g = ftAlgorithm::randRangef(0.3f, 1.0f);
+	float g = ftAlgorithm::randRangef(0.5f, 1.0f);
 	float b = ftAlgorithm::randRangef(0.5f, 1.0f);
 	return ftColor(r, g, b);
 }
