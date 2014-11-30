@@ -45,6 +45,7 @@ void drawAlphaPic(int picID);
 class Camera {
 private:
 	float x, y, z;
+	//size of viewport
 	float winW, winH;
 	float W2, H2;
 	float nearW2, nearH2;
@@ -59,7 +60,8 @@ public:
 	void setPosition(float x, float y);
 	void setPosition(float x, float y, float z);
 	void move(float x, float y);
-	void setWinSize(int w, int h);
+	void setViewport(int w, int h, int x = 0, int y = 0);
+	void setViewport(ftRect vp);
 	void setScale(float scale);
 	void setAngle(float x, float y, float z);
 	void setProjectionType(int type);

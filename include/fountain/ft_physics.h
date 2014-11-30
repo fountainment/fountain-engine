@@ -6,6 +6,11 @@
 
 #define BODY_MAXNUM 2000
 
+//TODO: add Kinematic type support
+#define FT_Static 1
+#define FT_Dynamic 2
+#define FT_Kinematic 3
+
 namespace ftPhysics {
 
 void init();

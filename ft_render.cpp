@@ -298,7 +298,7 @@ void ftRender::drawAlphaPic(int picID)
 Camera::Camera(float x, float y, float z)
 {
 	setPosition(x, y, z);
-	setWinSize(fountain::mainWin.w, fountain::mainWin.h);
+	setViewport(fountain::mainWin.w, fountain::mainWin.h);
 	setScale(1.0f);
 	setAngle(0.0f, 0.0f, 0.0f);
 	setProjectionType(FT_PLANE);
@@ -332,22 +332,25 @@ void Camera::setAngle(float x, float y, float z)
 	this->zAngle = z;
 }
 
-void Camera::setWinSize(int w, int h)
+void Camera::setViewport(int w, int h, int x, int y)
 {
-	//TODO: use viewport to replace winW,winH
-	winW = (float)w;
-	winH = (float)h;
-	W2 = winW / 2.0f;
-	H2 = winH / 2.0f;
+	viewport = ftRect(x, y, w, h);
+	W2 = viewport.getW() / 2.0f;
+	H2 = viewport.getH() / 2.0f;
 	ratio = z / FT_CAMERA_NEAR;
-	nearW2 = winW / ratio / 2.0f;
-	nearH2 = winH / ratio / 2.0f;
+	nearW2 = viewport.getW() / ratio / 2.0f;
+	nearH2 = viewport.getH() / ratio / 2.0f;
+}
+
+void Camera::setViewport(ftRect vp)
+{
+	this->setViewport(vp.getW(), vp.getH(), vp.getX(), vp.getY());
 }
 
 void Camera::setScale(float scale)
 {
-	if (scale < 0)
-		this->scale = 0.01;
+	if (scale == 0)
+		scale = 0.001;
 	this->scale = scale;
 }
 
@@ -358,7 +361,7 @@ void Camera::setProjectionType(int type)
 
 void Camera::update()
 {
-	glViewport(0, 0, winW, winH);
+	glViewport(viewport.getX(), viewport.getY(), viewport.getW(), viewport.getH());
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	if (projectionType == FT_PLANE) {

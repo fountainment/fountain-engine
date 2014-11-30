@@ -2,11 +2,11 @@
 <CodeBlocks_workspace_file>
 	<Workspace title="Workspace">
 		<Project filename="Box2D/Build/Box2D.cbp" />
-		<Project filename="fountain-lin.cbp">
+		<Project filename="fountain.cbp">
 			<Depends filename="Box2D/Build/Box2D.cbp" />
 		</Project>
 		<Project filename="test-lin.cbp">
-			<Depends filename="fountain-lin.cbp" />
+			<Depends filename="fountain.cbp" />
 		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>

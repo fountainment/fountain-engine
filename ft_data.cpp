@@ -107,6 +107,26 @@ void ftRect::setXY(ftVec2 XY)
 	y = XY.y;
 }
 
+float ftRect::getX()
+{
+	return x;
+}
+
+float ftRect::getY()
+{
+	return y;
+}
+
+float ftRect::getW()
+{
+	return w;
+}
+
+float ftRect::getH()
+{
+	return h;
+}
+
 ftVec2 ftRect::getLB()
 {
 	return ftVec2(x, y);
@@ -131,6 +151,25 @@ void ftRect::move(float x, float y)
 {
 	this->x += x;
 	this->y += y;
+}
+
+void ftRect::normalize()
+{
+	if (w < 0) {
+		x += w;
+		w *= -1;
+	}
+	if (h < 0) {
+		y += h;
+		h *= -1;
+	}
+}
+
+bool ftRect::collidePoint(ftVec2 p)
+{
+	int xx = x + w;
+	int yy = y + w;
+	return ((((x - p.x) * (xx - p.x)) <= 0) || (((y - p.y) * (yy - p.y)) <= 0));
 }
 
 //class ftShape

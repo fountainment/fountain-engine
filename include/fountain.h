@@ -42,6 +42,11 @@ void gameInit();
 
 void singleFrame();
 
+ftVec2 getWinSize()
+{
+	return ftVec2(mainWin.w, mainWin.h);
+}
+
 }
 
 #ifdef linux

@@ -10,12 +10,12 @@ using ftTime::Clock;
 #endif
 #include <sys/time.h>
 #include <unistd.h>
-void littleSleep()
+inline void littleSleep()
 {
 	usleep(1);
 }
 
-double floatTime()
+inline double floatTime()
 {
 	static struct timeval now;
 	gettimeofday(&now, NULL);
@@ -29,17 +29,17 @@ double floatTime()
 // Win32
 #include <time.h>
 #include <windows.h>
-void littleSleep()
+inline void littleSleep()
 {
 	Sleep(1);
 }
 
-double floatTime()
+inline double floatTime()
 {
 	LARGE_INTEGER tickPerSecond, tick;
 	QueryPerformanceFrequency(&tickPerSecond);
 	QueryPerformanceCounter(&tick);
-	return tick.QuadPart / (double)tickPerSecond.QuadPart;
+	return (double)tick.QuadPart / (double)tickPerSecond.QuadPart;
 }
 
 // Win32 end
@@ -58,6 +58,7 @@ Clock::Clock(double fps)
 	isPaused = true;
 	deltaT = 0.0;
 	timeScale = 1.0;
+	totalT = 0;
 }
 
 void Clock::init()
@@ -78,6 +79,7 @@ void Clock::tick()
 	deltaT *= timeScale;
 	if (isPaused == true)
 		deltaT = 0.0;
+	totalT += deltaT;
 	beginT = endT;
 }
 

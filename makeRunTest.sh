@@ -2,7 +2,7 @@
 
 CC="g++"
 LIBS="-lfountain -lX11 -lGL -lfreeimage -lBox2D"
-CFLAGS="-fexceptions -Wall -O2 -I./include -I. -L./Box2D/Build/bin/Release -L. -s"
+CFLAGS="-fexceptions -Wall -O1 -I./include -I. -L./Box2D/Build/bin/Release -L. -s"
 
 if [ -f "main" ]; then
 	rm -f main

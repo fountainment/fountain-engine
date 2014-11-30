@@ -75,12 +75,19 @@ public:
 	ftVec2 getSize();
 	void setSize(ftVec2 sz);
 
+	float getX();
+	float getY();
+	float getW();
+	float getH();
+
 	ftVec2 getLB();
 	ftVec2 getLT();
 	ftVec2 getRT();
 	ftVec2 getRB();
 
 	void move(float x, float y);
+	void normalize();
+	bool collidePoint(ftVec2 p);
 };
 
 class ftShape {

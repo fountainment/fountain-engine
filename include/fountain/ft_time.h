@@ -14,6 +14,8 @@ private:
 	double endT;
 	double deltaT;
 	double timeScale;
+	//TODO: use totalT to add slave mode
+	double totalT;
 public:
 	explicit Clock(double fps = 0.0);
 	void init();

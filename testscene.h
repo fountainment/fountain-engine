@@ -1,7 +1,4 @@
 #include <Box2D/Box2D.h>
-#define abs(x) ((x)>0?(x):-(x))
-#define max(a,b) ((a)>(b)?(a):(b))
-#define min(a,b) ((b)>(a)?(a):(b))
 
 float ttt;
 
@@ -55,7 +52,7 @@ void init(ftScene::Scene* sc)
 	transp = 0.0;
 	scale = 1.0;
 	x = 0;
-	mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
+	mainCamera.setViewport(fountain::mainWin.w, fountain::mainWin.h);
 }
 
 void update(ftScene::Scene* sc)
@@ -182,7 +179,7 @@ ftColor randColor()
 void init(ftScene::Scene* sc)
 {
 	ttt = 1;
-	mainCamera.setWinSize(fountain::mainWin.w, fountain::mainWin.h);
+	mainCamera.setViewport(fountain::mainWin.w, fountain::mainWin.h);
 	mainCamera.setPosition(0, 0, 500);
 	scale = 2.0f;
 	mode = 1;
@@ -299,7 +296,8 @@ void update(ftScene::Scene* sc)
 		}
 		else if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
 			bP = mPos;
-			makeRect = ftRect(min(aP.x, bP.x), min(aP.y, bP.y), abs(aP.x - bP.x), abs(aP.y - bP.y));
+			makeRect = ftRect(aP.x, aP.y, bP.x - aP.x, bP.y - aP.y);
+			makeRect.normalize();
 			ftRender::drawRect(makeRect);
 		}
 		else if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {
@@ -319,7 +317,8 @@ void update(ftScene::Scene* sc)
 		}
 		else if (fountain::sysMouse.getState(FT_RButton) == FT_isDown) {
 			bP = mPos;
-			makeRect = ftRect(min(aP.x, bP.x), min(aP.y, bP.y), abs(aP.x - bP.x), abs(aP.y - bP.y));
+			makeRect = ftRect(aP.x, aP.y, bP.x - aP.x, bP.y - aP.y);
+			makeRect.normalize();
 			ftRender::drawRect(makeRect);
 		}
 		else if (fountain::sysMouse.getState(FT_RButton) == FT_ButtonUp) {

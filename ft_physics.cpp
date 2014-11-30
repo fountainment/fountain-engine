@@ -62,6 +62,7 @@ void Body::autoCreateFixtures()
 		b2shape = &pshape;
 		break;
 
+		//TODO: add FT_LINE shape support(create fixture)
 		//case FT_Line:
 
 		//break;
@@ -104,7 +105,6 @@ World::World(ftVec2 gravity)
 
 bool World::addBody(Body* bd)
 {
-	//TODO: set defaultBodyDef
 	ftVec2 pos = bd->getPosition();
 	defaultBodyDef.position.Set(pos.x, pos.y);
 	if (bd->isDynamic) {
