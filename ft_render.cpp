@@ -249,6 +249,12 @@ void ftRender::drawShape(ftShape & shape, float angle)
 	}
 }
 
+ftVec2 ftRender::getPicSize(int picID)
+{
+	texInfo tex = PicID2TexInfo[picID];
+	return ftVec2(tex.w, tex.h);
+}
+
 void ftRender::drawPic(int picID)
 {
 	texInfo tex = PicID2TexInfo[picID];

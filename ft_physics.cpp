@@ -7,9 +7,15 @@ static b2BodyDef defaultBodyDef;
 static b2FixtureDef defaultFixtureDef;
 static float defaultTimeStep = 1.0f / 60.0f;
 static ftVec2 defaultGravity(0.0f, -10.0f);
+static float ratio = 1.0f;
 
 void ftPhysics::init()
 {
+}
+
+void ftPhysics::setRatio(float rt)
+{
+	ratio = rt;
 }
 
 Body::Body()
@@ -48,7 +54,7 @@ void Body::autoCreateFixtures()
 	switch (type)
 	{
 	case FT_Circle:
-		cshape.m_radius = shape.getR();
+		cshape.m_radius = shape.getR() / ratio;
 		b2shape = &cshape;
 		break;
 
@@ -56,7 +62,7 @@ void Body::autoCreateFixtures()
 		v = shape.getData();
 		n = shape.getN();
 		for (int i = 0; i < n; i++) {
-			bv[i].Set(v[i].x, v[i].y);
+			bv[i].Set(v[i].x / ratio, v[i].y / ratio);
 		}
 		pshape.Set(bv, n);
 		b2shape = &pshape;
@@ -69,7 +75,7 @@ void Body::autoCreateFixtures()
 
 	case FT_Rect:
 		v = shape.getData();
-		pshape.SetAsBox(v[0].x / 2.0f, v[0].y / 2.0f);
+		pshape.SetAsBox(v[0].x / 2.0f / ratio, v[0].y / 2.0f / ratio);
 		b2shape = &pshape;
 		break;
 
@@ -93,7 +99,7 @@ void Body::update()
 	b2Vec2 bv = body->GetPosition();
 	float angle = body->GetAngle();
 	//TODO: make ftSprite instance Body's member?
-	setPosition(bv.x, bv.y);
+	setPosition(bv.x * ratio, bv.y * ratio);
 	setAngle(angle);
 }
 
@@ -106,7 +112,7 @@ World::World(ftVec2 gravity)
 bool World::addBody(Body* bd)
 {
 	ftVec2 pos = bd->getPosition();
-	defaultBodyDef.position.Set(pos.x, pos.y);
+	defaultBodyDef.position.Set(pos.x / ratio, pos.y / ratio);
 	if (bd->isDynamic) {
 		defaultBodyDef.type = b2_dynamicBody;
 	} else {

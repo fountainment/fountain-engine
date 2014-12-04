@@ -15,6 +15,8 @@ namespace ftPhysics {
 
 void init();
 
+void setRatio(float rt);
+
 class Body : public ftSprite
 {
 private:

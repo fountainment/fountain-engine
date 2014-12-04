@@ -39,6 +39,7 @@ void drawCircle();
 void drawShape(ftShape & shape, float angle = 0.0f);
 
 int getPicture(const char *filename);
+ftVec2 getPicSize(int picID);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
 
