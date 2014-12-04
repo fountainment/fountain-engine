@@ -16,6 +16,8 @@ namespace ftPhysics {
 void init();
 
 void setRatio(float rt);
+ftVec2 render2Physics(ftVec2 v);
+ftVec2 physics2Render(ftVec2 v);
 
 class Body : public ftSprite
 {

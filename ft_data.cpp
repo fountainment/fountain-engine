@@ -30,6 +30,16 @@ const ftVec2 ftVec2::operator+(const ftVec2 & v)
 	return ftVec2(x + v.x, y + v.y);
 }
 
+const ftVec2 ftVec2::operator*(float k)
+{
+	return ftVec2(x * k, y * k);
+}
+
+const ftVec2 ftVec2::operator/(float k)
+{
+	return ftVec2(x / k, y / k);
+}
+
 //class ftVec3
 ftVec3::ftVec3()
 {
@@ -151,6 +161,14 @@ void ftRect::move(float x, float y)
 {
 	this->x += x;
 	this->y += y;
+}
+
+void ftRect::inflate(float x, float y)
+{
+	this->x *= x;
+	this->y *= y;
+	this->w *= x;
+	this->h *= y;
 }
 
 void ftRect::normalize()

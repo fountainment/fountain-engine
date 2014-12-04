@@ -88,6 +88,7 @@ void draw(ftScene::Scene* sc)
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
+
 }
 
 void destroy(ftScene::Scene* sc)
@@ -124,6 +125,8 @@ ftPhysics::World mainWorld(ftVec2(0, -10));
 
 //Test
 b2MouseJoint *mouseJoint;
+ftRender::SubImage xx;
+ftRender::SubImage yy;
 
 void MouseDown(ftVec2 p)
 {
@@ -181,38 +184,32 @@ void init(ftScene::Scene* sc)
 	ttt = 1;
 	mainCamera.setViewport(fountain::mainWin.w, fountain::mainWin.h);
 	mainCamera.setPosition(0, 0, 500);
-	scale = 2.0f;
+	scale = 1.0f;
 	mode = 1;
+	ftPhysics::setRatio(128.0f);
 
 	v.clear();
-	v.push_back(ftVec2(0,-2));
-	v.push_back(ftVec2(1,0));
-	v.push_back(ftVec2(0,2));
-	v.push_back(ftVec2(-1,0));
+	v.push_back(ftVec2(0,-50));
+	v.push_back(ftVec2(25,0));
+	v.push_back(ftVec2(0,50));
+	v.push_back(ftVec2(-25,0));
 	testShape0 = new ftShape(v , 4, true);
-	testShape1 = new ftShape();
-	testShape2 = new ftShape(1);
-	groundBox = new ftShape(ftRect(0, 0, 100, 1));
-	rect = new ftShape(ftRect(0, 0, 1, 1));
-	card = new ftShape(ftRect(0, 0, 0.3, 3));
+	testShape1 = new ftShape(10);
+	testShape2 = new ftShape(20);
+	groundBox = new ftShape(ftRect(0, 0, 2000, 20));
+	rect = new ftShape(ftRect(0, 0, 20, 20));
+	card = new ftShape(ftRect(0, 0, 6, 60));
 	addShape = rect;
 
+	//test
+	ftRender::SubImagePool ui("resources/ui.png", "resources/ui.sip");
+	xx = ui.getImage("button01.png");
+	yy = ui.getImage("button02.png");
+	std::printf("%f %f\n", xx.size.x, xx.size.y);
 	//Test
 	mouseJoint = NULL;
 
-	for (int i = 0; i < 10; i++) {
-		for (int j = 0 - i; j <= i; j++) {
-			bdPoint = new ftPhysics::Body(j, -i, false);
-			bdPoint->shape = *addShape;
-			bdPoint->setColor(randColor());
-			if (!mainWorld.addBody(bdPoint)) {
-				mainWorld.delHeadBody();
-				mainWorld.addBody(bdPoint);
-			}
-		}
-	}
-
-	bdPoint = new ftPhysics::Body(0, -100, false);
+	bdPoint = new ftPhysics::Body(0, -200, false);
 	bdPoint->shape = *groundBox;
 	bdPoint->setColor(randColor());
 	if (!mainWorld.addBody(bdPoint)) {
@@ -220,8 +217,8 @@ void init(ftScene::Scene* sc)
 		mainWorld.addBody(bdPoint);
 	}
 
-	for (int i = -50; i <= 50; i+=2) {
-		bdPoint = new ftPhysics::Body(i, -100 + 3.6);
+	for (int i = -2000; i <= 2000; i+=40) {
+		bdPoint = new ftPhysics::Body(i, -200 + 40);
 		bdPoint->shape = *card;
 		bdPoint->setColor(randColor());
 		if (!mainWorld.addBody(bdPoint)) {
@@ -335,8 +332,8 @@ void update(ftScene::Scene* sc)
 		}
 	}
 	if (mode == 3) {
-		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) MouseDown(mPos);
-		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) MouseMove(mPos);
+		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) MouseDown(ftPhysics::render2Physics(mPos));
+		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) MouseMove(ftPhysics::render2Physics(mPos));
 		if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) MouseUp();
 	}
 
@@ -366,6 +363,14 @@ void draw(ftScene::Scene* sc)
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+	ftRender::transformEnd();
+
+	ftRender::transformBegin();
+	ftRender::ftTranslate(0, 100);
+	if (fountain::sysMouse.getState(FT_LButton))
+		ftRender::drawImage(yy);
+	else
+		ftRender::drawImage(xx);
 	ftRender::transformEnd();
 }
 

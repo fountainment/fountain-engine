@@ -6,7 +6,10 @@
 #include <FreeImage.h>
 #include <map>
 #include <cmath>
+#include <cstdio>
 
+using ftRender::SubImage;
+using ftRender::SubImagePool;
 using ftRender::Camera;
 
 static std::map<int, int> Hash2PicID;
@@ -96,6 +99,14 @@ void ftRender::ftColor4f(float r, float g, float b, float a)
 	globalB = b;
 	globalA = a;
 	glColor4f(r, g, b, a);
+}
+
+void ftRender::ftColor3f(float r, float g, float b)
+{
+	globalR = r;
+	globalG = g;
+	globalB = b;
+	glColor3f(r, g, b);
 }
 
 void ftRender::useColor(ftColor c)
@@ -294,6 +305,99 @@ void ftRender::drawAlphaPic(int picID)
 	glTexCoord2f(1.0f, 1.0f);
 	glVertex2f(w2, h2);
 	glTexCoord2f(0.0f, 1.0f);
+	glVertex2f(-w2, h2);
+	glEnd();
+	glDisable(GL_BLEND);
+	glDisable(GL_TEXTURE_2D);
+}
+
+//class ftRender::SubImage
+SubImage::SubImage()
+{
+}
+
+SubImage::SubImage(int picID, ftRect rect)
+{
+	this->picID = picID;
+	size = rect.getSize();
+	ftRect texRect = rect;
+	ftVec2 pSize = ftRender::getPicSize(picID);
+	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
+	texCoor[0] = texRect.getLB();
+	texCoor[1] = texRect.getRB();
+	texCoor[2] = texRect.getRT();
+	texCoor[3] = texRect.getLT();
+}
+
+SubImage::SubImage(const char * picName, ftRect rect)
+{
+	picID = ftRender::getPicture(picName);
+	size = rect.getSize();
+	ftRect texRect = rect;
+	ftVec2 pSize = ftRender::getPicSize(picID);
+	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
+	texCoor[0] = texRect.getLB();
+	texCoor[1] = texRect.getRB();
+	texCoor[2] = texRect.getRT();
+	texCoor[3] = texRect.getLT();
+}
+
+//class ftRender::SubImagePool
+std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char * sipName)
+{
+	int x, y;
+	int picN;
+	char name[100];
+	int rx, ry, rw, rh;
+	int tmp;
+	std::map<int, SubImage> ans;
+	std::FILE *sipF = std::fopen(sipName, "r");
+	if (sipF == NULL) return ans;
+	tmp = std::fscanf(sipF, "%d %d", &x, &y);
+	tmp = std::fscanf(sipF, "%d", &picN);
+	for (int i = 0; i < picN; i++) {
+		tmp = std::fscanf(sipF, "%s %d %d %d %d", name, &rw, &rh, &rx, &ry);
+		if (tmp == EOF) break;
+		ftRect r(rx, y - ry - rh, rw, rh);
+		int hash = ftAlgorithm::bkdrHash(name);
+		ans[hash] = SubImage(pid, r);
+	}
+	std::fclose(sipF);
+
+	return ans;
+}
+
+SubImagePool::SubImagePool(const char * picName, const char * sipName)
+{
+	picID = ftRender::getPicture(picName);
+	nameHash2SubImage = getMapFromSip(picID, sipName);
+}
+
+const SubImage & SubImagePool::getImage(const char * imageName)
+{
+	int hash = ftAlgorithm::bkdrHash(imageName);
+	return nameHash2SubImage[hash];
+}
+
+//test
+void ftRender::drawImage(SubImage im)
+{
+	texInfo tex = PicID2TexInfo[im.picID];
+	int w2 = im.size.x / 2.0f;
+	int h2 = im.size.y / 2.0f;
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	glBindTexture(GL_TEXTURE_2D, tex.id);
+	glBegin(GL_TRIANGLE_FAN);
+	glTexCoord2f(im.texCoor[0].x, im.texCoor[0].y);
+	glVertex2f(-w2, -h2);
+	glTexCoord2f(im.texCoor[1].x, im.texCoor[1].y);
+	glVertex2f(w2, -h2);
+	glTexCoord2f(im.texCoor[2].x, im.texCoor[2].y);
+	glVertex2f(w2, h2);
+	glTexCoord2f(im.texCoor[3].x, im.texCoor[3].y);
 	glVertex2f(-w2, h2);
 	glEnd();
 	glDisable(GL_BLEND);

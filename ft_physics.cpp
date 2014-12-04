@@ -7,6 +7,8 @@ static b2BodyDef defaultBodyDef;
 static b2FixtureDef defaultFixtureDef;
 static float defaultTimeStep = 1.0f / 60.0f;
 static ftVec2 defaultGravity(0.0f, -10.0f);
+
+//TODO: add ratio coordinate func
 static float ratio = 1.0f;
 
 void ftPhysics::init()
@@ -16,6 +18,16 @@ void ftPhysics::init()
 void ftPhysics::setRatio(float rt)
 {
 	ratio = rt;
+}
+
+ftVec2 ftPhysics::render2Physics(ftVec2 v)
+{
+	return v / ratio;
+}
+
+ftVec2 ftPhysics::physics2Render(ftVec2 v)
+{
+	return v * ratio;
 }
 
 Body::Body()

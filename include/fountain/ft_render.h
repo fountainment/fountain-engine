@@ -2,6 +2,7 @@
 #define _FT_RENDER_H_
 
 #include <fountain/ft_data.h>
+#include <map>
 
 #define FT_CAMERA_NEAR 100.0f
 #define FT_CAMERA_FAR 1000.0f
@@ -43,11 +44,33 @@ ftVec2 getPicSize(int picID);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
 
+class SubImage {
+private:
+public:
+	int picID;
+	ftVec2 size;
+	ftVec2 texCoor[4];
+//public:
+	SubImage();
+	SubImage(int picID, ftRect rect);
+	SubImage(const char * picName, ftRect rect);
+};
+
+void drawImage(SubImage im);
+
+class SubImagePool {
+private:
+	int picID;
+	std::map<int, SubImage> nameHash2SubImage;
+	static std::map<int, SubImage> getMapFromSip(int pid, const char * sipName);
+public:
+	SubImagePool(const char * picName, const char * sipName);
+	const SubImage & getImage(const char * imageName);
+};
+
 class Camera {
 private:
 	float x, y, z;
-	//size of viewport
-	float winW, winH;
 	float W2, H2;
 	float nearW2, nearH2;
 	float scale;

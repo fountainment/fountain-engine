@@ -47,6 +47,8 @@ public:
 	ftVec2(float x, float y);
 	const ftVec2 operator-(const ftVec2 & v);
 	const ftVec2 operator+(const ftVec2 & v);
+	const ftVec2 operator*(float k);
+	const ftVec2 operator/(float k);
 };
 
 
@@ -87,6 +89,7 @@ public:
 
 	void move(float x, float y);
 	void normalize();
+	void inflate(float x, float y);
 	bool collidePoint(ftVec2 p);
 };
 

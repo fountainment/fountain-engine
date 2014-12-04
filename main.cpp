@@ -27,7 +27,6 @@ void fountain::gameInit()
 
 	SS.registerScene(&startScene, FT_StartScene);
 	SS.registerScene(&gameScene, FT_Scene2);
-	//ftPhysics::setRatio(10.0f);
 }
 
 void fountain::singleFrame()
