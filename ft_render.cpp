@@ -16,23 +16,21 @@ static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
 
-static ftVec2 circle8[8];
-static ftVec2 circle32[32];
-static ftVec2 circle128[128];
+static GLfloat circle8[8][2];
+static GLfloat circle32[32][2];
+static GLfloat circle128[128][2];
+
+//static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
 
-void initCircleData(ftVec2 *v, int n)
+void initCircleData(GLfloat (*v)[2], int n)
 {
 	float d = 3.14159f * 2.0f / n;
 	for (int i = 0; i < n; i++) {
-		v[i].x = std::sin(d * i);
-		v[i].y = std::cos(d * i);
+		v[i][0] = std::sin(d * i);
+		v[i][1] = std::cos(d * i);
 	}
-	globalR = 1.0f;
-	globalG = 1.0f;
-	globalB = 1.0f;
-	globalA = 1.0f;
 }
 
 void glDrawArrayFloat2(float (*a)[2], int n, int glType)
@@ -57,6 +55,14 @@ void ftRender::init()
 	initCircleData(circle8, 8);
 	initCircleData(circle32, 32);
 	initCircleData(circle128, 128);
+
+	globalR = 1.0f;
+	globalG = 1.0f;
+	globalB = 1.0f;
+	globalA = 1.0f;
+
+//	glGenVertexArrays(1, &VertexArrayID);
+//	glBindVertexArray(VertexArrayID);
 }
 
 void ftRender::transformBegin()
@@ -188,10 +194,15 @@ int ftRender::getPicture(const char *filename)
 
 void ftRender::drawLine(float x1, float y1, float x2, float y2)
 {
-	glBegin(GL_LINES);
-	glVertex2f(x1, y1);
-	glVertex2f(x2, y2);
-	glEnd();
+	GLfloat vtx1[] = {x1, y1, x2, y2};
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, vtx1);
+	glDrawArrays(GL_LINES, 0, 2);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	//glBegin(GL_LINES);
+	//glVertex2f(x1, y1);
+	//glVertex2f(x2, y2);
+	//glEnd();
 }
 
 void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
@@ -205,7 +216,7 @@ void ftRender::drawQuad(float w, float h)
 	float h2 = h / 2.0f;
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBegin(GL_QUADS);
+	glBegin(GL_TRIANGLE_FAN);
 	glVertex2f(-w2, -h2);
 	glVertex2f(-w2, h2);
 	glVertex2f(w2, h2);
@@ -227,11 +238,15 @@ void ftRender::drawRect(ftRect rct, float angle)
 
 void ftRender::drawCircle()
 {
-	glBegin(GL_TRIANGLE_FAN);
-	for (int i = 0; i < 32; i++) {
-		glVertex2f(circle32[i].x, circle32[i].y);
-	}
-	glEnd();
+	//glBegin(GL_TRIANGLE_FAN);
+	//for (int i = 0; i < 32; i++) {
+	//	glVertex2f(circle32[i].x, circle32[i].y);
+	//}
+	//glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, circle32);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 32);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void ftRender::drawShape(ftShape & shape, float angle)

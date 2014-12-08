@@ -237,6 +237,7 @@ void update(ftScene::Scene* sc)
 	mPos = mainCamera.mouseToWorld(mPos);
 
 	if (fountain::sysKeyboard.getState(FT_P) == FT_KeyUp) sc->gotoScene(FT_Scene2, true);
+	if (fountain::sysKeyboard.getState(FT_T) == FT_KeyUp) sc->gotoScene(FT_Scene3, true);
 	if (fountain::sysKeyboard.getState(FT_Space) == FT_KeyDown) {
 		if (mainClock.isPause())
 			mainClock.Continue();
@@ -388,5 +389,50 @@ void destroy(ftScene::Scene* sc)
 
 };
 
+namespace scene3 {
+
+ft3DModel::ObjModel robot("first.obj");
+ftRender::Camera mainCamera(0, 0, 500);
+float scale;
+float dx, dy;
+
+void init(ftScene::Scene* sc)
+{
+	mainCamera.setViewport(fountain::mainWin.w, fountain::mainWin.h);
+	mainCamera.setProjectionType(FT_PERSPECTIVE);
+	scale = 1.0f;
+	dx = 0.0f;
+	dy = 0.0f;
+}
+
+void update(ftScene::Scene* sc)
+{
+	if (fountain::sysKeyboard.getState(FT_T) == FT_KeyUp) sc->gotoScene(FT_Scene2, true);
+	if (fountain::sysMouse.getState(FT_ScrollUp)) scale *= 1.1f;
+	if (fountain::sysMouse.getState(FT_ScrollDown)) scale /= 1.1f;
+	if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+		ftVec2 deltaV = fountain::sysMouse.getDeltaV();
+		dy += deltaV.x;
+		dx -= deltaV.y;
+	}
+}
+
+void draw(ftScene::Scene* sc)
+{
+	mainCamera.update();
+	ftRender::transformBegin();
+	ftRender::ftRotate(dx, dy, 0);
+	ftRender::ftScale(scale);
+	robot.render();
+	ftRender::transformEnd();
+}
+
+void destroy(ftScene::Scene* sc)
+{
+}
+
+};
+
 ftScene::Scene startScene(scene1::init, scene1::update, scene1::draw, scene1::destroy);
 ftScene::Scene gameScene(scene2::init, scene2::update, scene2::draw, scene2::destroy);
+ftScene::Scene modelScene(scene3::init, scene3::update, scene3::draw, scene3::destroy);
