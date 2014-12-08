@@ -205,7 +205,7 @@ void init(ftScene::Scene* sc)
 	ftRender::SubImagePool ui("resources/ui.png", "resources/ui.sip");
 	xx = ui.getImage("button01.png");
 	yy = ui.getImage("button02.png");
-	std::printf("%f %f\n", xx.size.x, xx.size.y);
+
 	//Test
 	mouseJoint = NULL;
 
@@ -217,7 +217,7 @@ void init(ftScene::Scene* sc)
 		mainWorld.addBody(bdPoint);
 	}
 
-	for (int i = -2000; i <= 2000; i+=40) {
+	for (int i = -2000; i <= 2000; i += 40) {
 		bdPoint = new ftPhysics::Body(i, -200 + 40);
 		bdPoint->shape = *card;
 		bdPoint->setColor(randColor());
