@@ -57,6 +57,7 @@
 		<Unit filename="include/fountain/ft_scene.h" />
 		<Unit filename="include/fountain/ft_time.h" />
 		<Unit filename="include/fountain/linFountain.h" />
+		<Unit filename="include/fountain/winFountain.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
