@@ -6,7 +6,6 @@ obj/
 *.o
 *.depend
 *.layout
-*.obj
 *.exe
 *.a
 *.dll
