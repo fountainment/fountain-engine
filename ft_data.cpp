@@ -1,5 +1,6 @@
 #include <fountain/ft_data.h>
 #include <fountain/ft_render.h>
+#include <cstdio>
 
 namespace fountain {
 
@@ -350,9 +351,62 @@ ftColor::ftColor()
 	a = 1.0f;
 }
 
-//TODO: complete this function("#FFF")
+int Hex2Dec(std::string hexs)
+{
+	int ans = 0;
+	if (hexs.length() == 0) return ans;
+	for (unsigned i = 0; i < hexs.length(); i++) {
+		if (i != 0) ans *= 16;
+		if (hexs[i] >= '0' && hexs[i] <= '9') {
+			ans += hexs[i] - '0';
+		}
+		else if (hexs[i] >= 'A' && hexs[i] <= 'F') {
+			ans += 10 + hexs[i] - 'A';
+		}
+		else if (hexs[i] >= 'a' && hexs[i] <= 'f') {
+			ans += 10 + hexs[i] - 'a';
+		}
+		else {
+			//TODO: debug output
+		}
+	}
+	return ans;
+}
+
 ftColor::ftColor(std::string s)
 {
+	float r = 1.0f;
+	float g = 1.0f;
+	float b = 1.0f;
+	bool correct = false;
+	if (s.length() > 0 && s[0] == '#') {
+		std::string ss = s.substr(1, s.length() - 1);
+		std::string sss;
+		if (s.length() == 3) {
+			sss = ss.substr(0, 1);
+			sss = sss + sss;
+			r = Hex2Dec(sss) / 255.0f;
+			sss = ss.substr(1, 1);
+			sss = sss + sss;
+			g = Hex2Dec(sss) / 255.0f;
+			sss = ss.substr(2, 1);
+			sss = sss + sss;
+			b = Hex2Dec(sss) / 255.0f;
+			correct = true;
+		} else if (ss.length() == 6) {
+			r = Hex2Dec(ss.substr(0, 2)) / 255.0f;
+			g = Hex2Dec(ss.substr(2, 2)) / 255.0f;
+			b = Hex2Dec(ss.substr(4, 2)) / 255.0f;
+			correct = true;
+		}
+	}
+	if (!correct) {
+		//TODO: debug output
+	}
+	setR(r);
+	setG(g);
+	setB(b);
+	setAlpha(1.0f);
 }
 
 ftColor::ftColor(float r, float g, float b, float a)

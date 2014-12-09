@@ -33,7 +33,7 @@ void initCircleData(GLfloat (*v)[2], int n)
 	}
 }
 
-void glDrawArrayFloat2(float (*a)[2], int n, int glType)
+void glDrawArrayFloat2(GLfloat (*a)[2], int n, GLuint glType)
 {
 	glBegin(glType);
 	for (int i = 0; i < n; i++)
@@ -41,7 +41,7 @@ void glDrawArrayFloat2(float (*a)[2], int n, int glType)
 	glEnd();
 }
 
-void glDrawVectorVec2(std::vector<ftVec2> & v, int glType)
+void glDrawVectorVec2(std::vector<ftVec2> & v, GLuint glType)
 {
 	glBegin(glType);
 	for (unsigned int i = 0; i < v.size(); i++) {
@@ -214,14 +214,13 @@ void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
 	float h2 = h / 2.0f;
+	GLfloat vtx1[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex2f(-w2, -h2);
-	glVertex2f(-w2, h2);
-	glVertex2f(w2, h2);
-	glVertex2f(w2, -h2);
-	glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, vtx1);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_BLEND);
 }
 

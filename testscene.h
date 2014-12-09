@@ -395,6 +395,7 @@ ft3DModel::ObjModel robot("first.obj");
 ftRender::Camera mainCamera(0, 0, 500);
 float scale;
 float dx, dy;
+float cx, cy;
 
 void init(ftScene::Scene* sc)
 {
@@ -403,6 +404,8 @@ void init(ftScene::Scene* sc)
 	scale = 1.0f;
 	dx = 0.0f;
 	dy = 0.0f;
+	cx = 0.0f;
+	cy = 0.0f;
 }
 
 void update(ftScene::Scene* sc)
@@ -414,6 +417,10 @@ void update(ftScene::Scene* sc)
 		ftVec2 deltaV = fountain::sysMouse.getDeltaV();
 		dy += deltaV.x;
 		dx -= deltaV.y;
+	} else if (fountain::sysMouse.getState(FT_MButton) == FT_isDown) {
+		ftVec2 cDeltaV = fountain::sysMouse.getDeltaV();
+		cDeltaV = cDeltaV * -1;
+		mainCamera.move(cDeltaV.x, cDeltaV.y);
 	}
 }
 
@@ -424,6 +431,10 @@ void draw(ftScene::Scene* sc)
 	ftRender::ftRotate(dx, dy, 0);
 	ftRender::ftScale(scale);
 	robot.render();
+	ftRender::transformEnd();
+	ftRender::transformBegin();
+	ftRender::useColor(ftColor("#FFFF00"));
+	ftRender::drawQuad(100, 100);
 	ftRender::transformEnd();
 }
 
