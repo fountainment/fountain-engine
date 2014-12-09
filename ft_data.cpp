@@ -1,6 +1,9 @@
 #include <fountain/ft_data.h>
 #include <fountain/ft_render.h>
+
+//debug
 #include <cstdio>
+#include <iostream>
 
 namespace fountain {
 
@@ -382,7 +385,7 @@ ftColor::ftColor(std::string s)
 	if (s.length() > 0 && s[0] == '#') {
 		std::string ss = s.substr(1, s.length() - 1);
 		std::string sss;
-		if (s.length() == 3) {
+		if (ss.length() == 3) {
 			sss = ss.substr(0, 1);
 			sss = sss + sss;
 			r = Hex2Dec(sss) / 255.0f;

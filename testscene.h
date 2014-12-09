@@ -433,7 +433,7 @@ void draw(ftScene::Scene* sc)
 	robot.render();
 	ftRender::transformEnd();
 	ftRender::transformBegin();
-	ftRender::useColor(ftColor("#FFFF00"));
+	ftRender::useColor(ftColor("#F66"));
 	ftRender::drawQuad(100, 100);
 	ftRender::transformEnd();
 }
