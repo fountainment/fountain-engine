@@ -185,6 +185,7 @@ public:
 	void draw();
 	void doWith(void(*func)(_tp));
 	bool empty();
+	int getAvailN();
 };
 
 template <typename _tp, int _size>
@@ -287,6 +288,12 @@ bool container<_tp, _size>::empty()
 		return true;
 	else
 		return false;
+}
+
+template <typename _tp, int _size>
+int container<_tp, _size>::getAvailN()
+{
+	return availN;
 }
 
 namespace fountain {
