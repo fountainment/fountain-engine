@@ -33,21 +33,20 @@ void initCircleData(GLfloat (*v)[2], int n)
 	}
 }
 
-void glDrawArrayFloat2(GLfloat (*a)[2], int n, GLuint glType)
-{
-	glBegin(glType);
-	for (int i = 0; i < n; i++)
-		glVertex2fv(a[i]);
-	glEnd();
-}
+//void glDrawArrayFloat2(GLfloat (*a)[2], int n, GLuint glType)
+//{
+//	glBegin(glType);
+//	for (int i = 0; i < n; i++)
+//		glVertex2fv(a[i]);
+//	glEnd();
+//}
 
-void glDrawVectorVec2(std::vector<ftVec2> & v, GLuint glType)
+void glDrawVectorVec2(const float * v, int n, GLuint glType)
 {
-	glBegin(glType);
-	for (unsigned int i = 0; i < v.size(); i++) {
-		glVertex2f(v[i].x, v[i].y);
-	}
-	glEnd();
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, v);
+	glDrawArrays(glType, 0, n);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void ftRender::init()
@@ -251,7 +250,8 @@ void ftRender::drawCircle()
 void ftRender::drawShape(ftShape & shape, float angle)
 {
 	int type = shape.getType();
-	std::vector<ftVec2> v = shape.getData();
+	const float *v = shape.getData();
+	int n = shape.getN();
 	ftRender::ftRotate(0.0f, 0.0f, angle);
 	switch (type)
 	{
@@ -261,15 +261,15 @@ void ftRender::drawShape(ftShape & shape, float angle)
 		break;
 
 	case FT_Polygon:
-		glDrawVectorVec2(v, GL_TRIANGLE_FAN);
+		glDrawVectorVec2(v, n, GL_TRIANGLE_FAN);
 		break;
 
 	case FT_Line:
-		glDrawVectorVec2(v, GL_LINE_STRIP);
+		glDrawVectorVec2(v, n, GL_LINE_STRIP);
 		break;
 
 	case FT_Rect:
-		ftRender::drawQuad(v[0].x, v[0].y);
+		ftRender::drawQuad(v[0], v[1]);
 		break;
 	}
 }

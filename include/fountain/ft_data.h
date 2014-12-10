@@ -95,21 +95,24 @@ public:
 
 class ftShape {
 private:
-	std::vector<ftVec2> data;
+	float data[32];
 	float r;
 	int n;
 	bool loop;
 	int type;
+
+	void setN(int n);
 public:
 	ftShape(ftRect rct);
+	//ftShape(const ftShape & shape);
+	~ftShape();
 	ftShape(float r = 0.1f);
 	ftShape(const std::vector<ftVec2> & a, int n, bool loop = true);
 
-	const std::vector<ftVec2> & getData();
+	const float * getData();
 	void setData(const std::vector<ftVec2> & a);
 
 	int getN();
-	void setN(int n);
 
 	void setR(float r);
 	float getR();
@@ -156,6 +159,7 @@ public:
 	void setRect(ftRect rct);
 	ftRect getRect();
 	void setColor(const ftColor & c);
+	void setShape(const ftShape & shape);
 	const ftColor & getColor();
 	void draw();
 	void update();
