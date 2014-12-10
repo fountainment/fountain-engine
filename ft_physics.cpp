@@ -8,7 +8,6 @@ static b2FixtureDef defaultFixtureDef;
 static float defaultTimeStep = 1.0f / 60.0f;
 static ftVec2 defaultGravity(0.0f, -10.0f);
 
-//TODO: add ratio coordinate func
 static float ratio = 1.0f;
 
 void ftPhysics::init()
@@ -60,7 +59,7 @@ void Body::autoCreateFixtures()
 	b2CircleShape cshape;
 	//b2EdgeShape eshape;
 	int type = shape.getType();
-	std::vector<ftVec2> v;
+	const float * v;
 	b2Vec2 bv[10];
 	int n;
 	switch (type)
@@ -74,7 +73,7 @@ void Body::autoCreateFixtures()
 		v = shape.getData();
 		n = shape.getN();
 		for (int i = 0; i < n; i++) {
-			bv[i].Set(v[i].x / ratio, v[i].y / ratio);
+			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
 		}
 		pshape.Set(bv, n);
 		b2shape = &pshape;
@@ -87,7 +86,7 @@ void Body::autoCreateFixtures()
 
 	case FT_Rect:
 		v = shape.getData();
-		pshape.SetAsBox(v[0].x / 2.0f / ratio, v[0].y / 2.0f / ratio);
+		pshape.SetAsBox(v[0] / 2.0f / ratio, v[1] / 2.0f / ratio);
 		b2shape = &pshape;
 		break;
 

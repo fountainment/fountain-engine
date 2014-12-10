@@ -1,6 +1,7 @@
 #include <fountain/ft_data.h>
 #include <fountain/ft_render.h>
 #include <cstdio>
+#include <cstring>
 
 namespace fountain {
 
@@ -194,42 +195,59 @@ bool ftRect::collidePoint(ftVec2 p)
 //class ftShape
 ftShape::ftShape(ftRect rct)
 {
-	n = 1;
+	setN(1);
 	type = FT_Rect;
 	loop = true;
-	data.clear();
-	data.push_back(rct.getSize());
+//	data = new float[2];
+	data[0] = rct.getSize().x;
+	data[1] = rct.getSize().y;
+}
+
+ftShape::~ftShape()
+{
+	/*
+	if (data != NULL) {
+		std::printf("123\n");
+		delete data;
+		data = NULL;
+	}
+	*/
 }
 
 ftShape::ftShape(float r)
 {
-	data.clear();
 	setN(0);
 	type = FT_Circle;
 	loop = true;
 	this->r = r;
+//	data = NULL;
 }
 
 ftShape::ftShape(const std::vector<ftVec2> & a, int n, bool loop)
 {
-	data.clear();
 	setN(n);
 	if (loop == true)
 		type = FT_Polygon;
 	else
 		type = FT_Line;
 	this->loop = loop;
+//	data = NULL;
 	setData(a);
 }
 
-const std::vector<ftVec2> & ftShape::getData()
+const float * ftShape::getData()
 {
 	return data;
 }
 
 void ftShape::setData(const std::vector<ftVec2> & a)
 {
-	data = a;
+//	if (data != NULL) delete data;
+//	data = new float[a.size() * 2];
+	for (unsigned i = 0; i < a.size(); i++) {
+		data[i * 2] = a[i].x;
+		data[i * 2 + 1] = a[i].y;
+	}
 }
 
 int ftShape::getN()
@@ -256,7 +274,24 @@ int ftShape::getType()
 {
 	return type;
 }
-
+/*
+ftShape::ftShape(const ftShape & shape)
+{
+	if (this != &shape) {
+		r = shape.r;
+		n = shape.n;
+		loop = shape.loop;
+		type = shape.type;
+		if (shape.data != NULL) {
+			data = new float[n * 2];
+			for (int i = 0; i < n * 2; i++) {
+				data[i] = shape.data[i];
+			}
+		}
+		else data = NULL;
+	}
+}
+*/
 //class ftSprite
 ftSprite::ftSprite()
 {
@@ -323,6 +358,11 @@ ftRect ftSprite::getRect()
 	rct.setSize(rectSize);
 	rct.setCenter(position);
 	return rct;
+}
+
+void ftSprite::setShape(const ftShape & shape)
+{
+	this->shape = shape;
 }
 
 void ftSprite::draw()

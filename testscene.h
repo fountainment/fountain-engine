@@ -210,7 +210,7 @@ void init(ftScene::Scene* sc)
 	mouseJoint = NULL;
 
 	bdPoint = new ftPhysics::Body(0, -200, false);
-	bdPoint->shape = *groundBox;
+	bdPoint->setShape(*groundBox);
 	bdPoint->setColor(randColor());
 	if (!mainWorld.addBody(bdPoint)) {
 		mainWorld.delHeadBody();
@@ -219,7 +219,7 @@ void init(ftScene::Scene* sc)
 
 	for (int i = -2000; i <= 2000; i += 40) {
 		bdPoint = new ftPhysics::Body(i, -200 + 40);
-		bdPoint->shape = *card;
+		bdPoint->setShape(*card);
 		bdPoint->setColor(randColor());
 		if (!mainWorld.addBody(bdPoint)) {
 			mainWorld.delHeadBody();
@@ -270,7 +270,7 @@ void update(ftScene::Scene* sc)
 	if (mode == 1) {
 		if (fountain::sysMouse.getState(FT_LButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y);
-			bdPoint->shape = *addShape;
+			bdPoint->setShape(*addShape);
 			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
 				mainWorld.delHeadBody();
@@ -280,7 +280,7 @@ void update(ftScene::Scene* sc)
 
 		if (fountain::sysMouse.getState(FT_RButton)) {
 			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
-			bdPoint->shape = *addShape;
+			bdPoint->setShape(*addShape);
 			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
 				mainWorld.delHeadBody();
@@ -302,7 +302,7 @@ void update(ftScene::Scene* sc)
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.01 && makeRect.getSize().y > 0.01) {
 				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
-				bdPoint->shape = ftShape(makeRect);
+				bdPoint->setShape(ftShape(makeRect));
 				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
 					mainWorld.delHeadBody();
@@ -323,7 +323,7 @@ void update(ftScene::Scene* sc)
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
 				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, false);
-				bdPoint->shape = ftShape(makeRect);
+				bdPoint->setShape(ftShape(makeRect));
 				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
 					mainWorld.delHeadBody();
