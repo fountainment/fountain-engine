@@ -427,14 +427,16 @@ void update(ftScene::Scene* sc)
 void draw(ftScene::Scene* sc)
 {
 	mainCamera.update();
+
+	ftRender::transformBegin();
+	ftRender::useColor(ftColor("#777"));
+	ftRender::drawQuad(800, 600);
+	ftRender::transformEnd();
+
 	ftRender::transformBegin();
 	ftRender::ftRotate(dx, dy, 0);
 	ftRender::ftScale(scale);
 	robot.render();
-	ftRender::transformEnd();
-	ftRender::transformBegin();
-	ftRender::useColor(ftColor("#F66"));
-	ftRender::drawQuad(100, 100);
 	ftRender::transformEnd();
 }
 
