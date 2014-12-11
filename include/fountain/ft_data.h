@@ -165,6 +165,7 @@ public:
 	void update();
 };
 
+//TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
 class container {
 private:

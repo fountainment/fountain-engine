@@ -158,7 +158,7 @@ int main(int argc, char **argv)
 
 	for (;;)
 	{
-		//TODO: use a better way to solve it
+		//TODO: use a better way to solve input frame init
 		ftInput::initPerFrame();
 
 		while (XPending(dpy) > 0)
@@ -220,8 +220,8 @@ int main(int argc, char **argv)
 					        && nev.xkey.keycode ==
 					        event.xkey.keycode)
 					{
-						printf
-						("keyRetriggered\n");
+						//printf
+						//("keyRetriggered\n");
 						//TODO: set the sysKeyboard
 						XNextEvent(dpy, &event);
 						is_retriggered = 1;

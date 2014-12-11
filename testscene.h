@@ -228,7 +228,6 @@ void init(ftScene::Scene* sc)
 	}
 }
 
-
 void update(ftScene::Scene* sc)
 {
 	if (ttt > 0.01) ttt -= 0.01;

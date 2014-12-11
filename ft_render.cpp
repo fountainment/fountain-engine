@@ -33,14 +33,6 @@ void initCircleData(GLfloat (*v)[2], int n)
 	}
 }
 
-//void glDrawArrayFloat2(GLfloat (*a)[2], int n, GLuint glType)
-//{
-//	glBegin(glType);
-//	for (int i = 0; i < n; i++)
-//		glVertex2fv(a[i]);
-//	glEnd();
-//}
-
 void glDrawVectorVec2(const float * v, int n, GLuint glType)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -198,10 +190,6 @@ void ftRender::drawLine(float x1, float y1, float x2, float y2)
 	glVertexPointer(2, GL_FLOAT, 0, vtx1);
 	glDrawArrays(GL_LINES, 0, 2);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//glBegin(GL_LINES);
-	//glVertex2f(x1, y1);
-	//glVertex2f(x2, y2);
-	//glEnd();
 }
 
 void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
@@ -236,11 +224,6 @@ void ftRender::drawRect(ftRect rct, float angle)
 
 void ftRender::drawCircle()
 {
-	//glBegin(GL_TRIANGLE_FAN);
-	//for (int i = 0; i < 32; i++) {
-	//	glVertex2f(circle32[i].x, circle32[i].y);
-	//}
-	//glEnd();
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, circle32);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 32);

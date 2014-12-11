@@ -1,5 +1,6 @@
-#ifndef _FTTIME_H_
-#define _FTTIME_H_
+#ifndef _FT_TIME_H_
+#define _FT_TIME_H_
+
 namespace ftTime {
 void init();
 
@@ -14,6 +15,8 @@ private:
 	double endT;
 	double deltaT;
 	double timeScale;
+	//TODO: use frameCount to calculate real fps
+	long long frameCount;
 	//TODO: use totalT to add slave mode
 	double totalT;
 public:
@@ -29,4 +32,5 @@ public:
 	double secondsFromContinue();
 };
 }
+
 #endif

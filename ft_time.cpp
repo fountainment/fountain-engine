@@ -59,6 +59,7 @@ Clock::Clock(double fps)
 	deltaT = 0.0;
 	timeScale = 1.0;
 	totalT = 0;
+	frameCount = 0;
 }
 
 void Clock::init()
@@ -74,13 +75,15 @@ void Clock::tick()
 		littleSleep();
 		endT = floatTime();
 	}
-	if (secondPerFrame != 0 && deltaT > secondPerFrame)
-		deltaT = secondPerFrame;
+	//TODO: use a better way to solve debug deltaT
+	//if (secondPerFrame != 0 && deltaT > secondPerFrame)
+	//	deltaT = secondPerFrame;
 	deltaT *= timeScale;
 	if (isPaused == true)
 		deltaT = 0.0;
 	totalT += deltaT;
 	beginT = endT;
+	frameCount++;
 }
 
 double Clock::getDeltaT()

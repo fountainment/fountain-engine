@@ -10,6 +10,7 @@ namespace ftScene {
 
 void init();
 
+//TODO: delete function pointer, use virtual function
 class Scene {
 private:
 	ftTime::Clock mainClock;
