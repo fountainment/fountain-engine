@@ -12,7 +12,7 @@ void fountain::setBasicVarible()
 	mainWin.setH(600);
 	mainWin.title = std::string("fountain-prototype ") + std::string(FOUNTAIN_VERSION);
 	mainWin.icon = "fountain.ico";
-	mainWin.isFullScreen = false;
+	mainWin.isFullScreen = true;
 	mainWin.hideCursor = false;
 }
 

@@ -76,8 +76,8 @@ void Clock::tick()
 		endT = floatTime();
 	}
 	//TODO: use a better way to solve debug deltaT
-	//if (secondPerFrame != 0 && deltaT > secondPerFrame)
-	//	deltaT = secondPerFrame;
+	if (secondPerFrame != 0 && deltaT > secondPerFrame * 2)
+		deltaT = secondPerFrame;
 	deltaT *= timeScale;
 	if (isPaused == true)
 		deltaT = 0.0;

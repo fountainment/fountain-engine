@@ -128,8 +128,18 @@ b2MouseJoint *mouseJoint;
 ftRender::SubImage xx;
 ftRender::SubImage yy;
 
+void MouseUp()
+{
+	b2World *world = mainWorld.world;
+	if (mouseJoint) {
+		world->DestroyJoint(mouseJoint);
+		mouseJoint = NULL;
+	}
+}
+
 void MouseDown(ftVec2 p)
 {
+	MouseUp();
 	b2World *world = mainWorld.world;
 	b2AABB aabb;
 	ftVec2 d(0.001f, 0.001f);
@@ -159,15 +169,6 @@ void MouseMove(ftVec2 p)
 {
 	if (mouseJoint != NULL) {
 		mouseJoint->SetTarget(b2Vec2(p.x, p.y));
-	}
-}
-
-void MouseUp()
-{
-	b2World *world = mainWorld.world;
-	if (mouseJoint) {
-		world->DestroyJoint(mouseJoint);
-		mouseJoint = NULL;
 	}
 }
 
@@ -376,6 +377,7 @@ void draw(ftScene::Scene* sc)
 
 void destroy(ftScene::Scene* sc)
 {
+	MouseUp();
 	delete testShape0;
 	delete testShape1;
 	delete testShape2;
@@ -429,7 +431,7 @@ void draw(ftScene::Scene* sc)
 
 	ftRender::transformBegin();
 	ftRender::useColor(ftColor("#777"));
-	ftRender::drawQuad(800, 600);
+	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
