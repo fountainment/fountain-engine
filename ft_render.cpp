@@ -33,21 +33,20 @@ const GLchar *vss[] = {
 		"void main()"
 		"{"
 		"	vec4 v = gl_Vertex;"
-		"	v.x += sin(time);"
-		"	v.y += sin(v.x);"
 		"	gl_Position = gl_ModelViewProjectionMatrix * v;"
 		"}"
 		};
 const GLchar *fss[] = {
 		"uniform float time;"
-		"void main()"
+		"vec2 resolution = vec2(800.0, 600.0);"
+		"void main( void )"
 		"{"
-		"	vec2 pos = gl_FragCoord.xy;"
-		"	pos = pos / 10.0;"
-		"	float a = sin(pos.x + time);"
-		"	float b = sin(pos.y + time);"
-		"	float c = sin((pos.x + pos.y) / 2.0 + time);"
-		"	gl_FragColor = vec4(a, b, c, 0.0);"
+		"	vec2 position = ( gl_FragCoord.xy / resolution.xy ) * 2.0 - 1.0;"
+		"	position.x *= (resolution.x / resolution.y);"
+		"	float len = length( position );"
+		"	float freq = 800.0;"
+		"	vec2 v2 = ( position / len ) * freq * sin( time*4.0 - len*15.0 )*0.05;"
+		"	gl_FragColor = vec4( v2.x, v2.y, 0.0, 1.0 );"
 		"}"
 		};
 GLuint program;
@@ -81,7 +80,7 @@ void ftRender::init()
 	globalA = 1.0f;
 
 	glewInit();
-	std::printf("%s\n", glGetString(GL_VERSION));
+	std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
 	glGenVertexArrays(1, &VertexArrayID);
 //	glBindVertexArray(VertexArrayID);
 
@@ -92,10 +91,10 @@ void ftRender::init()
 	glShaderSource(fs, 1, fss, NULL);
 	glCompileShader(vs);
 	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) std::printf("vs!!!\n");
+	if (!compiled) std::printf("vertex shader compile failed!!!\n");
 	glCompileShader(fs);
 	glGetShaderiv(fs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) std::printf("fs!!!\n");
+	if (!compiled) std::printf("fragment shader compile failed!!!\n");
 	program = glCreateProgram();
 	glAttachShader(program, vs);
 	glAttachShader(program, fs);
@@ -108,6 +107,7 @@ void ftRender::init()
 void ftRender::transformBegin()
 {
 	timeX += 0.01f;
+	if (timeX > 314.0f) timeX -= 314.0f;
 	glUniform1f(timeLoc, timeX);
 	glPushMatrix();
 }
@@ -116,6 +116,9 @@ void ftRender::transformEnd()
 {
 	glPopMatrix();
 	ftColor4f(1.0f, 1.0, 1.0f, 1.0f);
+	timeX += 0.01f;
+	if (timeX > 314.0f) timeX -= 314.0f;
+	glUniform1f(timeLoc, timeX);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
