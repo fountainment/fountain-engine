@@ -1,6 +1,7 @@
 #include <fountain/ft_render.h>
 #include <fountain/ft_data.h>
 #include <fountain/ft_algorithm.h>
+#include <GL/glew.h>
 #include <GL/gl.h>
 #include <GL/glext.h>
 #include <FreeImage.h>
@@ -20,7 +21,7 @@ static GLfloat circle8[8][2];
 static GLfloat circle32[32][2];
 static GLfloat circle128[128][2];
 
-//static GLuint VertexArrayID;
+static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
 
@@ -52,7 +53,9 @@ void ftRender::init()
 	globalB = 1.0f;
 	globalA = 1.0f;
 
-//	glGenVertexArrays(1, &VertexArrayID);
+	glewInit();
+	std::printf("%s\n", glGetString(GL_VERSION));
+	glGenVertexArrays(1, &VertexArrayID);
 //	glBindVertexArray(VertexArrayID);
 }
 

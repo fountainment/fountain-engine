@@ -12,7 +12,7 @@ void fountain::setBasicVarible()
 	mainWin.setH(600);
 	mainWin.title = std::string("fountain-prototype ") + std::string(FOUNTAIN_VERSION);
 	mainWin.icon = "fountain.ico";
-	mainWin.isFullScreen = true;
+	mainWin.isFullScreen = false;
 	mainWin.hideCursor = false;
 }
 
@@ -28,6 +28,7 @@ void fountain::gameInit()
 	SS.registerScene(&startScene, FT_StartScene);
 	SS.registerScene(&gameScene, FT_Scene2);
 	SS.registerScene(&modelScene, FT_Scene3);
+	
 }
 
 void fountain::singleFrame()
