@@ -2,8 +2,6 @@
 #include <fountain/ft_data.h>
 #include <fountain/ft_algorithm.h>
 #include <GL/glew.h>
-#include <GL/gl.h>
-#include <GL/glext.h>
 #include <FreeImage.h>
 #include <map>
 #include <cmath>
@@ -24,6 +22,35 @@ static GLfloat circle128[128][2];
 static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
+
+//GLSL exp
+static GLuint vs ,fs;
+GLint compiled, linked;
+GLint timeLoc;
+GLfloat timeX = 0.0f;
+const GLchar *vss[] = {
+		"uniform float time;"
+		"void main()"
+		"{"
+		"	vec4 v = gl_Vertex;"
+		"	v.x += sin(time);"
+		"	v.y += sin(v.x);"
+		"	gl_Position = gl_ModelViewProjectionMatrix * v;"
+		"}"
+		};
+const GLchar *fss[] = {
+		"uniform float time;"
+		"void main()"
+		"{"
+		"	vec2 pos = gl_FragCoord.xy;"
+		"	pos /= 10;"
+		"	float a = sin(pos.x + time);"
+		"	float b = sin(pos.y + time);"
+		"	float c = sin((pos.x + pos.y) / 2.0 + time);"
+		"	gl_FragColor = vec4(a, b, c, 0.0);"
+		"}"
+		};
+GLuint program;
 
 void initCircleData(GLfloat (*v)[2], int n)
 {
@@ -57,10 +84,31 @@ void ftRender::init()
 	std::printf("%s\n", glGetString(GL_VERSION));
 	glGenVertexArrays(1, &VertexArrayID);
 //	glBindVertexArray(VertexArrayID);
+
+	//GLSL exp
+	vs = glCreateShader(GL_VERTEX_SHADER);
+	fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(vs, 1, vss, NULL);
+	glShaderSource(fs, 1, fss, NULL);
+	glCompileShader(vs);
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) std::printf("vs!!!\n");
+	glCompileShader(fs);
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) std::printf("fs!!!\n");
+	program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	timeLoc = glGetUniformLocation(program, "time");
+	glUniform1f(timeLoc, timeX);
+	glUseProgram(program);
 }
 
 void ftRender::transformBegin()
 {
+	timeX += 0.01f;
+	glUniform1f(timeLoc, timeX);
 	glPushMatrix();
 }
 
