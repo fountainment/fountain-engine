@@ -43,7 +43,7 @@ const GLchar *fss[] = {
 		"void main()"
 		"{"
 		"	vec2 pos = gl_FragCoord.xy;"
-		"	pos /= 10;"
+		"	pos = pos / 10.0;"
 		"	float a = sin(pos.x + time);"
 		"	float b = sin(pos.y + time);"
 		"	float c = sin((pos.x + pos.y) / 2.0 + time);"
