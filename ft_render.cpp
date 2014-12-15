@@ -19,7 +19,7 @@ static GLfloat circle8[8][2];
 static GLfloat circle32[32][2];
 static GLfloat circle128[128][2];
 
-static GLuint VertexArrayID;
+//static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
 
@@ -29,13 +29,13 @@ GLint compiled, linked;
 GLint timeLoc;
 GLfloat timeX = 0.0f;
 const GLchar *vss[] = {
-		"uniform float time;"
 		"void main()"
 		"{"
 		"	vec4 v = gl_Vertex;"
 		"	gl_Position = gl_ModelViewProjectionMatrix * v;"
 		"}"
 		};
+/*
 const GLchar *fss[] = {
 		"uniform float time;"
 		"vec2 resolution = vec2(800.0, 600.0);"
@@ -49,6 +49,15 @@ const GLchar *fss[] = {
 		"	gl_FragColor = vec4( v2.x, v2.y, 0.0, 1.0 );"
 		"}"
 		};
+*/
+const GLchar *fss[] = {
+		"uniform float time;"
+		"vec2 resolution = vec2(1366, 768);"
+		"void main( void ) {"
+		"	float g = (gl_FragCoord.x * gl_FragCoord.y) / (resolution.x * resolution.y);"
+		"	gl_FragColor = vec4(0.0,0.8,1.3,1.0)*sin((gl_FragCoord.y/ resolution.y ) * sin(g * 100000.0 + time) * 9.0 + (gl_FragCoord.x / resolution.y + 20.0) );"
+		"}"
+		};
 GLuint program;
 
 void initCircleData(GLfloat (*v)[2], int n)
@@ -60,12 +69,11 @@ void initCircleData(GLfloat (*v)[2], int n)
 	}
 }
 
-void glDrawVectorVec2(const float * v, int n, GLuint glType)
+void GLinit()
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, v);
-	glDrawArrays(glType, 0, n);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glewInit();
+	std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+	std::printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 }
 
 void ftRender::init()
@@ -79,9 +87,8 @@ void ftRender::init()
 	globalB = 1.0f;
 	globalA = 1.0f;
 
-	glewInit();
-	std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
-	glGenVertexArrays(1, &VertexArrayID);
+	GLinit();
+//	glGenVertexArrays(1, &VertexArrayID);
 //	glBindVertexArray(VertexArrayID);
 
 	//GLSL exp
@@ -102,6 +109,14 @@ void ftRender::init()
 	timeLoc = glGetUniformLocation(program, "time");
 	glUniform1f(timeLoc, timeX);
 	glUseProgram(program);
+}
+
+void glDrawVectorVec2(const float * v, int n, GLuint glType)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, v);
+	glDrawArrays(glType, 0, n);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void ftRender::transformBegin()
