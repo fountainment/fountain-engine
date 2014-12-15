@@ -175,11 +175,11 @@ public:
 	ftFile();
 	~ftFile();
 	ftFile(const char *filename);
+	bool isLoad();
+	void free();
 	bool load(const char *filename);
 	bool reload();
-	bool isLoad();
 	const char* getStr();
-	void free();
 };
 
 //TODO: add bool container::willLive(_tp & node)
