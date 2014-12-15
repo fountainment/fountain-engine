@@ -276,6 +276,7 @@ int ftShape::getType()
 {
 	return type;
 }
+
 /*
 ftShape::ftShape(const ftShape & shape)
 {
@@ -294,6 +295,7 @@ ftShape::ftShape(const ftShape & shape)
 	}
 }
 */
+
 //class ftSprite
 ftSprite::ftSprite()
 {
@@ -508,4 +510,67 @@ float ftColor::getB()
 float ftColor::getAlpha()
 {
 	return a;
+}
+
+//class ftFile
+ftFile::ftFile()
+{
+	str = NULL;
+}
+
+ftFile::~ftFile()
+{
+	free();
+}
+
+ftFile::ftFile(const char *filename)
+{
+	load(filename);
+}
+
+bool ftFile::isLoad()
+{
+	return str != NULL;
+}
+
+void ftFile::free()
+{
+	if (str != NULL) {
+		delete str;
+		str = NULL;
+	}
+}
+
+bool ftFile::load(const char *filename)
+{
+	if (isLoad()) free();
+	FILE *f = std::fopen(filename, "r");
+	int length;
+	int index = 0;
+	char tmpChar;
+	if (f != NULL) {
+		std::fseek(f, 0, SEEK_END);
+		length = std::ftell(f);
+		std::printf("%s: size %d\n", filename, length);
+		str = new char[length];
+		std::fseek(f, 0, SEEK_SET);
+		while (std::fscanf(f, "%c", &tmpChar) != EOF) {
+			str[index] = tmpChar;
+			index++;
+		}
+		return true;
+	} else {
+		std::printf("Open \"%s\" error!", filename);
+		return false;
+	}
+}
+
+bool ftFile::reload()
+{
+	return true;
+}
+
+const char* ftFile::getStr()
+{
+	return str;
 }

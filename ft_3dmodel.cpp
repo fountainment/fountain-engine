@@ -36,7 +36,7 @@ void ObjModel::openFile(const char *fileName)
 	v.clear();
 	p.clear();
 	v.push_back(tmpV);
-	std::FILE * objFile = std::fopen(fileName, "r");
+	std::FILE *objFile = std::fopen(fileName, "r");
 	vecN = 1;
 	indexN = 0;
 	if (objFile != NULL) {
