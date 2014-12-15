@@ -28,36 +28,10 @@ static GLuint vs ,fs;
 GLint compiled, linked;
 GLint timeLoc;
 GLfloat timeX = 0.0f;
-const GLchar *vss[] = {
-		"void main()"
-		"{"
-		"	vec4 v = gl_Vertex;"
-		"	gl_Position = gl_ModelViewProjectionMatrix * v;"
-		"}"
-		};
-/*
-const GLchar *fss[] = {
-		"uniform float time;"
-		"vec2 resolution = vec2(800.0, 600.0);"
-		"void main( void )"
-		"{"
-		"	vec2 position = ( gl_FragCoord.xy / resolution.xy ) * 2.0 - 1.0;"
-		"	position.x *= (resolution.x / resolution.y);"
-		"	float len = length( position );"
-		"	float freq = 800.0;"
-		"	vec2 v2 = ( position / len ) * freq * sin( time*4.0 - len*15.0 )*0.05;"
-		"	gl_FragColor = vec4( v2.x, v2.y, 0.0, 1.0 );"
-		"}"
-		};
-*/
-const GLchar *fss[] = {
-		"uniform float time;"
-		"vec2 resolution = vec2(1366, 768);"
-		"void main( void ) {"
-		"	float g = (gl_FragCoord.x * gl_FragCoord.y) / (resolution.x * resolution.y);"
-		"	gl_FragColor = vec4(0.0,0.8,1.3,1.0)*sin((gl_FragCoord.y/ resolution.y ) * sin(g * 100000.0 + time) * 9.0 + (gl_FragCoord.x / resolution.y + 20.0) );"
-		"}"
-		};
+ftFile vsf("resources/vs.vert");
+ftFile fsf("resources/fs.frag");
+const GLchar *vss = vsf.getStr();
+const GLchar *fss = fsf.getStr();
 GLuint program;
 
 void initCircleData(GLfloat (*v)[2], int n)
@@ -69,15 +43,19 @@ void initCircleData(GLfloat (*v)[2], int n)
 	}
 }
 
-void GLinit()
+bool GLinit()
 {
+	//TODO: check the OpenGL init state
 	glewInit();
 	std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
 	std::printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	return true;
 }
 
 void ftRender::init()
 {
+	GLinit();
+
 	initCircleData(circle8, 8);
 	initCircleData(circle32, 32);
 	initCircleData(circle128, 128);
@@ -87,15 +65,15 @@ void ftRender::init()
 	globalB = 1.0f;
 	globalA = 1.0f;
 
-	GLinit();
 //	glGenVertexArrays(1, &VertexArrayID);
 //	glBindVertexArray(VertexArrayID);
 
+	//TODO: add class ShaderManager to deal with shader
 	//GLSL exp
 	vs = glCreateShader(GL_VERTEX_SHADER);
 	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(vs, 1, vss, NULL);
-	glShaderSource(fs, 1, fss, NULL);
+	glShaderSource(vs, 1, &vss, NULL);
+	glShaderSource(fs, 1, &fss, NULL);
 	glCompileShader(vs);
 	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) std::printf("vertex shader compile failed!!!\n");
