@@ -47,8 +47,8 @@ ftRender::Camera mainCamera(0, 0, 500);
 void init(ftScene::Scene* sc)
 {
 	ttt = 1;
-	pic1 = ftRender::getPicture("./logo.png");
-	pic2 = ftRender::getPicture("./title.png");
+	pic1 = ftRender::getPicture("resources/logo.png");
+	pic2 = ftRender::getPicture("resources/title.png");
 	transp = 0.0;
 	scale = 1.0;
 	x = 0;
@@ -392,7 +392,7 @@ void destroy(ftScene::Scene* sc)
 
 namespace scene3 {
 
-ft3DModel::ObjModel robot("first.obj");
+ft3DModel::ObjModel robot("resources/first.obj");
 ftRender::Camera mainCamera(0, 0, 500);
 float scale;
 float dx, dy;

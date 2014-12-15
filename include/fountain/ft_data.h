@@ -165,6 +165,23 @@ public:
 	void update();
 };
 
+//TODO: implement this class
+class ftFile
+{
+private:
+	char name[260];
+	char *str;
+public:
+	ftFile();
+	~ftFile();
+	ftFile(const char *filename);
+	bool load(const char *filename);
+	bool reload();
+	bool isLoad();
+	const char* getStr();
+	void free();
+};
+
 //TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
 class container {
