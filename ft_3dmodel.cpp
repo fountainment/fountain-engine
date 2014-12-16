@@ -87,21 +87,6 @@ void ObjModel::openFile(const char *fileName)
 
 void ObjModel::render()
 {
-	//if (neverRendered) {
-	//	listIndex = glGenLists(1);
-	//	glNewList(listIndex, GL_COMPILE);
-	//for (int i = 0; i < indexN; i++) {
-	//	glBegin(GL_LINE_LOOP);
-	//	glVertex3fv(v[p[i].a].xyz);
-	//	glVertex3fv(v[p[i].b].xyz);
-	//	glVertex3fv(v[p[i].c].xyz);
-	//	glEnd();
-	//}
-	//	glEndList();
-	//	neverRendered = 0;
-	//} else {
-	//	glCallList(listIndex);
-	//}
 	glEnable(GL_DEPTH_TEST);
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

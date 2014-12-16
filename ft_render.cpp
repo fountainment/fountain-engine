@@ -307,44 +307,46 @@ ftVec2 ftRender::getPicSize(int picID)
 void ftRender::drawPic(int picID)
 {
 	texInfo tex = PicID2TexInfo[picID];
-	int w2 = tex.w / 2.0f;
-	int h2 = tex.h / 2.0f;
+	GLfloat w2 = tex.w / 2.0f;
+	GLfloat h2 = tex.h / 2.0f;
+	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
+	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 	glEnable(GL_TEXTURE_2D);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
-	glBegin(GL_TRIANGLE_FAN);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-w2, -h2);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(w2, -h2);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(w2, h2);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-w2, h2);
-	glEnd();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, vtx);
+	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glDisable(GL_TEXTURE_2D);
 }
 
 void ftRender::drawAlphaPic(int picID)
 {
 	texInfo tex = PicID2TexInfo[picID];
-	int w2 = tex.w / 2.0f;
-	int h2 = tex.h / 2.0f;
+	GLfloat w2 = tex.w / 2.0f;
+	GLfloat h2 = tex.h / 2.0f;
+	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
+	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
-	glBegin(GL_TRIANGLE_FAN);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex2f(-w2, -h2);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex2f(w2, -h2);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex2f(w2, h2);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex2f(-w2, h2);
-	glEnd();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, vtx);
+	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 }
@@ -421,23 +423,28 @@ const SubImage & SubImagePool::getImage(const char * imageName)
 void ftRender::drawImage(SubImage im)
 {
 	texInfo tex = PicID2TexInfo[im.picID];
-	int w2 = im.size.x / 2.0f;
-	int h2 = im.size.y / 2.0f;
+	GLfloat w2 = im.size.x / 2.0f;
+	GLfloat h2 = im.size.y / 2.0f;
+	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
+	GLfloat txc[8];
+	for (int i = 0; i < 4; i++) {
+		txc[i * 2] = im.texCoor[i].x;
+		txc[i * 2 + 1] = im.texCoor[i].y;
+	}
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
-	glBegin(GL_TRIANGLE_FAN);
-	glTexCoord2f(im.texCoor[0].x, im.texCoor[0].y);
-	glVertex2f(-w2, -h2);
-	glTexCoord2f(im.texCoor[1].x, im.texCoor[1].y);
-	glVertex2f(w2, -h2);
-	glTexCoord2f(im.texCoor[2].x, im.texCoor[2].y);
-	glVertex2f(w2, h2);
-	glTexCoord2f(im.texCoor[3].x, im.texCoor[3].y);
-	glVertex2f(-w2, h2);
-	glEnd();
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glVertexPointer(2, GL_FLOAT, 0, vtx);
+	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
 }
