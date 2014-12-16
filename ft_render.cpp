@@ -10,6 +10,7 @@
 using ftRender::SubImage;
 using ftRender::SubImagePool;
 using ftRender::Camera;
+using ftRender::ShaderProgram;
 
 static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
@@ -22,17 +23,6 @@ static GLfloat circle128[128][2];
 //static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
-
-//GLSL exp
-static GLuint vs ,fs;
-GLint compiled, linked;
-GLint timeLoc;
-GLfloat timeX = 0.0f;
-ftFile vsf("resources/vs.vert");
-ftFile fsf("resources/fs.frag");
-const GLchar *vss = vsf.getStr();
-const GLchar *fss = fsf.getStr();
-GLuint program;
 
 void initCircleData(GLfloat (*v)[2], int n)
 {
@@ -68,25 +58,6 @@ void ftRender::init()
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
-
-	//TODO: add class ShaderManager to deal with shader
-	//GLSL exp
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(vs, 1, &vss, NULL);
-	glShaderSource(fs, 1, &fss, NULL);
-	glCompileShader(vs);
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) std::printf("vertex shader compile failed!!!\n");
-	glCompileShader(fs);
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) std::printf("fragment shader compile failed!!!\n");
-	program = glCreateProgram();
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
-	timeLoc = glGetUniformLocation(program, "time");
-	glUniform1f(timeLoc, timeX);
 }
 
 void glDrawVectorVec2(const float * v, int n, GLuint glType)
@@ -383,7 +354,7 @@ SubImage::SubImage(const char * picName, ftRect rect)
 }
 
 //class ftRender::SubImagePool
-std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char * sipName)
+std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName)
 {
 	int x, y;
 	int picN;
@@ -447,12 +418,6 @@ void ftRender::drawImage(SubImage im)
 
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
-}
-
-//GLSL exp
-void ftRender::useShader()
-{
-	glUseProgram(program);
 }
 
 void ftRender::useFFP()
@@ -555,4 +520,71 @@ ftVec2 Camera::mouseToWorld(ftVec2 mPos)
 	ans.x = mPos.x / scale + l;
 	ans.y = mPos.y / scale + b;
 	return ans;
+}
+
+//class ftRender::ShaderProgram
+ShaderProgram::ShaderProgram(const char *vsf, const char *fsf)
+{
+	program = 0;
+	vs = 0;
+	fs = 0;
+	vsFile.load(vsf);
+	fsFile.load(fsf);
+}
+
+ShaderProgram::~ShaderProgram()
+{
+	free();
+}
+
+//TODO: add words to check the process
+bool ShaderProgram::init()
+{
+	GLint compiled;
+	const char *vss = vsFile.getStr();
+	const char *fss = fsFile.getStr();
+	program = glCreateProgram();
+	vs = glCreateShader(GL_VERTEX_SHADER);
+	fs = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(vs, 1, &vss, NULL);
+	glShaderSource(fs, 1, &fss, NULL);
+	glCompileShader(vs);
+	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		std::printf("fragment shader compile failed!!!\n");
+		return false;
+	}
+	glCompileShader(fs);
+	glGetShaderiv(fs, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		std::printf("fragment shader compile failed!!!\n");
+		return false;
+	}
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	vsFile.free();
+	fsFile.free();
+	return true;
+}
+
+void ShaderProgram::use()
+{
+	glUseProgram(program);
+}
+
+void ShaderProgram::setVarible(const char *varName, float value)
+{
+	GLint loc = glGetUniformLocation(program, varName);
+	GLfloat v = value;
+	if (loc != -1) {
+		glUniform1f(loc, v);
+	}
+}
+
+void ShaderProgram::free()
+{
+	glDeleteProgram(program);
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 }

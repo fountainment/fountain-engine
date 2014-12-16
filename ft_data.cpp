@@ -561,7 +561,7 @@ bool ftFile::load(const char *filename)
 		str[length] = '\0';
 		return true;
 	} else {
-		std::printf("Open \"%s\" error!", filename);
+		std::printf("Open \"%s\" error!\n", filename);
 		return false;
 	}
 }

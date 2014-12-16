@@ -94,5 +94,20 @@ public:
 	void setProjectionType(int type);
 	ftVec2 mouseToWorld(ftVec2 mPos);
 };
+
+class ShaderProgram {
+private:
+	ftFile vsFile, fsFile;
+	unsigned vs, fs;
+	unsigned program;
+public:
+	ShaderProgram(const char *vs, const char *vf);
+	~ShaderProgram();
+	bool init();
+	void use();
+	void setVarible(const char *varName, float value);
+	void free();
+};
+
 }
 #endif
