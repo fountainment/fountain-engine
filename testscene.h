@@ -86,7 +86,8 @@ void draw(ftScene::Scene* sc)
 
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
-	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+	if (ttt >= 0.01f)
+		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
 
 }
@@ -363,7 +364,8 @@ void draw(ftScene::Scene* sc)
 
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
-	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+	if (ttt >= 0.01f)
+		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
