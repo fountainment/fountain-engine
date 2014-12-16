@@ -87,7 +87,7 @@ void ftRender::init()
 	glLinkProgram(program);
 	timeLoc = glGetUniformLocation(program, "time");
 	glUniform1f(timeLoc, timeX);
-	glUseProgram(program);
+	//glUseProgram(program);
 }
 
 void glDrawVectorVec2(const float * v, int n, GLuint glType)
@@ -100,9 +100,6 @@ void glDrawVectorVec2(const float * v, int n, GLuint glType)
 
 void ftRender::transformBegin()
 {
-	timeX += 0.01f;
-	if (timeX > 314.0f) timeX -= 314.0f;
-	glUniform1f(timeLoc, timeX);
 	glPushMatrix();
 }
 
@@ -110,9 +107,6 @@ void ftRender::transformEnd()
 {
 	glPopMatrix();
 	ftColor4f(1.0f, 1.0, 1.0f, 1.0f);
-	timeX += 0.01f;
-	if (timeX > 314.0f) timeX -= 314.0f;
-	glUniform1f(timeLoc, timeX);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)

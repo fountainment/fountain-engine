@@ -552,12 +552,13 @@ bool ftFile::load(const char *filename)
 		std::fseek(f, 0, SEEK_END);
 		length = std::ftell(f);
 		std::printf("%s: size %d\n", filename, length);
-		str = new char[length];
+		str = new char[length + 1];
 		std::fseek(f, 0, SEEK_SET);
 		while (std::fscanf(f, "%c", &tmpChar) != EOF) {
 			str[index] = tmpChar;
 			index++;
 		}
+		str[length] = '\0';
 		return true;
 	} else {
 		std::printf("Open \"%s\" error!", filename);
