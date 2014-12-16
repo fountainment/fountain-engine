@@ -65,8 +65,9 @@ void ftRender::init()
 	globalB = 1.0f;
 	globalA = 1.0f;
 
-//	glGenVertexArrays(1, &VertexArrayID);
-//	glBindVertexArray(VertexArrayID);
+	//TODO: find out how to use VAO
+	//glGenVertexArrays(1, &VertexArrayID);
+	//glBindVertexArray(VertexArrayID);
 
 	//TODO: add class ShaderManager to deal with shader
 	//GLSL exp
