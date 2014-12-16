@@ -87,7 +87,6 @@ void ftRender::init()
 	glLinkProgram(program);
 	timeLoc = glGetUniformLocation(program, "time");
 	glUniform1f(timeLoc, timeX);
-	//glUseProgram(program);
 }
 
 void glDrawVectorVec2(const float * v, int n, GLuint glType)
@@ -441,6 +440,17 @@ void ftRender::drawImage(SubImage im)
 	glEnd();
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
+}
+
+//GLSL exp
+void ftRender::useShader()
+{
+	glUseProgram(program);
+}
+
+void ftRender::useFFP()
+{
+	glUseProgram(0);
 }
 
 //class ftRender::Camera

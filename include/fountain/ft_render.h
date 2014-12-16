@@ -44,6 +44,9 @@ ftVec2 getPicSize(int picID);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
 
+void useShader();
+void useFFP();
+
 class SubImage {
 private:
 public:

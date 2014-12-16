@@ -36,6 +36,11 @@ void fountain::singleFrame()
 	//TODO: move this internal(fountainMain)
 	mainClock.tick();
 
+	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyUp)
+		ftRender::useShader();
+	if (fountain::sysKeyboard.getState(FT_F) == FT_KeyUp)
+		ftRender::useFFP();
+
 	SS.sceneSolve();
 	SS.update();
 	SS.draw();
