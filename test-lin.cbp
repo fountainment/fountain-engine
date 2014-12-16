@@ -41,6 +41,7 @@
 		<Linker>
 			<Add library="fountain" />
 			<Add library="X11" />
+			<Add library="GLEW" />
 			<Add library="GL" />
 			<Add library="freeimage" />
 			<Add library="Box2D" />
