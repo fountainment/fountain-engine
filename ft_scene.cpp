@@ -104,7 +104,7 @@ void SceneSelector::draw()
 void SceneSelector::sceneSolve()
 {
 	Scene *sc = scene[SceneSelector::cur];
-	if (sc->end) {
+	if (sc != NULL && sc->end) {
 		if (sc->needDestroy)
 			sc->destroy();
 		cur = sc->next;
