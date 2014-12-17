@@ -17,6 +17,8 @@ Dependencies
 
 OpenGL
 
+GLEW
+
 FreeImage
 
 Box2D
