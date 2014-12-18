@@ -560,6 +560,7 @@ bool ftFile::load(const char *filename)
 			index++;
 		}
 		str[length] = '\0';
+		std::fclose(f);
 		return true;
 	} else {
 		std::printf("Open \"%s\" error!\n", filename);
