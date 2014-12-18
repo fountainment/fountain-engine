@@ -165,7 +165,6 @@ public:
 	void update();
 };
 
-//TODO: implement this class
 class ftFile
 {
 private:

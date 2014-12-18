@@ -1,3 +1,9 @@
+//TODO: move the Box2D part into ft_physics
+//TODO: move the anime part into ft_anime
+//TODO: make the scenes be class
+//TODO: add ft_ui module to deal with buttons, menus etc.
+//TODO: write a physics editor for this engine
+
 #include <Box2D/Box2D.h>
 
 float ttt;
