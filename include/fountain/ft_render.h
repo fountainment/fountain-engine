@@ -104,6 +104,7 @@ public:
 	ShaderProgram(const char *vs, const char *vf);
 	~ShaderProgram();
 	bool init();
+	bool reload();
 	void use();
 	void setVarible(const char *varName, float value);
 	void free();

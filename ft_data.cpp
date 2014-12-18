@@ -3,7 +3,7 @@
 
 //debug
 #include <cstdio>
-#include <iostream>
+#include <cstring>
 
 namespace fountain {
 
@@ -544,6 +544,7 @@ void ftFile::free()
 bool ftFile::load(const char *filename)
 {
 	if (isLoad()) free();
+	std::strcpy(name, filename);
 	FILE *f = std::fopen(filename, "r");
 	int length;
 	int index = 0;
@@ -568,7 +569,7 @@ bool ftFile::load(const char *filename)
 
 bool ftFile::reload()
 {
-	return true;
+	return load(name);
 }
 
 const char* ftFile::getStr()

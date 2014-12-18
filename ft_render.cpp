@@ -568,6 +568,18 @@ bool ShaderProgram::init()
 	return true;
 }
 
+bool ShaderProgram::reload()
+{
+	bool res;
+	ftRender::useFFP();
+	free();
+	vsFile.reload();
+	fsFile.reload();
+	res = init();
+	use();
+	return res;
+}
+
 void ShaderProgram::use()
 {
 	glUseProgram(program);
@@ -587,4 +599,6 @@ void ShaderProgram::free()
 	glDeleteProgram(program);
 	glDeleteShader(vs);
 	glDeleteShader(fs);
+	vsFile.free();
+	fsFile.free();
 }

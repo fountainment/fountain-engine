@@ -39,6 +39,8 @@ void fountain::singleFrame()
 		SP.use();
 	if (fountain::sysKeyboard.getState(FT_F) == FT_KeyUp)
 		ftRender::useFFP();
+	if (fountain::sysKeyboard.getState(FT_R) == FT_KeyUp)
+		SP.reload();
 
 	SS.sceneSolve();
 	SS.update();

@@ -84,7 +84,7 @@ void SceneSelector::registerScene(Scene *sc, int index)
 
 void SceneSelector::update()
 {
-	Scene *sc = scene[SceneSelector::cur];
+	Scene *sc = scene[cur];
 	mainClock.tick();
 	if (sc != NULL) sc->update();
 	else {
@@ -94,7 +94,7 @@ void SceneSelector::update()
 
 void SceneSelector::draw()
 {
-	Scene *sc = scene[SceneSelector::cur];
+	Scene *sc = scene[cur];
 	if (sc != NULL) sc->draw();
 	else {
 		//TODO:add debug info output
@@ -103,13 +103,13 @@ void SceneSelector::draw()
 
 void SceneSelector::sceneSolve()
 {
-	Scene *sc = scene[SceneSelector::cur];
+	Scene *sc = scene[cur];
 	if (sc != NULL && sc->end) {
 		if (sc->needDestroy)
 			sc->destroy();
 		cur = sc->next;
 		sc->end = false;
-		sc = scene[SceneSelector::cur];
+		sc = scene[cur];
 		if (!sc->isInit) sc->init();
 	}
 }
