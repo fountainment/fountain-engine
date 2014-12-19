@@ -34,8 +34,10 @@ void fountain::singleFrame()
 	//TODO: move this internal(fountainMain)
 	mainClock.tick();
 
+	ftVec2 mp = fountain::sysMouse.getPos();
 	SP.setVarible("time", mainClock.secondsFromInit());
 	SP.setVarible("resolution", fountain::getWinSize());
+	SP.setVarible("mouse", mp);
 
 	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyUp)
 		SP.use();
