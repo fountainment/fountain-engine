@@ -1,3 +1,4 @@
+//TODO: replace "//GLSL exp" with better solution
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
 #include <GL/glew.h>
@@ -22,6 +23,8 @@ static GLfloat circle128[128][2];
 //static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
+
+static ShaderProgram *currentShader = NULL;
 
 void initCircleData(GLfloat (*v)[2], int n)
 {
@@ -282,6 +285,11 @@ void ftRender::drawPic(int picID)
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
 	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 	glEnable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 1.0f);
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
 
@@ -294,6 +302,11 @@ void ftRender::drawPic(int picID)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glDisable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 0.0f);
+
 }
 
 void ftRender::drawAlphaPic(int picID)
@@ -304,6 +317,11 @@ void ftRender::drawAlphaPic(int picID)
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
 	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 	glEnable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 1.0f);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
@@ -319,6 +337,11 @@ void ftRender::drawAlphaPic(int picID)
 
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 0.0f);
+
 }
 
 //class ftRender::SubImage
@@ -402,9 +425,19 @@ void ftRender::drawImage(SubImage im)
 		txc[i * 2 + 1] = im.texCoor[i].y;
 	}
 	glEnable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 1.0f);
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("tex", tex.id);
+
 	glBindTexture(GL_TEXTURE_2D, tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -417,11 +450,17 @@ void ftRender::drawImage(SubImage im)
 
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 0.0f);
+
 }
 
 void ftRender::useFFP()
 {
 	glUseProgram(0);
+	currentShader = NULL;
 }
 
 //class ftRender::Camera
@@ -606,9 +645,10 @@ bool ShaderProgram::reload()
 void ShaderProgram::use()
 {
 	glUseProgram(program);
+	currentShader = this;
 }
 
-void ShaderProgram::setVarible(const char *varName, float value)
+void ShaderProgram::setUniform(const char *varName, float value)
 {
 	GLint loc = glGetUniformLocation(program, varName);
 	GLfloat v = value;
@@ -617,7 +657,7 @@ void ShaderProgram::setVarible(const char *varName, float value)
 	}
 }
 
-void ShaderProgram::setVarible(const char *varName, ftVec2 value)
+void ShaderProgram::setUniform(const char *varName, ftVec2 value)
 {
 	const GLfloat v[] = {value.x, value.y};
 	GLint loc = glGetUniformLocation(program, varName);

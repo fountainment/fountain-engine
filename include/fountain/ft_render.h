@@ -106,8 +106,8 @@ public:
 	bool init();
 	bool reload();
 	void use();
-	void setVarible(const char *varName, float value);
-	void setVarible(const char *varName, ftVec2 value);
+	void setUniform(const char *varName, float value);
+	void setUniform(const char *varName, ftVec2 value);
 	void free();
 };
 

@@ -1,19 +1,15 @@
-#ifdef GL_ES
-precision mediump float;
-#endif
-
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
+uniform sampler2D tex;
+uniform float useTex;
 
 void main( void ) {
-	vec2 m = mouse / resolution;
-	vec2 position = ( gl_FragCoord.xy / resolution.xy ) + m / 1.5;
-	float color = 0.0;
-	color += sin( position.x * cos( time / 15.0 ) * 80.0 ) + cos( position.y * cos( time / 15.0 ) * 10.0 );
-	color += sin( position.y * sin( time / 10.0 ) * 40.0 ) + cos( position.x * sin( time / 25.0 ) * 40.0 );
-	color += sin( position.x * sin( time / 5.0 ) * 10.0 ) + sin( position.y * sin( time / 35.0 ) * 80.0 );
-	color *= sin( time / 10.0 ) * 0.5;
-	gl_FragColor = vec4( vec3( color, color * 0.5, sin( color + time / 3.0 ) * 0.75 ), gl_Color.w );
-
+	vec4 color = gl_Color;
+	if (useTex == 1.0) {
+		color *= texture2D(tex, gl_TexCoord[0].st);
+	}
+	float gray = color.x * .299 + color.y * .587 + color.z * .114;
+	color = vec4(vec3(gray), color.w);
+	gl_FragColor = color;
 }

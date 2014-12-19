@@ -27,7 +27,7 @@ void fountain::gameInit()
 	SS.registerScene(&modelScene, FT_Scene3);
 
 	SP.init();
-	SP.setVarible("time", 0.0f);
+	SP.setUniform("time", 0.0f);
 }
 
 void fountain::singleFrame()
@@ -36,9 +36,9 @@ void fountain::singleFrame()
 	mainClock.tick();
 
 	ftVec2 mp = fountain::sysMouse.getPos();
-	SP.setVarible("time", mainClock.secondsFromInit());
-	SP.setVarible("resolution", fountain::getWinSize());
-	SP.setVarible("mouse", mp);
+	SP.setUniform("time", mainClock.secondsFromInit());
+	SP.setUniform("resolution", fountain::getWinSize());
+	SP.setUniform("mouse", mp);
 
 	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyUp)
 		SP.use();
