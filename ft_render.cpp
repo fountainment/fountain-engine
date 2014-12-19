@@ -1,5 +1,4 @@
 #include <fountain/ft_render.h>
-#include <fountain/ft_data.h>
 #include <fountain/ft_algorithm.h>
 #include <GL/glew.h>
 #include <FreeImage.h>
@@ -615,6 +614,15 @@ void ShaderProgram::setVarible(const char *varName, float value)
 	GLfloat v = value;
 	if (loc != -1) {
 		glUniform1f(loc, v);
+	}
+}
+
+void ShaderProgram::setVarible(const char *varName, ftVec2 value)
+{
+	const GLfloat v[] = {value.x, value.y};
+	GLint loc = glGetUniformLocation(program, varName);
+	if (loc != -1) {
+		glUniform2fv(loc, 1, v);
 	}
 }
 

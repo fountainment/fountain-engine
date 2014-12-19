@@ -35,6 +35,8 @@ void fountain::singleFrame()
 	mainClock.tick();
 
 	SP.setVarible("time", mainClock.secondsFromInit());
+	SP.setVarible("resolution", fountain::getWinSize());
+
 	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyUp)
 		SP.use();
 	if (fountain::sysKeyboard.getState(FT_F) == FT_KeyUp)
