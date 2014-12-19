@@ -522,6 +522,44 @@ ftVec2 Camera::mouseToWorld(ftVec2 mPos)
 	return ans;
 }
 
+//functions used by ShaderProgram
+GLuint compileShader(const GLchar *shaderStr, GLenum shaderType)
+{
+	GLint compiled;
+	GLuint shader = glCreateShader(shaderType);
+	glShaderSource(shader, 1, &shaderStr, NULL);
+	glCompileShader(shader);
+	//debug
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		GLint length;
+		GLchar *log;
+		if (shaderType == GL_VERTEX_SHADER)
+			std::printf("vertex");
+		if (shaderType == GL_FRAGMENT_SHADER)
+			std::printf("fragment");
+		std::printf(" shader compile failed!!!\n");
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+		log = new GLchar[length];
+		glGetShaderInfoLog(shader, length, &length, log);
+		std::printf("//\n%s//\n\n", log);
+		delete log;
+		glDeleteShader(shader);
+		return 0;
+	}
+	//debug end
+	return shader;
+}
+
+GLuint linkShaderProgram(GLuint vs, GLuint fs)
+{
+	GLuint program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	return program;
+}
+
 //class ftRender::ShaderProgram
 ShaderProgram::ShaderProgram(const char *vsf, const char *fsf)
 {
@@ -540,29 +578,15 @@ ShaderProgram::~ShaderProgram()
 //TODO: add words to check the process
 bool ShaderProgram::init()
 {
-	GLint compiled;
+	//compile
 	const char *vss = vsFile.getStr();
+	vs = compileShader(vss, GL_VERTEX_SHADER);
 	const char *fss = fsFile.getStr();
-	program = glCreateProgram();
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(vs, 1, &vss, NULL);
-	glShaderSource(fs, 1, &fss, NULL);
-	glCompileShader(vs);
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) {
-		std::printf("fragment shader compile failed!!!\n");
-		return false;
-	}
-	glCompileShader(fs);
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) {
-		std::printf("fragment shader compile failed!!!\n");
-		return false;
-	}
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
+	fs = compileShader(fss, GL_FRAGMENT_SHADER);
+
+	//link
+	program = linkShaderProgram(vs, fs);
+
 	vsFile.free();
 	fsFile.free();
 	return true;
