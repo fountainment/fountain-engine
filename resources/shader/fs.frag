@@ -28,8 +28,7 @@ uniform float useTex;
 #define distfading 0.760
 #define saturation 0.800
 
-
-void main(void)
+vec4 magicStar()
 {
 	//get coords and direction
 	vec2 uv=gl_FragCoord.xy/resolution.xy-.5;
@@ -76,13 +75,21 @@ void main(void)
 		s+=stepsize;
 	}
 	v=mix(vec3(length(v)),v,saturation); //color adjust
+	vec4 ans = vec4(v*.01,1.);
+	return ans;
+}
 
+void main(void)
+{
 	vec4 color = gl_Color;
 	if (useTex == 1.0) {
 		color *= texture2D(tex, gl_TexCoord[0].st);
 	}
-	color *= vec4(v*.01,1.);
-
+	if (color.w != 0.) {
+		if (color.x != 0. || color.y != 0. || color.z != 0.) {
+			vec4 ans = magicStar();
+			color *= ans;
+		}
+	}
 	gl_FragColor = color;
-
 }

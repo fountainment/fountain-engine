@@ -2,7 +2,7 @@
 
 ftTime::Clock mainClock(60.0);
 ftScene::SceneSelector SS;
-ftRender::ShaderProgram SP("resources/vs.vert", "resources/fs.frag");
+ftRender::ShaderProgram SP("resources/shader/vs.vert", "resources/shader/fs.frag");
 
 #include "testscene.h"
 #include <string>

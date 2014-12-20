@@ -53,8 +53,8 @@ ftRender::Camera mainCamera(0, 0, 500);
 void init(ftScene::Scene* sc)
 {
 	ttt = 1;
-	pic1 = ftRender::getPicture("resources/logo.png");
-	pic2 = ftRender::getPicture("resources/title.png");
+	pic1 = ftRender::getPicture("resources/image/logo.png");
+	pic2 = ftRender::getPicture("resources/image/title.png");
 	transp = 0.0;
 	scale = 1.0;
 	x = 0;
@@ -210,7 +210,7 @@ void init(ftScene::Scene* sc)
 	addShape = rect;
 
 	//test
-	ftRender::SubImagePool ui("resources/ui.png", "resources/ui.sip");
+	ftRender::SubImagePool ui("resources/image/ui.png", "resources/image/ui.sip");
 	xx = ui.getImage("button01.png");
 	yy = ui.getImage("button02.png");
 
@@ -400,7 +400,7 @@ void destroy(ftScene::Scene* sc)
 
 namespace scene3 {
 
-ft3DModel::ObjModel robot("resources/first.obj");
+ft3DModel::ObjModel robot("resources/model/first.obj");
 ftRender::Camera mainCamera(0, 0, 500);
 float scale;
 float dx, dy;
