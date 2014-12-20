@@ -1,6 +1,7 @@
 //TODO: replace "//GLSL exp" with better solution
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <FreeImage.h>
 #include <map>
