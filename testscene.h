@@ -93,7 +93,7 @@ void draw(ftScene::Scene* sc)
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	if (ttt >= 0.01f)
-		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+		ftRender::drawQuad(fountain::mainWin.w / scale, fountain::mainWin.h / scale);
 	ftRender::transformEnd();
 
 }
@@ -371,7 +371,7 @@ void draw(ftScene::Scene* sc)
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	if (ttt >= 0.01f)
-		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+		ftRender::drawQuad(fountain::mainWin.w / scale, fountain::mainWin.h / scale);
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
@@ -410,7 +410,7 @@ void init(ftScene::Scene* sc)
 {
 	mainCamera.setViewport(fountain::mainWin.w, fountain::mainWin.h);
 	mainCamera.setProjectionType(FT_PERSPECTIVE);
-	scale = 1.0f;
+	scale = 150.0f;
 	dx = 0.0f;
 	dy = 0.0f;
 	cx = 0.0f;

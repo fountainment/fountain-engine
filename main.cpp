@@ -28,6 +28,7 @@ void fountain::gameInit()
 
 	SP.init();
 	SP.setUniform("time", 0.0f);
+	SP.use();
 }
 
 void fountain::singleFrame()
