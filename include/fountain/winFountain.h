@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <GL/gl.h>
+#define GLEW_STATIC
+#include <GL/glew.h>
 #include <windows.h>
 
 #define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)

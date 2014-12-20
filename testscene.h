@@ -438,7 +438,7 @@ void draw(ftScene::Scene* sc)
 	mainCamera.update();
 
 	ftRender::transformBegin();
-	ftRender::useColor(ftColor("#777"));
+	ftRender::useColor(ftColor("#EEE"));
 	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
 
