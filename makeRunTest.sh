@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CC="g++"
-LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lBox2D"
+LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lfreetype -lBox2D"
 CFLAGS="-fexceptions -Wall -O1 -I./include -I. -L./Box2D/Build/bin/Release -L. -s"
 BOX2D="Box2D/Build/bin/Release/libBox2D.a"
 

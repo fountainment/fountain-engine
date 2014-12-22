@@ -9,6 +9,7 @@
 #include <fountain/ft_input.h>
 #include <fountain/ft_algorithm.h>
 #include <fountain/ft_scene.h>
+#include <fountain/ft_type.h>
 
 namespace fountain {
 
@@ -36,6 +37,7 @@ void initAllSystem() {
 	ftInput::init();
 	ftAlgorithm::init();
 	ftScene::init();
+	ftType::init();
 }
 
 void gameInit();
