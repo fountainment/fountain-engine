@@ -37,6 +37,7 @@
 		<Compiler>
 			<Add directory="include" />
 			<Add directory="." />
+			<Add directory="/usr/include/freetype2" />
 		</Compiler>
 		<Linker>
 			<Add library="fountain" />
@@ -44,6 +45,7 @@
 			<Add library="GLEW" />
 			<Add library="GL" />
 			<Add library="freeimage" />
+			<Add library="freetype" />
 			<Add library="Box2D" />
 		</Linker>
 		<Unit filename="main.cpp" />

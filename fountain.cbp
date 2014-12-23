@@ -37,6 +37,7 @@
 			<Add option="-Wall" />
 			<Add directory="include" />
 			<Add directory="." />
+			<Add directory="/usr/include/freetype2" />
 		</Compiler>
 		<Unit filename="ft_3dmodel.cpp" />
 		<Unit filename="ft_algorithm.cpp" />
@@ -46,6 +47,7 @@
 		<Unit filename="ft_render.cpp" />
 		<Unit filename="ft_scene.cpp" />
 		<Unit filename="ft_time.cpp" />
+		<Unit filename="ft_type.cpp" />
 		<Unit filename="include/fountain.h" />
 		<Unit filename="include/fountain/fountaindef.h" />
 		<Unit filename="include/fountain/ft_3dmodel.h" />
@@ -56,6 +58,7 @@
 		<Unit filename="include/fountain/ft_render.h" />
 		<Unit filename="include/fountain/ft_scene.h" />
 		<Unit filename="include/fountain/ft_time.h" />
+		<Unit filename="include/fountain/ft_type.h" />
 		<Unit filename="include/fountain/linFountain.h" />
 		<Unit filename="include/fountain/winFountain.h" />
 		<Extensions>
