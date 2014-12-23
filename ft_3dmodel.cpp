@@ -23,7 +23,7 @@ ObjModel::ObjModel(const char *fileName)
 
 ObjModel::~ObjModel()
 {
-	delete vtx;
+	delete [] vtx;
 }
 
 void ObjModel::openFile(const char *fileName)
