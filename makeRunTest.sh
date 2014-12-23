@@ -2,7 +2,7 @@
 
 CC="g++"
 LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lfreetype -lBox2D"
-CFLAGS="-fexceptions -Wall -O1 -I./include -I. -L./Box2D/Build/bin/Release -L. -s"
+CFLAGS="-fexceptions -Wall -O1 -I./include -I. -I/usr/include/freetype2 -L./Box2D/Build/bin/Release -L. -s"
 BOX2D="Box2D/Build/bin/Release/libBox2D.a"
 
 if [ ! -f $BOX2D ]; then

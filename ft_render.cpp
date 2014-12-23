@@ -145,12 +145,33 @@ void ftRender::setClearColor(int r, int g, int b)
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
 }
 
+int data2Texture(unsigned char *bits, int width, int height, bool transp)
+{
+	GLuint gl_texID;
+	glGenTextures(1, &gl_texID);
+	glBindTexture(GL_TEXTURE_2D, gl_texID);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	if (transp)
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
+		             GL_BGRA, GL_UNSIGNED_BYTE, bits);
+	else
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR,
+		             GL_UNSIGNED_BYTE, bits);
+	return gl_texID;
+}
+
 texInfo loadTexture(const char *filename)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib;
 	BYTE *bits;
-	unsigned int width, height;
+	int width, height;
+	bool transp = false;
 	GLuint gl_texID;
 	texInfo tex;
 	tex.id = -1;
@@ -166,18 +187,10 @@ texInfo loadTexture(const char *filename)
 	bits = FreeImage_GetBits(dib);
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
-	glGenTextures(1, &gl_texID);
-	glBindTexture(GL_TEXTURE_2D, gl_texID);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	if (fif == FIF_PNG)
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-		             GL_BGRA, GL_UNSIGNED_BYTE, bits);
-	else
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR,
-		             GL_UNSIGNED_BYTE, bits);
+
+	if (fif == FIF_PNG) transp = true;
+	gl_texID = data2Texture(bits, width, height, transp);
+
 	FreeImage_Unload(dib);
 	tex.id = gl_texID;
 	tex.w = width;

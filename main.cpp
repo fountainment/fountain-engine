@@ -3,6 +3,7 @@
 ftTime::Clock mainClock(60.0);
 ftScene::SceneSelector SS;
 ftRender::ShaderProgram SP("resources/shader/vs.vert", "resources/shader/fs.frag");
+ftType::FontMan fm;
 
 #include "testscene.h"
 #include <string>
@@ -25,6 +26,9 @@ void fountain::gameInit()
 	SS.registerScene(&startScene, FT_StartScene);
 	SS.registerScene(&gameScene, FT_Scene2);
 	SS.registerScene(&modelScene, FT_Scene3);
+
+	fm.loadFont("resources/font/wqy-microhei.ttc");
+	fm.genAsciiTable();
 
 	SP.init();
 	SP.setUniform("time", 0.0f);
