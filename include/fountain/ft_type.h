@@ -4,6 +4,13 @@
 namespace ftType {
 
 	bool init();
+
+	class fontMan {
+	public:
+		fontMan();
+		bool loadFont();
+		void drawString();
+	};
 };
 
 #endif
