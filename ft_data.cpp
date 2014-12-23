@@ -536,14 +536,14 @@ bool ftFile::isLoad()
 void ftFile::free()
 {
 	if (str != NULL) {
-		delete str;
+		delete [] str;
 		str = NULL;
 	}
 }
 
 bool ftFile::load(const char *filename)
 {
-	if (isLoad()) free();
+	free();
 	std::strcpy(name, filename);
 	FILE *f = std::fopen(filename, "r");
 	int length;

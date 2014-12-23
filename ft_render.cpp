@@ -595,7 +595,7 @@ GLuint compileShader(const GLchar *shaderStr, GLenum shaderType)
 		log = new GLchar[length];
 		glGetShaderInfoLog(shader, length, &length, log);
 		std::printf("//\n%s//\n\n", log);
-		delete log;
+		delete [] log;
 		glDeleteShader(shader);
 		return 0;
 	}
