@@ -175,7 +175,7 @@ void ftRender::setClearColor(int r, int g, int b)
 }
 
 //TODO:change the forth argument to int dataType(FT_BGR, FT_BGRA, FT_Gray, FT_GrayAlpha)
-int data2Texture(unsigned char *bits, int width, int height, bool transp)
+int data2Texture(unsigned char *bits, int width, int height, int dataType)
 {
 	GLuint gl_texID;
 	glGenTextures(1, &gl_texID);

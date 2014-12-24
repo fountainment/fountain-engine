@@ -10,6 +10,13 @@
 #define FT_PLANE 1
 #define FT_PERSPECTIVE 2
 
+#define FT_RGB 1
+#define FT_RGBA 2
+#define FT_BGR 3
+#define FT_BGRA 4
+#define FT_GRAY 5
+#define FT_GRAY_ALPHA 6
+
 typedef struct {
 	int id;
 	int w, h;
