@@ -253,6 +253,16 @@ texInfo loadTexture(const char *filename)
 	return tex;
 }
 
+int ftRender::getPicture(unsigned char *bits, int width, int height, int dataType)
+{
+	texInfo texIf;
+	texIf.id = data2Texture(bits, width, height, dataType);
+	texIf.w = width;
+	texIf.h = height;
+	PicID2TexInfo[curPicID] = texIf;
+	return curPicID++;
+}
+
 int ftRender::getPicture(const char *filename)
 {
 	texInfo texIf;

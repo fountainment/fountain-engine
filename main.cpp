@@ -55,4 +55,6 @@ void fountain::singleFrame()
 	SS.sceneSolve();
 	SS.update();
 	SS.draw();
+
+	ftRender::drawAlphaPic(fm.picID);
 }

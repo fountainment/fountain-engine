@@ -48,7 +48,7 @@ void drawShape(ftShape & shape, float angle = 0.0f);
 
 //TODO: implement this function
 void drawBitmap(unsigned char *bits, int width, int height, int left, int right);
-int data2Texture(unsigned char *bits, int width, int height, bool transp);
+int getPicture(unsigned char *bits, int width, int height, int dataType);
 int getPicture(const char *filename);
 ftVec2 getPicSize(int picID);
 void drawPic(int picID);
