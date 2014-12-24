@@ -63,7 +63,7 @@ void ftRender::init()
 	//glBindVertexArray(VertexArrayID);
 }
 
-void glDrawVectorVec2(const float * v, int n, GLuint glType)
+void glDrawVectorVec2(const float *v, int n, GLuint glType)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, v);
@@ -145,6 +145,7 @@ void ftRender::setClearColor(int r, int g, int b)
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
 }
 
+//TODO:change the forth argument to int dataType(FT_BGR, FT_BGRA, FT_Gray, FT_GrayAlpha)
 int data2Texture(unsigned char *bits, int width, int height, bool transp)
 {
 	GLuint gl_texID;
@@ -258,7 +259,7 @@ void ftRender::drawCircle()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void ftRender::drawShape(ftShape & shape, float angle)
+void ftRender::drawShape(ftShape &shape, float angle)
 {
 	int type = shape.getType();
 	const float *v = shape.getData();
