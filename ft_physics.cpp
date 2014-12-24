@@ -79,10 +79,10 @@ void Body::autoCreateFixtures()
 		b2shape = &pshape;
 		break;
 
-		//TODO: add FT_LINE shape support(create fixture)
-		//case FT_Line:
+	//TODO: add FT_LINE shape support(create fixture)
+	//case FT_Line:
 
-		//break;
+	//break;
 
 	case FT_Rect:
 		v = shape.getData();
