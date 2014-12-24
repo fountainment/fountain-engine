@@ -174,7 +174,6 @@ void ftRender::setClearColor(int r, int g, int b)
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
 }
 
-//TODO:change the forth argument to int dataType(FT_BGR, FT_BGRA, FT_Gray, FT_GrayAlpha)
 int data2Texture(unsigned char *bits, int width, int height, int dataType)
 {
 	GLuint gl_texID;
@@ -186,12 +185,36 @@ int data2Texture(unsigned char *bits, int width, int height, int dataType)
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	if (transp)
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-		             GL_BGRA, GL_UNSIGNED_BYTE, bits);
-	else
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR,
-		             GL_UNSIGNED_BYTE, bits);
+	GLenum internalFormat = GL_RGBA;
+	GLenum format = GL_RGBA;
+	switch (dataType) {
+	case FT_RGB:
+		internalFormat = GL_RGB;
+		format = GL_RGB;
+	break;
+	case FT_RGBA:
+		internalFormat = GL_RGBA;
+		format = GL_RGBA;
+	break;
+	case FT_BGR:
+		internalFormat = GL_RGB;
+		format = GL_BGR;
+	break;
+	case FT_BGRA:
+		internalFormat = GL_RGBA;
+		format = GL_BGRA;
+	break;
+	case FT_GRAY:
+		internalFormat = GL_RGB;
+		format = GL_LUMINANCE;
+	break;
+	case FT_GRAY_ALPHA:
+		internalFormat = GL_RGBA;
+		format = GL_LUMINANCE_ALPHA; 
+	break;
+	}
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0,
+		     format, GL_UNSIGNED_BYTE, bits);
 	return gl_texID;
 }
 
@@ -201,7 +224,6 @@ texInfo loadTexture(const char *filename)
 	FIBITMAP *dib;
 	BYTE *bits;
 	int width, height;
-	bool transp = false;
 	GLuint gl_texID;
 	texInfo tex;
 	tex.id = -1;
@@ -214,12 +236,15 @@ texInfo loadTexture(const char *filename)
 		dib = FreeImage_Load(fif, filename, 0);
 	else
 		return tex;
+
 	bits = FreeImage_GetBits(dib);
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
 
-	if (fif == FIF_PNG) transp = true;
-	gl_texID = data2Texture(bits, width, height, transp);
+	if (fif == FIF_PNG)
+		gl_texID = data2Texture(bits, width, height, FT_BGRA);
+	else
+		gl_texID = data2Texture(bits, width, height, FT_BGR);
 
 	FreeImage_Unload(dib);
 	tex.id = gl_texID;
