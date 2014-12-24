@@ -38,7 +38,7 @@ void initCircleData(GLfloat (*v)[2], int n)
 
 bool GLinit()
 {
-	//TODO: check the OpenGL init state
+	//TODO: complete the OpenGL init state checking
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
 		std::printf("GLEW init failed!\n");
@@ -46,7 +46,12 @@ bool GLinit()
 	} else {
 		std::printf("GLEW Version: %s\n", glewGetString(GLEW_VERSION));
 		std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+	}
+	if (GLEW_VERSION_2_0) {
 		std::printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		std::printf("Shader supported!\n");
+	} else {
+		std::printf("Shader unsupported -_-|||\n");
 	}
 	return true;
 }
