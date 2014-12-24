@@ -45,6 +45,24 @@ bool GLinit()
 	return true;
 }
 
+inline void enableTexture2D()
+{
+	glEnable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 1.0f);
+}
+
+inline void disableTexture2D()
+{
+	glDisable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 0.0f);
+}
+
 void ftRender::init()
 {
 	GLinit();
@@ -285,11 +303,8 @@ void ftRender::drawPic(int picID)
 	GLfloat h2 = tex.h / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
 	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
-	glEnable(GL_TEXTURE_2D);
 
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 1.0f);
+	enableTexture2D();
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
@@ -302,12 +317,7 @@ void ftRender::drawPic(int picID)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glDisable(GL_TEXTURE_2D);
-
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 0.0f);
-
+	disableTexture2D();
 }
 
 void ftRender::drawAlphaPic(int picID)
@@ -317,14 +327,12 @@ void ftRender::drawAlphaPic(int picID)
 	GLfloat h2 = tex.h / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
 	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
-	glEnable(GL_TEXTURE_2D);
 
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 1.0f);
+	enableTexture2D();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glBindTexture(GL_TEXTURE_2D, tex.id);
 
@@ -337,12 +345,8 @@ void ftRender::drawAlphaPic(int picID)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
 
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 0.0f);
-
+	disableTexture2D();
 }
 
 //class ftRender::SubImage
@@ -425,14 +429,12 @@ void ftRender::drawImage(SubImage im)
 		txc[i * 2] = im.texCoor[i].x;
 		txc[i * 2 + 1] = im.texCoor[i].y;
 	}
-	glEnable(GL_TEXTURE_2D);
 
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 1.0f);
+	enableTexture2D();
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	//GLSL exp
@@ -450,11 +452,8 @@ void ftRender::drawImage(SubImage im)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
 
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 0.0f);
+	disableTexture2D();
 
 }
 
