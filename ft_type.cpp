@@ -57,7 +57,7 @@ void FontMan::genAsciiTable()
 				int c = col * w + i;
 				expanded_data[2 * (r * imgW + c)] = 255;
 				expanded_data[2 * (r * imgW + c) + 1] =
-				(i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
+				    (i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
 			}
 		}
 	}

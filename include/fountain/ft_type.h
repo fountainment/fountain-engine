@@ -7,23 +7,23 @@
 
 namespace ftType {
 
-	bool init();
+bool init();
 
-	class FontMan {
-	private:
-		int h;
-		FT_Face face;
-		std::map<char, unsigned> char2Tex;
+class FontMan {
+private:
+	int h;
+	FT_Face face;
+	std::map<char, unsigned> char2Tex;
 
-	public:
-		//EXP: type
-		int picID;
-		FontMan();
-		~FontMan();
-		bool loadFont(const char *fontname);
-		void genAsciiTable();
-		void drawString(const char *str);
-	};
+public:
+	//EXP: type
+	int picID;
+	FontMan();
+	~FontMan();
+	bool loadFont(const char *fontname);
+	void genAsciiTable();
+	void drawString(const char *str);
+};
 };
 
 #endif

@@ -191,30 +191,30 @@ int data2Texture(unsigned char *bits, int width, int height, int dataType)
 	case FT_RGB:
 		internalFormat = GL_RGB;
 		format = GL_RGB;
-	break;
+		break;
 	case FT_RGBA:
 		internalFormat = GL_RGBA;
 		format = GL_RGBA;
-	break;
+		break;
 	case FT_BGR:
 		internalFormat = GL_RGB;
 		format = GL_BGR;
-	break;
+		break;
 	case FT_BGRA:
 		internalFormat = GL_RGBA;
 		format = GL_BGRA;
-	break;
+		break;
 	case FT_GRAY:
 		internalFormat = GL_RGB;
 		format = GL_LUMINANCE;
-	break;
+		break;
 	case FT_GRAY_ALPHA:
 		internalFormat = GL_RGBA;
-		format = GL_LUMINANCE_ALPHA; 
-	break;
+		format = GL_LUMINANCE_ALPHA;
+		break;
 	}
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0,
-		     format, GL_UNSIGNED_BYTE, bits);
+	             format, GL_UNSIGNED_BYTE, bits);
 	return gl_texID;
 }
 
