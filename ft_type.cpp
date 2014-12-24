@@ -58,6 +58,7 @@ void FontMan::genAsciiTable()
 		}
 		//TODO: use the data to create texture
 		//TODO: or get all the bitmaps to generate a big texture and use SubImage to draw
+		this->bitmap = expanded_data;
 	}
-	delete [] expanded_data;
+	//delete [] expanded_data;
 }

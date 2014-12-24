@@ -12,6 +12,8 @@ namespace ftType {
 	class FontMan {
 	private:
 		int h;
+		//TODO: delete this bitmap, use int texID to store it
+		unsigned char *bitmap;
 		FT_Face face;
 		std::map<char, unsigned> char2Tex;
 
