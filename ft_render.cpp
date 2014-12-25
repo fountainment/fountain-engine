@@ -17,9 +17,11 @@ static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
 
-static GLfloat circle8[8][2];
-static GLfloat circle32[32][2];
-static GLfloat circle128[128][2];
+static GLfloat circle8[8 * 2];
+static GLfloat circle32[32 * 2];
+static GLfloat circle128[128 * 2];
+
+static GLfloat defaultTexCoor[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
 //static GLuint VertexArrayID;
 
@@ -27,14 +29,6 @@ static float globalR, globalG, globalB, globalA;
 
 static ShaderProgram *currentShader = NULL;
 
-void initCircleData(GLfloat (*v)[2], int n)
-{
-	float d = 3.14159f * 2.0f / n;
-	for (int i = 0; i < n; i++) {
-		v[i][0] = std::sin(d * i);
-		v[i][1] = std::cos(d * i);
-	}
-}
 
 bool GLinit()
 {
@@ -56,22 +50,13 @@ bool GLinit()
 	return true;
 }
 
-inline void enableTexture2D()
+void initCircleData(GLfloat *v, int n)
 {
-	glEnable(GL_TEXTURE_2D);
-
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 1.0f);
-}
-
-inline void disableTexture2D()
-{
-	glDisable(GL_TEXTURE_2D);
-
-	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("useTex", 0.0f);
+	float d = 3.14159f * 2.0f / n;
+	for (int i = 0; i < n; i++) {
+		v[i * 2] = std::sin(d * i);
+		v[i * 2 + 1] = std::cos(d * i);
+	}
 }
 
 void ftRender::init()
@@ -92,7 +77,35 @@ void ftRender::init()
 	//glBindVertexArray(VertexArrayID);
 }
 
-void glDrawVectorVec2(const float * v, int n, GLuint glType)
+//some OpenGL functions
+inline void enableTexture2D()
+{
+	glEnable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 1.0f);
+}
+
+inline void disableTexture2D()
+{
+	glDisable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 0.0f);
+}
+
+inline void bindTexture(int id)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("tex", id);
+}
+
+inline void drawFloat2(const GLfloat *v, int n, GLuint glType)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, v);
@@ -229,11 +242,8 @@ int ftRender::getPicture(const char *filename)
 
 void ftRender::drawLine(float x1, float y1, float x2, float y2)
 {
-	GLfloat vtx1[] = {x1, y1, x2, y2};
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, vtx1);
-	glDrawArrays(GL_LINES, 0, 2);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	GLfloat vtx[] = {x1, y1, x2, y2};
+	drawFloat2(vtx, 2, GL_LINES);
 }
 
 void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
@@ -245,13 +255,10 @@ void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
 	float h2 = h / 2.0f;
-	GLfloat vtx1[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
+	GLfloat vtx[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, vtx1);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	drawFloat2(vtx, 4, GL_TRIANGLE_FAN);
 	glDisable(GL_BLEND);
 }
 
@@ -268,10 +275,7 @@ void ftRender::drawRect(ftRect rct, float angle)
 
 void ftRender::drawCircle()
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, circle32);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 32);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	drawFloat2(circle32, 32, GL_TRIANGLE_FAN);
 }
 
 void ftRender::drawShape(ftShape & shape, float angle)
@@ -288,11 +292,11 @@ void ftRender::drawShape(ftShape & shape, float angle)
 		break;
 
 	case FT_Polygon:
-		glDrawVectorVec2(v, n, GL_TRIANGLE_FAN);
+		drawFloat2(v, n, GL_TRIANGLE_FAN);
 		break;
 
 	case FT_Line:
-		glDrawVectorVec2(v, n, GL_LINE_STRIP);
+		drawFloat2(v, n, GL_LINE_STRIP);
 		break;
 
 	case FT_Rect:
@@ -313,17 +317,16 @@ void ftRender::drawPic(int picID)
 	GLfloat w2 = tex.w / 2.0f;
 	GLfloat h2 = tex.h / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
-	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
 	enableTexture2D();
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+	bindTexture(tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glTexCoordPointer(2, GL_FLOAT, 0, defaultTexCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -337,7 +340,6 @@ void ftRender::drawAlphaPic(int picID)
 	GLfloat w2 = tex.w / 2.0f;
 	GLfloat h2 = tex.h / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
-	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
 	enableTexture2D();
 
@@ -345,12 +347,12 @@ void ftRender::drawAlphaPic(int picID)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+	bindTexture(tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glTexCoordPointer(2, GL_FLOAT, 0, defaultTexCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -449,10 +451,7 @@ void ftRender::drawImage(SubImage im)
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 
 	//GLSL exp
-	if (currentShader != NULL)
-		currentShader->setUniform("tex", tex.id);
-
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+	bindTexture(tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
