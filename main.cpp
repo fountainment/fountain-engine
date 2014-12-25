@@ -27,7 +27,7 @@ void fountain::gameInit()
 	SS.registerScene(&gameScene, FT_Scene2);
 	SS.registerScene(&modelScene, FT_Scene3);
 
-	fm.loadFont("resources/font/wqy-microhei.ttc");
+	fm.loadFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
 	fm.genAsciiTable();
 
 	SP.init();
