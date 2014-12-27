@@ -18,11 +18,12 @@ bool ftType::init()
 
 FontMan::FontMan()
 {
-	h = 16;
+	picID = 0;
 }
 
 FontMan::~FontMan()
 {
+	//TODO: release the pic generated
 }
 
 bool FontMan::loadFont(const char *fontname)
@@ -34,8 +35,9 @@ bool FontMan::loadFont(const char *fontname)
 	return true;
 }
 
-void FontMan::genAsciiTable()
+void FontMan::genAsciiTable(int h)
 {
+	//TODO: check the state of picID
 	FT_Set_Pixel_Sizes(face, 0, h);
 	FT_Glyph glyph;
 	int w = h;

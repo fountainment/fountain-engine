@@ -11,7 +11,6 @@ bool init();
 
 class FontMan {
 private:
-	int h;
 	FT_Face face;
 	std::map<char, unsigned> char2Tex;
 
@@ -21,7 +20,7 @@ public:
 	FontMan();
 	~FontMan();
 	bool loadFont(const char *fontname);
-	void genAsciiTable();
+	void genAsciiTable(int h);
 	void drawString(const char *str);
 };
 };

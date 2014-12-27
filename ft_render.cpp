@@ -467,13 +467,13 @@ std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName
 	return ans;
 }
 
-SubImagePool::SubImagePool(const char * picName, const char * sipName)
+SubImagePool::SubImagePool(const char * picName, const char *sipName)
 {
 	picID = ftRender::getPicture(picName);
 	nameHash2SubImage = getMapFromSip(picID, sipName);
 }
 
-const SubImage & SubImagePool::getImage(const char * imageName)
+const SubImage & SubImagePool::getImage(const char *imageName)
 {
 	int hash = ftAlgorithm::bkdrHash(imageName);
 	return nameHash2SubImage[hash];

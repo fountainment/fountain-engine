@@ -3,9 +3,11 @@
 #include <cstring>
 
 static const unsigned char lOne[] = {0x00, 0x80, 0xc0, 0xe0,
-			0xf0, 0xf8, 0xfc, 0xfe, 0xff};
+                                     0xf0, 0xf8, 0xfc, 0xfe, 0xff
+                                    };
 static const unsigned char rOne[] = {0x00, 0x01, 0x03, 0x07,
-			0x0f, 0x1f, 0x3f, 0x7f, 0xff};
+                                     0x0f, 0x1f, 0x3f, 0x7f, 0xff
+                                    };
 
 void ftAlgorithm::init()
 {
@@ -58,8 +60,12 @@ std::vector<unsigned long> ftAlgorithm::utf8toUnicode(const char *input)
 			i += 1;
 			break;
 
-		case 2:case 3:case 4:
-		case 5:case 6:case 7:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6:
+		case 7:
 			ulTmp = (unsigned long)(ucTmp & rOne[7 - t]);
 			for (int j = 1; j < t; j++) {
 				ulTmp <<= 6;

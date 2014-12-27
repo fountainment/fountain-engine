@@ -29,7 +29,7 @@ void fountain::gameInit()
 
 	//fm.loadFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
 	fm.loadFont("/usr/share/fonts/truetype/wqy/wqy-microhei.ttc");
-	fm.genAsciiTable();
+	fm.genAsciiTable(16);
 
 	SP.init();
 	SP.setUniform("time", 0.0f);
