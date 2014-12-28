@@ -60,6 +60,7 @@ void useFFP();
 class SubImage {
 private:
 public:
+	//TODO: move the data to private
 	int picID;
 	ftVec2 size;
 	ftVec2 texCoor[4];

@@ -1,5 +1,6 @@
 #include <fountain/ft_type.h>
 #include <fountain/ft_render.h>
+#include <fountain/ft_algorithm.h>
 #include <cstdio>
 #include <ftglyph.h>
 
