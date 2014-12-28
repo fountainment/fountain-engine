@@ -29,7 +29,7 @@ void fountain::gameInit()
 
 	//fm.loadFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
 	fm.loadFont("/usr/share/fonts/truetype/wqy/wqy-microhei.ttc");
-	fm.genAsciiTable(16);
+	fm.genStringTable("我能吞下玻璃而不伤身体!", 16);
 
 	SP.init();
 	SP.setUniform("time", 0.0f);

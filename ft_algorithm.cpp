@@ -85,3 +85,10 @@ std::vector<unsigned long> ftAlgorithm::utf8toUnicode(const char *input)
 	}
 	return res;
 }
+
+int ftAlgorithm::nextPower2(int num)
+{
+	int rVal = 1;
+	while (rVal < num) rVal <<= 1;
+	return rVal;
+}
