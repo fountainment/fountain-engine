@@ -44,6 +44,9 @@ ftVec2 getPicSize(int picID);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
 
+void deletePicture(int picID);
+void deleteAllPictures();
+
 void useShader();
 void useFFP();
 
