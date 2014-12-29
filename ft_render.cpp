@@ -1,4 +1,6 @@
 //TODO: replace "//GLSL exp" with better solution
+//TODO: add deletePicture() and deleteAllPictures()
+//TODO: provide RTT(render to texture) function
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
 #define GLEW_STATIC
@@ -409,6 +411,34 @@ void ftRender::drawAlphaPic(int picID)
 	glDisable(GL_BLEND);
 
 	disableTexture2D();
+}
+
+void ftRender::deletePicture(int picID)
+{
+	texInfo tex = PicID2TexInfo[picID];
+	GLuint texID = tex.id;
+	glDeleteTextures(1, &texID);
+	PicID2TexInfo.erase(picID);
+	std::map<int, int>::iterator mapIt;
+	std::vector<int> delList;
+	for (mapIt = Hash2PicID.begin(); mapIt != Hash2PicID.end(); ++mapIt) {
+		if (mapIt->second == picID)
+			delList.push_back(mapIt->first);
+	}
+	for (unsigned i = 0; i < delList.size(); i++)
+		Hash2PicID.erase(delList[i]);
+}
+
+void ftRender::deleteAllPictures()
+{
+	GLuint texID;
+	std::map<int, texInfo>::iterator mapIt;
+	for (mapIt = PicID2TexInfo.begin(); mapIt != PicID2TexInfo.end(); ++mapIt) {
+		texID = (mapIt->second).id;
+		glDeleteTextures(1, &texID);
+	}
+	Hash2PicID.clear();
+	PicID2TexInfo.clear();
 }
 
 //class ftRender::SubImage
