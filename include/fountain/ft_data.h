@@ -86,6 +86,7 @@ public:
 	ftVec2 getLT();
 	ftVec2 getRT();
 	ftVec2 getRB();
+	void getFloatVertex(float *v);
 
 	void move(float x, float y);
 	void normalize();

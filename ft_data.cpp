@@ -161,6 +161,18 @@ ftVec2 ftRect::getRB()
 	return ftVec2(x + w, y);
 }
 
+void ftRect::getFloatVertex(float *v)
+{
+	v[0] = x;
+	v[1] = y;
+	v[2] = x + w;
+	v[3] = y;
+	v[4] = x + w;
+	v[5] = y + h;
+	v[6] = x;
+	v[7] = y + h;
+}
+
 void ftRect::move(float x, float y)
 {
 	this->x += x;

@@ -2,7 +2,6 @@
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
 #include <cstdio>
-#include <ftglyph.h>
 
 using ftType::FontMan;
 
@@ -49,14 +48,11 @@ void FontMan::genAsciiTable(int h)
 	int imgH = h * rows;
 
 	FT_Set_Pixel_Sizes(face, 0, h);
-	FT_Glyph glyph;
+	FT_GlyphSlot slot = face->glyph;
 	unsigned char* expanded_data = new unsigned char[2 * imgW * imgH];
 	for (unsigned char ch = 0; ch < 128; ch++) {
-		FT_Load_Glyph(face, FT_Get_Char_Index(face, ch), FT_LOAD_DEFAULT);
-		FT_Get_Glyph(face->glyph, &glyph);
-		FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
-		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
+		FT_Load_Char(face, ch, FT_LOAD_RENDER);
+		FT_Bitmap& bitmap = slot->bitmap;
 		int row = ch / cols;
 		int col = ch % cols;
 		for(int j = 0; j < h; j++) {
@@ -65,7 +61,8 @@ void FontMan::genAsciiTable(int h)
 				int c = col * w + i;
 				expanded_data[2 * (r * imgW + c)] = 255;
 				expanded_data[2 * (r * imgW + c) + 1] =
-				    (i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
+				    (i >= bitmap.width || j >= bitmap.rows) ?
+				    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
 			}
 		}
 	}
@@ -89,14 +86,12 @@ void FontMan::genStringTable(const char *str, int h)
 	int imgH = h * rows;
 
 	FT_Set_Pixel_Sizes(face, 0, h);
-	FT_Glyph glyph;
+	FT_GlyphSlot slot = face->glyph;
 	unsigned char* expanded_data = new unsigned char[2 * imgW * imgH];
 	for (int ci = 0; ci < strSize; ci++) {
-		FT_Load_Glyph(face, FT_Get_Char_Index(face, v[ci]), FT_LOAD_DEFAULT);
-		FT_Get_Glyph(face->glyph, &glyph);
-		FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, 0, 1);
-		FT_BitmapGlyph bitmap_glyph = (FT_BitmapGlyph)glyph;
-		FT_Bitmap& bitmap = bitmap_glyph->bitmap;
+		FT_Load_Char(face, v[ci], FT_LOAD_RENDER);
+		FT_Bitmap& bitmap = slot->bitmap;
+		//std::printf("%d %d %d %d\n", slot->bitmap_left, slot->bitmap_top, bitmap.width, bitmap.rows);
 		int row = ci / cols;
 		int col = ci % cols;
 		for(int j = 0; j < h; j++) {
@@ -105,7 +100,8 @@ void FontMan::genStringTable(const char *str, int h)
 				int c = col * w + i;
 				expanded_data[2 * (r * imgW + c)] = 255;
 				expanded_data[2 * (r * imgW + c) + 1] =
-				    (i >= bitmap.width || j >= bitmap.rows) ? 0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
+				    (i >= bitmap.width || j >= bitmap.rows) ?
+				    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
 			}
 		}
 	}

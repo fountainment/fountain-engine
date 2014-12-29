@@ -10,6 +10,7 @@
 #define FT_PLANE 1
 #define FT_PERSPECTIVE 2
 
+#define FT_FORMAT_MAX 16
 #define FT_RGB 1
 #define FT_RGBA 2
 #define FT_BGR 3
@@ -46,8 +47,8 @@ void drawRect(ftRect rct, float angle = 0.0f);
 void drawCircle();
 void drawShape(ftShape & shape, float angle = 0.0f);
 
-//TODO: implement this function
-void drawBitmap(unsigned char *bits, int width, int height, int left, int right);
+//TODO: implement this function drawBitmap
+void drawBitmap(unsigned char *bits, int width, int height, int dataType = FT_RGBA, int x = 0, int y = 0);
 int getPicture(unsigned char *bits, int width, int height, int dataType);
 int getPicture(const char *filename);
 ftVec2 getPicSize(int picID);
@@ -66,7 +67,7 @@ public:
 	//TODO: move the data to private
 	int picID;
 	ftVec2 size;
-	ftVec2 texCoor[4];
+	float texCoor[8];
 //public:
 	SubImage();
 	SubImage(int picID, ftRect rect);

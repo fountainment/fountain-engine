@@ -24,6 +24,15 @@ static GLfloat circle128[128 * 2];
 
 static GLfloat defaultTexCoor[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
+//TODO: make this transform more simple
+GLuint FT2InternalFormat[FT_FORMAT_MAX] = {GL_RGBA, GL_RGB, GL_RGBA, GL_RGB,
+                                           GL_RGBA, GL_RGB, GL_RGBA, GL_RGBA
+                                          };
+GLuint FT2Format[FT_FORMAT_MAX] = {GL_RGBA, GL_RGB, GL_RGBA, GL_BGR,
+                                   GL_BGRA, GL_LUMINANCE,
+                                   GL_LUMINANCE_ALPHA, GL_RGBA
+                                  };
+
 //static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
@@ -43,7 +52,8 @@ bool GLinit()
 		std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
 	}
 	if (GLEW_VERSION_2_0) {
-		std::printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		std::printf("GLSL Version: %s\n",
+			glGetString(GL_SHADING_LANGUAGE_VERSION));
 		std::printf("Shader supported!\n");
 	} else {
 		std::printf("Shader unsupported -_-|||\n");
@@ -199,34 +209,8 @@ int data2Texture(unsigned char *bits, int width, int height, int dataType)
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	GLenum internalFormat = GL_RGBA;
-	GLenum format = GL_RGBA;
-	switch (dataType) {
-	case FT_RGB:
-		internalFormat = GL_RGB;
-		format = GL_RGB;
-		break;
-	case FT_RGBA:
-		internalFormat = GL_RGBA;
-		format = GL_RGBA;
-		break;
-	case FT_BGR:
-		internalFormat = GL_RGB;
-		format = GL_BGR;
-		break;
-	case FT_BGRA:
-		internalFormat = GL_RGBA;
-		format = GL_BGRA;
-		break;
-	case FT_GRAY:
-		internalFormat = GL_RGB;
-		format = GL_LUMINANCE;
-		break;
-	case FT_GRAY_ALPHA:
-		internalFormat = GL_RGBA;
-		format = GL_LUMINANCE_ALPHA;
-		break;
-	}
+	GLenum internalFormat = FT2InternalFormat[dataType];
+	GLenum format = FT2Format[dataType];
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0,
 	             format, GL_UNSIGNED_BYTE, bits);
 	return gl_texID;
@@ -265,6 +249,12 @@ texInfo loadTexture(const char *filename)
 	tex.w = width;
 	tex.h = height;
 	return tex;
+}
+
+void drawBitmap(unsigned char *bits, int width, int height, int dataType, int x, int y)
+{
+	//TODO: deal with the drawing position
+	glDrawPixels(width, height, FT2Format[dataType], GL_UNSIGNED_BYTE, bits);
 }
 
 int ftRender::getPicture(unsigned char *bits, int width, int height, int dataType)
@@ -454,10 +444,7 @@ SubImage::SubImage(int picID, ftRect rect)
 	ftRect texRect = rect;
 	ftVec2 pSize = ftRender::getPicSize(picID);
 	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
-	texCoor[0] = texRect.getLB();
-	texCoor[1] = texRect.getRB();
-	texCoor[2] = texRect.getRT();
-	texCoor[3] = texRect.getLT();
+	texRect.getFloatVertex(texCoor);
 }
 
 SubImage::SubImage(const char * picName, ftRect rect)
@@ -467,10 +454,7 @@ SubImage::SubImage(const char * picName, ftRect rect)
 	ftRect texRect = rect;
 	ftVec2 pSize = ftRender::getPicSize(picID);
 	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
-	texCoor[0] = texRect.getLB();
-	texCoor[1] = texRect.getRB();
-	texCoor[2] = texRect.getRT();
-	texCoor[3] = texRect.getLT();
+	texRect.getFloatVertex(texCoor);
 }
 
 //class ftRender::SubImagePool
@@ -517,11 +501,6 @@ void ftRender::drawImage(SubImage im)
 	GLfloat w2 = im.size.x / 2.0f;
 	GLfloat h2 = im.size.y / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
-	GLfloat txc[8];
-	for (int i = 0; i < 4; i++) {
-		txc[i * 2] = im.texCoor[i].x;
-		txc[i * 2 + 1] = im.texCoor[i].y;
-	}
 
 	enableTexture2D();
 
@@ -536,7 +515,7 @@ void ftRender::drawImage(SubImage im)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glTexCoordPointer(2, GL_FLOAT, 0, im.texCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -544,7 +523,6 @@ void ftRender::drawImage(SubImage im)
 	glDisable(GL_BLEND);
 
 	disableTexture2D();
-
 }
 
 void ftRender::useFFP()
