@@ -53,7 +53,7 @@ bool GLinit()
 	}
 	if (GLEW_VERSION_2_0) {
 		std::printf("GLSL Version: %s\n",
-			glGetString(GL_SHADING_LANGUAGE_VERSION));
+		            glGetString(GL_SHADING_LANGUAGE_VERSION));
 		std::printf("Shader supported!\n");
 	} else {
 		std::printf("Shader unsupported -_-|||\n");
@@ -122,6 +122,11 @@ inline void drawFloat2(const GLfloat *v, int n, GLuint glType)
 	glVertexPointer(2, GL_FLOAT, 0, v);
 	glDrawArrays(glType, 0, n);
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void ftRender::clearColorDepthBuffer()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ftRender::transformBegin()

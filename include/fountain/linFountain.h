@@ -1,9 +1,9 @@
-#include <cstdio>
-#include <GL/glew.h>
+#include <fountain/ft_render.h>
 #include <GL/glx.h>
 #include <X11/X.h>
 #include <X11/keysym.h>
 
+#include <cstdio>
 #include <cstring>
 
 #define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
@@ -268,12 +268,10 @@ int main(int argc, char **argv)
 			}
 		}
 		fountain::sysMouse.update(mouseX, mouseY);
-		//TODO: move the outside OpenGL word to ft_render
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glColor3f(1.0, 1.0, 1.0);
-		glPushMatrix();
+		ftRender::clearColorDepthBuffer();
+		ftRender::transformBegin();
 		fountain::singleFrame();
-		glPopMatrix();
+		ftRender::transformEnd();
 		glXSwapBuffers(dpy, win);
 	}
 	return 0;

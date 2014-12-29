@@ -26,6 +26,8 @@ typedef struct {
 namespace ftRender {
 void init();
 
+void clearColorDepthBuffer();
+
 void transformBegin();
 void transformEnd();
 void ftTranslate(float x, float y, float z = 0.0f);
