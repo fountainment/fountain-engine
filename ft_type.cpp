@@ -24,7 +24,7 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//TODO: release the pic generated
+	//TODO: fix the bug
 	//ftRender::deletePicture(picID);
 }
 

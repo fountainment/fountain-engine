@@ -100,6 +100,8 @@ void draw(ftScene::Scene* sc)
 
 void destroy(ftScene::Scene* sc)
 {
+	ftRender::deletePicture(pic1);
+	ftRender::deletePicture(pic2);
 }
 
 };

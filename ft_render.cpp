@@ -1,5 +1,4 @@
 //TODO: replace "//GLSL exp" with better solution
-//TODO: add deletePicture() and deleteAllPictures()
 //TODO: provide RTT(render to texture) function
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
@@ -415,18 +414,20 @@ void ftRender::drawAlphaPic(int picID)
 
 void ftRender::deletePicture(int picID)
 {
-	texInfo tex = PicID2TexInfo[picID];
-	GLuint texID = tex.id;
-	glDeleteTextures(1, &texID);
-	PicID2TexInfo.erase(picID);
-	std::map<int, int>::iterator mapIt;
-	std::vector<int> delList;
-	for (mapIt = Hash2PicID.begin(); mapIt != Hash2PicID.end(); ++mapIt) {
-		if (mapIt->second == picID)
-			delList.push_back(mapIt->first);
+	std::map<int, texInfo>::iterator it = PicID2TexInfo.find(picID);
+	if (it != PicID2TexInfo.end()) {
+		texInfo tex = it->second;
+		GLuint texID = tex.id;
+		glDeleteTextures(1, &texID);
+		PicID2TexInfo.erase(it);
+		std::map<int, int>::iterator mapIt;
+		for (mapIt = Hash2PicID.begin(); mapIt != Hash2PicID.end(); ++mapIt) {
+			if (mapIt->second == picID) {
+				Hash2PicID.erase(mapIt);
+				break;
+			}
+		}
 	}
-	for (unsigned i = 0; i < delList.size(); i++)
-		Hash2PicID.erase(delList[i]);
 }
 
 void ftRender::deleteAllPictures()
