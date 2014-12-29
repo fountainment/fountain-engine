@@ -25,6 +25,7 @@ FontMan::FontMan()
 FontMan::~FontMan()
 {
 	//TODO: release the pic generated
+	//ftRender::deletePicture(picID);
 }
 
 bool FontMan::loadFont(const char *fontname)
@@ -40,6 +41,7 @@ bool FontMan::loadFont(const char *fontname)
 void FontMan::genAsciiTable(int h)
 {
 	//TODO: check the state of picID
+	h = ftAlgorithm::nextPower2(h);
 	int w = h;
 	int cols = 16;
 	int rows = 8;
@@ -68,19 +70,20 @@ void FontMan::genAsciiTable(int h)
 		}
 	}
 	//TODO: use SubImage to draw?
-	picID = ftRender::getPicture(expanded_data, w * rows, h * cols, FT_GRAY_ALPHA);
+	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
 	delete [] expanded_data;
 }
 
 void FontMan::genStringTable(const char *str, int h)
 {
 	//TODO: check the state of picID
+	h = ftAlgorithm::nextPower2(h);
 	std::vector<unsigned long> v = ftAlgorithm::utf8toUnicode(str);
 	int strSize = v.size();
 	int size = ftAlgorithm::nextPower2(strSize);
-	int rows = 1;
-	while (size / rows > rows) rows <<= 1;
-	int cols = size / rows;
+	int cols = 1;
+	while (size / cols > cols) cols <<= 1;
+	int rows = size / cols;
 	int w = h;
 	int imgW = w * cols;
 	int imgH = h * rows;
@@ -107,6 +110,6 @@ void FontMan::genStringTable(const char *str, int h)
 		}
 	}
 	//TODO: use SubImage to draw?
-	picID = ftRender::getPicture(expanded_data, w * rows, h * cols, FT_GRAY_ALPHA);
+	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
 	delete [] expanded_data;
 }

@@ -525,6 +525,7 @@ ftFile::~ftFile()
 
 ftFile::ftFile(const char *filename)
 {
+	str = NULL;
 	load(filename);
 }
 

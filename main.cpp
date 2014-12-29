@@ -28,8 +28,9 @@ void fountain::gameInit()
 	SS.registerScene(&modelScene, FT_Scene3);
 
 	//fm.loadFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
+	ftFile lData("resources/data/letters.dat");
 	fm.loadFont("/usr/share/fonts/truetype/wqy/wqy-microhei.ttc");
-	fm.genStringTable("我能吞下玻璃而不伤身体!", 16);
+	fm.genStringTable(lData.getStr(), 16);
 
 	SP.init();
 	SP.setUniform("time", 0.0f);
