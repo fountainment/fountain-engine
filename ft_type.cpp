@@ -91,6 +91,7 @@ void FontMan::genStringTable(const char *str, int h)
 	for (int ci = 0; ci < strSize; ci++) {
 		FT_Load_Char(face, v[ci], FT_LOAD_RENDER);
 		FT_Bitmap& bitmap = slot->bitmap;
+		//TODO: save the slot's data in FontMan
 		//std::printf("%d %d %d %d\n", slot->bitmap_left, slot->bitmap_top, bitmap.width, bitmap.rows);
 		int row = ci / cols;
 		int col = ci % cols;
