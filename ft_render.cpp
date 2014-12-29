@@ -1,4 +1,6 @@
 //TODO: replace "//GLSL exp" with better solution
+//TODO: add deletePicture() and deleteAllPictures()
+//TODO: provide RTT(render to texture) function
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
 #define GLEW_STATIC
