@@ -16,6 +16,20 @@ bool ftType::init()
 	return true;
 }
 
+void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int imgW, int w, int h, int row, int col)
+{
+		for(int j = 0; j < h; j++) {
+			for(int i = 0; i < w; i++) {
+				int r = row * h + j;
+				int c = col * w + i;
+				expanded_data[2 * (r * imgW + c)] = 255;
+				expanded_data[2 * (r * imgW + c) + 1] =
+				    (i >= bitmap.width || j >= bitmap.rows) ?
+				    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
+			}
+		}
+}
+
 FontMan::FontMan()
 {
 	picID = 0;
@@ -23,7 +37,7 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//TODO: fix the bug
+	//TODO: fix the bug (double free when delete the pic)
 	//ftRender::deletePicture(picID);
 }
 
@@ -55,16 +69,7 @@ void FontMan::genAsciiTable(int h)
 		FT_Bitmap& bitmap = slot->bitmap;
 		int row = ch / cols;
 		int col = ch % cols;
-		for(int j = 0; j < h; j++) {
-			for(int i = 0; i < w; i++) {
-				int r = row * h + j;
-				int c = col * w + i;
-				expanded_data[2 * (r * imgW + c)] = 255;
-				expanded_data[2 * (r * imgW + c) + 1] =
-				    (i >= bitmap.width || j >= bitmap.rows) ?
-				    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
-			}
-		}
+		copyBitmapToBufferData(bitmap, expanded_data, imgW, w, h, row, col);
 	}
 	//TODO: use SubImage to draw?
 	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
@@ -95,16 +100,7 @@ void FontMan::genStringTable(const char *str, int h)
 		//std::printf("%d %d %d %d\n", slot->bitmap_left, slot->bitmap_top, bitmap.width, bitmap.rows);
 		int row = ci / cols;
 		int col = ci % cols;
-		for(int j = 0; j < h; j++) {
-			for(int i = 0; i < w; i++) {
-				int r = row * h + j;
-				int c = col * w + i;
-				expanded_data[2 * (r * imgW + c)] = 255;
-				expanded_data[2 * (r * imgW + c) + 1] =
-				    (i >= bitmap.width || j >= bitmap.rows) ?
-				    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
-			}
-		}
+		copyBitmapToBufferData(bitmap, expanded_data, imgW, w, h, row, col);
 	}
 	//TODO: use SubImage to draw?
 	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
