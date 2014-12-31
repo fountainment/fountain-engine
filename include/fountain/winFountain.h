@@ -1,6 +1,4 @@
 #include <stdio.h>
-#define GLEW_STATIC
-#include <GL/glew.h>
 #include <windows.h>
 
 #define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
@@ -124,11 +122,10 @@ WinMain(HINSTANCE hInstance,
 		GetCursorPos(&mousePos);
 		ScreenToClient(hwnd, &mousePos);
 		fountain::sysMouse.update(mousePos.x, mousePos.y);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glColor3f(1.0, 1.0, 1.0);
-		glPushMatrix();
+		ftRender::clearColorDepthBuffer();
+		ftRender::transformBegin();
 		fountain::singleFrame();
-		glPopMatrix();
+		ftRender::transformEnd();
 		SwapBuffers(hDC);
 	}
 
