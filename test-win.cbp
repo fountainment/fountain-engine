@@ -45,6 +45,7 @@
 			<Add library="opengl32" />
 			<Add library="glu32" />
 			<Add library="FreeImage" />
+			<Add library="freetype" />
 			<Add library="Box2D" />
 		</Linker>
 		<Unit filename="icon.rc">

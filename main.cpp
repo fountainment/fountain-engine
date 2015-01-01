@@ -27,9 +27,8 @@ void fountain::gameInit()
 	SS.registerScene(&gameScene, FT_Scene2);
 	SS.registerScene(&modelScene, FT_Scene3);
 
-	//fm.loadFont("/usr/share/fonts/truetype/freefont/FreeSans.ttf");
 	ftFile lData("resources/data/letters.dat");
-	fm.loadFont("/usr/share/fonts/truetype/wqy/wqy-microhei.ttc");
+	fm.loadFont("resources/font/test.ttc");
 	fm.genStringTable(lData.getStr(), 16);
 
 	SP.init();

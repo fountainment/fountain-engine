@@ -10,4 +10,5 @@ obj/
 *.a
 *.dll
 *.orig
+font/
 main
