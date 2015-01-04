@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <windows.h>
 
+#pragma comment(lib, "fountain.lib")
+#pragma comment(lib, "Box2D.lib")
+#pragma comment(lib, "freetype.lib")
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "glew.lib")
+#pragma comment(lib, "FreeImage.lib")
+
 #define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
 
 POINT mousePos;
