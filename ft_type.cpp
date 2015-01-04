@@ -54,26 +54,12 @@ bool FontMan::loadFont(const char *fontname)
 void FontMan::genAsciiTable(int h)
 {
 	//TODO: check the state of picID
-	h = ftAlgorithm::nextPower2(h);
-	int w = h;
-	int cols = 16;
-	int rows = 8;
-	int imgW = w * cols;
-	int imgH = h * rows;
-
-	FT_Set_Pixel_Sizes(face, 0, h);
-	FT_GlyphSlot slot = face->glyph;
-	unsigned char* expanded_data = new unsigned char[2 * imgW * imgH];
-	for (unsigned char ch = 0; ch < 128; ch++) {
-		FT_Load_Char(face, ch, FT_LOAD_RENDER);
-		FT_Bitmap& bitmap = slot->bitmap;
-		int row = ch / cols;
-		int col = ch % cols;
-		copyBitmapToBufferData(bitmap, expanded_data, imgW, w, h, row, col);
-	}
-	//TODO: use SubImage to draw?
-	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
-	delete [] expanded_data;
+	char asciiTable[129];
+	asciiTable[0] = ' ';
+	for (int i = 1; i < 128; i++)
+		asciiTable[i] = i;
+	asciiTable[128] = '\0';
+	this->genStringTable(asciiTable, h);
 }
 
 void FontMan::genStringTable(const char *str, int h)
