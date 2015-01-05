@@ -65,18 +65,19 @@ void useFFP();
 
 class SubImage {
 private:
-public:
-	//TODO: move the data to private
 	int picID;
 	ftVec2 size;
 	float texCoor[8];
-//public:
+public:
 	SubImage();
 	SubImage(int picID, ftRect rect);
-	SubImage(const char * picName, ftRect rect);
+	SubImage(const char *picName, ftRect rect);
+	int getPicID();
+	const ftVec2 & getSize();
+	const float * getTexCoor();
 };
 
-void drawImage(SubImage im);
+void drawImage(SubImage & im);
 
 class SubImagePool {
 private:
@@ -84,8 +85,8 @@ private:
 	std::map<int, SubImage> nameHash2SubImage;
 	static std::map<int, SubImage> getMapFromSip(int pid, const char * sipName);
 public:
-	SubImagePool(const char * picName, const char * sipName);
-	const SubImage & getImage(const char * imageName);
+	SubImagePool(const char *picName, const char *sipName);
+	const SubImage & getImage(const char *imageName);
 };
 
 class Camera {

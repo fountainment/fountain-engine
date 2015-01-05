@@ -462,6 +462,21 @@ SubImage::SubImage(const char * picName, ftRect rect)
 	texRect.getFloatVertex(texCoor);
 }
 
+int SubImage::getPicID()
+{
+	return picID;
+}
+
+const ftVec2 & SubImage::getSize()
+{
+	return size;
+}
+
+const float * SubImage::getTexCoor()
+{
+	return texCoor;
+}
+
 //class ftRender::SubImagePool
 std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName)
 {
@@ -500,11 +515,15 @@ const SubImage & SubImagePool::getImage(const char *imageName)
 }
 
 //test
-void ftRender::drawImage(SubImage im)
+void ftRender::drawImage(SubImage & im)
 {
-	texInfo tex = PicID2TexInfo[im.picID];
-	GLfloat w2 = im.size.x / 2.0f;
-	GLfloat h2 = im.size.y / 2.0f;
+	int picID = im.getPicID();
+	ftVec2 size = im.getSize();
+	const float *texCoor = im.getTexCoor();	
+
+	texInfo tex = PicID2TexInfo[picID];
+	GLfloat w2 = size.x / 2.0f;
+	GLfloat h2 = size.y / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
 
 	enableTexture2D();
@@ -520,7 +539,7 @@ void ftRender::drawImage(SubImage im)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, im.texCoor);
+	glTexCoordPointer(2, GL_FLOAT, 0, texCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
