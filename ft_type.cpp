@@ -18,16 +18,16 @@ bool ftType::init()
 
 void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int imgW, int w, int h, int row, int col)
 {
-		for(int j = 0; j < h; j++) {
-			for(int i = 0; i < w; i++) {
-				int r = row * h + j;
-				int c = col * w + i;
-				expanded_data[2 * (r * imgW + c)] = 255;
-				expanded_data[2 * (r * imgW + c) + 1] =
-				    (i >= bitmap.width || j >= bitmap.rows) ?
-				    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
-			}
+	for(int j = 0; j < h; j++) {
+		for(int i = 0; i < w; i++) {
+			int r = row * h + j;
+			int c = col * w + i;
+			expanded_data[2 * (r * imgW + c)] = 255;
+			expanded_data[2 * (r * imgW + c) + 1] =
+			    (i >= bitmap.width || j >= bitmap.rows) ?
+			    0 : bitmap.buffer[i + bitmap.width * (bitmap.rows - 1 - j)];
 		}
+	}
 }
 
 FontMan::FontMan()

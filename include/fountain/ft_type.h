@@ -17,7 +17,6 @@ private:
 
 public:
 	//EXP: type
-	//TODO: implement the genStringTable()
 	//TODO: move the picID to private
 	int picID;
 	FontMan();
