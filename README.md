@@ -21,9 +21,11 @@ GLEW
 
 FreeImage
 
+FreeType
+
 Box2D
 
-Xlib(on Linux)
+Xlib(Linux)
 
 Our Site
 ========
