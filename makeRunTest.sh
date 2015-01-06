@@ -22,9 +22,7 @@ if [ -f "main" ]; then
 	rm -f main
 fi
 
-if [ ! -f "libfountain.a" ]; then
-	make
-fi
+make
 
 $CC main.cpp -o main $CFLAGS $LIBS 
 
