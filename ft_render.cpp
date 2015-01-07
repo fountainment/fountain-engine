@@ -145,6 +145,11 @@ void ftRender::ftTranslate(float x, float y, float z)
 	glTranslatef(x, y, z);
 }
 
+void ftRender::ftTranslate(ftVec2 xy, float z)
+{
+	ftRender::ftTranslate(xy.x, xy.y, z);
+}
+
 void ftRender::ftRotate(float xAngle, float yAngle, float zAngle)
 {
 	glRotatef(xAngle, 1.0f, 0.0f, 0.0f);

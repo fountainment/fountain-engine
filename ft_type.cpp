@@ -2,6 +2,7 @@
 #include <fountain/ft_render.h>
 #include <fountain/ft_algorithm.h>
 #include <cstdio>
+#include <vector>
 
 using ftType::FontMan;
 
@@ -47,6 +48,7 @@ bool FontMan::loadFont(const char *fontname)
 	if (error) {
 		return false;
 	}
+	useKerning = FT_HAS_KERNING(face);
 	return true;
 }
 
@@ -65,6 +67,7 @@ void FontMan::genAsciiTable(int h)
 void FontMan::genStringTable(const char *str, int h)
 {
 	//TODO: check the state of picID
+	//TODO: create a SubImage to store default char
 	h = ftAlgorithm::nextPower2(h);
 	std::vector<unsigned long> v = ftAlgorithm::utf8toUnicode(str);
 	int strSize = v.size();
@@ -83,12 +86,28 @@ void FontMan::genStringTable(const char *str, int h)
 		FT_Load_Char(face, v[ci], FT_LOAD_RENDER);
 		FT_Bitmap& bitmap = slot->bitmap;
 		//TODO: save the slot's data in FontMan
-		//std::printf("%d %d %d %d\n", slot->bitmap_left, slot->bitmap_top, bitmap.width, bitmap.rows);
+		//std::printf("%d %d %d %d %ld\n", slot->bitmap_left, slot->bitmap_top - bitmap.rows, bitmap.width, bitmap.rows, (slot->advance.x >> 6));
+		//TODO: gen SubImage
 		int row = ci / cols;
 		int col = ci % cols;
 		copyBitmapToBufferData(bitmap, expanded_data, imgW, w, h, row, col);
 	}
-	//TODO: use SubImage to draw?
 	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
 	delete [] expanded_data;
+}
+
+//TODO: complete this function
+void FontMan::drawString(const char *str, int startX, int startY)
+{
+	std::vector<unsigned long> s = ftAlgorithm::utf8toUnicode(str);
+	ftVec2 pen(startX, startY);
+	for (unsigned i = 0; i < s.size(); i++) {
+		ftType::charInfo ch = unicode2charInfo[s[i]];
+		ftRender::SubImage im = unicode2SubImage[s[i]];
+		ftRender::transformBegin();
+		  ftRender::ftTranslate(pen + ch.center);
+		  ftRender::drawImage(im);
+		ftRender::transformEnd();
+		pen = pen + ch.advance;
+	}
 }
