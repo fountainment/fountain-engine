@@ -29,7 +29,7 @@ void fountain::gameInit()
 
 	ftFile lData("resources/data/letters.dat");
 	fm.loadFont("resources/font/test.ttc");
-	fm.genStringTable(lData.getStr(), 16);
+	fm.genStringTable(lData.getStr(), 32);
 
 	SP.init();
 	SP.setUniform("time", 0.0f);
@@ -56,4 +56,6 @@ void fountain::singleFrame()
 	SS.sceneSolve();
 	SS.update();
 	SS.draw();
+
+	fm.drawString("Test Avoid Hello Fountain! Good luck! good!你好");
 }

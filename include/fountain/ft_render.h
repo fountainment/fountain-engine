@@ -41,6 +41,7 @@ void useColor(ftColor c);
 
 void openLineSmooth();
 void openPointSmooth();
+void openPolygonSmooth();
 void setClearColor(int r, int g, int b);
 
 void drawLine(float x1, float y1, float x2, float y2);
@@ -73,6 +74,7 @@ public:
 	SubImage();
 	SubImage(int picID, ftRect rect);
 	SubImage(const char *picName, ftRect rect);
+	void setPicID(int id);
 	int getPicID();
 	const ftVec2 & getSize();
 	const float * getTexCoor();

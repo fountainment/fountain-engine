@@ -203,6 +203,13 @@ void ftRender::openPointSmooth()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void ftRender::openPolygonSmooth()
+{
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void ftRender::setClearColor(int r, int g, int b)
 {
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
@@ -467,6 +474,11 @@ SubImage::SubImage(const char * picName, ftRect rect)
 	texRect.getFloatVertex(texCoor);
 }
 
+void SubImage::setPicID(int id)
+{
+	picID = id;
+}
+
 int SubImage::getPicID()
 {
 	return picID;
@@ -524,7 +536,7 @@ void ftRender::drawImage(SubImage & im)
 {
 	int picID = im.getPicID();
 	ftVec2 size = im.getSize();
-	const float *texCoor = im.getTexCoor();	
+	const float *texCoor = im.getTexCoor();
 
 	texInfo tex = PicID2TexInfo[picID];
 	GLfloat w2 = size.x / 2.0f;

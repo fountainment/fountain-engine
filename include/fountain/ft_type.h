@@ -10,12 +10,14 @@ namespace ftType {
 
 bool init();
 
-typedef struct
+class charInfo
 {
-	//TODO: data of single charactor
+public:
+	charInfo();
+	charInfo(ftVec2 ct, ftVec2 adv);
 	ftVec2 center;
 	ftVec2 advance;
-} charInfo;
+};
 
 class FontMan {
 private:
@@ -31,7 +33,7 @@ public:
 	bool loadFont(const char *fontname);
 	void genAsciiTable(int h = 16);
 	void genStringTable(const char *str, int h = 16);
-	void drawString(const char *str, int startX, int startY);
+	void drawString(const char *str);
 };
 
 };

@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <vector>
 
+using ftType::charInfo;
 using ftType::FontMan;
 
 FT_Library library;
@@ -15,6 +16,19 @@ bool ftType::init()
 		return false;
 	}
 	return true;
+}
+
+//class ftType::charInfo
+charInfo::charInfo()
+{
+	center = ftVec2(0.0f, 0.0f);
+	advance = ftVec2(0.0f, 0.0f);
+}
+
+charInfo::charInfo(ftVec2 ct, ftVec2 adv)
+{
+	center = ct;
+	advance = adv;
 }
 
 void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int imgW, int w, int h, int row, int col)
@@ -31,6 +45,7 @@ void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int
 	}
 }
 
+//class ftType::FontMan
 FontMan::FontMan()
 {
 	picID = 0;
@@ -82,32 +97,51 @@ void FontMan::genStringTable(const char *str, int h)
 	FT_Set_Pixel_Sizes(face, 0, h);
 	FT_GlyphSlot slot = face->glyph;
 	unsigned char* expanded_data = new unsigned char[2 * imgW * imgH];
+	std::vector<ftRect> rectV;
 	for (int ci = 0; ci < strSize; ci++) {
 		FT_Load_Char(face, v[ci], FT_LOAD_RENDER);
 		FT_Bitmap& bitmap = slot->bitmap;
-		//TODO: save the slot's data in FontMan
-		//std::printf("%d %d %d %d %ld\n", slot->bitmap_left, slot->bitmap_top - bitmap.rows, bitmap.width, bitmap.rows, (slot->advance.x >> 6));
-		//TODO: gen SubImage
+		ftVec2 center(slot->bitmap_left + bitmap.width / 2.0f,
+		              slot->bitmap_top - bitmap.rows + bitmap.rows / 2.0f);
+		ftVec2 advance(slot->advance.x >> 6, slot->advance.y >> 6);
+		charInfo ch(center, advance);
+		unicode2charInfo[v[ci]] = ch;
 		int row = ci / cols;
 		int col = ci % cols;
+		ftRect si(col * w, row * h, bitmap.width, bitmap.rows);
+		rectV.push_back(si);
 		copyBitmapToBufferData(bitmap, expanded_data, imgW, w, h, row, col);
 	}
 	picID = ftRender::getPicture(expanded_data, imgW, imgH, FT_GRAY_ALPHA);
+	for (int ci = 0; ci < strSize; ci++) {
+		ftRender::SubImage t(picID, rectV[ci]);
+		unicode2SubImage[v[ci]] = t;
+	}
 	delete [] expanded_data;
 }
 
 //TODO: complete this function
-void FontMan::drawString(const char *str, int startX, int startY)
+void FontMan::drawString(const char *str)
 {
 	std::vector<unsigned long> s = ftAlgorithm::utf8toUnicode(str);
-	ftVec2 pen(startX, startY);
+	ftVec2 pen(0, 0);
+	FT_Int previous = 0;
+	FT_UInt glyphIndex;
 	for (unsigned i = 0; i < s.size(); i++) {
-		ftType::charInfo ch = unicode2charInfo[s[i]];
+		charInfo ch = unicode2charInfo[s[i]];
 		ftRender::SubImage im = unicode2SubImage[s[i]];
 		ftRender::transformBegin();
-		  ftRender::ftTranslate(pen + ch.center);
-		  ftRender::drawImage(im);
+		ftRender::ftTranslate(pen + ch.center);
+		ftRender::drawImage(im);
 		ftRender::transformEnd();
 		pen = pen + ch.advance;
+		//kerning
+		glyphIndex = FT_Get_Char_Index(face, s[i]);
+		if (useKerning && previous && glyphIndex) {
+			FT_Vector delta;
+			FT_Get_Kerning(face, previous, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			pen.x += delta.x >> 6;
+		}
+		previous = glyphIndex;
 	}
 }
