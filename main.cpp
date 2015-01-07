@@ -57,5 +57,14 @@ void fountain::singleFrame()
 	SS.update();
 	SS.draw();
 
-	fm.drawString("Test Avoid Hello Fountain! Good luck! good!你好");
+	//test
+	ftRender::transformBegin();
+	  ftRender::ftTranslate(-300, 0);
+	  fm.drawString("Welcome to Fountain Game Engine!");
+	ftRender::transformEnd();
+
+	ftRender::transformBegin();
+	  ftRender::ftTranslate(-300, -100);
+	  fm.drawString("你好，这里是Fountain游戏引擎！");
+	ftRender::transformEnd();
 }
