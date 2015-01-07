@@ -10,10 +10,16 @@ namespace ftType {
 
 bool init();
 
+typedef struct
+{
+	//TODO: data of single charactor
+} charInfo;
+
 class FontMan {
 private:
 	FT_Face face;
 	std::map<unsigned long, ftRender::SubImage> unicode2SubImage;
+	std::map<unsigned long, ftType::charInfo> unicode2charInfo;
 
 public:
 	//EXP: type
