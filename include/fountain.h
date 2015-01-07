@@ -10,6 +10,7 @@
 #include <fountain/ft_algorithm.h>
 #include <fountain/ft_scene.h>
 #include <fountain/ft_type.h>
+#include <fountain/ft_audio.h>
 
 namespace fountain {
 
@@ -38,6 +39,7 @@ void initAllSystem() {
 	ftAlgorithm::init();
 	ftScene::init();
 	ftType::init();
+	ftAudio::init();
 }
 
 void gameInit();

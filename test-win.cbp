@@ -47,6 +47,7 @@
 			<Add library="FreeImage" />
 			<Add library="freetype" />
 			<Add library="Box2D" />
+			<Add library="OpenAL32" />
 		</Linker>
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
