@@ -6,8 +6,24 @@
 #include <iostream>
 #include <string>
 
+using ftAudio::Channel;
+
 ALCdevice *dev;
 ALCcontext *ctx;
+
+ALfloat listenerPos[] = {0.0, 0.0, 4.0};
+ALfloat listenerVel[] = {0.0, 0.0, 0.0};
+ALfloat	listenerOri[] = {0.0, 0.0, 1.0, 0.0, 1.0, 0.0};
+
+ALfloat sourcePos[] = {0.0, 0.0, 0.0};
+ALfloat sourceVel[] = {0.0, 0.0, 0.0};
+
+#define TEST_ERROR(_msg)		\
+	error = alGetError();		\
+	if (error != AL_NO_ERROR) {	\
+		fprintf(stderr, _msg "\n");	\
+		return -1;		\
+	}
 
 /*
 * Special thanks to Oliver Plunkett
@@ -48,8 +64,8 @@ struct WAVE_Data {
 };
 
 /*
- * Load wave file function. No need for ALUT with this
- */
+* Load wave file function. No need for ALUT with this
+*/
 bool loadWavFile(const std::string filename, ALuint* buffer,
 		ALsizei* size, ALsizei* frequency, ALenum* format) {
 	//Local Declarations
@@ -126,7 +142,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		}
 		//create our openAL buffer and check for success
 		alGenBuffers(1, buffer);
-		//errorCheck();
+		  //errorCheck();
 		//now we put our data into the openAL buffer and
 		//check for success
 		alBufferData(*buffer, *format, (void*)data,
@@ -160,13 +176,63 @@ bool ftAudio::init()
 		std::printf("Oops! Context create failed!\n");
 		return false;
 	}
+	alListenerfv(AL_POSITION,listenerPos);
+	alListenerfv(AL_VELOCITY,listenerVel);
+	alListenerfv(AL_ORIENTATION,listenerOri);
 	return true;
 }
 
-//TODO: implement int loadSound()
-/*
-int ftAudio::loadSound(const char *filename)
+void ftAudio::destroy()
 {
-	
+	alcMakeContextCurrent(NULL);
+	alcDestroyContext(ctx);
+	alcCloseDevice(dev);
 }
-*/
+
+//class ftAudio::Channel
+Channel::Channel()
+{
+}
+
+Channel::~Channel()
+{
+	alDeleteSources(1, &source);
+	alDeleteBuffers(1, &buffer);
+}
+
+void Channel::init()
+{
+	alGenSources((ALuint)1, &source);
+	alSourcef(source, AL_PITCH, 1.0f);
+	alSourcef(source, AL_GAIN, 1.0f);
+	alSourcefv(source, AL_POSITION, sourcePos);
+	alSourcefv(source, AL_VELOCITY, sourceVel);
+	alSourcei(source, AL_LOOPING, AL_FALSE);
+}
+
+bool Channel::load(const char *filename)
+{
+	ALsizei size, frequency;
+	ALenum format;
+	bool state = loadWavFile(filename, &buffer, &size, &frequency, &format);
+	if (!state) {
+		return false;
+	}
+	alSourcei(source, AL_BUFFER, buffer);
+	return true;
+}
+
+void Channel::play()
+{
+	alSourcePlay(source);
+}
+
+void Channel::pause()
+{
+	alSourcePause(source);
+}
+
+void Channel::stop()
+{
+	alSourceStop(source);
+}

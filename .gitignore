@@ -11,4 +11,5 @@ obj/
 *.dll
 *.orig
 font/
+sound/
 main

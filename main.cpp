@@ -4,6 +4,7 @@ ftTime::Clock mainClock(60.0);
 ftScene::SceneSelector SS;
 ftRender::ShaderProgram SP("resources/shader/vs.vert", "resources/shader/fs.frag");
 ftType::FontMan fm;
+ftAudio::Channel cha;
 
 #include "testscene.h"
 #include <string>
@@ -34,6 +35,10 @@ void fountain::gameInit()
 	SP.init();
 	SP.setUniform("time", 0.0f);
 	SP.use();
+
+	cha.init();
+	cha.load("resources/sound/test.wav");
+	cha.play();
 }
 
 void fountain::singleFrame()
@@ -46,12 +51,15 @@ void fountain::singleFrame()
 	SP.setUniform("resolution", fountain::getWinSize());
 	SP.setUniform("mouse", mp);
 
-	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyUp)
+	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyDown)
 		SP.use();
-	if (fountain::sysKeyboard.getState(FT_F) == FT_KeyUp)
+	if (fountain::sysKeyboard.getState(FT_F) == FT_KeyDown)
 		ftRender::useFFP();
-	if (fountain::sysKeyboard.getState(FT_R) == FT_KeyUp)
+	if (fountain::sysKeyboard.getState(FT_R) == FT_KeyDown)
 		SP.reload();
+
+	if (fountain::sysKeyboard.getState(FT_X) == FT_isDown)
+		cha.play();
 
 	SS.sceneSolve();
 	SS.update();
