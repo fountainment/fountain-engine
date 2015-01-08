@@ -47,6 +47,7 @@
 			<Add library="freeimage" />
 			<Add library="freetype" />
 			<Add library="Box2D" />
+			<Add library="openal" />
 		</Linker>
 		<Unit filename="main.cpp" />
 		<Unit filename="testscene.h" />

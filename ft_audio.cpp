@@ -37,7 +37,7 @@ ALfloat sourceVel[] = {0.0, 0.0, 0.0};
 */
 struct RIFF_Header {
 	char chunkID[4];
-	long chunkSize; //size not including chunkSize or chunkID
+	int chunkSize; //size not including chunkSize or chunkID
 	char format[4];
 };
 
@@ -46,11 +46,11 @@ struct RIFF_Header {
 */
 struct WAVE_Format {
 	char subChunkID[4];
-	long subChunkSize;
+	int subChunkSize;
 	short audioFormat;
 	short numChannels;
-	long sampleRate;
-	long byteRate;
+	int sampleRate;
+	int byteRate;
 	short blockAlign;
 	short bitsPerSample;
 };
@@ -60,7 +60,7 @@ struct WAVE_Format {
 */
 struct WAVE_Data {
 	char subChunkID[4]; //should contain the word data
-	long subChunk2Size; //Stores the size of the data block
+	int subChunk2Size; //Stores the size of the data block
 };
 
 /*
@@ -74,14 +74,15 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 	RIFF_Header riff_header;
 	WAVE_Data wave_data;
 	unsigned char* data;
+	size_t tmp;
 
 	try {
 		soundFile = fopen(filename.c_str(), "rb");
 		if (!soundFile)
-			throw (filename);
+			throw (filename.c_str());
 
 		// Read in the first chunk into the struct
-		fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
+		tmp = fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
 
 		//check for RIFF and WAVE tag in memeory
 		if ((riff_header.chunkID[0] != 'R' ||
@@ -95,7 +96,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 			throw ("Invalid RIFF or WAVE Header");
 
 		//Read in the 2nd chunk for the wave info
-		fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
+		tmp = fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
 		//check for fmt tag in memory
 		if (wave_format.subChunkID[0] != 'f' ||
 			wave_format.subChunkID[1] != 'm' ||
@@ -108,7 +109,8 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 			fseek(soundFile, sizeof(short), SEEK_CUR);
 
 		//Read in the the last byte of data before the sound file
-		fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
+		tmp = fread(&wave_data, sizeof(WAVE_Data), 1, soundFile);
+		if (!tmp) {};
 		//check for data tag in memory
 		if (wave_data.subChunkID[0] != 'd' ||
 			wave_data.subChunkID[1] != 'a' ||
@@ -151,7 +153,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		//clean up and return true if successful
 		fclose(soundFile);
 		return true;
-	} catch(std::string error) {
+	} catch(const char *error) {
 		//our catch statement for if we throw a string
 		std::cerr << error << " : trying to load "
 		<< filename << std::endl;
