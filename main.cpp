@@ -67,12 +67,12 @@ void fountain::singleFrame()
 
 	//test
 	ftRender::transformBegin();
-	  ftRender::ftTranslate(-300, 0);
+	  ftRender::ftTranslate(-300, 230);
 	  fm.drawString("Welcome to Fountain Game Engine!");
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
-	  ftRender::ftTranslate(-300, -100);
+	  ftRender::ftTranslate(-300, 180);
 	  fm.drawString("你好，这里是Fountain游戏引擎！");
 	ftRender::transformEnd();
 }
