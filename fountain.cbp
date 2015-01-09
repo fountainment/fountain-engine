@@ -49,6 +49,7 @@
 		<Unit filename="ft_scene.cpp" />
 		<Unit filename="ft_time.cpp" />
 		<Unit filename="ft_type.cpp" />
+		<Unit filename="ft_ui.cpp" />
 		<Unit filename="include/fountain.h" />
 		<Unit filename="include/fountain/fountaindef.h" />
 		<Unit filename="include/fountain/ft_3dmodel.h" />
@@ -61,6 +62,7 @@
 		<Unit filename="include/fountain/ft_scene.h" />
 		<Unit filename="include/fountain/ft_time.h" />
 		<Unit filename="include/fountain/ft_type.h" />
+		<Unit filename="include/fountain/ft_ui.h" />
 		<Unit filename="include/fountain/linFountain.h" />
 		<Unit filename="include/fountain/winFountain.h" />
 		<Extensions>
