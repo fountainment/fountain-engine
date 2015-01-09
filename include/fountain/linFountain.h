@@ -130,6 +130,15 @@ int main(int argc, char **argv)
 
 		XSendEvent(dpy, DefaultRootWindow(dpy), False,
 		           SubstructureNotifyMask, &xev);
+	} else {
+		XSizeHints* hints = XAllocSizeHints();
+		hints->flags = PMinSize | PMaxSize;
+		hints->min_width = fountain::mainWin.w;
+		hints->min_height = fountain::mainWin.h;
+		hints->max_width = fountain::mainWin.w;
+		hints->max_height = fountain::mainWin.h;
+		XSetWMNormalHints(dpy, win, hints);
+		XFree(hints);
 	}
 
 	if (fountain::mainWin.hideCursor)
