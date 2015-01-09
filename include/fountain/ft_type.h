@@ -9,6 +9,7 @@
 namespace ftType {
 
 bool init();
+void close();
 
 class charInfo
 {

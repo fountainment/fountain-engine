@@ -170,6 +170,7 @@ int main(int argc, char **argv)
 				if (event.xclient.data.l[0] ==
 				        (int)wmDeleteMessage)
 				{
+					fountain::closeAllSystem();
 					XDestroyWindow(dpy,
 					               event.xclient.window);
 					XCloseDisplay(dpy);
@@ -189,6 +190,7 @@ int main(int argc, char **argv)
 				         &keysym, NULL) == 1)
 				        && (keysym == (KeySym) XK_Escape))
 				{
+					fountain::closeAllSystem();
 					XDestroyWindow(dpy,
 					               event.xclient.
 					               window);

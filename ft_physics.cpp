@@ -10,7 +10,12 @@ static ftVec2 defaultGravity(0.0f, -10.0f);
 
 static float ratio = 1.0f;
 
-void ftPhysics::init()
+bool ftPhysics::init()
+{
+	return true;
+}
+
+void ftPhysics::close()
 {
 }
 

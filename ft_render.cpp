@@ -70,9 +70,9 @@ void initCircleData(GLfloat *v, int n)
 	}
 }
 
-void ftRender::init()
+bool ftRender::init()
 {
-	GLinit();
+	bool state = GLinit();
 
 	initCircleData(circle8, 8);
 	initCircleData(circle32, 32);
@@ -86,6 +86,11 @@ void ftRender::init()
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
+	return state;
+}
+
+void ftRender::close()
+{
 }
 
 //some OpenGL functions

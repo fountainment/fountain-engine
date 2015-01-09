@@ -18,6 +18,11 @@ bool ftType::init()
 	return true;
 }
 
+void ftType::close()
+{
+	FT_Done_FreeType(library);
+}
+
 //class ftType::charInfo
 charInfo::charInfo()
 {
@@ -53,8 +58,10 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//TODO: fix the bug (double free when delete the pic)
+	//FIXME: double free when delete the pic
 	//ftRender::deletePicture(picID);
+	//TODO: try to do the FT_Done_Face before the module close
+	//FT_Done_Face(face);
 }
 
 bool FontMan::loadFont(const char *fontname)

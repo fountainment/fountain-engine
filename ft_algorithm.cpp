@@ -9,7 +9,12 @@ static const unsigned char rOne[] = {0x00, 0x01, 0x03, 0x07,
                                      0x0f, 0x1f, 0x3f, 0x7f, 0xff
                                     };
 
-void ftAlgorithm::init()
+bool ftAlgorithm::init()
+{
+	return true;
+}
+
+void ftAlgorithm::close()
 {
 }
 

@@ -9,7 +9,12 @@ using ftInput::Keyboard;
 static std::stack<int> buttonChangeList;
 static std::stack<int> keyChangeList;
 
-void ftInput::init()
+bool ftInput::init()
+{
+	return true;
+}
+
+void ftInput::close()
 {
 }
 

@@ -4,7 +4,12 @@
 using ftScene::Scene;
 using ftScene::SceneSelector;
 
-void ftScene::init()
+bool ftScene::init()
+{
+	return true;
+}
+
+void ftScene::close()
 {
 }
 

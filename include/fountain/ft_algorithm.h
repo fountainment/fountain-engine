@@ -7,7 +7,9 @@
 
 namespace ftAlgorithm {
 
-void init();
+bool init();
+void close();
+
 int bkdrHash(const char *str);
 float randRangef(float l, float r);
 

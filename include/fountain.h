@@ -32,8 +32,8 @@ void basicSetting() {
 
 void initAllSystem() {
 	ftTime::init();
-	ft3DModel::init();
 	ftRender::init();
+	ft3DModel::init();
 	ftPhysics::init();
 	ftInput::init();
 	ftAlgorithm::init();
@@ -45,6 +45,20 @@ void initAllSystem() {
 void gameInit();
 
 void singleFrame();
+
+void closeAllSystem()
+{
+	ftAudio::close();
+	//FIXME: ftType close bug
+	ftType::close();
+	ftScene::close();
+	ftAlgorithm::close();
+	ftInput::close();
+	ftPhysics::close();
+	ft3DModel::close();
+	ftRender::close();
+	ftTime::close();
+}
 
 ftVec2 getWinSize()
 {

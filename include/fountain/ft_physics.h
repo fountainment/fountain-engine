@@ -13,7 +13,8 @@
 
 namespace ftPhysics {
 
-void init();
+bool init();
+void close();
 
 void setRatio(float rt);
 ftVec2 render2Physics(ftVec2 v);

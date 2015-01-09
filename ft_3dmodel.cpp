@@ -11,7 +11,12 @@ typedef struct {
 	int i[3];
 } ftVec3Index;
 
-void ft3DModel::init()
+bool ft3DModel::init()
+{
+	return true;
+}
+
+void ft3DModel::close()
 {
 }
 

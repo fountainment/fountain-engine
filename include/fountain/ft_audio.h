@@ -6,8 +6,7 @@
 namespace ftAudio {
 	
 bool init();
-
-void destroy();
+void close();
 
 class Channel {
 private:

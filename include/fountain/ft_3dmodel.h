@@ -3,7 +3,8 @@
 
 namespace ft3DModel {
 
-void init();
+bool init();
+void close();
 
 class ObjModel {
 private:

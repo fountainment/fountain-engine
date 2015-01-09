@@ -184,7 +184,7 @@ bool ftAudio::init()
 	return true;
 }
 
-void ftAudio::destroy()
+void ftAudio::close()
 {
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(ctx);
@@ -198,8 +198,9 @@ Channel::Channel()
 
 Channel::~Channel()
 {
-	alDeleteSources(1, &source);
-	alDeleteBuffers(1, &buffer);
+	//seem to be unnecessary to do these
+	//alDeleteSources(1, &source);
+	//alDeleteBuffers(1, &buffer);
 }
 
 void Channel::init()

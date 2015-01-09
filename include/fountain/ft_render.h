@@ -24,7 +24,9 @@ typedef struct {
 } texInfo;
 
 namespace ftRender {
-void init();
+
+bool init();
+void close();
 
 void clearColorDepthBuffer();
 
