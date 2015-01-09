@@ -73,6 +73,6 @@ void fountain::singleFrame()
 
 	ftRender::transformBegin();
 	  ftRender::ftTranslate(-300, 180);
-	  fm.drawString("你好，这里是Fountain游戏引擎！");
+	  fm.drawString("欢迎！这里是Fountain游戏引擎！");
 	ftRender::transformEnd();
 }
