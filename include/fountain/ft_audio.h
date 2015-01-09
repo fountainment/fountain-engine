@@ -4,7 +4,7 @@
 #include <AL/al.h>
 
 namespace ftAudio {
-	
+
 bool init();
 void close();
 

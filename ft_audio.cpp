@@ -67,7 +67,7 @@ struct WAVE_Data {
 * Load wave file function. No need for ALUT with this
 */
 bool loadWavFile(const std::string filename, ALuint* buffer,
-		ALsizei* size, ALsizei* frequency, ALenum* format) {
+                 ALsizei* size, ALsizei* frequency, ALenum* format) {
 	//Local Declarations
 	FILE* soundFile = NULL;
 	WAVE_Format wave_format;
@@ -86,22 +86,22 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 
 		//check for RIFF and WAVE tag in memeory
 		if ((riff_header.chunkID[0] != 'R' ||
-			riff_header.chunkID[1] != 'I' ||
-			riff_header.chunkID[2] != 'F' ||
-			riff_header.chunkID[3] != 'F') ||
-			(riff_header.format[0] != 'W' ||
-				riff_header.format[1] != 'A' ||
-				riff_header.format[2] != 'V' ||
-				riff_header.format[3] != 'E'))
+		        riff_header.chunkID[1] != 'I' ||
+		        riff_header.chunkID[2] != 'F' ||
+		        riff_header.chunkID[3] != 'F') ||
+		        (riff_header.format[0] != 'W' ||
+		         riff_header.format[1] != 'A' ||
+		         riff_header.format[2] != 'V' ||
+		         riff_header.format[3] != 'E'))
 			throw ("Invalid RIFF or WAVE Header");
 
 		//Read in the 2nd chunk for the wave info
 		tmp = fread(&wave_format, sizeof(WAVE_Format), 1, soundFile);
 		//check for fmt tag in memory
 		if (wave_format.subChunkID[0] != 'f' ||
-			wave_format.subChunkID[1] != 'm' ||
-			wave_format.subChunkID[2] != 't' ||
-			wave_format.subChunkID[3] != ' ')
+		        wave_format.subChunkID[1] != 'm' ||
+		        wave_format.subChunkID[2] != 't' ||
+		        wave_format.subChunkID[3] != ' ')
 			throw ("Invalid Wave Format");
 
 		//check for extra parameters;
@@ -113,9 +113,9 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		if (!tmp) {};
 		//check for data tag in memory
 		if (wave_data.subChunkID[0] != 'd' ||
-			wave_data.subChunkID[1] != 'a' ||
-			wave_data.subChunkID[2] != 't' ||
-			wave_data.subChunkID[3] != 'a')
+		        wave_data.subChunkID[1] != 'a' ||
+		        wave_data.subChunkID[2] != 't' ||
+		        wave_data.subChunkID[3] != 'a')
 			throw ("Invalid data header");
 
 		//Allocate memory for data
@@ -144,19 +144,19 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		}
 		//create our openAL buffer and check for success
 		alGenBuffers(1, buffer);
-		  //errorCheck();
+		//errorCheck();
 		//now we put our data into the openAL buffer and
 		//check for success
 		alBufferData(*buffer, *format, (void*)data,
-			*size, *frequency);
-		  //errorCheck();
+		             *size, *frequency);
+		//errorCheck();
 		//clean up and return true if successful
 		fclose(soundFile);
 		return true;
 	} catch(const char *error) {
 		//our catch statement for if we throw a string
 		std::cerr << error << " : trying to load "
-		<< filename << std::endl;
+		          << filename << std::endl;
 		//clean up memory if wave loading fails
 		if (soundFile != NULL)
 			fclose(soundFile);
