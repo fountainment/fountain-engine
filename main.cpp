@@ -18,6 +18,7 @@ void fountain::setBasicVarible()
 	mainWin.isFullScreen = false;
 //	mainWin.isFullScreen = true;
 	mainWin.hideCursor = false;
+//	mainWin.hideCursor = true;
 }
 
 void fountain::gameInit()
@@ -58,7 +59,7 @@ void fountain::singleFrame()
 	if (fountain::sysKeyboard.getState(FT_R) == FT_KeyDown)
 		SP.reload();
 
-	if (fountain::sysKeyboard.getState(FT_X) == FT_isDown)
+	if (fountain::sysKeyboard.getState(FT_X) == FT_KeyDown)
 		cha.play();
 
 	SS.sceneSolve();

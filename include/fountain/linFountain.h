@@ -105,8 +105,6 @@ int main(int argc, char **argv)
 
 	Atom wmDeleteMessage = XInternAtom(dpy, "WM_DELETE_WINDOW", false);
 
-	XMapWindow(dpy, win);
-
 	if (fountain::mainWin.isFullScreen)
 	{
 		XWindowAttributes xwa;
@@ -161,6 +159,8 @@ int main(int argc, char **argv)
 	}
 
 	XSetWMProtocols(dpy, win, &wmDeleteMessage, 1);
+
+	XMapWindow(dpy, win);
 
 	fountain::initAllSystem();
 	fountain::gameInit();
