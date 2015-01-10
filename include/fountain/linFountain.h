@@ -105,8 +105,6 @@ int main(int argc, char **argv)
 
 	Atom wmDeleteMessage = XInternAtom(dpy, "WM_DELETE_WINDOW", false);
 
-	XMapWindow(dpy, win);
-
 	if (fountain::mainWin.isFullScreen)
 	{
 		XWindowAttributes xwa;
@@ -130,6 +128,15 @@ int main(int argc, char **argv)
 
 		XSendEvent(dpy, DefaultRootWindow(dpy), False,
 		           SubstructureNotifyMask, &xev);
+	} else {
+		XSizeHints* hints = XAllocSizeHints();
+		hints->flags = PMinSize | PMaxSize;
+		hints->min_width = fountain::mainWin.w;
+		hints->min_height = fountain::mainWin.h;
+		hints->max_width = fountain::mainWin.w;
+		hints->max_height = fountain::mainWin.h;
+		XSetWMNormalHints(dpy, win, hints);
+		XFree(hints);
 	}
 
 	if (fountain::mainWin.hideCursor)
@@ -152,6 +159,8 @@ int main(int argc, char **argv)
 	}
 
 	XSetWMProtocols(dpy, win, &wmDeleteMessage, 1);
+
+	XMapWindow(dpy, win);
 
 	fountain::initAllSystem();
 	fountain::gameInit();

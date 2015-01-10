@@ -39,15 +39,15 @@ Body::Body()
 	body = NULL;
 	setPosition(0.0f, 0.0f);
 	setRectSize(ftVec2(1.0f, 1.0f));
-	isDynamic = true;
+	bodyType = FT_Dynamic;
 }
 
-Body::Body(float x, float y, bool dynamic)
+Body::Body(float x, float y, int bodyT)
 {
 	body = NULL;
 	setPosition(x, y);
 	setRectSize(ftVec2(1.0f, 1.0f));
-	isDynamic = dynamic;
+	bodyType = bodyT;
 }
 
 void Body::setBody(b2Body* b2bd)
@@ -100,13 +100,20 @@ void Body::autoCreateFixtures()
 		return;
 		break;
 	}
-	if (isDynamic) {
+
+	switch (bodyType) {
+	case FT_Dynamic:
 		defaultFixtureDef.shape = b2shape;
 		defaultFixtureDef.density = 1.0f;
 		defaultFixtureDef.friction = 0.3f;
 		body->CreateFixture(&defaultFixtureDef);
-	} else {
+		break;
+	case FT_Static:
 		body->CreateFixture(b2shape, 0.0f);
+		break;
+	case FT_Kinematic:
+		//TODO: createFixture for kinematicBody
+		break;
 	}
 }
 
@@ -129,10 +136,16 @@ bool World::addBody(Body* bd)
 {
 	ftVec2 pos = bd->getPosition();
 	defaultBodyDef.position.Set(pos.x / ratio, pos.y / ratio);
-	if (bd->isDynamic) {
+	switch (bd->bodyType) {
+	case FT_Dynamic:
 		defaultBodyDef.type = b2_dynamicBody;
-	} else {
+		break;
+	case FT_Static:
 		defaultBodyDef.type = b2_staticBody;
+		break;
+	case FT_Kinematic:
+		defaultBodyDef.type = b2_kinematicBody;
+		break;
 	}
 	if (World::bodyCon.add(bd) == true) {
 		bd->setBody(world->CreateBody(&defaultBodyDef));

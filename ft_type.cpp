@@ -128,7 +128,7 @@ void FontMan::genStringTable(const char *str, int h)
 }
 
 //TODO: complete this function
-void FontMan::drawString(const char *str)
+int FontMan::drawString(const char *str)
 {
 	std::vector<unsigned long> s = ftAlgorithm::utf8toUnicode(str);
 	ftVec2 pen(0, 0);
@@ -151,4 +151,5 @@ void FontMan::drawString(const char *str)
 		}
 		previous = glyphIndex;
 	}
+	return pen.x;
 }
