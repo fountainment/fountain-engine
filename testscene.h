@@ -219,7 +219,7 @@ void init(ftScene::Scene* sc)
 	//Test
 	mouseJoint = NULL;
 
-	bdPoint = new ftPhysics::Body(0, -200, false);
+	bdPoint = new ftPhysics::Body(0, -200, FT_Static);
 	bdPoint->setShape(*groundBox);
 	bdPoint->setColor(randColor());
 	if (!mainWorld.addBody(bdPoint)) {
@@ -288,7 +288,7 @@ void update(ftScene::Scene* sc)
 		}
 
 		if (fountain::sysMouse.getState(FT_RButton)) {
-			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
+			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, FT_Static);
 			bdPoint->setShape(*addShape);
 			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
@@ -310,7 +310,7 @@ void update(ftScene::Scene* sc)
 		else if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.01 && makeRect.getSize().y > 0.01) {
-				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
+				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y);
 				bdPoint->setShape(ftShape(makeRect));
 				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
@@ -331,7 +331,7 @@ void update(ftScene::Scene* sc)
 		else if (fountain::sysMouse.getState(FT_RButton) == FT_ButtonUp) {
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
-				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, false);
+				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, FT_Static);
 				bdPoint->setShape(ftShape(makeRect));
 				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {

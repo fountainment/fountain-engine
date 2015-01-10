@@ -6,7 +6,7 @@
 
 #define BODY_MAXNUM 2000
 
-//TODO: add Kinematic type support
+//TODO: complete Kinematic type support
 #define FT_Static 1
 #define FT_Dynamic 2
 #define FT_Kinematic 3
@@ -25,10 +25,10 @@ class Body : public ftSprite
 private:
 public:
 	b2Body* body;
-	bool isDynamic;
+	int bodyType;
 
 	Body();
-	Body(float x, float y, bool dynamic = true);
+	Body(float x, float y, int bodyT = FT_Dynamic);
 	void setBody(b2Body* b2bd);
 	void autoCreateFixtures();
 	void update();
