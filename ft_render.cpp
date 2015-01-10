@@ -275,7 +275,7 @@ texInfo loadTexture(const char *filename)
 
 void drawBitmap(unsigned char *bits, int width, int height, int dataType, int x, int y)
 {
-	//TODO: deal with the drawing position
+	glRasterPos2i(x, y);
 	glDrawPixels(width, height, FT2Format[dataType], GL_UNSIGNED_BYTE, bits);
 }
 
