@@ -34,7 +34,7 @@ public:
 	bool loadFont(const char *fontname);
 	void genAsciiTable(int h = 16);
 	void genStringTable(const char *str, int h = 16);
-	void drawString(const char *str);
+	int drawString(const char *str);
 };
 
 };
