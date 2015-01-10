@@ -8,6 +8,9 @@ static b2FixtureDef defaultFixtureDef;
 static float defaultTimeStep = 1.0f / 60.0f;
 static ftVec2 defaultGravity(0.0f, -10.0f);
 
+static int defaultVelocityIterations = 8;
+static int defaultPositionIterations = 3;
+
 static float ratio = 1.0f;
 
 bool ftPhysics::init()
@@ -22,6 +25,12 @@ void ftPhysics::close()
 void ftPhysics::setRatio(float rt)
 {
 	ratio = rt;
+}
+
+void ftPhysics::setIterations(int vIter, int pIter)
+{
+	defaultVelocityIterations = vIter;
+	defaultPositionIterations = pIter;
 }
 
 ftVec2 ftPhysics::render2Physics(ftVec2 v)
@@ -60,18 +69,17 @@ void Body::autoCreateFixtures()
 {
 	//Test Code
 	b2Shape *b2shape;
-	b2PolygonShape pshape;
-	b2CircleShape cshape;
-	//b2EdgeShape eshape;
+	b2PolygonShape pShape;
+	b2CircleShape cShape;
+	b2ChainShape chShape;
 	int type = shape.getType();
 	const float * v;
-	b2Vec2 bv[10];
+	b2Vec2 bv[16];
 	int n;
-	switch (type)
-	{
+	switch (type) {
 	case FT_Circle:
-		cshape.m_radius = shape.getR() / ratio;
-		b2shape = &cshape;
+		cShape.m_radius = shape.getR() / ratio;
+		b2shape = &cShape;
 		break;
 
 	case FT_Polygon:
@@ -80,19 +88,25 @@ void Body::autoCreateFixtures()
 		for (int i = 0; i < n; i++) {
 			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
 		}
-		pshape.Set(bv, n);
-		b2shape = &pshape;
+		pShape.Set(bv, n);
+		b2shape = &pShape;
 		break;
 
-	//TODO: add FT_LINE shape support(create fixture)
-	//case FT_Line:
-
-	//break;
+	//TODO: complete FT_LINE shape support(loop)
+	case FT_Line:
+		v = shape.getData();
+		n = shape.getN();
+		for (int i = 0; i < n; i++) {
+			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
+		}
+		chShape.CreateChain(bv, n);
+		b2shape = &chShape;
+		break;
 
 	case FT_Rect:
 		v = shape.getData();
-		pshape.SetAsBox(v[0] / 2.0f / ratio, v[1] / 2.0f / ratio);
-		b2shape = &pshape;
+		pShape.SetAsBox(v[0] / 2.0f / ratio, v[1] / 2.0f / ratio);
+		b2shape = &pShape;
 		break;
 
 	default:
@@ -103,16 +117,15 @@ void Body::autoCreateFixtures()
 
 	switch (bodyType) {
 	case FT_Dynamic:
+	case FT_Kinematic:/* not tested */
 		defaultFixtureDef.shape = b2shape;
 		defaultFixtureDef.density = 1.0f;
 		defaultFixtureDef.friction = 0.3f;
 		body->CreateFixture(&defaultFixtureDef);
 		break;
+
 	case FT_Static:
 		body->CreateFixture(b2shape, 0.0f);
-		break;
-	case FT_Kinematic:
-		//TODO: createFixture for kinematicBody
 		break;
 	}
 }
@@ -121,7 +134,6 @@ void Body::update()
 {
 	b2Vec2 bv = body->GetPosition();
 	float angle = body->GetAngle();
-	//TODO: make ftSprite instance Body's member?
 	setPosition(bv.x * ratio, bv.y * ratio);
 	setAngle(angle);
 }
@@ -136,17 +148,21 @@ bool World::addBody(Body* bd)
 {
 	ftVec2 pos = bd->getPosition();
 	defaultBodyDef.position.Set(pos.x / ratio, pos.y / ratio);
+
 	switch (bd->bodyType) {
 	case FT_Dynamic:
 		defaultBodyDef.type = b2_dynamicBody;
 		break;
+
 	case FT_Static:
 		defaultBodyDef.type = b2_staticBody;
 		break;
+
 	case FT_Kinematic:
 		defaultBodyDef.type = b2_kinematicBody;
 		break;
 	}
+
 	if (World::bodyCon.add(bd) == true) {
 		bd->setBody(world->CreateBody(&defaultBodyDef));
 		bd->autoCreateFixtures();
@@ -181,7 +197,8 @@ void bodyDraw(Body* bd)
 
 void World::update(float timeStep)
 {
-	world->Step(timeStep, 8, 3);
+	world->Step(timeStep, defaultVelocityIterations,
+			defaultPositionIterations);
 	bodyCon.doWith(bodyUpdate);
 }
 
