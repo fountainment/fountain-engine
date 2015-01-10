@@ -8,8 +8,8 @@ static b2FixtureDef defaultFixtureDef;
 static float defaultTimeStep = 1.0f / 60.0f;
 static ftVec2 defaultGravity(0.0f, -10.0f);
 
-static int defaultVelocityIterations = 6;
-static int defaultPositionIterations = 2;
+static int defaultVelocityIterations = 8;
+static int defaultPositionIterations = 3;
 
 static float ratio = 1.0f;
 
@@ -25,6 +25,12 @@ void ftPhysics::close()
 void ftPhysics::setRatio(float rt)
 {
 	ratio = rt;
+}
+
+void ftPhysics::setIterations(int vIter, int pIter)
+{
+	defaultVelocityIterations = vIter;
+	defaultPositionIterations = pIter;
 }
 
 ftVec2 ftPhysics::render2Physics(ftVec2 v)
@@ -111,6 +117,7 @@ void Body::autoCreateFixtures()
 
 	switch (bodyType) {
 	case FT_Dynamic:
+	case FT_Kinematic:/* not tested */
 		defaultFixtureDef.shape = b2shape;
 		defaultFixtureDef.density = 1.0f;
 		defaultFixtureDef.friction = 0.3f;
@@ -119,10 +126,6 @@ void Body::autoCreateFixtures()
 
 	case FT_Static:
 		body->CreateFixture(b2shape, 0.0f);
-		break;
-
-	case FT_Kinematic:
-		//TODO: createFixture for kinematicBody
 		break;
 	}
 }
