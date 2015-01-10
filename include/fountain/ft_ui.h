@@ -6,7 +6,17 @@ namespace ftUI {
 bool init();
 void close();
 
-class Button {
+class Button : public ftSprite {
+private:
+public:
+};
+
+class NineSprite : public ftSprite {
+private:
+public:
+};
+
+class Label : public ftSprite {
 private:
 public:
 };
