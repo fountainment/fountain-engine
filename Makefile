@@ -40,7 +40,7 @@ ft_audio.o: ft_audio.cpp #(FT_H)/ft_audio.h
 	$(CC) -O2 $(CFLAGS) ft_audio.cpp
 
 ft_ui.o: ft_ui.cpp #(FT_H)/ft_ui.h
-	$(CC) -O2 $(CFLAGS) ft_ui.cpp
+	$(CC) -O2 $(CFLAGS) $(FREETYPE) ft_ui.cpp
 
 clean:
 	rm -rf *.o libfountain.a
