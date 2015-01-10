@@ -148,6 +148,7 @@ private:
 	float angle;
 	ftColor color;
 public:
+	//TODO: move the shape out
 	ftShape shape;
 	ftSprite();
 	void setPosition(ftVec2 pos);
@@ -184,7 +185,7 @@ public:
 
 //TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
-class container {
+class container : public ftSprite {
 private:
 	_tp list[_size];
 	int head;

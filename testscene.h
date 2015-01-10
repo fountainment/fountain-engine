@@ -126,6 +126,7 @@ ftShape *testShape2;
 ftShape *addShape;
 ftShape *groundBox;
 ftShape *card;
+ftShape *line;
 ftRender::Camera mainCamera(0, 0, 500);
 std::vector<ftVec2> v;
 
@@ -199,11 +200,18 @@ void init(ftScene::Scene* sc)
 	ftPhysics::setRatio(128.0f);
 
 	v.clear();
-	v.push_back(ftVec2(0,-50));
-	v.push_back(ftVec2(25,0));
-	v.push_back(ftVec2(0,50));
-	v.push_back(ftVec2(-25,0));
+	v.push_back(ftVec2(0, -50));
+	v.push_back(ftVec2(25, 0));
+	v.push_back(ftVec2(0, 50));
+	v.push_back(ftVec2(-25, 0));
 	testShape0 = new ftShape(v , 4, true);
+	v.clear();
+	v.push_back(ftVec2(-200, 0));
+	v.push_back(ftVec2(-100, -50));
+	v.push_back(ftVec2(0, 0));
+	v.push_back(ftVec2(100, -50));
+	v.push_back(ftVec2(200, 0));
+	line = new ftShape(v , 5, false);
 	testShape1 = new ftShape(10);
 	testShape2 = new ftShape(20);
 	groundBox = new ftShape(ftRect(0, 0, 2000, 20));
@@ -221,6 +229,14 @@ void init(ftScene::Scene* sc)
 
 	bdPoint = new ftPhysics::Body(0, -200, FT_Static);
 	bdPoint->setShape(*groundBox);
+	bdPoint->setColor(randColor());
+	if (!mainWorld.addBody(bdPoint)) {
+		mainWorld.delHeadBody();
+		mainWorld.addBody(bdPoint);
+	}
+
+	bdPoint = new ftPhysics::Body(0, 0, FT_Static);
+	bdPoint->setShape(*line);
 	bdPoint->setColor(randColor());
 	if (!mainWorld.addBody(bdPoint)) {
 		mainWorld.delHeadBody();
@@ -391,6 +407,7 @@ void destroy(ftScene::Scene* sc)
 	delete testShape0;
 	delete testShape1;
 	delete testShape2;
+	delete line;
 	delete card;
 	delete groundBox;
 	delete rect;
