@@ -35,6 +35,7 @@ public:
 	void genAsciiTable(int h = 16);
 	void genStringTable(const char *str, int h = 16);
 	int drawString(const char *str);
+	int drawString(std::vector<unsigned long> s);
 };
 
 };

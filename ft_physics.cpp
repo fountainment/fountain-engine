@@ -198,7 +198,7 @@ void bodyDraw(Body* bd)
 void World::update(float timeStep)
 {
 	world->Step(timeStep, defaultVelocityIterations,
-			defaultPositionIterations);
+	            defaultPositionIterations);
 	bodyCon.doWith(bodyUpdate);
 }
 

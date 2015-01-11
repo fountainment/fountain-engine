@@ -205,6 +205,7 @@ public:
 	void doWith(void(*func)(_tp));
 	bool empty();
 	int getAvailN();
+	bool willLive(_tp &node);
 };
 
 template <typename _tp, int _size>
@@ -313,6 +314,12 @@ template <typename _tp, int _size>
 int container<_tp, _size>::getAvailN()
 {
 	return availN;
+}
+
+template <typename _tp, int _size>
+bool container<_tp, _size>::willLive(_tp &node)
+{
+	return true;
 }
 
 namespace fountain {

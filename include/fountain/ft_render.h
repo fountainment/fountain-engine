@@ -82,6 +82,8 @@ public:
 	const float * getTexCoor();
 };
 
+SubImage getImage(int picID);
+SubImage getImage(const char *filename);
 void drawImage(SubImage & im);
 
 class SubImagePool {

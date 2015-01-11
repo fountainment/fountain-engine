@@ -273,7 +273,7 @@ texInfo loadTexture(const char *filename)
 	return tex;
 }
 
-void drawBitmap(unsigned char *bits, int width, int height, int dataType, int x, int y)
+void ftRender::drawBitmap(unsigned char *bits, int width, int height, int dataType, int x, int y)
 {
 	glRasterPos2i(x, y);
 	glDrawPixels(width, height, FT2Format[dataType], GL_UNSIGNED_BYTE, bits);
@@ -534,6 +534,21 @@ const SubImage & SubImagePool::getImage(const char *imageName)
 {
 	int hash = ftAlgorithm::bkdrHash(imageName);
 	return nameHash2SubImage[hash];
+}
+
+//TODO: complete ftRender::getImage
+SubImage ftRender::getImage(int picID)
+{
+	ftRect rct;
+	rct.setSize(ftRender::getPicSize(picID));
+	SubImage res(picID, rct);
+	return res;
+}
+
+SubImage ftRender::getImage(const char *filename)
+{
+	int picID = ftRender::getPicture(filename);
+	return ftRender::getImage(picID);
 }
 
 //test
