@@ -9,6 +9,21 @@ ftAudio::Channel cha;
 #include "testscene.h"
 #include <string>
 
+class testButton : public ftUI::Button
+{
+public:
+	void update()
+	{
+		Button::update();
+		int st = Button::getState();
+		if (st == FT_isOn) setBackColor(FT_White);
+		if (st == FT_isDown) setBackColor(FT_Yellow); 
+		if (st == FT_None) setBackColor(FT_Orange);
+	}
+};
+
+testButton tBut;
+
 void fountain::setBasicVarible()
 {
 	mainWin.setW(800);
@@ -40,6 +55,9 @@ void fountain::gameInit()
 	cha.init();
 	cha.load("resources/sound/test.wav");
 	cha.play();
+
+	tBut.setPosition(0, -100);
+	tBut.setRectSize(ftVec2(200, 50));
 }
 
 void fountain::singleFrame()
@@ -76,4 +94,7 @@ void fountain::singleFrame()
 	  ftRender::ftTranslate(-300, 180);
 	  fm.drawString("欢迎！这里是Fountain游戏引擎！");
 	ftRender::transformEnd();
+
+	tBut.update();
+	tBut.draw();
 }

@@ -38,6 +38,7 @@ GLuint FT2Format[FT_FORMAT_MAX] = {GL_RGBA, GL_RGB, GL_RGBA, GL_BGR,
 static float globalR, globalG, globalB, globalA;
 
 static ShaderProgram *currentShader = NULL;
+static Camera *currentCamera = NULL;
 
 
 bool GLinit()
@@ -674,6 +675,7 @@ void Camera::update()
 	glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
 	glTranslatef(-x, -y, -z);
 	glMatrixMode(GL_MODELVIEW);
+	currentCamera = this;
 }
 
 ftVec2 Camera::mouseToWorld(ftVec2 mPos)
@@ -687,6 +689,11 @@ ftVec2 Camera::mouseToWorld(ftVec2 mPos)
 	ans.x = mPos.x / scale + l;
 	ans.y = mPos.y / scale + b;
 	return ans;
+}
+
+Camera* ftRender::getCurrentCamera()
+{
+	return currentCamera;
 }
 
 //functions used by ShaderProgram

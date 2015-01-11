@@ -1,6 +1,7 @@
 #ifndef _FOUNTAIN_H_
 #define _FOUNTAIN_H_
 
+#include <fountain/fountaindef.h>
 #include <fountain/ft_data.h>
 #include <fountain/ft_time.h>
 #include <fountain/ft_3dmodel.h>

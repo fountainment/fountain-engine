@@ -20,6 +20,7 @@
 #define FT_ButtonUp 3
 
 #define FT_None 0
+#define FT_isOn 4
 
 #define FT_A 0x0001
 #define FT_B 0x0002

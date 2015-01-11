@@ -3,6 +3,7 @@
 
 #include <fountain/ft_render.h>
 #include <fountain/ft_data.h>
+#include <fountain/ft_input.h>
 #include <string>
 
 namespace ftUI {
@@ -12,6 +13,7 @@ void close();
 
 class Button : public ftSprite {
 private:
+	int state;
 	ftColor backColor;
 	ftColor foreColor;
 public:
@@ -19,6 +21,8 @@ public:
 	void click();
 	void update();
 	void draw();
+	int getState();
+	void setBackColor(ftColor c);
 };
 
 class NineSprite : public ftSprite {
@@ -27,6 +31,7 @@ private:
 public:
 	NineSprite(const char *picName);
 	NineSprite(int picID);
+	NineSprite(ftRender::SubImage image);
 	void draw();
 };
 

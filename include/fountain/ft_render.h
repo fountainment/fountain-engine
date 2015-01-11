@@ -120,6 +120,8 @@ public:
 	ftVec2 mouseToWorld(ftVec2 mPos);
 };
 
+Camera* getCurrentCamera();
+
 class ShaderProgram {
 private:
 	ftFile vsFile, fsFile;

@@ -202,8 +202,8 @@ void ftRect::normalize()
 bool ftRect::collidePoint(ftVec2 p)
 {
 	int xx = x + w;
-	int yy = y + w;
-	return ((((x - p.x) * (xx - p.x)) <= 0) || (((y - p.y) * (yy - p.y)) <= 0));
+	int yy = y + h;
+	return ((((x - p.x) * (xx - p.x)) <= 0) && (((y - p.y) * (yy - p.y)) <= 0));
 }
 
 //class ftShape
@@ -312,8 +312,8 @@ ftShape::ftShape(const ftShape & shape)
 ftSprite::ftSprite()
 {
 	color = FT_White;
-	position.x = 0;
-	position.y = 0;
+	setPosition(ftVec2(0, 0));
+	setRectSize(ftVec2(0, 0));
 }
 
 void ftSprite::setColor(const ftColor & c)
