@@ -74,11 +74,14 @@ private:
 	float texCoor[8];
 public:
 	SubImage();
+	SubImage(int picID);
 	SubImage(int picID, ftRect rect);
 	SubImage(const char *picName, ftRect rect);
+	SubImage(SubImage image, ftRect rect);
 	void setPicID(int id);
 	int getPicID();
 	const ftVec2 & getSize();
+	void setSize(ftVec2 size);
 	const float * getTexCoor();
 };
 

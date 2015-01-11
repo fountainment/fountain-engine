@@ -460,12 +460,21 @@ SubImage::SubImage()
 {
 }
 
+SubImage::SubImage(int picID)
+{
+	this->picID = picID;
+	size = ftRender::getPicSize(picID);
+	ftRect texRect(0, 0, 1, 1);
+	texRect.getFloatVertex(texCoor);
+}
+
 SubImage::SubImage(int picID, ftRect rect)
 {
 	this->picID = picID;
+	ftVec2 pSize = ftRender::getPicSize(picID);
+
 	size = rect.getSize();
 	ftRect texRect = rect;
-	ftVec2 pSize = ftRender::getPicSize(picID);
 	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
 	texRect.getFloatVertex(texCoor);
 }
@@ -473,10 +482,24 @@ SubImage::SubImage(int picID, ftRect rect)
 SubImage::SubImage(const char * picName, ftRect rect)
 {
 	picID = ftRender::getPicture(picName);
+	ftVec2 pSize = ftRender::getPicSize(picID);
+
 	size = rect.getSize();
 	ftRect texRect = rect;
-	ftVec2 pSize = ftRender::getPicSize(picID);
 	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
+	texRect.getFloatVertex(texCoor);
+}
+
+SubImage::SubImage(SubImage image, ftRect rect)
+{
+	picID = image.getPicID();
+	ftVec2 pSize = ftRender::getPicSize(picID);
+
+	size = rect.getSize();
+	ftRect texRect = rect;
+	const float *tC = image.getTexCoor();
+	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
+	texRect.move(tC[0], tC[1]);
 	texRect.getFloatVertex(texCoor);
 }
 
@@ -493,6 +516,11 @@ int SubImage::getPicID()
 const ftVec2 & SubImage::getSize()
 {
 	return size;
+}
+
+void SubImage::setSize(ftVec2 size)
+{
+	this->size = size;
 }
 
 const float * SubImage::getTexCoor()
@@ -540,10 +568,7 @@ const SubImage & SubImagePool::getImage(const char *imageName)
 //TODO: complete ftRender::getImage
 SubImage ftRender::getImage(int picID)
 {
-	ftRect rct;
-	rct.setSize(ftRender::getPicSize(picID));
-	SubImage res(picID, rct);
-	return res;
+	return SubImage(picID);;
 }
 
 SubImage ftRender::getImage(const char *filename)

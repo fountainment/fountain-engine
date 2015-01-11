@@ -28,10 +28,17 @@ public:
 class NineSprite : public ftSprite {
 private:
 	ftRender::SubImage image;
+	ftRender::SubImage cornerImage[4];
+	ftRender::SubImage borderImage[4];
+	ftRender::SubImage centerImage;
+	ftVec2 gridSize;
 public:
+	void init(int picID);
+	NineSprite();
 	NineSprite(const char *picName);
 	NineSprite(int picID);
 	NineSprite(ftRender::SubImage image);
+	void setSize(ftVec2 size);
 	void draw();
 };
 

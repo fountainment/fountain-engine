@@ -5,6 +5,7 @@ ftScene::SceneSelector SS;
 ftRender::ShaderProgram SP("resources/shader/vs.vert", "resources/shader/fs.frag");
 ftType::FontMan fm;
 ftAudio::Channel cha;
+ftUI::NineSprite nineS;
 
 #include "testscene.h"
 #include <string>
@@ -17,7 +18,7 @@ public:
 		Button::update();
 		int st = Button::getState();
 		if (st == FT_isOn) setBackColor(FT_White);
-		if (st == FT_isDown) setBackColor(FT_Yellow); 
+		if (st == FT_isDown) setBackColor(FT_Yellow);
 		if (st == FT_None) setBackColor(FT_Orange);
 	}
 };
@@ -58,6 +59,10 @@ void fountain::gameInit()
 
 	tBut.setPosition(0, -100);
 	tBut.setRectSize(ftVec2(200, 50));
+
+	nineS = ftUI::NineSprite("resources/image/nine.png");
+	nineS.setSize(ftVec2(200, 200));
+	nineS.setPosition(-200, 0);
 }
 
 void fountain::singleFrame()
@@ -97,4 +102,6 @@ void fountain::singleFrame()
 
 	tBut.update();
 	tBut.draw();
+
+	nineS.draw();
 }

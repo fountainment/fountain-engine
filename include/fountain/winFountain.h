@@ -137,6 +137,7 @@ WinMain(HINSTANCE hInstance,
 		ftRender::transformEnd();
 		SwapBuffers(hDC);
 	}
+	fountain::closeAllSystem();
 
 	DisableOpenGL(hwnd, hDC, hRC);
 
