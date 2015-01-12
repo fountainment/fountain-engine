@@ -62,13 +62,18 @@ private:
 	ftRender::SubImage centerImage;
 	ftVec2 gridSize;
 public:
-	void init(int picID);
+	void init();
 	NineSprite();
 	NineSprite(const char *picName);
 	NineSprite(int picID);
 	NineSprite(ftRender::SubImage image);
 	void setSize(ftVec2 size);
 	void draw();
+};
+
+class Cursor : public ftSprite {
+private:
+public:
 };
 
 };

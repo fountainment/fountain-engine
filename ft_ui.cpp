@@ -155,17 +155,18 @@ NineSprite::NineSprite()
 NineSprite::NineSprite(const char *picName)
 {
 	int picID = ftRender::getPicture(picName);
-	init(picID);
+	image = ftRender::getImage(picID);
+	init();
 }
 
 NineSprite::NineSprite(int picID)
 {
-	init(picID);
+	image = ftRender::getImage(picID);
+	init();
 }
 
-void NineSprite::init(int picID)
+void NineSprite::init()
 {
-	image = ftRender::getImage(picID);
 	ftVec2 imageSize = image.getSize();
 	gridSize = imageSize / 3.0f;
 	setRectSize(imageSize);
@@ -204,21 +205,16 @@ void NineSprite::setSize(ftVec2 size)
 
 void NineSprite::draw()
 {
-	ftVec2 centerSize = getRectSize() - (gridSize * 2);
+	ftVec2 centerSize = getRectSize() - (gridSize * 2.0f);
 
-	float cx = centerSize.x + gridSize.x;
-	float cy = centerSize.y + gridSize.y;
+	float cx = (centerSize.x + gridSize.x) * 0.5f;
+	float cy = (centerSize.y + gridSize.y) * 0.5f;
 
-	ftVec2 cornerPos[4];
-	cornerPos[0] = ftVec2(-cx, -cy) * 0.5f;
-	cornerPos[1] = ftVec2(cx, -cy) * 0.5f;
-	cornerPos[2] = ftVec2(cx, cy) * 0.5f;
-	cornerPos[3] = ftVec2(-cx, cy) * 0.5f;
-	ftVec2 borderPos[4];
-	borderPos[0] = ftVec2(0, -cy) * 0.5f;
-	borderPos[1] = ftVec2(cx, 0) * 0.5f;
-	borderPos[2] = ftVec2(0, cy) * 0.5f;
-	borderPos[3] = ftVec2(-cx, 0) * 0.5f;
+	ftVec2 cornerPos[4] = {ftVec2(-cx, -cy), ftVec2(cx, -cy),
+				ftVec2(cx, cy), ftVec2(-cx, cy)};
+	ftVec2 borderPos[4] = {ftVec2(.0f, -cy), ftVec2(cx, .0f),
+				ftVec2(.0f, cy), ftVec2(-cx, .0f)};
+
 	ftRender::transformBegin();
 	ftRender::ftTranslate(getPosition());
 	for (int i = 0; i < 4; i++) {
@@ -233,8 +229,6 @@ void NineSprite::draw()
 		ftRender::drawImage(borderImage[i]);
 		ftRender::transformEnd();
 	}
-
 	ftRender::drawImage(centerImage);
-
 	ftRender::transformEnd();
 }

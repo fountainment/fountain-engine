@@ -38,6 +38,11 @@ typedef struct {
 		h4 = h / 4.0f;
 	}
 
+	void setSize(int w, int h) {
+		setW(w);
+		setH(h);
+	}
+
 } winState;
 
 class ftVec2 {

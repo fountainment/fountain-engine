@@ -36,8 +36,7 @@ testButton tBut;
 
 void fountain::setBasicVarible()
 {
-	mainWin.setW(800);
-	mainWin.setH(600);
+	mainWin.setSize(800, 600);
 	mainWin.title = std::string("fountain-prototype ") + std::string(FOUNTAIN_VERSION);
 	mainWin.icon = "fountain.ico";
 	mainWin.isFullScreen = false;

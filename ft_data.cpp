@@ -1,5 +1,4 @@
 #include <fountain/ft_data.h>
-#include <fountain/ft_render.h>
 
 //debug
 #include <cstdio>
@@ -384,11 +383,13 @@ void ftSprite::setShape(const ftShape & shape)
 void ftSprite::draw()
 {
 	ftVec2 pos = getPosition();
+	/*
 	ftRender::transformBegin();
 	ftRender::useColor(color);
 	ftRender::ftTranslate(pos.x, pos.y);
 	ftRender::drawShape(shape, getAngle());
 	ftRender::transformEnd();
+	*/
 }
 
 void ftSprite::move(ftVec2 x)
@@ -463,6 +464,7 @@ ftColor::ftColor(std::string s)
 	}
 	if (!correct) {
 		//TODO: debug output
+		return;
 	}
 	setR(r);
 	setG(g);
