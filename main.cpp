@@ -17,9 +17,18 @@ public:
 	{
 		Button::update();
 		int st = Button::getState();
-		if (st == FT_isOn) setBackColor(FT_White);
-		if (st == FT_isDown) setBackColor(FT_Yellow);
-		if (st == FT_None) setBackColor(FT_Orange);
+		if (st == FT_isOn) {
+			setBackColor(FT_White);
+			setForeColor(FT_Black);
+		}
+		if (st == FT_isDown) {
+			setBackColor(FT_Yellow);
+			setForeColor(FT_White);
+		}
+		if (st == FT_None) {
+			setBackColor(FT_Orange);
+			setForeColor(FT_White);
+		}
 	}
 };
 
@@ -49,6 +58,8 @@ void fountain::gameInit()
 	fm.loadFont("resources/font/test.ttc");
 	fm.genStringTable(lData.getStr(), 32);
 
+	ftUI::setDefaultFont(&fm);
+
 	SP.init();
 	SP.setUniform("time", 0.0f);
 	SP.use();
@@ -59,6 +70,7 @@ void fountain::gameInit()
 
 	tBut.setPosition(0, -100);
 	tBut.setRectSize(ftVec2(200, 50));
+	tBut.setCaption("按钮");
 
 	nineS = ftUI::NineSprite("resources/image/nine.png");
 	nineS.setSize(ftVec2(200, 200));
@@ -85,11 +97,13 @@ void fountain::singleFrame()
 	if (fountain::sysKeyboard.getState(FT_X) == FT_KeyDown)
 		cha.play();
 
+	ftRender::useColor(FT_White);
 	SS.sceneSolve();
 	SS.update();
 	SS.draw();
 
 	//test
+	ftRender::useColor(FT_White);
 	ftRender::transformBegin();
 	  ftRender::ftTranslate(-300, 230);
 	  fm.drawString("Welcome to Fountain Game Engine!");

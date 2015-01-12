@@ -40,6 +40,7 @@ void ftTransparency(float tp);
 void ftColor4f(float r, float g, float b, float a);
 void ftColor3f(float r, float g, float b);
 void useColor(ftColor c);
+ftColor getGlobalColor();
 
 void openLineSmooth();
 void openPointSmooth();

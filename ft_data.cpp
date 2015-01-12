@@ -391,6 +391,11 @@ void ftSprite::draw()
 	ftRender::transformEnd();
 }
 
+void ftSprite::move(ftVec2 x)
+{
+	position = position + x;
+}
+
 //class ftColor
 float ftColor::checkValue(float v)
 {

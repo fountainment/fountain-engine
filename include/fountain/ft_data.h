@@ -165,6 +165,7 @@ public:
 	const ftColor & getColor();
 	void draw();
 	void update();
+	void move(ftVec2 x);
 };
 
 class ftFile

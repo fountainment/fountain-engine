@@ -53,6 +53,7 @@ void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int
 //class ftType::FontMan
 FontMan::FontMan()
 {
+	color = FT_White;
 	picID = 0;
 }
 
@@ -125,6 +126,7 @@ void FontMan::genStringTable(const char *str, int h)
 		unicode2SubImage[v[ci]] = t;
 	}
 	delete [] expanded_data;
+	fontSize = h;
 }
 
 //TODO: complete this function
@@ -138,6 +140,7 @@ int FontMan::drawString(std::vector<unsigned long> s)
 		ftRender::SubImage im = unicode2SubImage[s[i]];
 		ftRender::transformBegin();
 		ftRender::ftTranslate(pen + ch.center);
+		ftRender::useColor(ftRender::getGlobalColor());
 		ftRender::drawImage(im);
 		ftRender::transformEnd();
 		pen = pen + ch.advance;
@@ -157,4 +160,9 @@ int FontMan::drawString(const char *str)
 {
 	std::vector<unsigned long> s = ftAlgorithm::utf8toUnicode(str);
 	return drawString(s);
+}
+
+int FontMan::getFontSize()
+{
+	return fontSize;
 }

@@ -143,7 +143,7 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
-	ftColor4f(1.0f, 1.0, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
@@ -193,6 +193,11 @@ void ftRender::ftColor3f(float r, float g, float b)
 void ftRender::useColor(ftColor c)
 {
 	ftRender::ftColor4f(c.getR(), c.getG(), c.getB(), c.getAlpha());
+}
+
+ftColor ftRender::getGlobalColor()
+{
+	return ftColor(globalR, globalG, globalB, globalA);
 }
 
 void ftRender::openLineSmooth()

@@ -2,9 +2,13 @@
 #include <fountain/ft_type.h>
 #include <fountain/ft_input.h>
 
+#include <cstdio>
+
 using ftUI::Button;
 using ftUI::NineSprite;
 using ftUI::Label;
+
+static ftType::FontMan *defaultFont = NULL;
 
 bool ftUI::init()
 {
@@ -15,12 +19,81 @@ void ftUI::close()
 {
 }
 
+void ftUI::setDefaultFont(ftType::FontMan *font)
+{
+	defaultFont = font;
+}
+
+//class ftUI::Label
+Label::Label()
+{
+	font = defaultFont;
+	align = FT_AlignLeft;
+	strLength = 0;
+}
+
+Label::Label(const char *str)
+{
+	font = defaultFont;
+	setString(str);
+	align = FT_AlignLeft;
+	strLength = 0;
+}
+
+Label::Label(std::string str)
+{
+	font = defaultFont;
+	setString(str.c_str());
+	align = FT_AlignLeft;
+	strLength = 0;
+}
+
+void Label::setString(const char *str)
+{
+	text = ftAlgorithm::utf8toUnicode(str);
+}
+
+void Label::setFont(ftType::FontMan *font)
+{
+	this->font = font;
+}
+
+void Label::setAlign(int align)
+{
+	this->align = align;
+}
+
+void Label::draw()
+{
+	ftRender::transformBegin();
+	ftRender::ftTranslate(getPosition());
+	if (font != NULL) {
+		strLength = font->drawString(text);
+	} else {
+		font = defaultFont;
+	}
+	ftRender::transformEnd();
+}
+
+int Label::getStrLength()
+{
+	return strLength;
+}
+
+int Label::getFontSize()
+{
+	if (font != NULL) return font->getFontSize();
+	return 0;
+}
+
 //clase ftUI::Button
 Button::Button()
 {
 	state = FT_None;
 	backColor = FT_White;
-	foreColor = FT_Black;
+	setColor(FT_Black);
+	label.setString("Button");
+	label.setRect(getRect());
 }
 
 void Button::click()
@@ -40,6 +113,8 @@ void Button::update()
 	} else {
 		state = FT_None;
 	}
+	label.setRect(getRect());
+	label.move(ftVec2(label.getStrLength() * -0.5f, label.getFontSize() * -0.40f));
 }
 
 void Button::draw()
@@ -47,6 +122,8 @@ void Button::draw()
 	ftRect rct = getRect();
 	ftRender::useColor(backColor);
 	ftRender::drawRect(rct);
+	ftRender::useColor(getColor());
+	label.draw();
 }
 
 int Button::getState()
@@ -57,6 +134,16 @@ int Button::getState()
 void Button::setBackColor(ftColor c)
 {
 	backColor = c;
+}
+
+void Button::setForeColor(ftColor c)
+{
+	setColor(c);
+}
+
+void Button::setCaption(const char *str)
+{
+	label.setString(str);
 }
 
 //class ftUI::NineSprite
@@ -150,10 +237,4 @@ void NineSprite::draw()
 	ftRender::drawImage(centerImage);
 
 	ftRender::transformEnd();
-}
-
-//class ftUI::Label
-Label::Label()
-{
-	text = "";
 }
