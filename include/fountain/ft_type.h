@@ -28,7 +28,6 @@ private:
 	std::map<unsigned long, ftRender::SubImage> unicode2SubImage;
 	std::map<unsigned long, ftType::charInfo> unicode2charInfo;
 	int fontSize;
-	ftColor color;
 
 public:
 	FontMan();
@@ -39,7 +38,6 @@ public:
 	int drawString(const char *str);
 	int drawString(std::vector<unsigned long> s);
 	int getFontSize();
-	void setColor(ftColor c);
 };
 
 };

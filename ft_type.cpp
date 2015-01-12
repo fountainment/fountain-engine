@@ -53,7 +53,6 @@ void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int
 //class ftType::FontMan
 FontMan::FontMan()
 {
-	color = FT_White;
 	picID = 0;
 }
 
