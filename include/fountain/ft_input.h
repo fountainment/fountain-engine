@@ -9,7 +9,8 @@
 
 namespace ftInput {
 
-void init();
+bool init();
+void close();
 
 void initPerFrame();
 

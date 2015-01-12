@@ -53,8 +53,8 @@ ftRender::Camera mainCamera(0, 0, 500);
 void init(ftScene::Scene* sc)
 {
 	ttt = 1;
-	pic1 = ftRender::getPicture("resources/logo.png");
-	pic2 = ftRender::getPicture("resources/title.png");
+	pic1 = ftRender::getPicture("resources/image/logo.png");
+	pic2 = ftRender::getPicture("resources/image/title.png");
 	transp = 0.0;
 	scale = 1.0;
 	x = 0;
@@ -93,13 +93,15 @@ void draw(ftScene::Scene* sc)
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	if (ttt >= 0.01f)
-		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+		ftRender::drawQuad(fountain::mainWin.w / scale, fountain::mainWin.h / scale);
 	ftRender::transformEnd();
 
 }
 
 void destroy(ftScene::Scene* sc)
 {
+	ftRender::deletePicture(pic1);
+	ftRender::deletePicture(pic2);
 }
 
 };
@@ -124,6 +126,7 @@ ftShape *testShape2;
 ftShape *addShape;
 ftShape *groundBox;
 ftShape *card;
+ftShape *line;
 ftRender::Camera mainCamera(0, 0, 500);
 std::vector<ftVec2> v;
 
@@ -197,11 +200,18 @@ void init(ftScene::Scene* sc)
 	ftPhysics::setRatio(128.0f);
 
 	v.clear();
-	v.push_back(ftVec2(0,-50));
-	v.push_back(ftVec2(25,0));
-	v.push_back(ftVec2(0,50));
-	v.push_back(ftVec2(-25,0));
+	v.push_back(ftVec2(0, -50));
+	v.push_back(ftVec2(25, 0));
+	v.push_back(ftVec2(0, 50));
+	v.push_back(ftVec2(-25, 0));
 	testShape0 = new ftShape(v , 4, true);
+	v.clear();
+	v.push_back(ftVec2(-200, 0));
+	v.push_back(ftVec2(-100, -50));
+	v.push_back(ftVec2(0, 0));
+	v.push_back(ftVec2(100, -50));
+	v.push_back(ftVec2(200, 0));
+	line = new ftShape(v , 5, false);
 	testShape1 = new ftShape(10);
 	testShape2 = new ftShape(20);
 	groundBox = new ftShape(ftRect(0, 0, 2000, 20));
@@ -210,15 +220,23 @@ void init(ftScene::Scene* sc)
 	addShape = rect;
 
 	//test
-	ftRender::SubImagePool ui("resources/ui.png", "resources/ui.sip");
+	ftRender::SubImagePool ui("resources/image/ui.png", "resources/image/ui.sip");
 	xx = ui.getImage("button01.png");
 	yy = ui.getImage("button02.png");
 
 	//Test
 	mouseJoint = NULL;
 
-	bdPoint = new ftPhysics::Body(0, -200, false);
+	bdPoint = new ftPhysics::Body(0, -200, FT_Static);
 	bdPoint->setShape(*groundBox);
+	bdPoint->setColor(randColor());
+	if (!mainWorld.addBody(bdPoint)) {
+		mainWorld.delHeadBody();
+		mainWorld.addBody(bdPoint);
+	}
+
+	bdPoint = new ftPhysics::Body(0, 0, FT_Static);
+	bdPoint->setShape(*line);
 	bdPoint->setColor(randColor());
 	if (!mainWorld.addBody(bdPoint)) {
 		mainWorld.delHeadBody();
@@ -286,7 +304,7 @@ void update(ftScene::Scene* sc)
 		}
 
 		if (fountain::sysMouse.getState(FT_RButton)) {
-			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, false);
+			bdPoint = new ftPhysics::Body(mPos.x, mPos.y, FT_Static);
 			bdPoint->setShape(*addShape);
 			bdPoint->setColor(randColor());
 			if (!mainWorld.addBody(bdPoint)) {
@@ -308,7 +326,7 @@ void update(ftScene::Scene* sc)
 		else if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonUp) {
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.01 && makeRect.getSize().y > 0.01) {
-				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, true);
+				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y);
 				bdPoint->setShape(ftShape(makeRect));
 				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
@@ -329,7 +347,7 @@ void update(ftScene::Scene* sc)
 		else if (fountain::sysMouse.getState(FT_RButton) == FT_ButtonUp) {
 			ftVec2 tmpP = makeRect.getCenter();
 			if (makeRect.getSize().x > 0.1 && makeRect.getSize().y > 0.1) {
-				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, false);
+				bdPoint = new ftPhysics::Body(tmpP.x, tmpP.y, FT_Static);
 				bdPoint->setShape(ftShape(makeRect));
 				bdPoint->setColor(randColor());
 				if (!mainWorld.addBody(bdPoint)) {
@@ -371,7 +389,7 @@ void draw(ftScene::Scene* sc)
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
 	if (ttt >= 0.01f)
-		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
+		ftRender::drawQuad(fountain::mainWin.w / scale, fountain::mainWin.h / scale);
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
@@ -389,6 +407,7 @@ void destroy(ftScene::Scene* sc)
 	delete testShape0;
 	delete testShape1;
 	delete testShape2;
+	delete line;
 	delete card;
 	delete groundBox;
 	delete rect;
@@ -400,7 +419,7 @@ void destroy(ftScene::Scene* sc)
 
 namespace scene3 {
 
-ft3DModel::ObjModel robot("resources/first.obj");
+ft3DModel::ObjModel robot("resources/model/first.obj");
 ftRender::Camera mainCamera(0, 0, 500);
 float scale;
 float dx, dy;
@@ -410,7 +429,7 @@ void init(ftScene::Scene* sc)
 {
 	mainCamera.setViewport(fountain::mainWin.w, fountain::mainWin.h);
 	mainCamera.setProjectionType(FT_PERSPECTIVE);
-	scale = 1.0f;
+	scale = 150.0f;
 	dx = 0.0f;
 	dy = 0.0f;
 	cx = 0.0f;
@@ -438,7 +457,7 @@ void draw(ftScene::Scene* sc)
 	mainCamera.update();
 
 	ftRender::transformBegin();
-	ftRender::useColor(ftColor("#777"));
+	ftRender::useColor(ftColor("#EEE"));
 	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
 	ftRender::transformEnd();
 

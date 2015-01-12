@@ -10,4 +10,6 @@ obj/
 *.a
 *.dll
 *.orig
+font/
+sound/
 main

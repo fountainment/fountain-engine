@@ -1,8 +1,8 @@
 #ifndef _FOUNTAINDEF_H_
 #define _FOUNTAINDEF_H_
 
-#define FOUNTAIN_VERSION "0.05"
-#define FOUNTAIN_VERSION_NUM 0.05
+#define FOUNTAIN_VERSION "0.052"
+#define FOUNTAIN_VERSION_NUM 0.052
 
 #define FT_LButton 1
 #define FT_MButton 2
@@ -20,6 +20,7 @@
 #define FT_ButtonUp 3
 
 #define FT_None 0
+#define FT_isOn 4
 
 #define FT_A 0x0001
 #define FT_B 0x0002

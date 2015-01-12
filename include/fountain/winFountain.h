@@ -1,6 +1,14 @@
 #include <stdio.h>
-#include <GL/gl.h>
 #include <windows.h>
+
+/*
+#pragma comment(lib, "fountain.lib")
+#pragma comment(lib, "Box2D.lib")
+#pragma comment(lib, "freetype.lib")
+#pragma comment(lib, "opengl32.lib")
+#pragma comment(lib, "glew.lib")
+#pragma comment(lib, "FreeImage.lib")
+*/
 
 #define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
 
@@ -123,13 +131,13 @@ WinMain(HINSTANCE hInstance,
 		GetCursorPos(&mousePos);
 		ScreenToClient(hwnd, &mousePos);
 		fountain::sysMouse.update(mousePos.x, mousePos.y);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glColor3f(1.0, 1.0, 1.0);
-		glPushMatrix();
+		ftRender::clearColorDepthBuffer();
+		ftRender::transformBegin();
 		fountain::singleFrame();
-		glPopMatrix();
+		ftRender::transformEnd();
 		SwapBuffers(hDC);
 	}
+	fountain::closeAllSystem();
 
 	DisableOpenGL(hwnd, hDC, hRC);
 

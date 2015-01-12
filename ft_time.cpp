@@ -45,7 +45,12 @@ inline double floatTime()
 // Win32 end
 #endif
 
-void ftTime::init()
+bool ftTime::init()
+{
+	return true;
+}
+
+void ftTime::close()
 {
 }
 

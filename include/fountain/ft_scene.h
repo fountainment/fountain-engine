@@ -8,7 +8,8 @@
 
 namespace ftScene {
 
-void init();
+bool init();
+void close();
 
 //TODO: delete function pointer, use virtual function
 class Scene {

@@ -1,6 +1,8 @@
+//TODO: replace "//GLSL exp" with better solution
+//TODO: provide RTT(render to texture) function
 #include <fountain/ft_render.h>
-#include <fountain/ft_data.h>
 #include <fountain/ft_algorithm.h>
+#define GLEW_STATIC
 #include <GL/glew.h>
 #include <FreeImage.h>
 #include <map>
@@ -16,35 +18,62 @@ static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
 
-static GLfloat circle8[8][2];
-static GLfloat circle32[32][2];
-static GLfloat circle128[128][2];
+static GLfloat circle8[8 * 2];
+static GLfloat circle32[32 * 2];
+static GLfloat circle128[128 * 2];
+
+static GLfloat defaultTexCoor[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
+
+//TODO: make this transform more simple
+GLuint FT2InternalFormat[FT_FORMAT_MAX] = {GL_RGBA, GL_RGB, GL_RGBA, GL_RGB,
+                                           GL_RGBA, GL_RGB, GL_RGBA, GL_RGBA
+                                          };
+GLuint FT2Format[FT_FORMAT_MAX] = {GL_RGBA, GL_RGB, GL_RGBA, GL_BGR,
+                                   GL_BGRA, GL_LUMINANCE,
+                                   GL_LUMINANCE_ALPHA, GL_RGBA
+                                  };
 
 //static GLuint VertexArrayID;
 
 static float globalR, globalG, globalB, globalA;
 
-void initCircleData(GLfloat (*v)[2], int n)
-{
-	float d = 3.14159f * 2.0f / n;
-	for (int i = 0; i < n; i++) {
-		v[i][0] = std::sin(d * i);
-		v[i][1] = std::cos(d * i);
-	}
-}
+static ShaderProgram *currentShader = NULL;
+static Camera *currentCamera = NULL;
+
 
 bool GLinit()
 {
-	//TODO: check the OpenGL init state
-	glewInit();
-	std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
-	std::printf("GLSL Version: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+	//TODO: complete the OpenGL init state checking
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		std::printf("GLEW init failed!\n");
+		return false;
+	} else {
+		std::printf("GLEW Version: %s\n", glewGetString(GLEW_VERSION));
+		std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+	}
+	if (GLEW_VERSION_2_0) {
+		std::printf("GLSL Version: %s\n",
+		            glGetString(GL_SHADING_LANGUAGE_VERSION));
+		std::printf("Shader supported!\n");
+	} else {
+		std::printf("Shader unsupported -_-|||\n");
+	}
 	return true;
 }
 
-void ftRender::init()
+void initCircleData(GLfloat *v, int n)
 {
-	GLinit();
+	float d = 3.14159f * 2.0f / n;
+	for (int i = 0; i < n; i++) {
+		v[i * 2] = std::sin(d * i);
+		v[i * 2 + 1] = std::cos(d * i);
+	}
+}
+
+bool ftRender::init()
+{
+	bool state = GLinit();
 
 	initCircleData(circle8, 8);
 	initCircleData(circle32, 32);
@@ -58,14 +87,52 @@ void ftRender::init()
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
+	return state;
 }
 
-void glDrawVectorVec2(const float * v, int n, GLuint glType)
+void ftRender::close()
+{
+}
+
+//some OpenGL functions
+inline void enableTexture2D()
+{
+	glEnable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 1.0f);
+}
+
+inline void disableTexture2D()
+{
+	glDisable(GL_TEXTURE_2D);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("useTex", 0.0f);
+}
+
+inline void bindTexture(int id)
+{
+	glBindTexture(GL_TEXTURE_2D, id);
+
+	//GLSL exp
+	if (currentShader != NULL)
+		currentShader->setUniform("tex", id);
+}
+
+inline void drawFloat2(const GLfloat *v, int n, GLuint glType)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, v);
 	glDrawArrays(glType, 0, n);
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void ftRender::clearColorDepthBuffer()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void ftRender::transformBegin()
@@ -76,12 +143,17 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
-	ftColor4f(1.0f, 1.0, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
 {
 	glTranslatef(x, y, z);
+}
+
+void ftRender::ftTranslate(ftVec2 xy, float z)
+{
+	ftRender::ftTranslate(xy.x, xy.y, z);
 }
 
 void ftRender::ftRotate(float xAngle, float yAngle, float zAngle)
@@ -123,6 +195,11 @@ void ftRender::useColor(ftColor c)
 	ftRender::ftColor4f(c.getR(), c.getG(), c.getB(), c.getAlpha());
 }
 
+ftColor ftRender::getGlobalColor()
+{
+	return ftColor(globalR, globalG, globalB, globalA);
+}
+
 void ftRender::openLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);
@@ -137,9 +214,34 @@ void ftRender::openPointSmooth()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
+void ftRender::openPolygonSmooth()
+{
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void ftRender::setClearColor(int r, int g, int b)
 {
 	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
+}
+
+int data2Texture(unsigned char *bits, int width, int height, int dataType)
+{
+	GLuint gl_texID;
+	glGenTextures(1, &gl_texID);
+	glBindTexture(GL_TEXTURE_2D, gl_texID);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	GLenum internalFormat = FT2InternalFormat[dataType];
+	GLenum format = FT2Format[dataType];
+	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0,
+	             format, GL_UNSIGNED_BYTE, bits);
+	return gl_texID;
 }
 
 texInfo loadTexture(const char *filename)
@@ -147,7 +249,7 @@ texInfo loadTexture(const char *filename)
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib;
 	BYTE *bits;
-	unsigned int width, height;
+	int width, height;
 	GLuint gl_texID;
 	texInfo tex;
 	tex.id = -1;
@@ -160,26 +262,37 @@ texInfo loadTexture(const char *filename)
 		dib = FreeImage_Load(fif, filename, 0);
 	else
 		return tex;
+
 	bits = FreeImage_GetBits(dib);
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
-	glGenTextures(1, &gl_texID);
-	glBindTexture(GL_TEXTURE_2D, gl_texID);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
 	if (fif == FIF_PNG)
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,
-		             GL_BGRA, GL_UNSIGNED_BYTE, bits);
+		gl_texID = data2Texture(bits, width, height, FT_BGRA);
 	else
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_BGR,
-		             GL_UNSIGNED_BYTE, bits);
+		gl_texID = data2Texture(bits, width, height, FT_BGR);
+
 	FreeImage_Unload(dib);
 	tex.id = gl_texID;
 	tex.w = width;
 	tex.h = height;
 	return tex;
+}
+
+void ftRender::drawBitmap(unsigned char *bits, int width, int height, int dataType, int x, int y)
+{
+	glRasterPos2i(x, y);
+	glDrawPixels(width, height, FT2Format[dataType], GL_UNSIGNED_BYTE, bits);
+}
+
+int ftRender::getPicture(unsigned char *bits, int width, int height, int dataType)
+{
+	texInfo texIf;
+	texIf.id = data2Texture(bits, width, height, dataType);
+	texIf.w = width;
+	texIf.h = height;
+	PicID2TexInfo[curPicID] = texIf;
+	return curPicID++;
 }
 
 int ftRender::getPicture(const char *filename)
@@ -197,11 +310,8 @@ int ftRender::getPicture(const char *filename)
 
 void ftRender::drawLine(float x1, float y1, float x2, float y2)
 {
-	GLfloat vtx1[] = {x1, y1, x2, y2};
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, vtx1);
-	glDrawArrays(GL_LINES, 0, 2);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	GLfloat vtx[] = {x1, y1, x2, y2};
+	drawFloat2(vtx, 2, GL_LINES);
 }
 
 void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
@@ -213,13 +323,10 @@ void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
 	float h2 = h / 2.0f;
-	GLfloat vtx1[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
+	GLfloat vtx[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, vtx1);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	drawFloat2(vtx, 4, GL_TRIANGLE_FAN);
 	glDisable(GL_BLEND);
 }
 
@@ -236,13 +343,10 @@ void ftRender::drawRect(ftRect rct, float angle)
 
 void ftRender::drawCircle()
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(2, GL_FLOAT, 0, circle32);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 32);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	drawFloat2(circle32, 32, GL_TRIANGLE_FAN);
 }
 
-void ftRender::drawShape(ftShape & shape, float angle)
+void ftRender::drawShape(ftShape &shape, float angle)
 {
 	int type = shape.getType();
 	const float *v = shape.getData();
@@ -256,11 +360,11 @@ void ftRender::drawShape(ftShape & shape, float angle)
 		break;
 
 	case FT_Polygon:
-		glDrawVectorVec2(v, n, GL_TRIANGLE_FAN);
+		drawFloat2(v, n, GL_TRIANGLE_FAN);
 		break;
 
 	case FT_Line:
-		glDrawVectorVec2(v, n, GL_LINE_STRIP);
+		drawFloat2(v, n, GL_LINE_STRIP);
 		break;
 
 	case FT_Rect:
@@ -281,20 +385,21 @@ void ftRender::drawPic(int picID)
 	GLfloat w2 = tex.w / 2.0f;
 	GLfloat h2 = tex.h / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
-	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
-	glEnable(GL_TEXTURE_2D);
+
+	enableTexture2D();
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+	bindTexture(tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glTexCoordPointer(2, GL_FLOAT, 0, defaultTexCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glDisable(GL_TEXTURE_2D);
+	disableTexture2D();
 }
 
 void ftRender::drawAlphaPic(int picID)
@@ -303,23 +408,56 @@ void ftRender::drawAlphaPic(int picID)
 	GLfloat w2 = tex.w / 2.0f;
 	GLfloat h2 = tex.h / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
-	GLfloat txc[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
-	glEnable(GL_TEXTURE_2D);
+
+	enableTexture2D();
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+	bindTexture(tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glTexCoordPointer(2, GL_FLOAT, 0, defaultTexCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
+
+	disableTexture2D();
+}
+
+void ftRender::deletePicture(int picID)
+{
+	std::map<int, texInfo>::iterator it = PicID2TexInfo.find(picID);
+	if (it != PicID2TexInfo.end()) {
+		texInfo tex = it->second;
+		GLuint texID = tex.id;
+		glDeleteTextures(1, &texID);
+		PicID2TexInfo.erase(it);
+		std::map<int, int>::iterator mapIt;
+		for (mapIt = Hash2PicID.begin(); mapIt != Hash2PicID.end(); ++mapIt) {
+			if (mapIt->second == picID) {
+				Hash2PicID.erase(mapIt);
+				break;
+			}
+		}
+	}
+}
+
+void ftRender::deleteAllPictures()
+{
+	GLuint texID;
+	std::map<int, texInfo>::iterator mapIt;
+	for (mapIt = PicID2TexInfo.begin(); mapIt != PicID2TexInfo.end(); ++mapIt) {
+		texID = (mapIt->second).id;
+		glDeleteTextures(1, &texID);
+	}
+	Hash2PicID.clear();
+	PicID2TexInfo.clear();
 }
 
 //class ftRender::SubImage
@@ -327,30 +465,72 @@ SubImage::SubImage()
 {
 }
 
+SubImage::SubImage(int picID)
+{
+	this->picID = picID;
+	size = ftRender::getPicSize(picID);
+	ftRect texRect(0, 0, 1, 1);
+	texRect.getFloatVertex(texCoor);
+}
+
 SubImage::SubImage(int picID, ftRect rect)
 {
 	this->picID = picID;
+	ftVec2 pSize = ftRender::getPicSize(picID);
+
 	size = rect.getSize();
 	ftRect texRect = rect;
-	ftVec2 pSize = ftRender::getPicSize(picID);
 	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
-	texCoor[0] = texRect.getLB();
-	texCoor[1] = texRect.getRB();
-	texCoor[2] = texRect.getRT();
-	texCoor[3] = texRect.getLT();
+	texRect.getFloatVertex(texCoor);
 }
 
 SubImage::SubImage(const char * picName, ftRect rect)
 {
 	picID = ftRender::getPicture(picName);
+	ftVec2 pSize = ftRender::getPicSize(picID);
+
 	size = rect.getSize();
 	ftRect texRect = rect;
-	ftVec2 pSize = ftRender::getPicSize(picID);
 	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
-	texCoor[0] = texRect.getLB();
-	texCoor[1] = texRect.getRB();
-	texCoor[2] = texRect.getRT();
-	texCoor[3] = texRect.getLT();
+	texRect.getFloatVertex(texCoor);
+}
+
+SubImage::SubImage(SubImage image, ftRect rect)
+{
+	picID = image.getPicID();
+	ftVec2 pSize = ftRender::getPicSize(picID);
+
+	size = rect.getSize();
+	ftRect texRect = rect;
+	const float *tC = image.getTexCoor();
+	texRect.inflate(1.0f / pSize.x, 1.0f / pSize.y);
+	texRect.move(tC[0], tC[1]);
+	texRect.getFloatVertex(texCoor);
+}
+
+void SubImage::setPicID(int id)
+{
+	picID = id;
+}
+
+int SubImage::getPicID()
+{
+	return picID;
+}
+
+const ftVec2 & SubImage::getSize()
+{
+	return size;
+}
+
+void SubImage::setSize(ftVec2 size)
+{
+	this->size = size;
+}
+
+const float * SubImage::getTexCoor()
+{
+	return texCoor;
 }
 
 //class ftRender::SubImagePool
@@ -378,51 +558,69 @@ std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName
 	return ans;
 }
 
-SubImagePool::SubImagePool(const char * picName, const char * sipName)
+SubImagePool::SubImagePool(const char * picName, const char *sipName)
 {
 	picID = ftRender::getPicture(picName);
 	nameHash2SubImage = getMapFromSip(picID, sipName);
 }
 
-const SubImage & SubImagePool::getImage(const char * imageName)
+const SubImage & SubImagePool::getImage(const char *imageName)
 {
 	int hash = ftAlgorithm::bkdrHash(imageName);
 	return nameHash2SubImage[hash];
 }
 
-//test
-void ftRender::drawImage(SubImage im)
+//TODO: complete ftRender::getImage
+SubImage ftRender::getImage(int picID)
 {
-	texInfo tex = PicID2TexInfo[im.picID];
-	GLfloat w2 = im.size.x / 2.0f;
-	GLfloat h2 = im.size.y / 2.0f;
+	return SubImage(picID);;
+}
+
+SubImage ftRender::getImage(const char *filename)
+{
+	int picID = ftRender::getPicture(filename);
+	return ftRender::getImage(picID);
+}
+
+//test
+void ftRender::drawImage(SubImage & im)
+{
+	int picID = im.getPicID();
+	ftVec2 size = im.getSize();
+	const float *texCoor = im.getTexCoor();
+
+	texInfo tex = PicID2TexInfo[picID];
+	GLfloat w2 = size.x / 2.0f;
+	GLfloat h2 = size.y / 2.0f;
 	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
-	GLfloat txc[8];
-	for (int i = 0; i < 4; i++) {
-		txc[i * 2] = im.texCoor[i].x;
-		txc[i * 2 + 1] = im.texCoor[i].y;
-	}
-	glEnable(GL_TEXTURE_2D);
+
+	enableTexture2D();
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-	glBindTexture(GL_TEXTURE_2D, tex.id);
+
+	//GLSL exp
+	bindTexture(tex.id);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glVertexPointer(2, GL_FLOAT, 0, vtx);
-	glTexCoordPointer(2, GL_FLOAT, 0, txc);
+	glTexCoordPointer(2, GL_FLOAT, 0, texCoor);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
+
+	disableTexture2D();
 }
 
 void ftRender::useFFP()
 {
 	glUseProgram(0);
+	currentShader = NULL;
 }
 
 //class ftRender::Camera
@@ -507,6 +705,7 @@ void Camera::update()
 	glRotatef(zAngle, 0.0f, 0.0f, 1.0f);
 	glTranslatef(-x, -y, -z);
 	glMatrixMode(GL_MODELVIEW);
+	currentCamera = this;
 }
 
 ftVec2 Camera::mouseToWorld(ftVec2 mPos)
@@ -520,6 +719,49 @@ ftVec2 Camera::mouseToWorld(ftVec2 mPos)
 	ans.x = mPos.x / scale + l;
 	ans.y = mPos.y / scale + b;
 	return ans;
+}
+
+Camera* ftRender::getCurrentCamera()
+{
+	return currentCamera;
+}
+
+//functions used by ShaderProgram
+GLuint compileShader(const GLchar *shaderStr, GLenum shaderType)
+{
+	GLint compiled;
+	GLuint shader = glCreateShader(shaderType);
+	glShaderSource(shader, 1, &shaderStr, NULL);
+	glCompileShader(shader);
+	//debug
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		GLint length;
+		GLchar *log;
+		if (shaderType == GL_VERTEX_SHADER)
+			std::printf("vertex");
+		if (shaderType == GL_FRAGMENT_SHADER)
+			std::printf("fragment");
+		std::printf(" shader compile failed!!!\n");
+		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+		log = new GLchar[length];
+		glGetShaderInfoLog(shader, length, &length, log);
+		std::printf("//\n%s//\n\n", log);
+		delete [] log;
+		glDeleteShader(shader);
+		return 0;
+	}
+	//debug end
+	return shader;
+}
+
+GLuint linkShaderProgram(GLuint vs, GLuint fs)
+{
+	GLuint program = glCreateProgram();
+	glAttachShader(program, vs);
+	glAttachShader(program, fs);
+	glLinkProgram(program);
+	return program;
 }
 
 //class ftRender::ShaderProgram
@@ -540,29 +782,15 @@ ShaderProgram::~ShaderProgram()
 //TODO: add words to check the process
 bool ShaderProgram::init()
 {
-	GLint compiled;
+	//compile
 	const char *vss = vsFile.getStr();
+	vs = compileShader(vss, GL_VERTEX_SHADER);
 	const char *fss = fsFile.getStr();
-	program = glCreateProgram();
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(vs, 1, &vss, NULL);
-	glShaderSource(fs, 1, &fss, NULL);
-	glCompileShader(vs);
-	glGetShaderiv(vs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) {
-		std::printf("fragment shader compile failed!!!\n");
-		return false;
-	}
-	glCompileShader(fs);
-	glGetShaderiv(fs, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) {
-		std::printf("fragment shader compile failed!!!\n");
-		return false;
-	}
-	glAttachShader(program, vs);
-	glAttachShader(program, fs);
-	glLinkProgram(program);
+	fs = compileShader(fss, GL_FRAGMENT_SHADER);
+
+	//link
+	program = linkShaderProgram(vs, fs);
+
 	vsFile.free();
 	fsFile.free();
 	return true;
@@ -583,14 +811,24 @@ bool ShaderProgram::reload()
 void ShaderProgram::use()
 {
 	glUseProgram(program);
+	currentShader = this;
 }
 
-void ShaderProgram::setVarible(const char *varName, float value)
+void ShaderProgram::setUniform(const char *varName, float value)
 {
 	GLint loc = glGetUniformLocation(program, varName);
 	GLfloat v = value;
 	if (loc != -1) {
 		glUniform1f(loc, v);
+	}
+}
+
+void ShaderProgram::setUniform(const char *varName, ftVec2 value)
+{
+	const GLfloat v[] = {value.x, value.y};
+	GLint loc = glGetUniformLocation(program, varName);
+	if (loc != -1) {
+		glUniform2fv(loc, 1, v);
 	}
 }
 

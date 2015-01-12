@@ -10,26 +10,41 @@
 #define FT_PLANE 1
 #define FT_PERSPECTIVE 2
 
+#define FT_FORMAT_MAX 16
+#define FT_RGB 1
+#define FT_RGBA 2
+#define FT_BGR 3
+#define FT_BGRA 4
+#define FT_GRAY 5
+#define FT_GRAY_ALPHA 6
+
 typedef struct {
 	int id;
 	int w, h;
 } texInfo;
 
 namespace ftRender {
-void init();
+
+bool init();
+void close();
+
+void clearColorDepthBuffer();
 
 void transformBegin();
 void transformEnd();
 void ftTranslate(float x, float y, float z = 0.0f);
+void ftTranslate(ftVec2 xy, float z = 0.0f);
 void ftRotate(float xAngle, float yAngle, float zAngle);
 void ftScale(float scale);
 void ftTransparency(float tp);
 void ftColor4f(float r, float g, float b, float a);
 void ftColor3f(float r, float g, float b);
 void useColor(ftColor c);
+ftColor getGlobalColor();
 
 void openLineSmooth();
 void openPointSmooth();
+void openPolygonSmooth();
 void setClearColor(int r, int g, int b);
 
 void drawLine(float x1, float y1, float x2, float y2);
@@ -39,27 +54,41 @@ void drawRect(ftRect rct, float angle = 0.0f);
 void drawCircle();
 void drawShape(ftShape & shape, float angle = 0.0f);
 
+//TODO: implement this function drawBitmap
+void drawBitmap(unsigned char *bits, int width, int height, int dataType = FT_RGBA, int x = 0, int y = 0);
+int getPicture(unsigned char *bits, int width, int height, int dataType);
 int getPicture(const char *filename);
 ftVec2 getPicSize(int picID);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
+
+void deletePicture(int picID);
+void deleteAllPictures();
 
 void useShader();
 void useFFP();
 
 class SubImage {
 private:
-public:
 	int picID;
 	ftVec2 size;
-	ftVec2 texCoor[4];
-//public:
+	float texCoor[8];
+public:
 	SubImage();
+	SubImage(int picID);
 	SubImage(int picID, ftRect rect);
-	SubImage(const char * picName, ftRect rect);
+	SubImage(const char *picName, ftRect rect);
+	SubImage(SubImage image, ftRect rect);
+	void setPicID(int id);
+	int getPicID();
+	const ftVec2 & getSize();
+	void setSize(ftVec2 size);
+	const float * getTexCoor();
 };
 
-void drawImage(SubImage im);
+SubImage getImage(int picID);
+SubImage getImage(const char *filename);
+void drawImage(SubImage & im);
 
 class SubImagePool {
 private:
@@ -67,8 +96,8 @@ private:
 	std::map<int, SubImage> nameHash2SubImage;
 	static std::map<int, SubImage> getMapFromSip(int pid, const char * sipName);
 public:
-	SubImagePool(const char * picName, const char * sipName);
-	const SubImage & getImage(const char * imageName);
+	SubImagePool(const char *picName, const char *sipName);
+	const SubImage & getImage(const char *imageName);
 };
 
 class Camera {
@@ -95,6 +124,8 @@ public:
 	ftVec2 mouseToWorld(ftVec2 mPos);
 };
 
+Camera* getCurrentCamera();
+
 class ShaderProgram {
 private:
 	ftFile vsFile, fsFile;
@@ -106,7 +137,8 @@ public:
 	bool init();
 	bool reload();
 	void use();
-	void setVarible(const char *varName, float value);
+	void setUniform(const char *varName, float value);
+	void setUniform(const char *varName, ftVec2 value);
 	void free();
 };
 

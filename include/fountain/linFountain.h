@@ -1,9 +1,9 @@
-#include <cstdio>
-#include <GL/glew.h>
+#include <fountain/ft_render.h>
 #include <GL/glx.h>
 #include <X11/X.h>
 #include <X11/keysym.h>
 
+#include <cstdio>
 #include <cstring>
 
 #define KS(r,d) keymap[(r)&FT_KEYBOARDSTATE_SIZE]=(d)
@@ -105,8 +105,6 @@ int main(int argc, char **argv)
 
 	Atom wmDeleteMessage = XInternAtom(dpy, "WM_DELETE_WINDOW", false);
 
-	XMapWindow(dpy, win);
-
 	if (fountain::mainWin.isFullScreen)
 	{
 		XWindowAttributes xwa;
@@ -130,6 +128,15 @@ int main(int argc, char **argv)
 
 		XSendEvent(dpy, DefaultRootWindow(dpy), False,
 		           SubstructureNotifyMask, &xev);
+	} else {
+		XSizeHints* hints = XAllocSizeHints();
+		hints->flags = PMinSize | PMaxSize;
+		hints->min_width = fountain::mainWin.w;
+		hints->min_height = fountain::mainWin.h;
+		hints->max_width = fountain::mainWin.w;
+		hints->max_height = fountain::mainWin.h;
+		XSetWMNormalHints(dpy, win, hints);
+		XFree(hints);
 	}
 
 	if (fountain::mainWin.hideCursor)
@@ -153,6 +160,8 @@ int main(int argc, char **argv)
 
 	XSetWMProtocols(dpy, win, &wmDeleteMessage, 1);
 
+	XMapWindow(dpy, win);
+
 	fountain::initAllSystem();
 	fountain::gameInit();
 
@@ -170,6 +179,7 @@ int main(int argc, char **argv)
 				if (event.xclient.data.l[0] ==
 				        (int)wmDeleteMessage)
 				{
+					fountain::closeAllSystem();
 					XDestroyWindow(dpy,
 					               event.xclient.window);
 					XCloseDisplay(dpy);
@@ -189,6 +199,7 @@ int main(int argc, char **argv)
 				         &keysym, NULL) == 1)
 				        && (keysym == (KeySym) XK_Escape))
 				{
+					fountain::closeAllSystem();
 					XDestroyWindow(dpy,
 					               event.xclient.
 					               window);
@@ -268,12 +279,10 @@ int main(int argc, char **argv)
 			}
 		}
 		fountain::sysMouse.update(mouseX, mouseY);
-		//TODO: move the outside OpenGL word to ft_render
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glColor3f(1.0, 1.0, 1.0);
-		glPushMatrix();
+		ftRender::clearColorDepthBuffer();
+		ftRender::transformBegin();
 		fountain::singleFrame();
-		glPopMatrix();
+		ftRender::transformEnd();
 		glXSwapBuffers(dpy, win);
 	}
 	return 0;

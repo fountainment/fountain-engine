@@ -1,9 +1,16 @@
 #!/bin/bash
 
 CC="g++"
-LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lBox2D"
-CFLAGS="-fexceptions -Wall -O1 -I./include -I. -L./Box2D/Build/bin/Release -L. -s"
+LIN_LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lfreetype -lBox2D -lopenal"
+WIN_LIBS="-lfountain -lgdi32 -lglew_static -lopengl32 -lglu32 -lFreeImage -lfreetype -lBox2D -lOpenAL32"
+CFLAGS="-fexceptions -Wall -O1 -I./include -I. -I/usr/include/freetype2 -L./Box2D/Build/bin/Release -L. -s"
 BOX2D="Box2D/Build/bin/Release/libBox2D.a"
+
+LIBS=$LIN_LIBS
+
+if [ ! -e `uname|grep MINGW` ]; then
+	LIBS=$WIN_LIBS
+fi
 
 if [ ! -f $BOX2D ]; then
 	cd Box2D/Build
@@ -15,9 +22,7 @@ if [ -f "main" ]; then
 	rm -f main
 fi
 
-if [ ! -f "libfountain.a" ]; then
-	make
-fi
+make
 
 $CC main.cpp -o main $CFLAGS $LIBS 
 

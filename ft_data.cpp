@@ -161,6 +161,18 @@ ftVec2 ftRect::getRB()
 	return ftVec2(x + w, y);
 }
 
+void ftRect::getFloatVertex(float *v)
+{
+	v[0] = x;
+	v[1] = y;
+	v[2] = x + w;
+	v[3] = y;
+	v[4] = x + w;
+	v[5] = y + h;
+	v[6] = x;
+	v[7] = y + h;
+}
+
 void ftRect::move(float x, float y)
 {
 	this->x += x;
@@ -190,8 +202,8 @@ void ftRect::normalize()
 bool ftRect::collidePoint(ftVec2 p)
 {
 	int xx = x + w;
-	int yy = y + w;
-	return ((((x - p.x) * (xx - p.x)) <= 0) || (((y - p.y) * (yy - p.y)) <= 0));
+	int yy = y + h;
+	return ((((x - p.x) * (xx - p.x)) <= 0) && (((y - p.y) * (yy - p.y)) <= 0));
 }
 
 //class ftShape
@@ -300,8 +312,8 @@ ftShape::ftShape(const ftShape & shape)
 ftSprite::ftSprite()
 {
 	color = FT_White;
-	position.x = 0;
-	position.y = 0;
+	setPosition(ftVec2(0, 0));
+	setRectSize(ftVec2(0, 0));
 }
 
 void ftSprite::setColor(const ftColor & c)
@@ -377,6 +389,11 @@ void ftSprite::draw()
 	ftRender::ftTranslate(pos.x, pos.y);
 	ftRender::drawShape(shape, getAngle());
 	ftRender::transformEnd();
+}
+
+void ftSprite::move(ftVec2 x)
+{
+	position = position + x;
 }
 
 //class ftColor
@@ -525,6 +542,7 @@ ftFile::~ftFile()
 
 ftFile::ftFile(const char *filename)
 {
+	str = NULL;
 	load(filename);
 }
 
@@ -536,14 +554,14 @@ bool ftFile::isLoad()
 void ftFile::free()
 {
 	if (str != NULL) {
-		delete str;
+		delete [] str;
 		str = NULL;
 	}
 }
 
 bool ftFile::load(const char *filename)
 {
-	if (isLoad()) free();
+	free();
 	std::strcpy(name, filename);
 	FILE *f = std::fopen(filename, "r");
 	int length;

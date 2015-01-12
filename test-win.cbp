@@ -41,10 +41,13 @@
 		<Linker>
 			<Add library="fountain" />
 			<Add library="gdi32" />
+			<Add library="glew_static" />
 			<Add library="opengl32" />
 			<Add library="glu32" />
 			<Add library="FreeImage" />
+			<Add library="freetype" />
 			<Add library="Box2D" />
+			<Add library="OpenAL32" />
 		</Linker>
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />

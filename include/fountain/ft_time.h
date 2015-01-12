@@ -2,7 +2,9 @@
 #define _FT_TIME_H_
 
 namespace ftTime {
-void init();
+
+bool init();
+void close();
 
 class Clock {
 private:

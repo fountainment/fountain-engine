@@ -86,6 +86,7 @@ public:
 	ftVec2 getLT();
 	ftVec2 getRT();
 	ftVec2 getRB();
+	void getFloatVertex(float *v);
 
 	void move(float x, float y);
 	void normalize();
@@ -147,6 +148,7 @@ private:
 	float angle;
 	ftColor color;
 public:
+	//TODO: move the shape out
 	ftShape shape;
 	ftSprite();
 	void setPosition(ftVec2 pos);
@@ -163,6 +165,7 @@ public:
 	const ftColor & getColor();
 	void draw();
 	void update();
+	void move(ftVec2 x);
 };
 
 class ftFile
@@ -183,7 +186,7 @@ public:
 
 //TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
-class container {
+class container : public ftSprite {
 private:
 	_tp list[_size];
 	int head;
@@ -203,6 +206,7 @@ public:
 	void doWith(void(*func)(_tp));
 	bool empty();
 	int getAvailN();
+	bool willLive(_tp &node);
 };
 
 template <typename _tp, int _size>
@@ -311,6 +315,12 @@ template <typename _tp, int _size>
 int container<_tp, _size>::getAvailN()
 {
 	return availN;
+}
+
+template <typename _tp, int _size>
+bool container<_tp, _size>::willLive(_tp &node)
+{
+	return true;
 }
 
 namespace fountain {
