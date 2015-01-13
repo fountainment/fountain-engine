@@ -47,6 +47,7 @@ void fountain::setBasicVarible()
 
 void fountain::gameInit()
 {
+
 	mainClock.init();
 
 	SS.registerScene(&startScene, FT_StartScene);

@@ -341,9 +341,20 @@ void ftRender::drawRect(ftRect rct, float angle)
 	ftRender::transformEnd();
 }
 
-void ftRender::drawCircle()
+void ftRender::drawCircle(float radius)
 {
+	ftRender::transformBegin();
+	ftRender::ftScale(radius);
 	drawFloat2(circle32, 32, GL_TRIANGLE_FAN);
+	ftRender::transformEnd();
+}
+
+void ftRender::drawCircleLine(float radius)
+{
+	ftRender::transformBegin();
+	ftRender::ftScale(radius);
+	drawFloat2(circle32, 32, GL_LINE_LOOP);
+	ftRender::transformEnd();
 }
 
 void ftRender::drawShape(ftShape &shape, float angle)
@@ -355,8 +366,7 @@ void ftRender::drawShape(ftShape &shape, float angle)
 	switch (type)
 	{
 	case FT_Circle:
-		ftRender::ftScale(shape.getR());
-		ftRender::drawCircle();
+		ftRender::drawCircle(shape.getR());
 		break;
 
 	case FT_Polygon:

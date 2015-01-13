@@ -1,4 +1,5 @@
 #include <fountain/ft_physics.h>
+#include <fountain/ft_render.h>
 
 using ftPhysics::Body;
 using ftPhysics::World;
@@ -13,8 +14,93 @@ static int defaultPositionIterations = 3;
 
 static float ratio = 1.0f;
 
+class DebugDraw : public b2Draw
+{
+private:
+public:
+	~DebugDraw()
+	{
+
+	}
+
+	void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+	{
+		ftVec2 a, b;
+		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
+		for (int i = 0; i < vertexCount; i++) {
+			a = ftVec2(vertices[i].x, vertices[i].y);
+			if (i == vertexCount - 1)
+				b = ftVec2(vertices[0].x, vertices[0].y);
+			else
+				b = ftVec2(vertices[i + 1].x, vertices[i + 1].y);
+			a = a * ratio;
+			b = b * ratio;
+			ftRender::drawLine(a, b);
+		}
+	}
+
+	void DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
+	{
+		std::vector<ftVec2> v;
+		for (int i = 0; i < vertexCount; i++) {
+			v.push_back(ftVec2(vertices[i].x * ratio, vertices[i].y * ratio));
+		}
+		ftShape poly(v, vertexCount, true);
+		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
+		ftRender::drawShape(poly);
+	}
+
+	void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
+	{
+		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
+		ftRender::transformBegin();
+		ftRender::ftTranslate(ftVec2(center.x, center.y) * ratio);
+		ftRender::drawCircleLine(radius * ratio);
+		ftRender::transformEnd();
+	}
+
+	void DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
+	{
+		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
+		ftRender::transformBegin();
+		ftRender::ftTranslate(ftVec2(center.x, center.y) * ratio);
+		ftRender::drawCircle(radius * ratio);
+		ftRender::transformEnd();
+	}
+
+	void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
+	{
+		ftVec2 a(p1.x, p1.y);
+		ftVec2 b(p2.x, p2.y);
+		a = a * ratio;
+		b = b * ratio;
+		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
+		ftRender::drawLine(a, b);
+	}
+
+	void DrawTransform(const b2Transform& xf)
+	{
+		b2Vec2 p1 = xf.p, p2;
+		const float32 k_axisScale = 0.2f;
+		p2 = p1 + k_axisScale * xf.q.GetXAxis();
+		DrawSegment(p1, p2, b2Color(1, 0, 0));
+
+		p2 = p1 + k_axisScale * xf.q.GetYAxis();
+		DrawSegment(p1, p2, b2Color(0, 1, 0));
+	}
+};
+
+static DebugDraw debugDraw;
+
 bool ftPhysics::init()
 {
+	uint32 flags = 0;
+	flags += b2Draw::e_shapeBit;
+	flags += b2Draw::e_jointBit;
+	//flags += b2Draw::e_aabbBit;
+	flags += b2Draw::e_pairBit;
+	flags += b2Draw::e_centerOfMassBit;
+	debugDraw.SetFlags(flags);
 	return true;
 }
 
@@ -43,6 +129,7 @@ ftVec2 ftPhysics::physics2Render(ftVec2 v)
 	return v * ratio;
 }
 
+//class ftPhysics::Body
 Body::Body()
 {
 	body = NULL;
@@ -138,10 +225,29 @@ void Body::update()
 	setAngle(angle);
 }
 
+void Body::draw()
+{
+	ftVec2 pos = getPosition();
+	ftRender::transformBegin();
+	ftRender::useColor(getColor());
+	ftRender::ftTranslate(pos.x, pos.y);
+	ftRender::drawShape(shape, getAngle());
+	ftRender::transformEnd();
+}
+
+void Body::setShape(const ftShape & shape)
+{
+	this->shape = shape;
+}
+
+//class ftPhysics::World
 World::World(ftVec2 gravity)
 {
 	b2Vec2 g(gravity.x, gravity.y);
 	world = new b2World(g);
+	world->SetAllowSleeping(true);
+	world->SetDebugDraw(&debugDraw);
+	doDebugDraw = false;
 }
 
 bool World::addBody(Body* bd)
@@ -210,4 +316,11 @@ void World::update()
 void World::draw()
 {
 	bodyCon.doWith(bodyDraw);
+	if (doDebugDraw == true)
+		world->DrawDebugData();
+}
+
+void World::setDebugDraw(bool dd)
+{
+	doDebugDraw = dd;
 }

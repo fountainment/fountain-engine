@@ -154,7 +154,7 @@ private:
 	ftColor color;
 public:
 	//TODO: move the shape out
-	ftShape shape;
+	//ftShape shape;
 	ftSprite();
 	void setPosition(ftVec2 pos);
 	void setPosition(float x, float y);
@@ -166,7 +166,6 @@ public:
 	void setRect(ftRect rct);
 	ftRect getRect();
 	void setColor(const ftColor & c);
-	void setShape(const ftShape & shape);
 	const ftColor & getColor();
 	void draw();
 	void update();

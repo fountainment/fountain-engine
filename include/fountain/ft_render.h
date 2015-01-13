@@ -51,7 +51,8 @@ void drawLine(float x1, float y1, float x2, float y2);
 void drawLine(ftVec2 p1, ftVec2 p2);
 void drawQuad(float w, float h);
 void drawRect(ftRect rct, float angle = 0.0f);
-void drawCircle();
+void drawCircle(float radius);
+void drawCircleLine(float radius);
 void drawShape(ftShape & shape, float angle = 0.0f);
 
 //TODO: implement this function drawBitmap

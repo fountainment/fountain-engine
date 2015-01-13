@@ -375,21 +375,8 @@ ftRect ftSprite::getRect()
 	return rct;
 }
 
-void ftSprite::setShape(const ftShape & shape)
-{
-	this->shape = shape;
-}
-
 void ftSprite::draw()
 {
-	ftVec2 pos = getPosition();
-	/*
-	ftRender::transformBegin();
-	ftRender::useColor(color);
-	ftRender::ftTranslate(pos.x, pos.y);
-	ftRender::drawShape(shape, getAngle());
-	ftRender::transformEnd();
-	*/
 }
 
 void ftSprite::move(ftVec2 x)

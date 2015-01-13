@@ -25,6 +25,7 @@ class Body : public ftSprite
 {
 private:
 public:
+	ftShape shape;
 	b2Body* body;
 	int bodyType;
 
@@ -33,12 +34,15 @@ public:
 	void setBody(b2Body* b2bd);
 	void autoCreateFixtures();
 	void update();
+	void draw();
+	void setShape(const ftShape & shape);
 };
 
 class World
 {
 private:
 	container<Body*, BODY_MAXNUM> bodyCon;
+	bool doDebugDraw;
 public:
 	b2World* world;
 	World(ftVec2 gravity);
@@ -48,6 +52,7 @@ public:
 	void update(float timeStep);
 	void draw();
 	bool empty();
+	void setDebugDraw(bool dd);
 };
 
 };
