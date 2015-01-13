@@ -137,6 +137,7 @@ ftPhysics::World mainWorld(ftVec2(0, -10));
 b2MouseJoint *mouseJoint;
 ftRender::SubImage xx;
 ftRender::SubImage yy;
+bool debugDrawS;
 
 void MouseUp()
 {
@@ -252,6 +253,8 @@ void init(ftScene::Scene* sc)
 			mainWorld.addBody(bdPoint);
 		}
 	}
+
+	debugDrawS = false;
 }
 
 void update(ftScene::Scene* sc)
@@ -269,7 +272,10 @@ void update(ftScene::Scene* sc)
 		else
 			mainClock.Pause();
 	}
-
+	if (fountain::sysKeyboard.getState(FT_D) == FT_KeyDown) {
+		debugDrawS = !debugDrawS;
+		mainWorld.setDebugDraw(debugDrawS);
+	}
 
 	int tmp = ftAlgorithm::randRangef(1, 5);
 
