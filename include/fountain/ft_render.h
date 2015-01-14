@@ -116,6 +116,7 @@ public:
 	void update();
 	void setPosition(float x, float y);
 	void setPosition(float x, float y, float z);
+	ftVec2 getPosition();
 	void move(float x, float y);
 	void setViewport(int w, int h, int x = 0, int y = 0);
 	void setViewport(ftRect vp);

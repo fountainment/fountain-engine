@@ -231,11 +231,12 @@ int data2Texture(unsigned char *bits, int width, int height, int dataType)
 	GLuint gl_texID;
 	glGenTextures(1, &gl_texID);
 	glBindTexture(GL_TEXTURE_2D, gl_texID);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	GLenum internalFormat = FT2InternalFormat[dataType];
 	GLenum format = FT2Format[dataType];
@@ -656,6 +657,11 @@ void Camera::setPosition(float x, float y, float z)
 	if (z < FT_CAMERA_NEAR)
 		z = FT_CAMERA_NEAR;
 	this->z = z;
+}
+
+ftVec2 Camera::getPosition()
+{
+	return ftVec2(x, y);
 }
 
 void Camera::move(float x, float y)

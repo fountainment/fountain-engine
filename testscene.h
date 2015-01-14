@@ -92,8 +92,9 @@ void draw(ftScene::Scene* sc)
 
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
-	if (ttt >= 0.01f)
+	if (ttt >= 0.01f) {
 		ftRender::drawQuad(fountain::mainWin.w / scale, fountain::mainWin.h / scale);
+	}
 	ftRender::transformEnd();
 
 }
@@ -394,8 +395,10 @@ void draw(ftScene::Scene* sc)
 
 	ftRender::transformBegin();
 	ftRender::ftColor4f(0, 0, 0, ttt);
-	if (ttt >= 0.01f)
+	if (ttt >= 0.01f) {
+		ftRender::ftTranslate(mainCamera.getPosition());
 		ftRender::drawQuad(fountain::mainWin.w / scale, fountain::mainWin.h / scale);
+	}
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
