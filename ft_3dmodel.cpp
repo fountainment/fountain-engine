@@ -108,5 +108,6 @@ void ObjModel::render()
 	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_DEPTH_TEST);
+	glLineWidth(1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

@@ -7,6 +7,8 @@ ftType::FontMan fm;
 ftAudio::Channel cha;
 ftUI::NineSprite nineS;
 
+bool useShader = false;
+
 #include "testscene.h"
 #include <string>
 
@@ -82,17 +84,19 @@ void fountain::singleFrame()
 	//TODO: move this internal(fountainMain)
 	mainClock.tick();
 
+	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyDown)
+		useShader = !useShader;
+	if (useShader)
+		SP.use();
+	else
+		ftRender::useFFP();
+	if (fountain::sysKeyboard.getState(FT_R) == FT_KeyDown)
+		SP.reload();
+
 	ftVec2 mp = fountain::sysMouse.getPos();
 	SP.setUniform("time", mainClock.secondsFromInit());
 	SP.setUniform("resolution", fountain::getWinSize());
 	SP.setUniform("mouse", mp);
-
-	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyDown)
-		SP.use();
-	if (fountain::sysKeyboard.getState(FT_F) == FT_KeyDown)
-		ftRender::useFFP();
-	if (fountain::sysKeyboard.getState(FT_R) == FT_KeyDown)
-		SP.reload();
 
 	if (fountain::sysKeyboard.getState(FT_X) == FT_KeyDown)
 		cha.play();

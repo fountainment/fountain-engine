@@ -211,9 +211,11 @@ void NineSprite::draw()
 	float cy = (centerSize.y + gridSize.y) * 0.5f;
 
 	ftVec2 cornerPos[4] = {ftVec2(-cx, -cy), ftVec2(cx, -cy),
-				ftVec2(cx, cy), ftVec2(-cx, cy)};
+	                       ftVec2(cx, cy), ftVec2(-cx, cy)
+	                      };
 	ftVec2 borderPos[4] = {ftVec2(.0f, -cy), ftVec2(cx, .0f),
-				ftVec2(.0f, cy), ftVec2(-cx, .0f)};
+	                       ftVec2(.0f, cy), ftVec2(-cx, .0f)
+	                      };
 
 	ftRender::transformBegin();
 	ftRender::ftTranslate(getPosition());
