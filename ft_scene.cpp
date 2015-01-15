@@ -4,6 +4,10 @@
 using ftScene::Scene;
 using ftScene::SceneSelector;
 
+namespace fountain {
+	SceneSelector sceneSelector;
+}
+
 bool ftScene::init()
 {
 	return true;
@@ -13,42 +17,24 @@ void ftScene::close()
 {
 }
 
-Scene::Scene(void (*init)(Scene *sc), void (*update)(Scene *sc), void (*draw)(Scene *sc), void (*uninit)(Scene *sc)) {
-	initPtr = init;
-	updatePtr = update;
-	drawPtr = draw;
-	destroyPtr = uninit;
-	end = false;
-	isInit = false;
-	needDestroy = false;
+Scene::Scene() {
 }
 
 void Scene::init()
 {
-	if (initPtr != NULL)
-		initPtr(this);
 	mainClock.init();
-	isInit = true;
 }
 
 void Scene::update()
 {
-	mainClock.tick();
-	if (updatePtr != NULL)
-		updatePtr(this);
 }
 
 void Scene::draw()
 {
-	if (drawPtr != NULL)
-		drawPtr(this);
 }
 
 void Scene::destroy()
 {
-	if (destroyPtr != NULL)
-		destroyPtr(this);
-	isInit = false;
 }
 
 void Scene::Pause()
@@ -117,5 +103,12 @@ void SceneSelector::sceneSolve()
 		sc = scene[cur];
 		if (!sc->isInit) sc->init();
 	}
+}
+
+void SceneSelector::doAll()
+{
+	sceneSolve();
+	update();
+	draw();
 }
 

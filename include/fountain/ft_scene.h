@@ -12,13 +12,10 @@ bool init();
 void close();
 
 //TODO: delete function pointer, use virtual function
-class Scene {
+class Scene
+{
 private:
 	ftTime::Clock mainClock;
-	void (*initPtr)(Scene *sc);
-	void (*updatePtr)(Scene *sc);
-	void (*drawPtr)(Scene *sc);
-	void (*destroyPtr)(Scene *sc);
 
 public:
 	bool pause;
@@ -27,17 +24,18 @@ public:
 	bool needDestroy;
 	int next;
 	int prev;
-	Scene(void (*init)(Scene *sc), void (*update)(Scene *sc), void (*draw)(Scene *sc), void (*destroy)(Scene *sc));
-	void init();
-	void update();
-	void draw();
-	void destroy();
+	Scene();
+	virtual void init();
+	virtual void update();
+	virtual void draw();
+	virtual void destroy();
 	void Pause();
 	void Continue();
 	void gotoScene(int next, int animeSceneIndex = FT_None, bool destroyCurScene = true);
 };
 
-class SceneSelector {
+class SceneSelector
+{
 private:
 	ftTime::Clock mainClock;
 	int cur;
@@ -49,8 +47,13 @@ public:
 	void update();
 	void draw();
 	void sceneSolve();
+	void doAll();
 };
 
-};
+}
+
+namespace fountain {
+	extern ftScene::SceneSelector sceneSelector;
+}
 
 #endif

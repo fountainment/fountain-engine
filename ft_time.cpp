@@ -2,6 +2,10 @@
 
 using ftTime::Clock;
 
+namespace fountain {
+Clock mainClock(60.0);
+}
+
 #ifdef linux
 
 // Linux
@@ -47,6 +51,7 @@ inline double floatTime()
 
 bool ftTime::init()
 {
+	fountain::mainClock.init();
 	return true;
 }
 

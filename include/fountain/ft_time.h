@@ -33,6 +33,11 @@ public:
 	double secondsFromPause();
 	double secondsFromContinue();
 };
+
+}
+
+namespace fountain {
+extern ftTime::Clock mainClock;
 }
 
 #endif
