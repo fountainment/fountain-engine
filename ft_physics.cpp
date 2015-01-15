@@ -48,6 +48,7 @@ public:
 		ftShape poly(v, vertexCount, true);
 		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
 		ftRender::drawShape(poly);
+		DrawPolygon(vertices, vertexCount, b2Color(color.r + 0.2, color.g + 0.2, color.b + 0.2));
 	}
 
 	void DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
@@ -65,7 +66,10 @@ public:
 		ftRender::transformBegin();
 		ftRender::ftTranslate(ftVec2(center.x, center.y) * ratio);
 		ftRender::drawCircle(radius * ratio);
+		ftRender::useColor(FT_White);
+		ftRender::drawLine(ftVec2(0, 0), ftVec2(axis.x, axis.y) * (radius * ratio));
 		ftRender::transformEnd();
+		DrawCircle(center, radius, b2Color(color.r + 0.2, color.g + 0.2, color.b + 0.2));
 	}
 
 	void DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
@@ -99,7 +103,7 @@ bool ftPhysics::init()
 	flags += b2Draw::e_jointBit;
 	//flags += b2Draw::e_aabbBit;
 	flags += b2Draw::e_pairBit;
-	flags += b2Draw::e_centerOfMassBit;
+	//flags += b2Draw::e_centerOfMassBit;
 	debugDraw.SetFlags(flags);
 	return true;
 }
