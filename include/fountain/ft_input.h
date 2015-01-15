@@ -14,7 +14,8 @@ void close();
 
 void initPerFrame();
 
-class Mouse {
+class Mouse
+{
 private:
 	ftVec2 coor;
 	ftVec2 lastCoorNor;
@@ -31,7 +32,8 @@ public:
 	void clearState();
 };
 
-class Keyboard {
+class Keyboard
+{
 private:
 	int state[FT_KEYBOARDSTATE_SIZE];
 public:
@@ -48,6 +50,6 @@ namespace fountain {
 extern ftInput::Mouse sysMouse;
 extern ftInput::Keyboard sysKeyboard;
 
-};
+}
 
 #endif

@@ -69,6 +69,11 @@ ftVec2 getWinSize()
 	return ftVec2(mainWin.w, mainWin.h);
 }
 
+ftRect getWinRect()
+{
+	return ftRect(0, 0, mainWin.w, mainWin.h);
+}
+
 }
 
 #ifndef FT_Console

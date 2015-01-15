@@ -6,7 +6,8 @@ namespace ftTime {
 bool init();
 void close();
 
-class Clock {
+class Clock
+{
 private:
 	double secondPerFrame;
 	bool isPaused;
@@ -25,8 +26,8 @@ public:
 	explicit Clock(double fps = 0.0);
 	void init();
 	void tick();
-	void Pause();
-	void Continue();
+	void pause();
+	void resume();
 	bool isPause();
 	double getDeltaT();
 	double secondsFromInit();

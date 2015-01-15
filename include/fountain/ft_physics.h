@@ -55,6 +55,6 @@ public:
 	void setDebugDraw(bool dd);
 };
 
-};
+}
 
 #endif

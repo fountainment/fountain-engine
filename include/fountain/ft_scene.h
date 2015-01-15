@@ -1,10 +1,9 @@
 #ifndef _FT_SCENE_H_
 #define _FT_SCENE_H_
 
-#define FT_SceneMax 32
-
 #include <fountain/ft_data.h>
 #include <fountain/ft_time.h>
+#include <fountain/ft_render.h>
 
 namespace ftScene {
 
@@ -14,46 +13,38 @@ void close();
 //TODO: delete function pointer, use virtual function
 class Scene
 {
-private:
-	ftTime::Clock mainClock;
-
 public:
-	bool pause;
-	bool end;
-	bool isInit;
-	bool needDestroy;
-	int next;
-	int prev;
+	ftTime::Clock mainClock;
+	ftRender::Camera mainCamera;
+	bool isPause;
 	Scene();
+	virtual ~Scene();
 	virtual void init();
 	virtual void update();
 	virtual void draw();
 	virtual void destroy();
-	void Pause();
-	void Continue();
-	void gotoScene(int next, int animeSceneIndex = FT_None, bool destroyCurScene = true);
+	void pause();
+	void resume();
 };
 
 class SceneSelector
 {
 private:
 	ftTime::Clock mainClock;
-	int cur;
-	Scene *scene[FT_SceneMax];
-	//void gotoScene(int next, int animeSceneIndex);
+	Scene *curScene;
 public:
 	SceneSelector();
-	void registerScene(Scene *sc, int index);
 	void update();
 	void draw();
-	void sceneSolve();
+	//void sceneSolve();
 	void doAll();
+	void gotoScene(Scene *nextScene, int animeSceneIndex = FT_None, bool destroyCurScene = true);
 };
 
 }
 
 namespace fountain {
-	extern ftScene::SceneSelector sceneSelector;
+extern ftScene::SceneSelector sceneSelector;
 }
 
 #endif

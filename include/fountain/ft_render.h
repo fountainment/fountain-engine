@@ -69,7 +69,8 @@ void deleteAllPictures();
 void useShader();
 void useFFP();
 
-class SubImage {
+class SubImage
+{
 private:
 	int picID;
 	ftVec2 size;
@@ -91,7 +92,8 @@ SubImage getImage(int picID);
 SubImage getImage(const char *filename);
 void drawImage(SubImage & im);
 
-class SubImagePool {
+class SubImagePool
+{
 private:
 	int picID;
 	std::map<int, SubImage> nameHash2SubImage;
@@ -101,7 +103,8 @@ public:
 	const SubImage & getImage(const char *imageName);
 };
 
-class Camera {
+class Camera
+{
 private:
 	float x, y, z;
 	float W2, H2;
@@ -128,7 +131,8 @@ public:
 
 Camera* getCurrentCamera();
 
-class ShaderProgram {
+class ShaderProgram
+{
 private:
 	ftFile vsFile, fsFile;
 	unsigned vs, fs;

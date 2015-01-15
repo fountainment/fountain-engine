@@ -6,7 +6,8 @@ namespace ft3DModel {
 bool init();
 void close();
 
-class ObjModel {
+class ObjModel
+{
 private:
 	int vecN;
 	int indexN;

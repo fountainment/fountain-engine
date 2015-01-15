@@ -45,7 +45,8 @@ typedef struct {
 
 } winState;
 
-class ftVec2 {
+class ftVec2
+{
 public:
 	float x, y;
 	ftVec2();
@@ -57,14 +58,16 @@ public:
 };
 
 
-class ftVec3 {
+class ftVec3
+{
 public:
 	float xyz[3];
 	ftVec3();
 	ftVec3(float x, float y, float z);
 };
 
-class ftRect {
+class ftRect
+{
 private:
 	float x;
 	float y;
@@ -99,7 +102,8 @@ public:
 	bool collidePoint(ftVec2 p);
 };
 
-class ftShape {
+class ftShape
+{
 private:
 	float data[32];
 	float r;
@@ -146,7 +150,8 @@ public:
 	float getAlpha();
 };
 
-class ftSprite {
+class ftSprite
+{
 private:
 	ftVec2 position;
 	ftVec2 rectSize;
@@ -190,7 +195,8 @@ public:
 
 //TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
-class container : public ftSprite {
+class container : public ftSprite
+{
 private:
 	_tp list[_size];
 	int head;
@@ -331,6 +337,6 @@ namespace fountain {
 
 extern winState mainWin;
 
-};
+}
 
 #endif

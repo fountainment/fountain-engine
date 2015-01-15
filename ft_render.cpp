@@ -143,7 +143,7 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
-	glColor4f(1.0f, 1.0, 1.0f, 1.0f);
+	//glColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)

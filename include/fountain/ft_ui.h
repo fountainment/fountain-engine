@@ -19,7 +19,8 @@ void close();
 
 void setDefaultFont(ftType::FontMan *font);
 
-class Label : public ftSprite {
+class Label : public ftSprite
+{
 private:
 	std::vector<unsigned long> text;
 	ftType::FontMan *font;
@@ -38,7 +39,8 @@ public:
 	int getFontSize();
 };
 
-class Button : public ftSprite {
+class Button : public ftSprite
+{
 private:
 	Label label;
 	int state;
@@ -54,7 +56,8 @@ public:
 	void setCaption(const char *str);
 };
 
-class NineSprite : public ftSprite {
+class NineSprite : public ftSprite
+{
 private:
 	ftRender::SubImage image;
 	ftRender::SubImage cornerImage[4];
@@ -71,11 +74,12 @@ public:
 	void draw();
 };
 
-class Cursor : public ftSprite {
+class Cursor : public ftSprite
+{
 private:
 public:
 };
 
-};
+}
 
 #endif

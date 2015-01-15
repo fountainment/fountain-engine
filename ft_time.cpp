@@ -116,13 +116,13 @@ double Clock::secondsFromContinue()
 	return floatTime() - continueT;
 }
 
-void Clock::Pause()
+void Clock::pause()
 {
 	pauseT = floatTime();
 	isPaused = true;
 }
 
-void Clock::Continue()
+void Clock::resume()
 {
 	beginT = continueT = floatTime();
 	isPaused = false;

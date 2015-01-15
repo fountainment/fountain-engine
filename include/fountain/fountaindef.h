@@ -88,16 +88,4 @@
 #define FT_ON 1
 #define FT_OFF 0
 
-#define FT_StartScene 0
-#define FT_Scene1 1
-#define FT_Scene2 2
-#define FT_Scene3 3
-#define FT_Scene4 4
-#define FT_Scene5 5
-#define FT_Scene6 6
-#define FT_Scene7 7
-#define FT_Scene8 8
-#define FT_Scene9 9
-#define FT_EndScene -1
-
 #endif

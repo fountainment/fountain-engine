@@ -20,7 +20,8 @@ public:
 	ftVec2 advance;
 };
 
-class FontMan {
+class FontMan
+{
 private:
 	int picID;
 	FT_Face face;
@@ -40,6 +41,6 @@ public:
 	int getFontSize();
 };
 
-};
+}
 
 #endif

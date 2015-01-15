@@ -16,6 +16,6 @@ float randRangef(float l, float r);
 std::vector<unsigned long> utf8toUnicode(const char *input);
 int nextPower2(int num);
 
-};
+}
 
 #endif

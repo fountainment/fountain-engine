@@ -139,7 +139,6 @@ int FontMan::drawString(std::vector<unsigned long> s)
 		ftRender::SubImage im = unicode2SubImage[s[i]];
 		ftRender::transformBegin();
 		ftRender::ftTranslate(pen + ch.center);
-		ftRender::useColor(ftRender::getGlobalColor());
 		ftRender::drawImage(im);
 		ftRender::transformEnd();
 		pen = pen + ch.advance;

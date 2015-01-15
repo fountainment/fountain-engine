@@ -14,10 +14,10 @@ void fountain::setBasicVarible()
 
 void fountain::gameInit()
 {
+	fountain::sceneSelector.gotoScene(new HelloWorld());
 }
 
 void fountain::singleFrame()
 {
-	//fountain::mainClock.tick();
 	fountain::sceneSelector.doAll();
 }

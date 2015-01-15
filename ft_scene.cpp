@@ -5,7 +5,7 @@ using ftScene::Scene;
 using ftScene::SceneSelector;
 
 namespace fountain {
-	SceneSelector sceneSelector;
+SceneSelector sceneSelector;
 }
 
 bool ftScene::init()
@@ -17,7 +17,13 @@ void ftScene::close()
 {
 }
 
-Scene::Scene() {
+Scene::Scene()
+{
+	init();
+}
+
+Scene::~Scene()
+{
 }
 
 void Scene::init()
@@ -37,47 +43,27 @@ void Scene::destroy()
 {
 }
 
-void Scene::Pause()
+void Scene::pause()
 {
-	mainClock.Pause();
-	pause = true;
+	mainClock.pause();
+	isPause = true;
 }
 
-void Scene::Continue()
+void Scene::resume()
 {
-	mainClock.Continue();
-	pause = false;
-}
-
-void Scene::gotoScene(int next, int animeSceneIndex, bool destroyCurScene)
-{
-	end = true;
-	needDestroy = destroyCurScene;
-	this->next = next;
+	mainClock.resume();
+	isPause = false;
 }
 
 SceneSelector::SceneSelector()
 {
-	for (int i = 0; i < FT_SceneMax; i++)
-		scene[i] = NULL;
-	cur = FT_StartScene;
-}
-
-void SceneSelector::registerScene(Scene *sc, int index)
-{
-	if (index >= 0 && index < FT_SceneMax) {
-		scene[index] = sc;
-		if (index == FT_StartScene) sc->init();
-	} else {
-		//TODO:add debug info output
-	}
+	curScene = NULL;
 }
 
 void SceneSelector::update()
 {
-	Scene *sc = scene[cur];
 	mainClock.tick();
-	if (sc != NULL) sc->update();
+	if (curScene != NULL) curScene->update();
 	else {
 		//TODO:add debug info output
 	}
@@ -85,30 +71,26 @@ void SceneSelector::update()
 
 void SceneSelector::draw()
 {
-	Scene *sc = scene[cur];
-	if (sc != NULL) sc->draw();
+	if (curScene != NULL) curScene->draw();
 	else {
 		//TODO:add debug info output
 	}
 }
 
-void SceneSelector::sceneSolve()
-{
-	Scene *sc = scene[cur];
-	if (sc != NULL && sc->end) {
-		if (sc->needDestroy)
-			sc->destroy();
-		cur = sc->next;
-		sc->end = false;
-		sc = scene[cur];
-		if (!sc->isInit) sc->init();
-	}
-}
-
 void SceneSelector::doAll()
 {
-	sceneSolve();
 	update();
 	draw();
 }
 
+void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destroyCurScene)
+{
+	if (curScene != NULL && destroyCurScene) {
+		curScene->destroy();
+		//TODO: delete when current frame end
+		//delete curScene;
+	}
+	curScene = nextScene;
+	//TODO: to init or not
+	if (curScene != NULL) curScene->init();
+}

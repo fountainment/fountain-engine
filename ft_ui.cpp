@@ -65,6 +65,7 @@ void Label::setAlign(int align)
 
 void Label::draw()
 {
+	ftRender::useColor(getColor());
 	ftRender::transformBegin();
 	ftRender::ftTranslate(getPosition());
 	if (font != NULL) {
@@ -122,7 +123,7 @@ void Button::draw()
 	ftRect rct = getRect();
 	ftRender::useColor(backColor);
 	ftRender::drawRect(rct);
-	ftRender::useColor(getColor());
+	label.setColor(getColor());
 	label.draw();
 }
 
