@@ -117,3 +117,19 @@ public:
 	void customDraw();
 	void destroy();
 };
+
+class InputScene : public TestScene
+{
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
+class TimeScene : public TestScene
+{
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};

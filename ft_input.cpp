@@ -43,7 +43,7 @@ void ftInput::initPerFrame()
 	}
 }
 
-//Mouse
+//class ftInput::Mouse
 Mouse::Mouse()
 {
 	clearState();
@@ -95,7 +95,7 @@ void Mouse::clearState()
 	std::memset(state, 0, sizeof(state));
 }
 
-//Keyboard
+//class ftInput::Keyboard
 Keyboard::Keyboard()
 {
 	clearState();

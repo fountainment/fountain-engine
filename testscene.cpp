@@ -60,10 +60,10 @@ void HWButton::click()
 		fountain::sceneSelector.gotoScene(new ShaderScene());
 		break;
 	case 7:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new InputScene());
 		break;
 	case 8:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new TimeScene());
 		break;
 	case 9:
 		fountain::sceneSelector.gotoScene(new HelloWorld());
@@ -278,3 +278,30 @@ void ShaderScene::destroy()
 {
 	ftRender::useFFP();
 }
+
+//class InputScene
+void InputScene::customInit()
+{
+}
+
+void InputScene::customUpdate()
+{
+}
+
+void InputScene::customDraw()
+{
+}
+
+//class TimeScene
+void TimeScene::customInit()
+{
+}
+
+void TimeScene::customUpdate()
+{
+}
+
+void TimeScene::customDraw()
+{
+}
+

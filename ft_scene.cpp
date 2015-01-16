@@ -17,6 +17,7 @@ void ftScene::close()
 {
 }
 
+//class ftScene::Scene
 Scene::Scene()
 {
 	init();
@@ -55,6 +56,7 @@ void Scene::resume()
 	isPause = false;
 }
 
+//class ftScene::SceneSelector
 SceneSelector::SceneSelector()
 {
 	curScene = NULL;
