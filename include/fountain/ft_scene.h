@@ -32,11 +32,12 @@ class SceneSelector
 private:
 	ftTime::Clock mainClock;
 	Scene *curScene;
-public:
-	SceneSelector();
+	Scene *oldScene;
+	bool destroyOldScene;
 	void update();
 	void draw();
-	//void sceneSolve();
+public:
+	SceneSelector();
 	void doAll();
 	void gotoScene(Scene *nextScene, int animeSceneIndex = FT_None, bool destroyCurScene = true);
 };

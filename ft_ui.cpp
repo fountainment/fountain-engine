@@ -51,6 +51,8 @@ Label::Label(std::string str)
 void Label::setString(const char *str)
 {
 	text = ftAlgorithm::utf8toUnicode(str);
+	if (font == NULL) setFont(defaultFont);
+	if (font != NULL) strLength = font->getStringLength(text);
 }
 
 void Label::setFont(ftType::FontMan *font)
@@ -110,12 +112,13 @@ void Button::update()
 	ftRect rct = getRect();
 	if (rct.collidePoint(mPos)) {
 		state = mState;
-		if (state == FT_isUp) state = FT_isOn;
+		if (state == FT_isUp) {
+			state = FT_isOn;
+		}
 	} else {
 		state = FT_None;
 	}
-	label.setRect(getRect());
-	label.move(ftVec2(label.getStrLength() * -0.5f, label.getFontSize() * -0.40f));
+	if (state == FT_ButtonUp) click();
 }
 
 void Button::draw()
@@ -145,6 +148,7 @@ void Button::setForeColor(ftColor c)
 void Button::setCaption(const char *str)
 {
 	label.setString(str);
+	label.setPosition(getPosition() + ftVec2(label.getStrLength() * -0.5f, label.getFontSize() * -0.40f));
 }
 
 //class ftUI::NineSprite

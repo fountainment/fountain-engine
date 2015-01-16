@@ -47,7 +47,7 @@ private:
 	ftColor backColor;
 public:
 	Button();
-	void click();
+	virtual void click();
 	void update();
 	void draw();
 	int getState();

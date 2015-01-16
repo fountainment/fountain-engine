@@ -15,6 +15,7 @@ void fountain::setBasicVarible()
 void fountain::gameInit()
 {
 	fountain::sceneSelector.gotoScene(new HelloWorld());
+	ftRender::setClearColor(ftColor("#252525"));
 }
 
 void fountain::singleFrame()

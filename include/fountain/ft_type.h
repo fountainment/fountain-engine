@@ -38,6 +38,7 @@ public:
 	void genStringTable(const char *str, int h = 16);
 	int drawString(const char *str);
 	int drawString(std::vector<unsigned long> s);
+	int getStringLength(std::vector<unsigned long> s);
 	int getFontSize();
 };
 

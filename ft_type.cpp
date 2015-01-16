@@ -59,7 +59,7 @@ FontMan::FontMan()
 FontMan::~FontMan()
 {
 	//FIXME: double free when delete the pic
-	//ftRender::deletePicture(picID);
+	ftRender::deletePicture(picID);
 	//TODO: try to do the FT_Done_Face before the module close
 	//FT_Done_Face(face);
 }
@@ -141,6 +141,26 @@ int FontMan::drawString(std::vector<unsigned long> s)
 		ftRender::ftTranslate(pen + ch.center);
 		ftRender::drawImage(im);
 		ftRender::transformEnd();
+		pen = pen + ch.advance;
+		//kerning
+		glyphIndex = FT_Get_Char_Index(face, s[i]);
+		if (useKerning && previous && glyphIndex) {
+			FT_Vector delta;
+			FT_Get_Kerning(face, previous, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			pen.x += delta.x >> 6;
+		}
+		previous = glyphIndex;
+	}
+	return pen.x;
+}
+
+int FontMan::getStringLength(std::vector<unsigned long> s)
+{
+	ftVec2 pen(0, 0);
+	FT_Int previous = 0;
+	FT_UInt glyphIndex;
+	for (unsigned i = 0; i < s.size(); i++) {
+		charInfo ch = unicode2charInfo[s[i]];
 		pen = pen + ch.advance;
 		//kerning
 		glyphIndex = FT_Get_Char_Index(face, s[i]);

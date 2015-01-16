@@ -58,6 +58,8 @@ void Scene::resume()
 SceneSelector::SceneSelector()
 {
 	curScene = NULL;
+	oldScene = NULL;
+	destroyOldScene = false;
 }
 
 void SceneSelector::update()
@@ -80,6 +82,11 @@ void SceneSelector::draw()
 void SceneSelector::doAll()
 {
 	update();
+	if (destroyOldScene && oldScene != NULL) {
+		delete oldScene;
+		oldScene = NULL;
+		destroyOldScene = false;
+	}
 	draw();
 }
 
@@ -87,8 +94,7 @@ void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destro
 {
 	if (curScene != NULL && destroyCurScene) {
 		curScene->destroy();
-		//TODO: delete when current frame end
-		//delete curScene;
+		destroyOldScene = true;
 	}
 	curScene = nextScene;
 	//TODO: to init or not
