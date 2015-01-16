@@ -1,5 +1,4 @@
-#include <fountain/ft_physics.h>
-#include <fountain/ft_render.h>
+#include <fountain/fountaindef.h>
 
 using ftPhysics::Body;
 using ftPhysics::World;

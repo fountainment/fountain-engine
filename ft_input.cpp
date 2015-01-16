@@ -1,5 +1,4 @@
-#include <fountain/ft_input.h>
-#include <fountain/ft_data.h>
+#include <fountain/fountaindef.h>
 #include <cstring>
 #include <stack>
 

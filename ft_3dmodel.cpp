@@ -1,5 +1,4 @@
-#include <fountain/ft_3dmodel.h>
-#include <fountain/ft_data.h>
+#include <fountain/fountaindef.h>
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <cstdio>

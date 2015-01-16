@@ -1,4 +1,4 @@
-#include <fountain/ft_data.h>
+#include <fountain/fountaindef.h>
 
 //debug
 #include <cstdio>

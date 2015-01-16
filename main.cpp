@@ -1,7 +1,8 @@
 #include <fountain.h>
-
 #include "testscene.h"
 #include <string>
+
+ftType::FontMan fm;
 
 void fountain::setBasicVarible()
 {
@@ -14,11 +15,16 @@ void fountain::setBasicVarible()
 
 void fountain::gameInit()
 {
-	fountain::sceneSelector.gotoScene(new HelloWorld());
+	ftFile lData("resources/data/letters.dat");
+	fm.loadFont("resources/font/test.ttc");
+	fm.genStringTable(lData.getStr(), 32);
+	ftUI::setDefaultFont(&fm);
 	ftRender::setClearColor(ftColor("#252525"));
+	fountain::sceneSelector.gotoScene(new HelloWorld());
 }
 
 void fountain::singleFrame()
 {
 	fountain::sceneSelector.doAll();
+	fountain::mainClock.tick();
 }

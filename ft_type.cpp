@@ -1,6 +1,4 @@
-#include <fountain/ft_type.h>
-#include <fountain/ft_render.h>
-#include <fountain/ft_algorithm.h>
+#include <fountain/fountaindef.h>
 #include <cstdio>
 #include <vector>
 
@@ -58,8 +56,6 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//FIXME: double free when delete the pic
-	ftRender::deletePicture(picID);
 	//TODO: try to do the FT_Done_Face before the module close
 	//FT_Done_Face(face);
 }

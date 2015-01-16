@@ -88,4 +88,36 @@
 #define FT_ON 1
 #define FT_OFF 0
 
+#include <fountain/ft_data.h>
+#include <fountain/ft_time.h>
+#include <fountain/ft_3dmodel.h>
+#include <fountain/ft_render.h>
+#include <fountain/ft_physics.h>
+#include <fountain/ft_input.h>
+#include <fountain/ft_algorithm.h>
+#include <fountain/ft_scene.h>
+#include <fountain/ft_type.h>
+#include <fountain/ft_audio.h>
+#include <fountain/ft_ui.h>
+
+namespace fountain {
+
+void checkSysState();
+void readSettingFile();
+
+void basicSetting();
+
+void initAllSystem();
+void closeAllSystem();
+
+//these three functions are what you should implement
+void setBasicVarible();
+void gameInit();
+void singleFrame();
+
+ftVec2 getWinSize();
+ftRect getWinRect();
+
+}
+
 #endif

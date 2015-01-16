@@ -1,4 +1,4 @@
-#include <fountain/ft_audio.h>
+#include <fountain/fountaindef.h>
 #include <AL/al.h>
 #include <AL/alc.h>
 

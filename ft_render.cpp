@@ -1,7 +1,6 @@
 //TODO: replace "//GLSL exp" with better solution
 //TODO: provide RTT(render to texture) function
-#include <fountain/ft_render.h>
-#include <fountain/ft_algorithm.h>
+#include <fountain/fountaindef.h>
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <FreeImage.h>

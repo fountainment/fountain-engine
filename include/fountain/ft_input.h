@@ -2,7 +2,6 @@
 #define _FT_INPUT_H_
 
 #include <fountain/fountaindef.h>
-#include <fountain/ft_data.h>
 
 #define FT_KEYBOARDSTATE_SIZE 0x01ff
 #define FT_MOUSESTATE_SIZE 10

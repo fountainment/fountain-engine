@@ -1,6 +1,4 @@
-#include <fountain/ft_ui.h>
-#include <fountain/ft_type.h>
-#include <fountain/ft_input.h>
+#include <fountain/fountaindef.h>
 
 #include <cstdio>
 
@@ -148,14 +146,13 @@ void Button::setForeColor(ftColor c)
 void Button::setCaption(const char *str)
 {
 	label.setString(str);
-	label.setPosition(getPosition() + ftVec2(label.getStrLength() * -0.5f, label.getFontSize() * -0.40f));
+	label.setPosition(getPosition() + ftVec2(label.getStrLength() * -0.5f, label.getFontSize() * -0.37f));
 }
 
 //class ftUI::NineSprite
 NineSprite::NineSprite()
 {
 }
-
 
 NineSprite::NineSprite(const char *picName)
 {
