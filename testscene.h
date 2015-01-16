@@ -96,3 +96,24 @@ public:
 	void customDraw();
 };
 
+class UIScene : public TestScene
+{
+private:
+	float sz;
+	ftUI::NineSprite nineS;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
+class ShaderScene : public TestScene
+{
+private:
+	ftRender::ShaderProgram SP;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+	void destroy();
+};

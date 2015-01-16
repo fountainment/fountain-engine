@@ -219,6 +219,7 @@ void NineSprite::draw()
 	                       ftVec2(.0f, cy), ftVec2(-cx, .0f)
 	                      };
 
+	ftRender::useColor(getColor());
 	ftRender::transformBegin();
 	ftRender::ftTranslate(getPosition());
 	for (int i = 0; i < 4; i++) {

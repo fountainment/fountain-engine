@@ -138,8 +138,10 @@ private:
 	unsigned vs, fs;
 	unsigned program;
 public:
+	ShaderProgram();
 	ShaderProgram(const char *vs, const char *vf);
 	~ShaderProgram();
+	void load(const char *vs, const char *vf);
 	bool init();
 	bool reload();
 	void use();

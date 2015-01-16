@@ -54,10 +54,10 @@ void HWButton::click()
 		fountain::sceneSelector.gotoScene(new AudioScene());
 		break;
 	case 5:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new UIScene());
 		break;
 	case 6:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new ShaderScene());
 		break;
 	case 7:
 		fountain::sceneSelector.gotoScene(new TestScene());
@@ -233,3 +233,48 @@ void AudioScene::customDraw()
 }
 
 //class UIScene
+void UIScene::customInit()
+{
+	sz = 100.0f;
+	nineS = ftUI::NineSprite("resources/image/nine.png");
+	nineS.setSize(ftVec2(sz, sz));
+}
+
+void UIScene::customUpdate()
+{
+	if (fountain::sysMouse.getState(FT_LButton)) sz += 2.0f;
+	if (fountain::sysMouse.getState(FT_RButton)) sz -= 2.0f;
+	nineS.setSize(ftVec2(sz, sz));
+}
+
+void UIScene::customDraw()
+{
+	nineS.draw();
+} 
+
+//class ShaderScene
+void ShaderScene::customInit()
+{
+	SP.load("resources/shader/vs.vert", "resources/shader/fs.frag");
+	SP.init();
+	SP.use();
+}
+
+void ShaderScene::customUpdate()
+{
+	ftVec2 mp = fountain::sysMouse.getPos();
+	SP.setUniform("time", mainClock.secondsFromInit());
+	SP.setUniform("resolution", fountain::getWinSize());
+	SP.setUniform("mouse", mp);
+}
+
+void ShaderScene::customDraw()
+{
+	ftRender::useColor(FT_White);
+	ftRender::drawQuad(300, 300);
+}
+
+void ShaderScene::destroy()
+{
+	ftRender::useFFP();
+}

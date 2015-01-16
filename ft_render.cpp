@@ -780,18 +780,30 @@ GLuint linkShaderProgram(GLuint vs, GLuint fs)
 }
 
 //class ftRender::ShaderProgram
+ShaderProgram::ShaderProgram()
+{
+	program = 0;
+	vs = 0;
+	fs = 0;
+}
+
 ShaderProgram::ShaderProgram(const char *vsf, const char *fsf)
 {
 	program = 0;
 	vs = 0;
 	fs = 0;
-	vsFile.load(vsf);
-	fsFile.load(fsf);
+	load(vsf, fsf);
 }
 
 ShaderProgram::~ShaderProgram()
 {
 	free();
+}
+
+void ShaderProgram::load(const char *vsf, const char *fsf)
+{
+	vsFile.load(vsf);
+	fsFile.load(fsf);
 }
 
 //TODO: add words to check the process
