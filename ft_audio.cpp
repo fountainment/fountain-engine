@@ -198,9 +198,8 @@ Channel::Channel()
 
 Channel::~Channel()
 {
-	//seem to be unnecessary to do these
-	//alDeleteSources(1, &source);
-	//alDeleteBuffers(1, &buffer);
+	alDeleteSources(1, &source);
+	alDeleteBuffers(1, &buffer);
 }
 
 void Channel::init()

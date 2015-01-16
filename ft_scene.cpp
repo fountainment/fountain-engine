@@ -94,6 +94,7 @@ void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destro
 {
 	if (curScene != NULL && destroyCurScene) {
 		curScene->destroy();
+		oldScene = curScene;
 		destroyOldScene = true;
 	}
 	curScene = nextScene;
