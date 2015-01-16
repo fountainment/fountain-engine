@@ -32,6 +32,7 @@ class TextureScene : public ftScene::Scene
 {
 private:
 	SButton button;
+	int picID;
 public:
 	void init();
 	void update();

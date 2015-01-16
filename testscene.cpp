@@ -95,14 +95,17 @@ void TextureScene::init()
 {
 	button.setPosition(ftVec2(320, 260));
 	button.setRectSize(ftVec2(120, 40));
-	button.setCaption("Return");
+	button.setCaption("返回");
 	button.id = 9;
+	picID = ftRender::getPicture("resources/image/logo.png");
 	mainCamera.setViewport(fountain::getWinRect());
 }
 
 void TextureScene::update()
 {
 	mainCamera.update();
+	ftRender::useColor(FT_White);
+	ftRender::drawAlphaPic(picID);
 	button.update();
 }
 
