@@ -43,6 +43,7 @@
 		<Unit filename="ft_algorithm.cpp" />
 		<Unit filename="ft_audio.cpp" />
 		<Unit filename="ft_data.cpp" />
+		<Unit filename="ft_fountain.cpp" />
 		<Unit filename="ft_input.cpp" />
 		<Unit filename="ft_physics.cpp" />
 		<Unit filename="ft_render.cpp" />
