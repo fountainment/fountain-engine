@@ -48,10 +48,10 @@ void HWButton::click()
 		fountain::sceneSelector.gotoScene(new PhysicsScene());
 		break;
 	case 3:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new TypeScene());
 		break;
 	case 4:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new AudioScene());
 		break;
 	case 5:
 		fountain::sceneSelector.gotoScene(new TestScene());
@@ -192,3 +192,45 @@ void PhysicsScene::customDraw()
 	world.draw();
 }
 
+//class TypeScene
+void TypeScene::customInit()
+{
+	fontMan.loadFont("resources/font/test.ttc");
+	fontMan.genAsciiTable();
+}
+
+void TypeScene::customUpdate()
+{
+}
+
+void TypeScene::customDraw()
+{
+	ftRender::useColor(FT_White);
+	fontMan.drawString("Hello World!");
+}
+
+//class AudioScene
+void AudioScene::customInit()
+{
+	x.setRectSize(ftVec2(100, 100));
+	x.setPosition(0, 0);
+	x.setCaption("Play");
+	ch.init();
+	ch.load("resources/sound/test.wav");
+	ch.play();
+}
+
+void AudioScene::customUpdate()
+{
+	x.update();
+	if (x.getState() == FT_ButtonDown) {
+		ch.play();
+	}
+}
+
+void AudioScene::customDraw()
+{
+	x.draw();
+}
+
+//class UIScene

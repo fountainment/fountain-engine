@@ -74,3 +74,25 @@ public:
 	void customUpdate();
 	void customDraw();
 };
+
+class TypeScene : public TestScene
+{
+private:
+	ftType::FontMan fontMan;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
+class AudioScene : public TestScene
+{
+private:
+	SButton x;
+	ftAudio::Channel ch;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
