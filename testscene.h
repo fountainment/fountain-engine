@@ -8,14 +8,20 @@ class SButton : public ftUI::Button
 public:
 	SButton();
 	int id;
-	void click();
 	void update();
+};
+
+class HWButton : public SButton
+{
+public:
+	HWButton();
+	void click();
 };
 
 class HelloWorld : public ftScene::Scene
 {
 private:
-	container<SButton, 10> butCon;
+	container<HWButton, 10> butCon;
 
 public:
 	void init();
@@ -26,7 +32,7 @@ public:
 class TestScene : public ftScene::Scene
 {
 private:
-	SButton button;
+	HWButton button;
 public:
 	void init();
 	void update();
@@ -52,6 +58,17 @@ private:
 	float y;
 	ft3DModel::ObjModel x;
 	ftRender::Camera modelCamera;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
+class PhysicsScene : public TestScene
+{
+private:
+	ftPhysics::World world;
+	ftPhysics::Body a, b, c;
 public:
 	void customInit();
 	void customUpdate();

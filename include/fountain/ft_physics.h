@@ -45,7 +45,7 @@ private:
 	bool doDebugDraw;
 public:
 	b2World* world;
-	World(ftVec2 gravity);
+	World(ftVec2 gravity = ftVec2(0, -10));
 	bool addBody(Body* bd);
 	void delHeadBody();
 	void update();

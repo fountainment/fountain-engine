@@ -12,7 +12,29 @@ SButton::SButton()
 	setBackColor(ftColor("#CCC"));
 }
 
-void SButton::click()
+void SButton::update()
+{
+	ftUI::Button::update();
+	int st = getState();
+	if (st == FT_isOn) {
+		setForeColor(FT_White);
+		setBackColor(FT_Orange);
+	} else if (st == FT_isDown || st == FT_ButtonDown || st == FT_ButtonUp) {
+		setForeColor(FT_Yellow);
+		setBackColor(FT_Orange);
+	} else {
+		setForeColor(ftColor("#333"));
+		setBackColor(ftColor("#CCC"));
+	}
+}
+
+//class HWButton
+HWButton::HWButton()
+{
+	SButton();
+}
+
+void HWButton::click()
 {
 	std::printf("Button %d click!\n", id);
 	switch (id) {
@@ -23,7 +45,7 @@ void SButton::click()
 		fountain::sceneSelector.gotoScene(new ModelScene());
 		break;
 	case 2:
-		fountain::sceneSelector.gotoScene(new TestScene());
+		fountain::sceneSelector.gotoScene(new PhysicsScene());
 		break;
 	case 3:
 		fountain::sceneSelector.gotoScene(new TestScene());
@@ -49,27 +71,11 @@ void SButton::click()
 	};
 }
 
-void SButton::update()
-{
-	ftUI::Button::update();
-	int st = getState();
-	if (st == FT_isOn) {
-		setForeColor(FT_White);
-		setBackColor(FT_Orange);
-	} else if (st == FT_isDown || st == FT_ButtonDown || st == FT_ButtonUp) {
-		setForeColor(FT_Yellow);
-		setBackColor(FT_Orange);
-	} else {
-		setForeColor(ftColor("#333"));
-		setBackColor(ftColor("#CCC"));
-	}
-}
-
 //class HelloWorld
 void HelloWorld::init()
 {
 	for (int i = 0; i < 9; i++) {
-		SButton t;
+		HWButton t;
 		t.setPosition(ftVec2(0, 240 - i * 60));
 		t.setRectSize(ftVec2(300, 40));
 		t.setCaption(str[i]);
@@ -152,8 +158,37 @@ void ModelScene::customDraw()
 {
 	modelCamera.update();
 	ftRender::transformBegin();
-	ftRender::ftScale(150.0f);
+	ftRender::ftScale(130.0f);
 	ftRender::ftRotate(0, y, 0);
 	x.render();
 	ftRender::transformEnd();
 }
+
+//class PhysicsScene
+void PhysicsScene::customInit()
+{
+	ftPhysics::setRatio(100);
+
+	a = ftPhysics::Body(0, -100, FT_Static);
+	a.setShape(ftShape(ftRect(0, 0, 200, 20)));
+	world.addBody(&a);
+
+	b = ftPhysics::Body(0, 0, FT_Dynamic);
+	b.setShape(ftShape(10));
+	world.addBody(&b);
+
+	c = ftPhysics::Body(-5, 100, FT_Dynamic);
+	c.setShape(ftShape(10));
+	world.addBody(&c);
+}
+
+void PhysicsScene::customUpdate()
+{
+	world.update();
+}
+
+void PhysicsScene::customDraw()
+{
+	world.draw();
+}
+
