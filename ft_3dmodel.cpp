@@ -19,10 +19,13 @@ void ft3DModel::close()
 {
 }
 
+ObjModel::ObjModel()
+{
+}
+
 ObjModel::ObjModel(const char *fileName)
 {
-	openFile(fileName);
-	neverRendered = 1;
+	loadObj(fileName);
 }
 
 ObjModel::~ObjModel()
@@ -30,7 +33,7 @@ ObjModel::~ObjModel()
 	delete [] vtx;
 }
 
-void ObjModel::openFile(const char *fileName)
+void ObjModel::loadObj(const char *fileName)
 {
 	char tmp;
 	int tmpInt;
@@ -84,7 +87,6 @@ void ObjModel::openFile(const char *fileName)
 					vtx[tri * 3 + vti][coori] = v[p[tri].i[vti]].xyz[coori];
 			}
 		}
-		neverRendered = 1;
 	} else {
 		std::printf("Open \"%s\" error!\n", fileName);
 	}

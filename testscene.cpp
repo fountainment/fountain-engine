@@ -20,28 +20,28 @@ void SButton::click()
 		fountain::sceneSelector.gotoScene(new TextureScene());
 		break;
 	case 1:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new ModelScene());
 		break;
 	case 2:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 3:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 4:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 5:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 6:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 7:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 8:
-		fountain::sceneSelector.gotoScene(new emptyScene());
+		fountain::sceneSelector.gotoScene(new TestScene());
 		break;
 	case 9:
 		fountain::sceneSelector.gotoScene(new HelloWorld());
@@ -90,26 +90,69 @@ void HelloWorld::draw()
 	butCon.draw();
 }
 
-//class TextureScene
-void TextureScene::init()
+//class TestScene
+void TestScene::init()
 {
+	mainCamera.setViewport(fountain::getWinRect());
 	button.setPosition(ftVec2(320, 260));
 	button.setRectSize(ftVec2(120, 40));
 	button.setCaption("返回");
 	button.id = 9;
-	picID = ftRender::getPicture("resources/image/logo.png");
-	mainCamera.setViewport(fountain::getWinRect());
+	customInit();
 }
 
-void TextureScene::update()
+void TestScene::update()
 {
-	mainCamera.update();
-	ftRender::useColor(FT_White);
-	ftRender::drawAlphaPic(picID);
 	button.update();
+	customUpdate();
 }
 
-void TextureScene::draw()
+void TestScene::draw()
 {
 	button.draw();
+	customDraw();
+}
+
+void TestScene::customInit() {}
+void TestScene::customUpdate() {}
+void TestScene::customDraw() {}
+
+//class TextureScene
+void TextureScene::customInit()
+{
+	picID = ftRender::getPicture("resources/image/logo.png");
+}
+
+void TextureScene::customUpdate()
+{
+	mainCamera.update();
+}
+
+void TextureScene::customDraw()
+{
+	ftRender::useColor(FT_White);
+	ftRender::drawAlphaPic(picID);
+}
+
+//class ModelScene
+void ModelScene::customInit()
+{
+	mainCamera.setProjectionType(FT_PERSPECTIVE);
+	mainCamera.setScale(100.0f);
+	x.loadObj("resources/model/first.obj");
+	y = 0;
+}
+
+void ModelScene::customUpdate()
+{
+	y += 1.0f;
+}
+
+void ModelScene::customDraw()
+{
+	ftRender::transformBegin();
+	ftRender::ftScale(200.0f);
+	ftRender::ftRotate(0, y, 0);
+	x.render();
+	ftRender::transformEnd();
 }

@@ -3,11 +3,6 @@
 extern const char *str[];
 extern const char *strEn[];
 
-class emptyScene : public ftScene::Scene
-{
-
-};
-
 class SButton : public ftUI::Button
 {
 public:
@@ -28,13 +23,36 @@ public:
 	void draw();
 };
 
-class TextureScene : public ftScene::Scene
+class TestScene : public ftScene::Scene
 {
 private:
 	SButton button;
-	int picID;
 public:
 	void init();
 	void update();
 	void draw();
+	virtual void customInit();
+	virtual void customUpdate();
+	virtual void customDraw();
+};
+
+class TextureScene : public TestScene
+{
+private:
+	int picID;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
+class ModelScene : public TestScene
+{
+private:
+	float y;
+	ft3DModel::ObjModel x;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
 };
