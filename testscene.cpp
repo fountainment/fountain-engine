@@ -93,12 +93,12 @@ void HelloWorld::draw()
 //class TestScene
 void TestScene::init()
 {
-	mainCamera.setViewport(fountain::getWinRect());
 	button.setPosition(ftVec2(320, 260));
 	button.setRectSize(ftVec2(120, 40));
 	button.setCaption("返回");
 	button.id = 9;
 	customInit();
+	mainCamera.setViewport(fountain::getWinRect());
 }
 
 void TestScene::update()
@@ -109,6 +109,7 @@ void TestScene::update()
 
 void TestScene::draw()
 {
+	mainCamera.update();
 	button.draw();
 	customDraw();
 }
@@ -125,7 +126,6 @@ void TextureScene::customInit()
 
 void TextureScene::customUpdate()
 {
-	mainCamera.update();
 }
 
 void TextureScene::customDraw()
@@ -137,8 +137,8 @@ void TextureScene::customDraw()
 //class ModelScene
 void ModelScene::customInit()
 {
-	mainCamera.setProjectionType(FT_PERSPECTIVE);
-	mainCamera.setScale(100.0f);
+	modelCamera = ftRender::Camera(0, 0, 1000);
+	modelCamera.setProjectionType(FT_PERSPECTIVE);
 	x.loadObj("resources/model/first.obj");
 	y = 0;
 }
@@ -150,8 +150,9 @@ void ModelScene::customUpdate()
 
 void ModelScene::customDraw()
 {
+	modelCamera.update();
 	ftRender::transformBegin();
-	ftRender::ftScale(200.0f);
+	ftRender::ftScale(150.0f);
 	ftRender::ftRotate(0, y, 0);
 	x.render();
 	ftRender::transformEnd();

@@ -51,6 +51,7 @@ class ModelScene : public TestScene
 private:
 	float y;
 	ft3DModel::ObjModel x;
+	ftRender::Camera modelCamera;
 public:
 	void customInit();
 	void customUpdate();

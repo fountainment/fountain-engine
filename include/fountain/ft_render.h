@@ -5,7 +5,7 @@
 #include <map>
 
 #define FT_CAMERA_NEAR 100.0f
-#define FT_CAMERA_FAR 1000.0f
+#define FT_CAMERA_FAR 2000.0f
 
 #define FT_PLANE 1
 #define FT_PERSPECTIVE 2
