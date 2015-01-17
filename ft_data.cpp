@@ -23,6 +23,12 @@ ftVec2::ftVec2(float x, float y)
 	this->y = y;
 }
 
+void ftVec2::move(float x, float y)
+{
+	this->x += x;
+	this->y += y;
+}
+
 const ftVec2 ftVec2::operator-(const ftVec2 & v)
 {
 	return ftVec2(x - v.x, y - v.y);

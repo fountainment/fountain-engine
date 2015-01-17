@@ -10,9 +10,16 @@ void readSettingFile() {
 
 }
 
+void defaultSetting()
+{
+	fountain::mainWin.setSize(500, 500);
+	fountain::mainWin.title = "FountainEngine Powered";
+}
+
 void basicSetting() {
 	checkSysState();
 	readSettingFile();
+	defaultSetting();
 	setBasicVarible();
 }
 

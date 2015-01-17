@@ -1,3 +1,4 @@
+#include <fountain/fountaindef.h>
 #include <stdio.h>
 #include <windows.h>
 

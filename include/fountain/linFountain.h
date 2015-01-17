@@ -1,4 +1,4 @@
-#include <fountain/ft_render.h>
+#include <fountain/fountaindef.h>
 #include <GL/glx.h>
 #include <X11/X.h>
 #include <X11/keysym.h>

@@ -51,6 +51,7 @@ public:
 	float x, y;
 	ftVec2();
 	ftVec2(float x, float y);
+	void move(float x, float y);
 	const ftVec2 operator-(const ftVec2 & v);
 	const ftVec2 operator+(const ftVec2 & v);
 	const ftVec2 operator*(float k);

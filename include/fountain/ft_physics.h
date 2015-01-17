@@ -36,6 +36,7 @@ public:
 	void update();
 	void draw();
 	void setShape(const ftShape & shape);
+	void setVelocity(ftVec2 v);
 };
 
 class World

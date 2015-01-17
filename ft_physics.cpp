@@ -243,6 +243,12 @@ void Body::setShape(const ftShape & shape)
 	this->shape = shape;
 }
 
+void Body::setVelocity(ftVec2 v)
+{
+	v = v / ratio;
+	body->SetLinearVelocity(b2Vec2(v.x, v.y));
+}
+
 //class ftPhysics::World
 World::World(ftVec2 gravity)
 {
