@@ -109,13 +109,13 @@ void fountain::singleFrame()
 	//test
 	ftRender::useColor(FT_White);
 	ftRender::transformBegin();
-	  ftRender::ftTranslate(-300, 230);
-	  fm.drawString("Welcome to Fountain Game Engine!");
+	ftRender::ftTranslate(-300, 230);
+	fm.drawString("Welcome to Fountain Game Engine!");
 	ftRender::transformEnd();
 
 	ftRender::transformBegin();
-	  ftRender::ftTranslate(-300, 180);
-	  fm.drawString("欢迎！这里是Fountain游戏引擎！");
+	ftRender::ftTranslate(-300, 180);
+	fm.drawString("欢迎！这里是Fountain游戏引擎！");
 	ftRender::transformEnd();
 
 	tBut.update();

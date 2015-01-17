@@ -251,7 +251,7 @@ void UIScene::customUpdate()
 void UIScene::customDraw()
 {
 	nineS.draw();
-} 
+}
 
 //class ShaderScene
 void ShaderScene::customInit()
