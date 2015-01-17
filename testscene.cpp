@@ -217,6 +217,7 @@ void AudioScene::customInit()
 	x.setCaption("Play");
 	ch.init();
 	ch.load("resources/sound/test.wav");
+	ch.setLoop(true);
 }
 
 void AudioScene::customUpdate()

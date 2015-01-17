@@ -209,7 +209,7 @@ void Channel::init()
 	alSourcef(source, AL_GAIN, 1.0f);
 	alSourcefv(source, AL_POSITION, sourcePos);
 	alSourcefv(source, AL_VELOCITY, sourceVel);
-	alSourcei(source, AL_LOOPING, AL_FALSE);
+	setLoop(false);
 }
 
 bool Channel::load(const char *filename)
@@ -237,4 +237,13 @@ void Channel::pause()
 void Channel::stop()
 {
 	alSourceStop(source);
+}
+
+void Channel::setLoop(bool loop)
+{
+	if (loop) {
+		alSourcei(source, AL_LOOPING, AL_TRUE);
+	} else {
+		alSourcei(source, AL_LOOPING, AL_FALSE);
+	}
 }
