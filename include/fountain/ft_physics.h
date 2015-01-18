@@ -42,7 +42,7 @@ public:
 class World
 {
 private:
-	container<Body*, BODY_MAXNUM> bodyCon;
+	ptrContainer<Body*, BODY_MAXNUM> bodyCon;
 	bool doDebugDraw;
 public:
 	b2World* world;

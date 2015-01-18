@@ -300,21 +300,11 @@ bool World::empty()
 	return bodyCon.empty();
 }
 
-void bodyUpdate(Body* bd)
-{
-	bd->update();
-}
-
-void bodyDraw(Body* bd)
-{
-	bd->draw();
-}
-
 void World::update(float timeStep)
 {
 	world->Step(timeStep, defaultVelocityIterations,
 	            defaultPositionIterations);
-	bodyCon.doWith(bodyUpdate);
+	bodyCon.update();
 }
 
 void World::update()
@@ -324,7 +314,7 @@ void World::update()
 
 void World::draw()
 {
-	bodyCon.doWith(bodyDraw);
+	bodyCon.draw();
 	if (doDebugDraw == true)
 		world->DrawDebugData();
 }

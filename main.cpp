@@ -19,12 +19,12 @@ void fountain::gameInit()
 	fm.loadFont("resources/font/test.ttc");
 	fm.genStringTable(lData.getStr(), 32);
 	ftUI::setDefaultFont(&fm);
-	ftRender::setClearColor(ftColor("#252525"));
+	ftRender::setClearColor(ftColor("#131313"));
 	fountain::sceneSelector.gotoScene(new HelloWorld());
 }
 
 void fountain::singleFrame()
 {
-	fountain::sceneSelector.doAll();
 	fountain::mainClock.tick();
+	fountain::sceneSelector.doAll();
 }

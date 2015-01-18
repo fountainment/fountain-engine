@@ -385,6 +385,10 @@ void ftSprite::draw()
 {
 }
 
+void ftSprite::update()
+{
+}
+
 void ftSprite::move(ftVec2 x)
 {
 	position = position + x;

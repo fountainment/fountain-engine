@@ -159,8 +159,6 @@ private:
 	float angle;
 	ftColor color;
 public:
-	//TODO: move the shape out
-	//ftShape shape;
 	ftSprite();
 	void setPosition(ftVec2 pos);
 	void setPosition(float x, float y);
@@ -194,18 +192,20 @@ public:
 	const char* getStr();
 };
 
-//TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
 class container : public ftSprite
 {
 private:
-	_tp list[_size];
-	int head;
 	int tail;
 	int avail[_size];
 	int availN;
 	int prev[_size];
+
+protected:
+	_tp list[_size];
+	int head;
 	int next[_size];
+
 public:
 	container();
 	_tp getHead();
@@ -217,7 +217,7 @@ public:
 	void doWith(void(*func)(_tp));
 	bool empty();
 	int getAvailN();
-	bool willLive(_tp &node);
+	virtual bool willLive(_tp &node);
 };
 
 template <typename _tp, int _size>
@@ -287,9 +287,17 @@ template <typename _tp, int _size>
 void container<_tp, _size>::update()
 {
 	int cur = head;
+	bool kill;
+	int kn;
 	while (cur != -1) {
 		list[cur].update();
+		kill = false;
+		if (!willLive(list[cur])) {
+			kill = true;
+			kn = cur;
+		}
 		cur = next[cur];
+		if (kill) del(cur);
 	}
 }
 
@@ -332,6 +340,43 @@ template <typename _tp, int _size>
 bool container<_tp, _size>::willLive(_tp &node)
 {
 	return true;
+}
+
+//pointer specification
+template <typename _tp, int _size>
+class ptrContainer : public container<_tp, _size>
+{
+public:
+	void update();
+	void draw();
+};
+
+template <typename _tp, int _size>
+void ptrContainer<_tp, _size>::update()
+{
+	int cur = this->head;
+	bool kill;
+	int kn;
+	while (cur != -1) {
+		this->list[cur]->update();
+		kill = false;
+		if (!this->willLive(this->list[cur])) {
+			kill = true;
+			kn = cur;
+		}
+		cur = this->next[cur];
+		if (kill) this->del(cur);
+	}
+}
+
+template <typename _tp, int _size>
+void ptrContainer<_tp, _size>::draw()
+{
+	int cur = this->head;
+	while (cur != -1) {
+		this->list[cur]->draw();
+		cur = this->next[cur];
+	}
 }
 
 namespace fountain {

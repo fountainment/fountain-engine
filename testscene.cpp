@@ -8,8 +8,8 @@ const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "UI", "
 SButton::SButton()
 {
 	ftUI::Button();
-	setForeColor(ftColor("#333"));
-	setBackColor(ftColor("#CCC"));
+	setForeColor(FT_White);
+	setBackColor(FT_Black);
 }
 
 void SButton::update()
@@ -18,13 +18,13 @@ void SButton::update()
 	int st = getState();
 	if (st == FT_isOn) {
 		setForeColor(FT_White);
-		setBackColor(FT_Orange);
+		setBackColor(ftColor("#0099CC"));
 	} else if (st == FT_isDown || st == FT_ButtonDown || st == FT_ButtonUp) {
 		setForeColor(FT_Yellow);
-		setBackColor(FT_Orange);
+		setBackColor(ftColor("#0099CC"));
 	} else {
-		setForeColor(ftColor("#333"));
-		setBackColor(ftColor("#CCC"));
+		setForeColor(FT_White);
+		setBackColor(FT_Black);
 	}
 }
 
@@ -76,8 +76,8 @@ void HelloWorld::init()
 {
 	for (int i = 0; i < 9; i++) {
 		HWButton t;
-		t.setPosition(ftVec2(200, 240 - i * 60));
-		t.setRectSize(ftVec2(300, 40));
+		t.setPosition(ftVec2(0, 240 - i * 60));
+		t.setRectSize(ftVec2(300, 50));
 		t.setCaption(str[i]);
 		t.id = i;
 		butCon.add(t);
@@ -105,6 +105,7 @@ void TestScene::init()
 	button.id = 9;
 	customInit();
 	mainCamera.setViewport(fountain::getWinRect());
+
 }
 
 void TestScene::update()
