@@ -88,8 +88,10 @@ public:
 class AudioScene : public TestScene
 {
 private:
-	SButton x;
+	SButton play, stop, loop;
+	ptrContainer<SButton*, 3> buttonCon;
 	ftAudio::Channel ch;
+	bool loopFlag;
 public:
 	void customInit();
 	void customUpdate();

@@ -216,25 +216,51 @@ void TypeScene::customDraw()
 //class AudioScene
 void AudioScene::customInit()
 {
-	x.setRectSize(ftVec2(100, 100));
-	x.setPosition(0, 0);
-	x.setCaption("Play");
+	play.setRectSize(ftVec2(100, 100));
+	play.setPosition(-70, 70);
+	play.setCaption("播放");
+	buttonCon.add(&play);
+
+	stop.setRectSize(ftVec2(100, 100));
+	stop.setPosition(70, 70);
+	stop.setCaption("停止");
+	buttonCon.add(&stop);
+
+	loop.setRectSize(ftVec2(240, 100));
+	loop.setPosition(0, -60);
+	loop.setCaption("循环: 开");
+	buttonCon.add(&loop);
+
+	loopFlag = true;
 	ch.init();
 	ch.load("resources/sound/test.wav");
-	ch.setLoop(true);
+	ch.setLoop(loopFlag);
 }
 
 void AudioScene::customUpdate()
 {
-	x.update();
-	if (x.getState() == FT_ButtonDown) {
+	buttonCon.update();
+	if (play.getState() == FT_ButtonDown) {
 		ch.play();
+	}
+	if (stop.getState() == FT_ButtonDown) {
+		ch.stop();
+	}
+	if (loop.getState() == FT_ButtonDown) {
+		if (loopFlag) {
+			loop.setCaption("循环: 关");
+		}
+		else {
+			loop.setCaption("循环: 开");
+		}
+		loopFlag = !loopFlag;
+		ch.setLoop(loopFlag);
 	}
 }
 
 void AudioScene::customDraw()
 {
-	x.draw();
+	buttonCon.draw();
 }
 
 //class UIScene
