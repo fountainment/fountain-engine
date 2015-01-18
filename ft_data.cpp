@@ -565,15 +565,15 @@ bool ftFile::load(const char *filename)
 	if (f != NULL) {
 		std::fseek(f, 0, SEEK_END);
 		length = std::ftell(f);
-		std::printf("%s: size %d\n", filename, length);
 		str = new char[length + 1];
 		std::fseek(f, 0, SEEK_SET);
 		while (std::fscanf(f, "%c", &tmpChar) != EOF) {
 			str[index] = tmpChar;
 			index++;
 		}
-		str[length] = '\0';
+		str[index] = '\0';
 		std::fclose(f);
+		std::printf("%s: size %d\n", filename, index);
 		return true;
 	} else {
 		std::printf("Open \"%s\" error!\n", filename);

@@ -56,8 +56,8 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//TODO: try to do the FT_Done_Face before the module close
-	//FT_Done_Face(face);
+	FT_Done_Face(face);
+	ftRender::deletePicture(picID);
 }
 
 bool FontMan::loadFont(const char *fontname)
