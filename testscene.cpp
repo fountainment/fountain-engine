@@ -137,7 +137,10 @@ void TextureScene::customUpdate()
 void TextureScene::customDraw()
 {
 	ftRender::useColor(FT_White);
+	ftRender::transformBegin();
+	ftRender::ftScale(0.5f);
 	ftRender::drawAlphaPic(picID);
+	ftRender::transformEnd();
 }
 
 //class ModelScene

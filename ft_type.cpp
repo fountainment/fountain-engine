@@ -56,7 +56,7 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	FT_Done_Face(face);
+	//FT_Done_Face(face);
 	ftRender::deletePicture(picID);
 }
 
