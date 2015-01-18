@@ -79,10 +79,7 @@ Clock::Clock(Clock *mClock)
 
 void Clock::init()
 {
-	if (slave)
-		firstT = beginT = continueT = pauseT = masterClock->getTotalT();
-	else
-		firstT = beginT = continueT = pauseT = floatTime();
+	firstT = beginT = continueT = pauseT = getCurTime();
 	deltaT = 0.0;
 	timeScale = 1.0;
 	totalT = 0;
@@ -90,12 +87,18 @@ void Clock::init()
 	isPaused = false;
 }
 
-void Clock::masterTick()
+float Clock::getCurTime()
 {
-	endT = floatTime();
+	if (slave) return masterClock->getTotalT();
+	else return floatTime();
+}
+
+void Clock::tick()
+{
+	endT = getCurTime();
 	while ((deltaT = endT - beginT) < secondPerFrame) {
 		littleSleep();
-		endT = floatTime();
+		endT = getCurTime();
 	}
 	//TODO: use a better way to solve debug deltaT
 	if (secondPerFrame != 0 && deltaT > secondPerFrame * 2)
@@ -106,24 +109,6 @@ void Clock::masterTick()
 	totalT += deltaT;
 	beginT = endT;
 	frameCount++;
-}
-
-void Clock::slaveTick()
-{
-	endT = masterClock->getTotalT();
-	deltaT = endT - beginT;
-	deltaT *= timeScale;
-	if (isPaused == true)
-		deltaT = 0.0;
-	totalT += deltaT;
-	beginT = endT;
-	frameCount++;
-}
-
-void Clock::tick()
-{
-	if (slave) slaveTick();
-	else masterTick();
 }
 
 float Clock::getDeltaT()
@@ -138,30 +123,28 @@ float Clock::getTotalT()
 
 float Clock::secondsFromInit()
 {
-	return floatTime() - firstT;
+	return getCurTime() - firstT;
 }
 
 float Clock::secondsFromPause()
 {
-	return floatTime() - pauseT;
+	return getCurTime() - pauseT;
 }
 
 float Clock::secondsFromContinue()
 {
-	return floatTime() - continueT;
+	return getCurTime() - continueT;
 }
 
 void Clock::pause()
 {
-	if (slave) pauseT = masterClock->getTotalT();
-	else pauseT = floatTime();
+	pauseT = getCurTime();
 	isPaused = true;
 }
 
 void Clock::resume()
 {
-	if (slave) beginT = continueT = masterClock->getTotalT();
-	else beginT = continueT = floatTime();
+	beginT = continueT = getCurTime();
 	isPaused = false;
 }
 

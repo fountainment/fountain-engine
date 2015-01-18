@@ -76,7 +76,7 @@ void HelloWorld::init()
 {
 	for (int i = 0; i < 9; i++) {
 		HWButton t;
-		t.setPosition(ftVec2(0, 240 - i * 60));
+		t.setPosition(ftVec2(200, 240 - i * 60));
 		t.setRectSize(ftVec2(300, 40));
 		t.setCaption(str[i]);
 		t.id = i;

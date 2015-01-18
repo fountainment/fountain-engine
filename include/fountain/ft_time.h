@@ -24,8 +24,7 @@ private:
 	float totalT;
 	Clock *masterClock;
 	bool slave;
-	void masterTick();
-	void slaveTick();
+	float getCurTime();
 public:
 	explicit Clock(float fps = 0.0);
 	explicit Clock(Clock *mClock);
