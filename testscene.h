@@ -68,7 +68,10 @@ class PhysicsScene : public TestScene
 {
 private:
 	ftPhysics::World world;
-	ftPhysics::Body a, b, c;
+	ftPhysics::Body ground, ball;
+	ftPhysics::Body card[25];
+	SButton debugDraw;
+	bool ddFlag;
 public:
 	void customInit();
 	void customUpdate();

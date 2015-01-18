@@ -100,7 +100,7 @@ void HelloWorld::draw()
 void TestScene::init()
 {
 	button.setPosition(ftVec2(320, 260));
-	button.setRectSize(ftVec2(120, 40));
+	button.setRectSize(ftVec2(130, 50));
 	button.setCaption("返回");
 	button.id = 9;
 	customInit();
@@ -171,29 +171,49 @@ void ModelScene::customDraw()
 //class PhysicsScene
 void PhysicsScene::customInit()
 {
-	ftPhysics::setRatio(100);
+	ftPhysics::setRatio(100.0f);
 
-	a = ftPhysics::Body(0, -100, FT_Static);
-	a.setShape(ftShape(ftRect(0, 0, 200, 20)));
-	world.addBody(&a);
+	ground = ftPhysics::Body(0, -100, FT_Static);
+	ground.setShape(ftShape(ftRect(0, 0, 500, 20)));
+	world.addBody(&ground);
 
-	b = ftPhysics::Body(0, 0, FT_Dynamic);
-	b.setShape(ftShape(10));
-	world.addBody(&b);
+	ball = ftPhysics::Body(-5, 200, FT_Dynamic);
+	ball.setShape(ftShape(10));
+	world.addBody(&ball);
 
-	c = ftPhysics::Body(-5, 100, FT_Dynamic);
-	c.setShape(ftShape(10));
-	world.addBody(&c);
+	for (int i = 0; i < 25; i++) {
+		card[i] = ftPhysics::Body(-240 + i * 20, -75, FT_Dynamic);
+		card[i].setShape(ftShape(ftRect(0, 0, 3, 30)));
+		world.addBody(&card[i]);
+	}
+
+	debugDraw.setRectSize(ftVec2(300, 80));
+	debugDraw.setPosition(0, -180);
+	debugDraw.setCaption("调试绘图: 关");
+	ddFlag = false;
+	world.setDebugDraw(ddFlag);
 }
 
 void PhysicsScene::customUpdate()
 {
 	world.update(mainClock.getDeltaT());
+	debugDraw.update();
+	if (debugDraw.getState() == FT_ButtonDown) {
+		ddFlag = !ddFlag;
+		if (ddFlag) {
+			world.setDebugDraw(true);
+			debugDraw.setCaption("调试绘图: 开");
+		} else {
+			world.setDebugDraw(false);
+			debugDraw.setCaption("调试绘图: 关");
+		}
+	}
 }
 
 void PhysicsScene::customDraw()
 {
 	world.draw();
+	debugDraw.draw();
 }
 
 //class TypeScene
@@ -247,14 +267,14 @@ void AudioScene::customUpdate()
 		ch.stop();
 	}
 	if (loop.getState() == FT_ButtonDown) {
-		if (loopFlag) {
-			loop.setCaption("循环: 关");
-		}
-		else {
-			loop.setCaption("循环: 开");
-		}
 		loopFlag = !loopFlag;
 		ch.setLoop(loopFlag);
+		if (loopFlag) {
+			loop.setCaption("循环: 开");
+		}
+		else {
+			loop.setCaption("循环: 关");
+		}
 	}
 }
 
