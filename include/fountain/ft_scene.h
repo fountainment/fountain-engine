@@ -19,7 +19,9 @@ public:
 	bool isPause;
 	Scene();
 	virtual ~Scene();
+	void baseInit();
 	virtual void init();
+	void baseUpdate();
 	virtual void update();
 	virtual void draw();
 	virtual void destroy();
@@ -30,14 +32,14 @@ public:
 class SceneSelector
 {
 private:
-	ftTime::Clock mainClock;
 	Scene *curScene;
 	Scene *oldScene;
 	bool destroyOldScene;
 	void update();
 	void draw();
 public:
-	SceneSelector();
+	ftTime::Clock mainClock;
+	SceneSelector(ftTime::Clock *masterClock);
 	void doAll();
 	void gotoScene(Scene *nextScene, int animeSceneIndex = FT_None, bool destroyCurScene = true);
 };

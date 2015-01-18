@@ -9,30 +9,36 @@ void close();
 class Clock
 {
 private:
-	double secondPerFrame;
+	float secondPerFrame;
 	bool isPaused;
-	double firstT;
-	double beginT;
-	double pauseT;
-	double continueT;
-	double endT;
-	double deltaT;
-	double timeScale;
+	float firstT;
+	float beginT;
+	float pauseT;
+	float continueT;
+	float endT;
+	float deltaT;
+	float timeScale;
 	//TODO: use frameCount to calculate real fps
 	long long frameCount;
 	//TODO: use totalT to add slave mode
-	double totalT;
+	float totalT;
+	Clock *masterClock;
+	bool slave;
+	void masterTick();
+	void slaveTick();
 public:
-	explicit Clock(double fps = 0.0);
+	explicit Clock(float fps = 0.0);
+	explicit Clock(Clock *mClock);
 	void init();
 	void tick();
 	void pause();
 	void resume();
 	bool isPause();
-	double getDeltaT();
-	double secondsFromInit();
-	double secondsFromPause();
-	double secondsFromContinue();
+	float getDeltaT();
+	float getTotalT();
+	float secondsFromInit();
+	float secondsFromPause();
+	float secondsFromContinue();
 };
 
 }

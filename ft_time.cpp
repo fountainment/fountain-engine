@@ -19,11 +19,11 @@ inline void littleSleep()
 	usleep(1);
 }
 
-inline double floatTime()
+inline float floatTime()
 {
 	static struct timeval now;
 	gettimeofday(&now, NULL);
-	return (1000000 * now.tv_sec + now.tv_usec) / 1000000.0;
+	return (1000000 * now.tv_sec + now.tv_usec) / 1000000.0f;
 }
 
 // Linux end
@@ -38,12 +38,12 @@ inline void littleSleep()
 	Sleep(1);
 }
 
-inline double floatTime()
+inline float floatTime()
 {
 	LARGE_INTEGER tickPerSecond, tick;
 	QueryPerformanceFrequency(&tickPerSecond);
 	QueryPerformanceCounter(&tick);
-	return (double)tick.QuadPart / (double)tickPerSecond.QuadPart;
+	return (float)tick.QuadPart / (float)tickPerSecond.QuadPart;
 }
 
 // Win32 end
@@ -59,26 +59,38 @@ void ftTime::close()
 {
 }
 
-Clock::Clock(double fps)
+Clock::Clock(float fps)
 {
 	if (fps == 0.0)
 		secondPerFrame = 0.0;
 	else
 		secondPerFrame = 1.0 / fps;
 	isPaused = true;
-	deltaT = 0.0;
-	timeScale = 1.0;
-	totalT = 0;
-	frameCount = 0;
+	slave = false;
+}
+
+Clock::Clock(Clock *mClock)
+{
+	masterClock = mClock;
+	secondPerFrame = 0.0;
+	isPaused = true;
+	slave = true;
 }
 
 void Clock::init()
 {
-	firstT = beginT = continueT = pauseT = floatTime();
+	if (slave)
+		firstT = beginT = continueT = pauseT = masterClock->getTotalT();
+	else
+		firstT = beginT = continueT = pauseT = floatTime();
+	deltaT = 0.0;
+	timeScale = 1.0;
+	totalT = 0;
+	frameCount = 0;
 	isPaused = false;
 }
 
-void Clock::tick()
+void Clock::masterTick()
 {
 	endT = floatTime();
 	while ((deltaT = endT - beginT) < secondPerFrame) {
@@ -96,35 +108,60 @@ void Clock::tick()
 	frameCount++;
 }
 
-double Clock::getDeltaT()
+void Clock::slaveTick()
+{
+	endT = masterClock->getTotalT();
+	deltaT = endT - beginT;
+	deltaT *= timeScale;
+	if (isPaused == true)
+		deltaT = 0.0;
+	totalT += deltaT;
+	beginT = endT;
+	frameCount++;
+}
+
+void Clock::tick()
+{
+	if (slave) slaveTick();
+	else masterTick();
+}
+
+float Clock::getDeltaT()
 {
 	return deltaT;
 }
 
-double Clock::secondsFromInit()
+float Clock::getTotalT()
+{
+	return totalT;
+}
+
+float Clock::secondsFromInit()
 {
 	return floatTime() - firstT;
 }
 
-double Clock::secondsFromPause()
+float Clock::secondsFromPause()
 {
 	return floatTime() - pauseT;
 }
 
-double Clock::secondsFromContinue()
+float Clock::secondsFromContinue()
 {
 	return floatTime() - continueT;
 }
 
 void Clock::pause()
 {
-	pauseT = floatTime();
+	if (slave) pauseT = masterClock->getTotalT();
+	else pauseT = floatTime();
 	isPaused = true;
 }
 
 void Clock::resume()
 {
-	beginT = continueT = floatTime();
+	if (slave) beginT = continueT = masterClock->getTotalT();
+	else beginT = continueT = floatTime();
 	isPaused = false;
 }
 

@@ -151,7 +151,7 @@ void ModelScene::customInit()
 
 void ModelScene::customUpdate()
 {
-	y += 1.0f;
+	y += mainClock.getDeltaT() * 90.0f;
 }
 
 void ModelScene::customDraw()
@@ -184,7 +184,7 @@ void PhysicsScene::customInit()
 
 void PhysicsScene::customUpdate()
 {
-	world.update();
+	world.update(mainClock.getDeltaT());
 }
 
 void PhysicsScene::customDraw()
@@ -264,7 +264,7 @@ void ShaderScene::customInit()
 void ShaderScene::customUpdate()
 {
 	ftVec2 mp = fountain::sysMouse.getPos();
-	SP.setUniform("time", mainClock.secondsFromInit());
+	SP.setUniform("time", mainClock.getTotalT());
 	SP.setUniform("resolution", fountain::getWinSize());
 	SP.setUniform("mouse", mp);
 }

@@ -18,6 +18,6 @@ void fountain::gameInit()
 
 void fountain::singleFrame()
 {
-	sceneSelector.doAll();
 	mainClock.tick();
+	sceneSelector.doAll();
 }

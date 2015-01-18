@@ -20,7 +20,7 @@ void TDAScene::init()
 	ground.setShape(ftRect(0, 0, 800, 50));
 	ground.setColor(ftColor("#88FF88"));
 
-	ball = Body(0, 0);
+	ball = Body(0, 100);
 	ball.setShape(ftShape(10));
 
 	for (int i = 0; i < 10; i++) {
@@ -38,7 +38,10 @@ void TDAScene::init()
 
 void TDAScene::update()
 {
-	world.update();
+	world.update(mainClock.getDeltaT());
+	if (fountain::sysKeyboard.getState(FT_L))
+	flySpeed = 200.0f;
+	else flySpeed = 400.0f;
 	ftVec2 speed(0, 0);
 	if (fountain::sysKeyboard.getState(FT_W))
 		speed.move(0, flySpeed);
@@ -49,9 +52,6 @@ void TDAScene::update()
 	if (fountain::sysKeyboard.getState(FT_D))
 		speed.move(flySpeed, 0);
 	fly.setVelocity(speed);
-	if (fountain::sysKeyboard.getState(FT_L))
-		flySpeed = 200.0f;
-	else flySpeed = 400.0f;
 	mainCamera.update();
 }
 
@@ -59,4 +59,3 @@ void TDAScene::draw()
 {
 	world.draw();
 }
-
