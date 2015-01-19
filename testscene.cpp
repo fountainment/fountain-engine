@@ -178,7 +178,7 @@ void PhysicsScene::customInit()
 	world.addBody(&ground);
 
 	ball = ftPhysics::Body(-5, 200, FT_Dynamic);
-	ball.setShape(ftShape(10));
+	ball.setShape(ftShape(15));
 	world.addBody(&ball);
 
 	for (int i = 0; i < 25; i++) {

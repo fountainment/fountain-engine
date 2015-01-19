@@ -10,18 +10,16 @@ class Clock
 {
 private:
 	float secondPerFrame;
-	bool isPaused;
-	float firstT;
 	float beginT;
-	float pauseT;
-	float continueT;
 	float endT;
 	float deltaT;
+	bool isPaused;
 	float timeScale;
-	//TODO: use frameCount to calculate real fps
-	long long frameCount;
-	//TODO: use totalT to add slave mode
+	float firstT;
+	float pauseT;
+	float continueT;
 	float totalT;
+	long long frameCount;
 	Clock *masterClock;
 	bool slave;
 	float getCurTime();
@@ -35,6 +33,7 @@ public:
 	bool isPause();
 	float getDeltaT();
 	float getTotalT();
+	long long getFrameCount();
 	float secondsFromInit();
 	float secondsFromPause();
 	float secondsFromContinue();

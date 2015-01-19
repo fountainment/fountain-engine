@@ -101,11 +101,14 @@ void Clock::tick()
 		endT = getCurTime();
 	}
 	//TODO: use a better way to solve debug deltaT
-	if (secondPerFrame != 0 && deltaT > secondPerFrame * 2)
-		deltaT = secondPerFrame;
-	deltaT *= timeScale;
 	if (isPaused == true)
 		deltaT = 0.0;
+	else {
+		if (secondPerFrame != 0 && deltaT > secondPerFrame * 2) {
+			deltaT = secondPerFrame;
+		}
+		deltaT *= timeScale;
+	}
 	totalT += deltaT;
 	beginT = endT;
 	frameCount++;
@@ -119,6 +122,11 @@ float Clock::getDeltaT()
 float Clock::getTotalT()
 {
 	return totalT;
+}
+
+long long Clock::getFrameCount()
+{
+	return frameCount;
 }
 
 float Clock::secondsFromInit()
