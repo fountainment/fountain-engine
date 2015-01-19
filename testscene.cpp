@@ -1,5 +1,6 @@
 #include "testscene.h"
 #include <cstdio>
+#include <cstring>
 
 const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎", "字体系统", "音频系统", "UI系统", "着色器", "输入检测", "时间检测"};
 const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "UI", "Shader", "Input", "Time"};
@@ -346,13 +347,21 @@ void InputScene::customDraw()
 //class TimeScene
 void TimeScene::customInit()
 {
+	float t = ftTime::getFps();
+	std::sprintf(s, "fps: %.2f", t);
+	fps.setCaption(s);
+	fps.setForeColor(FT_White);
 }
 
 void TimeScene::customUpdate()
 {
+	float t = ftTime::getFps();
+	std::sprintf(s, "fps: %.2f", t);
+	fps.setCaption(s);
 }
 
 void TimeScene::customDraw()
 {
+	fps.draw();
 }
 

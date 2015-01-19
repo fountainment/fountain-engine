@@ -133,6 +133,9 @@ public:
 
 class TimeScene : public TestScene
 {
+private:
+	char s[20];
+	ftUI::Button fps;
 public:
 	void customInit();
 	void customUpdate();
