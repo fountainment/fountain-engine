@@ -296,7 +296,7 @@ void container<_tp, _size>::update()
 			kn = cur;
 		}
 		cur = next[cur];
-		if (kill) del(cur);
+		if (kill) del(kn);
 	}
 }
 
@@ -364,7 +364,7 @@ void ptrContainer<_tp, _size>::update()
 			kn = cur;
 		}
 		cur = this->next[cur];
-		if (kill) this->del(cur);
+		if (kill) this->del(kn);
 	}
 }
 
