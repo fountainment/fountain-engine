@@ -27,6 +27,7 @@ namespace ftRender {
 
 bool init();
 void close();
+bool isAlive();
 
 void clearColorDepthBuffer();
 

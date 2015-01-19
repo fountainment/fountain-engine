@@ -10,6 +10,7 @@ namespace ftType {
 
 bool init();
 void close();
+bool isAlive();
 
 class charInfo
 {

@@ -348,7 +348,7 @@ void InputScene::customDraw()
 void TimeScene::customInit()
 {
 	float t = ftTime::getFps();
-	std::sprintf(s, "fps: %.2f", t);
+	std::sprintf(s, "fps: %.1f", t);
 	fps.setCaption(s);
 	fps.setForeColor(FT_White);
 }
@@ -356,7 +356,7 @@ void TimeScene::customInit()
 void TimeScene::customUpdate()
 {
 	float t = ftTime::getFps();
-	std::sprintf(s, "fps: %.2f", t);
+	std::sprintf(s, "fps: %.1f", t);
 	fps.setCaption(s);
 }
 

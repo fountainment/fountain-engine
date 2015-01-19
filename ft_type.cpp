@@ -5,6 +5,7 @@
 using ftType::charInfo;
 using ftType::FontMan;
 
+static bool alive = false;
 FT_Library library;
 
 bool ftType::init()
@@ -13,12 +14,19 @@ bool ftType::init()
 	if (error) {
 		return false;
 	}
+	alive = true;
 	return true;
 }
 
 void ftType::close()
 {
 	FT_Done_FreeType(library);
+	alive = false;
+}
+
+bool ftType::isAlive()
+{
+	return alive;
 }
 
 //class ftType::charInfo
@@ -56,9 +64,8 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//FT_Done_Face(face);
-	//TODO: find why it causes crash
-	//ftRender::deletePicture(picID);
+	if (ftType::isAlive()) FT_Done_Face(face);
+	if (ftRender::isAlive()) ftRender::deletePicture(picID);
 }
 
 bool FontMan::loadFont(const char *fontname)

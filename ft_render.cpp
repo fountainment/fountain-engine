@@ -15,6 +15,8 @@ using ftRender::SubImagePool;
 using ftRender::Camera;
 using ftRender::ShaderProgram;
 
+static bool alive = false;
+
 static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
 static int curPicID = 1;
@@ -88,11 +90,18 @@ bool ftRender::init()
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
+	alive = state;
 	return state;
 }
 
 void ftRender::close()
 {
+	alive = false;
+}
+
+bool ftRender::isAlive()
+{
+	return alive;
 }
 
 //some OpenGL functions
