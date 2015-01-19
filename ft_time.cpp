@@ -2,6 +2,9 @@
 
 using ftTime::Clock;
 
+static float curTime, lastTime;
+static float realFps;
+
 namespace fountain {
 Clock mainClock(60.0);
 }
@@ -14,6 +17,9 @@ Clock mainClock(60.0);
 #endif
 #include <sys/time.h>
 #include <unistd.h>
+
+const float littleSleepTime = 0.000001f;
+
 inline void littleSleep()
 {
 	usleep(1);
@@ -33,6 +39,9 @@ inline float floatTime()
 // Win32
 #include <time.h>
 #include <windows.h>
+
+const float littleSleepTime = 0.001f;
+
 inline void littleSleep()
 {
 	Sleep(1);
@@ -52,19 +61,35 @@ inline float floatTime()
 bool ftTime::init()
 {
 	fountain::mainClock.init();
+	curTime = lastTime = 0.0f;
+	realFps = 0.0f;
 	return true;
 }
+
+void ftTime::initPerFrame()
+{
+	if (fountain::mainClock.getFrameCount() % 128 == 0) {
+		curTime = fountain::mainClock.getTotalT();
+		float deltaTime = curTime - lastTime;
+		if (deltaTime > littleSleepTime)
+			realFps = 128.0f / deltaTime;
+		lastTime = curTime;
+	}
+}
+
 
 void ftTime::close()
 {
 }
 
+float ftTime::getFps()
+{
+	return realFps;
+}
+
 Clock::Clock(float fps)
 {
-	if (fps == 0.0)
-		secondPerFrame = 0.0;
-	else
-		secondPerFrame = 1.0 / fps;
+	setFps(fps);
 	isPaused = true;
 	slave = false;
 }
@@ -72,7 +97,8 @@ Clock::Clock(float fps)
 Clock::Clock(Clock *mClock)
 {
 	masterClock = mClock;
-	secondPerFrame = 0.0;
+	secondPerFrame = 0.0f;
+	perFrameWaitTime = 0.0f;
 	isPaused = true;
 	slave = true;
 }
@@ -80,9 +106,9 @@ Clock::Clock(Clock *mClock)
 void Clock::init()
 {
 	firstT = beginT = continueT = pauseT = getCurTime();
-	deltaT = 0.0;
-	timeScale = 1.0;
-	totalT = 0;
+	deltaT = 0.0f;
+	timeScale = 1.0f;
+	totalT = 0.0f;
 	frameCount = 0;
 	isPaused = false;
 }
@@ -96,15 +122,15 @@ float Clock::getCurTime()
 void Clock::tick()
 {
 	endT = getCurTime();
-	while ((deltaT = endT - beginT) < secondPerFrame) {
+	while ((deltaT = endT - beginT) < perFrameWaitTime) {
 		littleSleep();
 		endT = getCurTime();
 	}
-	//TODO: use a better way to solve debug deltaT
 	if (isPaused == true)
-		deltaT = 0.0;
+		deltaT = 0.0f;
 	else {
-		if (secondPerFrame != 0 && deltaT > secondPerFrame * 2) {
+		//TODO: use a better way to solve debug deltaT
+		if (secondPerFrame > 0.0f && deltaT > secondPerFrame * 2) {
 			deltaT = secondPerFrame;
 		}
 		deltaT *= timeScale;
@@ -159,4 +185,17 @@ void Clock::resume()
 bool Clock::isPause()
 {
 	return isPaused;
+}
+
+void Clock::setFps(float fps)
+{
+	if (!slave) {
+		if (fps == 0.0f)
+			secondPerFrame = 0.0f;
+		else
+			secondPerFrame = 1.0f / fps;
+		perFrameWaitTime = secondPerFrame - littleSleepTime * 0.5;
+	} else {
+		masterClock->setFps(fps);
+	}
 }

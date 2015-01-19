@@ -1,8 +1,10 @@
 #include <fountain.h>
 #include "testscene.h"
 #include <string>
+#include <cstdio>
 
 ftType::FontMan fm;
+float curTime, lastTime;
 
 void fountain::setBasicVarible()
 {

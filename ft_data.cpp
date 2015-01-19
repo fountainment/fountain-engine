@@ -1,6 +1,4 @@
-#include <fountain/fountaindef.h>
-
-//debug
+#include <fountain/ft_data.h>
 #include <cstdio>
 #include <cstring>
 
@@ -217,20 +215,8 @@ ftShape::ftShape(ftRect rct)
 	setN(1);
 	type = FT_Rect;
 	loop = true;
-//	data = new float[2];
 	data[0] = rct.getSize().x;
 	data[1] = rct.getSize().y;
-}
-
-ftShape::~ftShape()
-{
-	/*
-	if (data != NULL) {
-		std::printf("123\n");
-		delete data;
-		data = NULL;
-	}
-	*/
 }
 
 ftShape::ftShape(float r)
@@ -239,7 +225,6 @@ ftShape::ftShape(float r)
 	type = FT_Circle;
 	loop = true;
 	this->r = r;
-//	data = NULL;
 }
 
 ftShape::ftShape(const std::vector<ftVec2> & a, int n, bool loop)
@@ -250,8 +235,11 @@ ftShape::ftShape(const std::vector<ftVec2> & a, int n, bool loop)
 	else
 		type = FT_Line;
 	this->loop = loop;
-//	data = NULL;
 	setData(a);
+}
+
+ftShape::~ftShape()
+{
 }
 
 const float * ftShape::getData()
@@ -261,8 +249,6 @@ const float * ftShape::getData()
 
 void ftShape::setData(const std::vector<ftVec2> & a)
 {
-//	if (data != NULL) delete data;
-//	data = new float[a.size() * 2];
 	for (unsigned i = 0; i < a.size(); i++) {
 		data[i * 2] = a[i].x;
 		data[i * 2 + 1] = a[i].y;
@@ -293,25 +279,6 @@ int ftShape::getType()
 {
 	return type;
 }
-
-/*
-ftShape::ftShape(const ftShape & shape)
-{
-	if (this != &shape) {
-		r = shape.r;
-		n = shape.n;
-		loop = shape.loop;
-		type = shape.type;
-		if (shape.data != NULL) {
-			data = new float[n * 2];
-			for (int i = 0; i < n * 2; i++) {
-				data[i] = shape.data[i];
-			}
-		}
-		else data = NULL;
-	}
-}
-*/
 
 //class ftSprite
 ftSprite::ftSprite()

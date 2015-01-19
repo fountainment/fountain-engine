@@ -115,10 +115,9 @@ private:
 	void setN(int n);
 public:
 	ftShape(ftRect rct);
-	//ftShape(const ftShape & shape);
-	~ftShape();
 	ftShape(float r = 0.1f);
 	ftShape(const std::vector<ftVec2> & a, int n, bool loop = true);
+	~ftShape();
 
 	const float * getData();
 	void setData(const std::vector<ftVec2> & a);

@@ -167,6 +167,7 @@ int main(int argc, char **argv)
 
 	for (;;)
 	{
+		ftTime::initPerFrame();
 		//TODO: use a better way to solve input frame init
 		ftInput::initPerFrame();
 

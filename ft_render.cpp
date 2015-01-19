@@ -1,6 +1,8 @@
 //TODO: replace "//GLSL exp" with better solution
 //TODO: provide RTT(render to texture) function
-#include <fountain/fountaindef.h>
+#include <fountain/ft_render.h>
+#include <fountain/ft_data.h>
+#include <fountain/ft_algorithm.h>
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <FreeImage.h>
@@ -363,6 +365,7 @@ void ftRender::drawShape(ftShape &shape, float angle)
 	const float *v = shape.getData();
 	int n = shape.getN();
 	ftRender::ftRotate(0.0f, 0.0f, angle);
+
 	switch (type)
 	{
 	case FT_Circle:

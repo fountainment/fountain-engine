@@ -4,12 +4,15 @@
 namespace ftTime {
 
 bool init();
+void initPerFrame();
 void close();
+float getFps();
 
 class Clock
 {
 private:
 	float secondPerFrame;
+	float perFrameWaitTime;
 	float beginT;
 	float endT;
 	float deltaT;
@@ -31,6 +34,7 @@ public:
 	void pause();
 	void resume();
 	bool isPause();
+	void setFps(float fps);
 	float getDeltaT();
 	float getTotalT();
 	long long getFrameCount();

@@ -88,6 +88,8 @@
 #define FT_ON 1
 #define FT_OFF 0
 
+#define FT_ABS(x) ((x)>0?(x):(-(x)))
+
 #include <fountain/ft_data.h>
 #include <fountain/ft_time.h>
 #include <fountain/ft_3dmodel.h>
