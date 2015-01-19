@@ -57,7 +57,8 @@ FontMan::FontMan()
 FontMan::~FontMan()
 {
 	//FT_Done_Face(face);
-	ftRender::deletePicture(picID);
+	//TODO: find why it causes crash
+	//ftRender::deletePicture(picID);
 }
 
 bool FontMan::loadFont(const char *fontname)

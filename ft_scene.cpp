@@ -118,5 +118,6 @@ void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destro
 	if (curScene != NULL) {
 		curScene->baseInit();
 		curScene->init();
+		curScene->update();
 	}
 }

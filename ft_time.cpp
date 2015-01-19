@@ -4,6 +4,7 @@ using ftTime::Clock;
 
 static float curTime, lastTime;
 static float realFps;
+static double initT;
 
 namespace fountain {
 Clock mainClock(60.0);
@@ -25,11 +26,18 @@ inline void littleSleep()
 	usleep(1);
 }
 
+void floatTimeInit()
+{
+	static struct timeval now;
+	gettimeofday(&now, NULL);
+	initT = (1000000 * now.tv_sec + now.tv_usec) / 1000000.0;
+}
+
 inline float floatTime()
 {
 	static struct timeval now;
 	gettimeofday(&now, NULL);
-	return (1000000 * now.tv_sec + now.tv_usec) / 1000000.0f;
+	return (float)(((1000000 * now.tv_sec + now.tv_usec) / 1000000.0) - initT);
 }
 
 // Linux end
@@ -41,18 +49,27 @@ inline float floatTime()
 #include <windows.h>
 
 const float littleSleepTime = 0.001f;
+static double freq = 1.0;
 
 inline void littleSleep()
 {
 	Sleep(1);
 }
 
-inline float floatTime()
+void floatTimeInit()
 {
 	LARGE_INTEGER tickPerSecond, tick;
 	QueryPerformanceFrequency(&tickPerSecond);
 	QueryPerformanceCounter(&tick);
-	return (float)tick.QuadPart / (float)tickPerSecond.QuadPart;
+	freq = 1.0 / (double)tickPerSecond.QuadPart;
+	initT = (double)tick.QuadPart * freq;
+}
+
+inline float floatTime()
+{
+	LARGE_INTEGER tick;
+	QueryPerformanceCounter(&tick);
+	return (float)((double)tick.QuadPart / freq - initT);
 }
 
 // Win32 end
@@ -60,6 +77,7 @@ inline float floatTime()
 
 bool ftTime::init()
 {
+	floatTimeInit();
 	fountain::mainClock.init();
 	curTime = lastTime = 0.0f;
 	realFps = 0.0f;

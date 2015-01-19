@@ -4,7 +4,6 @@
 #include <cstdio>
 
 ftType::FontMan fm;
-float curTime, lastTime;
 
 void fountain::setBasicVarible()
 {
