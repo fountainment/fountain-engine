@@ -5,7 +5,7 @@ precision mediump float;
 uniform float time;
 uniform vec2 mouse;
 uniform vec2 resolution;
-vec2 surfacePosition = (gl_FragCoord.xy - resolution * 0.5) / resolution;
+vec2 surfacePosition = gl_FragCoord.xy / resolution.y - vec2(0.5 * resolution.x / resolution.y, 0.5);
 
 
 #define MAX_ITER 10
