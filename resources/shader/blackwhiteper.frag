@@ -10,11 +10,13 @@ void main( void ) {
 	if (useTex == 1.0) {
 		color *= texture2D(tex, gl_TexCoord[0].st);
 	}
-	if (colorPercent < .0) colorPercent = .0;
-	if (colorPercent > 1.) colorPercent = 1.;
-	float r = color.x * (.299 + .701 * colorPercent);
-	float g = color.y * (.587 + .413 * colorPercent);
-	float b = color.z * (.114 + .886 * colorPercent);
-	color = vec4(r, g, b, color.w);
+	float gray = color.x * .299 + color.y * .587 + color.z * .114;
+	float cp = colorPercent;
+	if (cp < .0) cp = .0;
+	if (cp > 1.) cp = 1.;
+	float r = (color.r - gray) * cp + gray;
+	float g = (color.g - gray) * cp + gray;
+	float b = (color.b - gray) * cp + gray;
+	color = vec4(r, g, b, color.a);
 	gl_FragColor = color;
 }

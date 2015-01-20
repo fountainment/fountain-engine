@@ -104,9 +104,8 @@ void TestScene::init()
 	button.setRectSize(ftVec2(130, 50));
 	button.setCaption("返回");
 	button.id = 9;
-	customInit();
 	mainCamera.setViewport(fountain::getWinRect());
-
+	customInit();
 }
 
 void TestScene::update()
