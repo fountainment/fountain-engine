@@ -56,6 +56,7 @@ public:
 	const ftVec2 operator+(const ftVec2 & v);
 	const ftVec2 operator*(float k);
 	const ftVec2 operator/(float k);
+	const ftVec2 operator/(const ftVec2 & v);
 };
 
 

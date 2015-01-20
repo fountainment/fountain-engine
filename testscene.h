@@ -118,16 +118,17 @@ public:
 	void update()
 	{
 		ftVec2 mp = fountain::sysMouse.getPos();
-		setUniform("time", fountain::mainClock.getTotalT());
-		setUniform("resolution", fountain::getWinSize());
-		setUniform("mouse", mp);
+		this->setUniform("time", fountain::mainClock.getTotalT());
+		this->setUniform("resolution", fountain::getWinSize());
+		this->setUniform("mouse", mp);
 	}
 };
 
 class ShaderScene : public TestScene
 {
 private:
-	MyShaderProgram SP;
+	MyShaderProgram spa, spb, spc;
+	SButton ba, bb, bc;
 public:
 	void customInit();
 	void customUpdate();

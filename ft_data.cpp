@@ -47,6 +47,11 @@ const ftVec2 ftVec2::operator/(float k)
 	return ftVec2(x / k, y / k);
 }
 
+const ftVec2 ftVec2::operator/(const ftVec2 & v)
+{
+	return ftVec2(x / v.x, y / v.y);
+}
+
 //class ftVec3
 ftVec3::ftVec3()
 {

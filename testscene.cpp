@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cstring>
 
-const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎", "字体系统", "音频系统", "UI系统", "着色器", "输入检测", "时间检测"};
+const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎调用", "字体渲染", "音频播放", "UI组件", "着色器渲染", "输入检测", "时间检测"};
 const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "UI", "Shader", "Input", "Time"};
 
 //class SButton
@@ -306,18 +306,48 @@ void UIScene::customDraw()
 //class ShaderScene
 void ShaderScene::customInit()
 {
-	SP.load("resources/shader/vs.vert", "resources/shader/fs.frag");
-	SP.init();
-	SP.use();
+	spa.load("resources/shader/vs.vert", "resources/shader/magicStar.frag");
+	spb.load("resources/shader/vs.vert", "resources/shader/wave.frag");
+	spc.load("resources/shader/vs.vert", "resources/shader/purple.frag");
+	spa.init();
+	spb.init();
+	spc.init();
+	spa.use();
+	ba.setPosition(-200, -220);
+	ba.setRectSize(ftVec2(180, 70));
+	ba.setCaption("magicStar");
+	bb.setPosition(0, -220);
+	bb.setRectSize(ftVec2(180, 70));
+	bb.setCaption("wave");
+	bc.setPosition(200, -220);
+	bc.setRectSize(ftVec2(180, 70));
+	bc.setCaption("purple");
 }
 
 void ShaderScene::customUpdate()
 {
-	SP.update();
+	ba.update();
+	if (ba.getState() == FT_ButtonUp) {
+		spa.use();
+	}
+	bb.update();
+	if (bb.getState() == FT_ButtonUp) {
+		spb.use();
+	}
+	bc.update();
+	if (bc.getState() == FT_ButtonUp) {
+		spc.use();
+	}
+	spa.update();
+	spb.update();
+	spc.update();
 }
 
 void ShaderScene::customDraw()
 {
+	ba.draw();
+	bb.draw();
+	bc.draw();
 	ftRender::useColor(FT_White);
 	ftRender::drawQuad(300, 300);
 }

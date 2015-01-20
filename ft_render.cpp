@@ -852,6 +852,7 @@ void ShaderProgram::update()
 
 void ShaderProgram::setUniform(const char *varName, float value)
 {
+	if (currentShader != this) return;
 	GLint loc = glGetUniformLocation(program, varName);
 	GLfloat v = value;
 	if (loc != -1) {
@@ -861,6 +862,7 @@ void ShaderProgram::setUniform(const char *varName, float value)
 
 void ShaderProgram::setUniform(const char *varName, ftVec2 value)
 {
+	if (currentShader != this) return;
 	const GLfloat v[] = {value.x, value.y};
 	GLint loc = glGetUniformLocation(program, varName);
 	if (loc != -1) {
