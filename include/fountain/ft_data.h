@@ -81,30 +81,30 @@ private:
 public:
 	ftRect(float x, float y, float w, float h);
 	ftRect();
-	ftRect(ftVec2 pos, ftVec2 rSize);
+	ftRect(const ftVec2 & pos, const ftVec2 & rSize);
 	ftVec2 getCenter();
 
-	void setCenter(ftVec2 p);
+	void setCenter(const ftVec2 & p);
 	ftVec2 getXY();
-	void setXY(ftVec2 XY);
+	void setXY(const ftVec2 & XY);
 	ftVec2 getSize();
-	void setSize(ftVec2 sz);
+	void setSize(const ftVec2 & sz);
 
 	float getX();
 	float getY();
 	float getW();
 	float getH();
 
-	ftVec2 getLB();
-	ftVec2 getLT();
-	ftVec2 getRT();
-	ftVec2 getRB();
+	const ftVec2 getLB();
+	const ftVec2 getLT();
+	const ftVec2 getRT();
+	const ftVec2 getRB();
 	void getFloatVertex(float *v);
 
 	void move(float x, float y);
 	void normalize();
 	void inflate(float x, float y);
-	bool collidePoint(ftVec2 p);
+	bool collidePoint(const ftVec2 & p);
 };
 
 class ftShape
@@ -141,7 +141,7 @@ private:
 	float checkValue(float v);
 public:
 	ftColor();
-	ftColor(std::string);
+	ftColor(std::string s);
 	ftColor(float r, float g, float b, float a = 1.0f);
 	void inverse();
 	void setR(float r);
@@ -163,12 +163,13 @@ private:
 	ftColor color;
 public:
 	ftSprite();
-	void setPosition(ftVec2 pos);
+	void setPosition(const ftVec2 & pos);
 	void setPosition(float x, float y);
 	ftVec2 getPosition();
 	void setAngle(float agl);
 	float getAngle();
-	void setRectSize(ftVec2 rts);
+	void setRectSize(const ftVec2 & rts);
+	void setRectSize(float x, float y);
 	ftVec2 getRectSize();
 	void setRect(ftRect rct);
 	ftRect getRect();
@@ -176,7 +177,8 @@ public:
 	const ftColor & getColor();
 	void draw();
 	void update();
-	void move(ftVec2 x);
+	void move(const ftVec2 & x);
+	void move(float x, float y);
 };
 
 class ftFile

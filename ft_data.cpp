@@ -102,7 +102,7 @@ ftRect::ftRect()
 	h = 0;
 }
 
-ftRect::ftRect(ftVec2 pos, ftVec2 rSize)
+ftRect::ftRect(const ftVec2 & pos, const ftVec2 & rSize)
 {
 	x = pos.x;
 	y = pos.y;
@@ -118,7 +118,7 @@ ftVec2 ftRect::getCenter()
 	return p;
 }
 
-void ftRect::setCenter(ftVec2 p)
+void ftRect::setCenter(const ftVec2 & p)
 {
 	x = p.x - ftRect::w / 2.0f;
 	y = p.y - ftRect::h / 2.0f;
@@ -130,7 +130,7 @@ ftVec2 ftRect::getSize()
 	return p;
 }
 
-void ftRect::setSize(ftVec2 sz)
+void ftRect::setSize(const ftVec2 & sz)
 {
 	w = sz.x;
 	h = sz.y;
@@ -141,7 +141,7 @@ ftVec2 ftRect::getXY()
 	return ftVec2(ftRect::x, ftRect::y);
 }
 
-void ftRect::setXY(ftVec2 XY)
+void ftRect::setXY(const ftVec2 & XY)
 {
 	x = XY.x;
 	y = XY.y;
@@ -167,22 +167,22 @@ float ftRect::getH()
 	return h;
 }
 
-ftVec2 ftRect::getLB()
+const ftVec2 ftRect::getLB()
 {
 	return ftVec2(x, y);
 }
 
-ftVec2 ftRect::getLT()
+const ftVec2 ftRect::getLT()
 {
 	return ftVec2(x, y + h);
 }
 
-ftVec2 ftRect::getRT()
+const ftVec2 ftRect::getRT()
 {
 	return ftVec2(x + w, y + h);
 }
 
-ftVec2 ftRect::getRB()
+const ftVec2 ftRect::getRB()
 {
 	return ftVec2(x + w, y);
 }
@@ -225,7 +225,7 @@ void ftRect::normalize()
 	}
 }
 
-bool ftRect::collidePoint(ftVec2 p)
+bool ftRect::collidePoint(const ftVec2 & p)
 {
 	int xx = x + w;
 	int yy = y + h;
@@ -307,8 +307,8 @@ int ftShape::getType()
 ftSprite::ftSprite()
 {
 	color = FT_White;
-	setPosition(ftVec2(0, 0));
-	setRectSize(ftVec2(0, 0));
+	setPosition(0, 0);
+	setRectSize(0, 0);
 }
 
 void ftSprite::setColor(const ftColor & c)
@@ -321,14 +321,15 @@ const ftColor & ftSprite::getColor()
 	return color;
 }
 
-void ftSprite::setPosition(ftVec2 pos)
+void ftSprite::setPosition(const ftVec2 & pos)
 {
 	position = pos;
 }
 
 void ftSprite::setPosition(float x, float y)
 {
-	position = ftVec2(x, y);
+	position.x = x;
+	position.y = y;
 }
 
 ftVec2 ftSprite::getPosition()
@@ -347,9 +348,15 @@ float ftSprite::getAngle()
 	return angle;
 }
 
-void ftSprite::setRectSize(ftVec2 rts)
+void ftSprite::setRectSize(const ftVec2 & rts)
 {
 	rectSize = rts;
+}
+
+void ftSprite::setRectSize(float x, float y)
+{
+	rectSize.x = x;
+	rectSize.y = y;
 }
 
 ftVec2 ftSprite::getRectSize()
@@ -379,9 +386,15 @@ void ftSprite::update()
 {
 }
 
-void ftSprite::move(ftVec2 x)
+void ftSprite::move(const ftVec2 & x)
 {
-	position = position + x;
+	position += x;
+}
+
+void ftSprite::move(float x, float y)
+{
+	position.x += x;
+	position.y += y;
 }
 
 //class ftColor

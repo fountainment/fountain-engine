@@ -36,7 +36,7 @@ charInfo::charInfo()
 	advance = ftVec2(0.0f, 0.0f);
 }
 
-charInfo::charInfo(ftVec2 ct, ftVec2 adv)
+charInfo::charInfo(const ftVec2 & ct, const ftVec2 & adv)
 {
 	center = ct;
 	advance = adv;
@@ -133,7 +133,7 @@ void FontMan::genStringTable(const char *str, int h)
 }
 
 //TODO: complete this function
-int FontMan::drawString(std::vector<unsigned long> s)
+int FontMan::drawString(const std::vector<unsigned long> & s)
 {
 	ftVec2 pen(0, 0);
 	FT_Int previous = 0;
@@ -158,7 +158,7 @@ int FontMan::drawString(std::vector<unsigned long> s)
 	return pen.x;
 }
 
-int FontMan::getStringLength(std::vector<unsigned long> s)
+int FontMan::getStringLength(const std::vector<unsigned long> & s)
 {
 	ftVec2 pen(0, 0);
 	FT_Int previous = 0;

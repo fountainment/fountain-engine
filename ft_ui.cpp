@@ -133,12 +133,12 @@ int Button::getState()
 	return state;
 }
 
-void Button::setBackColor(ftColor c)
+void Button::setBackColor(const ftColor c)
 {
 	backColor = c;
 }
 
-void Button::setForeColor(ftColor c)
+void Button::setForeColor(const ftColor c)
 {
 	setColor(c);
 }
@@ -165,6 +165,11 @@ NineSprite::NineSprite(int picID)
 {
 	image = ftRender::getImage(picID);
 	init();
+}
+
+//TODO: complete this function(NineSprite(ftRender::SubImage image))
+NineSprite::NineSprite(ftRender::SubImage image)
+{
 }
 
 void NineSprite::init()
@@ -194,7 +199,7 @@ void NineSprite::init()
 	centerImage = ftRender::SubImage(image, centerRect);
 }
 
-void NineSprite::setSize(ftVec2 size)
+void NineSprite::setSize(const ftVec2 & size)
 {
 	setRectSize(size);
 	ftVec2 centerSize = getRectSize() - (gridSize * 2);

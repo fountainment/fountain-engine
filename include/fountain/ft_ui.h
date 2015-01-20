@@ -51,8 +51,8 @@ public:
 	void update();
 	void draw();
 	int getState();
-	void setBackColor(ftColor c);
-	void setForeColor(ftColor c);
+	void setBackColor(const ftColor c);
+	void setForeColor(const ftColor c);
 	void setCaption(const char *str);
 };
 
@@ -70,10 +70,11 @@ public:
 	NineSprite(const char *picName);
 	NineSprite(int picID);
 	NineSprite(ftRender::SubImage image);
-	void setSize(ftVec2 size);
+	void setSize(const ftVec2 & size);
 	void draw();
 };
 
+//TODO: complete this class(Cursor)
 class Cursor : public ftSprite
 {
 private:
