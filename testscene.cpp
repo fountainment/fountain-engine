@@ -314,10 +314,7 @@ void ShaderScene::customInit()
 
 void ShaderScene::customUpdate()
 {
-	ftVec2 mp = fountain::sysMouse.getPos();
-	SP.setUniform("time", mainClock.getTotalT());
-	SP.setUniform("resolution", fountain::getWinSize());
-	SP.setUniform("mouse", mp);
+	SP.update();
 }
 
 void ShaderScene::customDraw()

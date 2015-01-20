@@ -146,6 +146,7 @@ public:
 	bool init();
 	bool reload();
 	void use();
+	virtual void update();
 	void setUniform(const char *varName, float value);
 	void setUniform(const char *varName, ftVec2 value);
 	void free();

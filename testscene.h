@@ -112,10 +112,22 @@ public:
 	void customDraw();
 };
 
+class MyShaderProgram : public ftRender::ShaderProgram
+{
+public:
+	void update()
+	{
+		ftVec2 mp = fountain::sysMouse.getPos();
+		setUniform("time", fountain::mainClock.getTotalT());
+		setUniform("resolution", fountain::getWinSize());
+		setUniform("mouse", mp);
+	}
+};
+
 class ShaderScene : public TestScene
 {
 private:
-	ftRender::ShaderProgram SP;
+	MyShaderProgram SP;
 public:
 	void customInit();
 	void customUpdate();

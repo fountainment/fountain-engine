@@ -831,7 +831,6 @@ bool ShaderProgram::init()
 bool ShaderProgram::reload()
 {
 	bool res;
-	ftRender::useFFP();
 	free();
 	vsFile.reload();
 	fsFile.reload();
@@ -844,6 +843,11 @@ void ShaderProgram::use()
 {
 	glUseProgram(program);
 	currentShader = this;
+	update();
+}
+
+void ShaderProgram::update()
+{
 }
 
 void ShaderProgram::setUniform(const char *varName, float value)
@@ -866,7 +870,9 @@ void ShaderProgram::setUniform(const char *varName, ftVec2 value)
 
 void ShaderProgram::free()
 {
-	if (currentShader == this) currentShader = NULL;
+	if (currentShader == this) {
+		ftRender::useFFP();
+	}
 	glDeleteProgram(program);
 	glDeleteShader(vs);
 	glDeleteShader(fs);
