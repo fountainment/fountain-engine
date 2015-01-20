@@ -116,6 +116,11 @@ void ftPhysics::setRatio(float rt)
 	ratio = rt;
 }
 
+float ftPhysics::getRatio()
+{
+	return ratio;
+}
+
 void ftPhysics::setIterations(int vIter, int pIter)
 {
 	defaultVelocityIterations = vIter;

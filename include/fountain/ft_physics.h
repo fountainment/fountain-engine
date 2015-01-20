@@ -17,6 +17,7 @@ bool init();
 void close();
 
 void setRatio(float rt);
+float getRatio();
 void setIterations(int vIter, int pIter);
 ftVec2 render2Physics(ftVec2 v);
 ftVec2 physics2Render(ftVec2 v);

@@ -108,8 +108,6 @@ bool ftRender::isAlive()
 inline void enableTexture2D()
 {
 	glEnable(GL_TEXTURE_2D);
-
-	//GLSL exp
 	if (currentShader != NULL)
 		currentShader->setUniform("useTex", 1.0f);
 }
@@ -117,8 +115,6 @@ inline void enableTexture2D()
 inline void disableTexture2D()
 {
 	glDisable(GL_TEXTURE_2D);
-
-	//GLSL exp
 	if (currentShader != NULL)
 		currentShader->setUniform("useTex", 0.0f);
 }
@@ -126,8 +122,6 @@ inline void disableTexture2D()
 inline void bindTexture(int id)
 {
 	glBindTexture(GL_TEXTURE_2D, id);
-
-	//GLSL exp
 	if (currentShader != NULL)
 		currentShader->setUniform("tex", id);
 }
@@ -153,7 +147,6 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
-	//glColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
@@ -873,6 +866,7 @@ void ShaderProgram::setUniform(const char *varName, ftVec2 value)
 
 void ShaderProgram::free()
 {
+	if (currentShader == this) currentShader = NULL;
 	glDeleteProgram(program);
 	glDeleteShader(vs);
 	glDeleteShader(fs);
