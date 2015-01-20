@@ -780,6 +780,8 @@ GLuint linkShaderProgram(GLuint vs, GLuint fs)
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vs);
 	glAttachShader(program, fs);
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 	glLinkProgram(program);
 	return program;
 }
@@ -876,8 +878,6 @@ void ShaderProgram::free()
 		ftRender::useFFP();
 	}
 	glDeleteProgram(program);
-	glDeleteShader(vs);
-	glDeleteShader(fs);
 	vsFile.free();
 	fsFile.free();
 }
