@@ -151,6 +151,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		             *size, *frequency);
 		//errorCheck();
 		//clean up and return true if successful
+		delete [] data;
 		fclose(soundFile);
 		return true;
 	} catch(const char *error) {

@@ -21,6 +21,7 @@ void ft3DModel::close()
 
 ObjModel::ObjModel()
 {
+	vtx = NULL;
 }
 
 ObjModel::ObjModel(const char *fileName)
@@ -30,7 +31,10 @@ ObjModel::ObjModel(const char *fileName)
 
 ObjModel::~ObjModel()
 {
-	delete [] vtx;
+	if (vtx != NULL) {
+		delete [] vtx;
+		vtx = NULL;
+	}
 }
 
 void ObjModel::loadObj(const char *fileName)

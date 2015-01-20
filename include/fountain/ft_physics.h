@@ -48,6 +48,7 @@ private:
 public:
 	b2World* world;
 	World(ftVec2 gravity = ftVec2(0, -10));
+	~World();
 	bool addBody(Body* bd);
 	void delHeadBody();
 	void update();

@@ -264,6 +264,12 @@ World::World(ftVec2 gravity)
 	doDebugDraw = false;
 }
 
+World::~World()
+{
+	delete world;
+	world = NULL;
+}
+
 bool World::addBody(Body* bd)
 {
 	ftVec2 pos = bd->getPosition();
