@@ -2,7 +2,7 @@
 #include <cstdio>
 #include <cstring>
 
-const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎调用", "字体渲染", "音频播放", "UI组件", "着色器渲染", "输入检测", "时间检测"};
+const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎调用", "字体渲染", "音频播放", "UI组件", "着色器渲染", "输入模块示例", "时间模块示例"};
 const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "UI", "Shader", "Input", "Time"};
 
 //class SButton
@@ -217,10 +217,15 @@ void PhysicsScene::customDraw()
 }
 
 //class TypeScene
+//TODO: simplize drawString with different font size
 void TypeScene::customInit()
 {
+	fontMan2.loadFont("resources/font/test.ttc");
+	fontMan2.genStringTable("HWelod! ", 32);
 	fontMan.loadFont("resources/font/test.ttc");
-	fontMan.genAsciiTable();
+	fontMan.genStringTable("HWelod! ", 16);
+	fontMan1.loadFont("resources/font/test.ttc");
+	fontMan1.genStringTable("HWelod! ", 8);
 }
 
 void TypeScene::customUpdate()
@@ -230,7 +235,18 @@ void TypeScene::customUpdate()
 void TypeScene::customDraw()
 {
 	ftRender::useColor(FT_White);
+	ftRender::transformBegin();
+	ftRender::ftTranslate(-100, 0);
 	fontMan.drawString("Hello World!");
+	ftRender::transformEnd();
+	ftRender::transformBegin();
+	ftRender::ftTranslate(-100, -100);
+	fontMan1.drawString("Hello World!");
+	ftRender::transformEnd();
+	ftRender::transformBegin();
+	ftRender::ftTranslate(-100, 100);
+	fontMan2.drawString("Hello World!");
+	ftRender::transformEnd();
 }
 
 //class AudioScene
@@ -293,8 +309,8 @@ void UIScene::customInit()
 
 void UIScene::customUpdate()
 {
-	if (fountain::sysMouse.getState(FT_LButton)) sz += 2.0f;
-	if (fountain::sysMouse.getState(FT_RButton)) sz -= 2.0f;
+	if (fountain::sysMouse.getState(FT_LButton)) sz += 120.0f * mainClock.getDeltaT();
+	if (fountain::sysMouse.getState(FT_RButton)) sz -= 120.0f * mainClock.getDeltaT();
 	nineS.setSize(ftVec2(sz, sz));
 }
 
@@ -360,14 +376,26 @@ void ShaderScene::destroy()
 //class InputScene
 void InputScene::customInit()
 {
+	info.setCaption("按一下空格试试");
+	info.setForeColor(FT_White);
 }
 
 void InputScene::customUpdate()
 {
+	if (fountain::sysKeyboard.getState(FT_Space)) {
+		ftRender::setClearColor(ftColor("#333"));
+	} else
+		ftRender::setClearColor(ftColor("#131313"));
 }
 
 void InputScene::customDraw()
 {
+	info.draw();
+}
+
+void InputScene::destroy()
+{
+	ftRender::setClearColor(ftColor("#131313"));
 }
 
 //class TimeScene

@@ -82,6 +82,8 @@ class TypeScene : public TestScene
 {
 private:
 	ftType::FontMan fontMan;
+	ftType::FontMan fontMan1;
+	ftType::FontMan fontMan2;
 public:
 	void customInit();
 	void customUpdate();
@@ -138,10 +140,13 @@ public:
 
 class InputScene : public TestScene
 {
+private:
+	ftUI::Button info;
 public:
 	void customInit();
 	void customUpdate();
 	void customDraw();
+	void destroy();
 };
 
 class TimeScene : public TestScene
