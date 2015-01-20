@@ -49,9 +49,9 @@ void openPolygonSmooth();
 void setClearColor(ftColor c);
 
 void drawLine(float x1, float y1, float x2, float y2);
-void drawLine(ftVec2 p1, ftVec2 p2);
+void drawLine(const ftVec2 & p1, const ftVec2 & p2);
 void drawQuad(float w, float h);
-void drawRect(ftRect rct, float angle = 0.0f);
+void drawRect(ftRect & rct, float angle = 0.0f);
 void drawCircle(float radius);
 void drawCircleLine(float radius);
 void drawShape(ftShape & shape, float angle = 0.0f);
@@ -79,13 +79,13 @@ private:
 public:
 	SubImage();
 	SubImage(int picID);
-	SubImage(int picID, ftRect rect);
-	SubImage(const char *picName, ftRect rect);
-	SubImage(SubImage image, ftRect rect);
+	SubImage(int picID, ftRect & rect);
+	SubImage(const char *picName, ftRect & rect);
+	SubImage(SubImage image, ftRect & rect);
 	void setPicID(int id);
 	int getPicID();
 	const ftVec2 & getSize();
-	void setSize(ftVec2 size);
+	void setSize(const ftVec2 size);
 	const float * getTexCoor();
 };
 
@@ -120,14 +120,14 @@ public:
 	void update();
 	void setPosition(float x, float y);
 	void setPosition(float x, float y, float z);
-	ftVec2 getPosition();
+	const ftVec2 getPosition();
 	void move(float x, float y);
 	void setViewport(int w, int h, int x = 0, int y = 0);
 	void setViewport(ftRect vp);
 	void setScale(float scale);
 	void setAngle(float x, float y, float z);
 	void setProjectionType(int type);
-	ftVec2 mouseToWorld(ftVec2 mPos);
+	const ftVec2 mouseToWorld(const ftVec2 & mPos);
 };
 
 Camera* getCurrentCamera();
@@ -148,7 +148,7 @@ public:
 	void use();
 	virtual void update();
 	void setUniform(const char *varName, float value);
-	void setUniform(const char *varName, ftVec2 value);
+	void setUniform(const char *varName, const ftVec2 & value);
 	void free();
 };
 

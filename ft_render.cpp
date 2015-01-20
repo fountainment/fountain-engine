@@ -318,7 +318,7 @@ void ftRender::drawLine(float x1, float y1, float x2, float y2)
 	drawFloat2(vtx, 2, GL_LINES);
 }
 
-void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
+void ftRender::drawLine(const ftVec2 & p1, const ftVec2 & p2)
 {
 	ftRender::drawLine(p1.x, p1.y, p2.x, p2.y);
 }
@@ -334,7 +334,7 @@ void ftRender::drawQuad(float w, float h)
 	glDisable(GL_BLEND);
 }
 
-void ftRender::drawRect(ftRect rct, float angle)
+void ftRender::drawRect(ftRect & rct, float angle)
 {
 	ftVec2 rPos = rct.getCenter();
 	ftVec2 rSize = rct.getSize();
@@ -361,7 +361,7 @@ void ftRender::drawCircleLine(float radius)
 	ftRender::transformEnd();
 }
 
-void ftRender::drawShape(ftShape &shape, float angle)
+void ftRender::drawShape(ftShape & shape, float angle)
 {
 	int type = shape.getType();
 	const float *v = shape.getData();
@@ -488,7 +488,7 @@ SubImage::SubImage(int picID)
 	texRect.getFloatVertex(texCoor);
 }
 
-SubImage::SubImage(int picID, ftRect rect)
+SubImage::SubImage(int picID, ftRect & rect)
 {
 	this->picID = picID;
 	ftVec2 pSize = ftRender::getPicSize(picID);
@@ -499,7 +499,7 @@ SubImage::SubImage(int picID, ftRect rect)
 	texRect.getFloatVertex(texCoor);
 }
 
-SubImage::SubImage(const char * picName, ftRect rect)
+SubImage::SubImage(const char * picName, ftRect & rect)
 {
 	picID = ftRender::getPicture(picName);
 	ftVec2 pSize = ftRender::getPicSize(picID);
@@ -510,7 +510,7 @@ SubImage::SubImage(const char * picName, ftRect rect)
 	texRect.getFloatVertex(texCoor);
 }
 
-SubImage::SubImage(SubImage image, ftRect rect)
+SubImage::SubImage(SubImage image, ftRect & rect)
 {
 	picID = image.getPicID();
 	ftVec2 pSize = ftRender::getPicSize(picID);
@@ -538,7 +538,7 @@ const ftVec2 & SubImage::getSize()
 	return size;
 }
 
-void SubImage::setSize(ftVec2 size)
+void SubImage::setSize(const ftVec2 size)
 {
 	this->size = size;
 }
@@ -663,7 +663,7 @@ void Camera::setPosition(float x, float y, float z)
 	this->z = z;
 }
 
-ftVec2 Camera::getPosition()
+const ftVec2 Camera::getPosition()
 {
 	return ftVec2(x, y);
 }
@@ -728,7 +728,7 @@ void Camera::update()
 	currentCamera = this;
 }
 
-ftVec2 Camera::mouseToWorld(ftVec2 mPos)
+const ftVec2 Camera::mouseToWorld(const ftVec2 & mPos)
 {
 	float l, b, w2, h2;
 	w2 = W2 / scale;
@@ -862,7 +862,7 @@ void ShaderProgram::setUniform(const char *varName, float value)
 	}
 }
 
-void ShaderProgram::setUniform(const char *varName, ftVec2 value)
+void ShaderProgram::setUniform(const char *varName, const ftVec2 & value)
 {
 	if (currentShader != this) return;
 	const GLfloat v[] = {value.x, value.y};
