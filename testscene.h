@@ -131,6 +131,7 @@ class ShaderScene : public TestScene
 private:
 	MyShaderProgram spa, spb, spc;
 	SButton ba, bb, bc;
+	int use;
 public:
 	void customInit();
 	void customUpdate();

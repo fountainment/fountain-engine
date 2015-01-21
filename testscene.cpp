@@ -88,12 +88,12 @@ void HelloWorld::init()
 
 void HelloWorld::update()
 {
-	mainCamera.update();
 	butCon.update();
 }
 
 void HelloWorld::draw()
 {
+	mainCamera.update();
 	butCon.draw();
 }
 
@@ -221,11 +221,11 @@ void PhysicsScene::customDraw()
 void TypeScene::customInit()
 {
 	fontMan2.loadFont("resources/font/test.ttc");
-	fontMan2.genStringTable("HWelod! ", 32);
+	fontMan2.genStringTable("HWerlod! ", 32);
 	fontMan.loadFont("resources/font/test.ttc");
-	fontMan.genStringTable("HWelod! ", 16);
+	fontMan.genStringTable("HWerlod! ", 16);
 	fontMan1.loadFont("resources/font/test.ttc");
-	fontMan1.genStringTable("HWelod! ", 8);
+	fontMan1.genStringTable("HWerlod! ", 8);
 }
 
 void TypeScene::customUpdate()
@@ -328,7 +328,7 @@ void ShaderScene::customInit()
 	spa.init();
 	spb.init();
 	spc.init();
-	spa.use();
+	use = 1;
 	ba.setPosition(-200, -220);
 	ba.setRectSize(ftVec2(180, 70));
 	ba.setCaption("magicStar");
@@ -344,19 +344,16 @@ void ShaderScene::customUpdate()
 {
 	ba.update();
 	if (ba.getState() == FT_ButtonUp) {
-		spa.use();
+		use = 1;
 	}
 	bb.update();
 	if (bb.getState() == FT_ButtonUp) {
-		spb.use();
+		use = 2;
 	}
 	bc.update();
 	if (bc.getState() == FT_ButtonUp) {
-		spc.use();
+		use = 3;
 	}
-	spa.update();
-	spb.update();
-	spc.update();
 }
 
 void ShaderScene::customDraw()
@@ -364,8 +361,12 @@ void ShaderScene::customDraw()
 	ba.draw();
 	bb.draw();
 	bc.draw();
+	if (use == 1) spa.use();
+	if (use == 2) spb.use();
+	if (use == 3) spc.use();
 	ftRender::useColor(FT_White);
 	ftRender::drawQuad(300, 300);
+	ftRender::useFFP();
 }
 
 void ShaderScene::destroy()

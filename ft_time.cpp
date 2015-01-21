@@ -7,7 +7,7 @@ static float realFps;
 static double initT;
 
 namespace fountain {
-Clock mainClock(60.0);
+Clock mainClock(60.0f);
 }
 
 #ifdef linux
@@ -148,7 +148,7 @@ void Clock::tick()
 		deltaT = 0.0f;
 	else {
 		//TODO: use a better way to solve debug deltaT
-		if (secondPerFrame > 0.0f && deltaT > secondPerFrame * 2) {
+		if (secondPerFrame > 0.0f && deltaT > secondPerFrame * 2.0f) {
 			deltaT = secondPerFrame;
 		}
 		deltaT *= timeScale;
@@ -212,7 +212,7 @@ void Clock::setFps(float fps)
 			secondPerFrame = 0.0f;
 		else
 			secondPerFrame = 1.0f / fps;
-		perFrameWaitTime = secondPerFrame - littleSleepTime * 0.5;
+		perFrameWaitTime = secondPerFrame - littleSleepTime * 0.5f;
 	} else {
 		masterClock->setFps(fps);
 	}
