@@ -69,7 +69,7 @@ inline float floatTime()
 {
 	LARGE_INTEGER tick;
 	QueryPerformanceCounter(&tick);
-	return (float)((double)tick.QuadPart / freq - initT);
+	return (float)((double)tick.QuadPart * freq - initT);
 }
 
 // Win32 end
