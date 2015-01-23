@@ -5,6 +5,7 @@ extern ftRender::ShaderProgram bg;
 class OpenScene : public ftScene::Scene
 {
 private:
+	int cursorID;
 public:
 	void init();
 	void update();
