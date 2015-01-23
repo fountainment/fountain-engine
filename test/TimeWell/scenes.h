@@ -2,30 +2,45 @@
 
 extern ftRender::ShaderProgram bg;
 
-class OpenScene : public ftScene::Scene
+class BaseScene : public ftScene::Scene
 {
 private:
 	int cursorID;
+	ftRender::Camera screenC;
 public:
 	void init();
 	void update();
 	void draw();
+	void drawBG();
+	void drawCursor();
+	virtual void otherInit();
+	virtual void otherDraw();
+	virtual void otherUpdate();
 };
 
-class GameScene : public ftScene::Scene
+class OpenScene : public BaseScene
 {
 private:
 public:
-	void init();
-	void update();
-	void draw();
+	void otherInit();
+	void otherUpdate();
+	void otherDraw();
 };
 
-class ScoreScene : public ftScene::Scene
+class GameScene : public BaseScene
 {
 private:
 public:
-	void init();
-	void update();
-	void draw();
+	void otherInit();
+	void otherUpdate();
+	void otherDraw();
+};
+
+class ScoreScene : public BaseScene
+{
+private:
+public:
+	void otherInit();
+	void otherUpdate();
+	void otherDraw();
 };
