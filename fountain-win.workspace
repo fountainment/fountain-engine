@@ -8,5 +8,6 @@
 		<Project filename="test-win.cbp">
 			<Depends filename="fountain.cbp" />
 		</Project>
+		<Project filename="TimeWell-win.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>
