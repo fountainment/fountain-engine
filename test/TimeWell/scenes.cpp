@@ -1,6 +1,26 @@
 #include "scenes.h"
 
-ftRender::ShaderProgram bg("res/shader/vs.vert", "res/shader/bg.frag");
+#include <cstdio>
+
+MC::MC()
+{
+}
+
+MC::MC(ftRender::SubImage image)
+{
+	im = image;
+	this->body = NULL;
+	this->bodyType = FT_Kinematic;
+	setPosition(0, 0);
+	setRectSize(ftVec2(1.0f, 1.0f));
+	scale = 1.0f;
+}
+
+void MC::draw()
+{
+	ftVec2 pos = this->getPosition();
+	drawImage(im, pos.x, pos.y, this->getAngle(), scale, this->getColor());
+}
 
 void BaseScene::init()
 {
@@ -32,11 +52,6 @@ void BaseScene::draw()
 void BaseScene::drawBG()
 {
 	screenC.update();
-	bg.use();
-	bg.setUniform("time", mainClock.secondsFromInit());
-	bg.setUniform("resolution", fountain::getWinSize());
-	ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h);
-	ftRender::useFFP();
 }
 
 void BaseScene::otherDraw()
@@ -58,9 +73,31 @@ void OpenScene::otherInit()
 
 void OpenScene::otherUpdate()
 {
+	if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown)
+		fountain::sceneSelector.gotoScene(new GameScene());
 }
 
 void OpenScene::otherDraw()
 {
 	mainCamera.update();
 }
+
+void GameScene::otherInit()
+{
+	ftPhysics::setRatio(100.0f);
+	myWorld = ftPhysics::World(ftVec2(0, 0));
+	ftRender::setClearColor(ftColor("#CC3333"));
+	mainC = MC(ftRender::getImage("res/image/me.png"));
+	mainC.setShape(ftShape(100.0f));
+}
+
+void GameScene::otherUpdate()
+{
+}
+
+void GameScene::otherDraw()
+{
+	mainCamera.update();
+	mainC.draw();
+}
+

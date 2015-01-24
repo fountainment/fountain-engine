@@ -31,11 +31,12 @@ public:
 	int bodyType;
 
 	Body();
+	virtual ~Body();
 	Body(float x, float y, int bodyT = FT_Dynamic);
 	void setBody(b2Body* b2bd);
 	void autoCreateFixtures();
 	void update();
-	void draw();
+	virtual void draw();
 	void setShape(const ftShape & shape);
 	void setVelocity(ftVec2 v);
 };

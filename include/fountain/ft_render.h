@@ -92,6 +92,7 @@ public:
 SubImage getImage(int picID);
 SubImage getImage(const char *filename);
 void drawImage(SubImage & im);
+void drawImage(SubImage & im, float x, float y, float degree = 0.0f, float scale = 1.0f, ftColor c = FT_White);
 
 class SubImagePool
 {
