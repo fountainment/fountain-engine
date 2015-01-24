@@ -161,6 +161,7 @@ private:
 	ftVec2 rectSize;
 	float angle;
 	ftColor color;
+	float scale;
 	std::string tag;
 public:
 	ftSprite();
@@ -182,6 +183,10 @@ public:
 	void move(float x, float y);
 	void setTag(std::string tag);
 	std::string getTag();
+/*
+	void drawBegin();
+	void drawEnd();
+*/
 };
 
 class ftFile

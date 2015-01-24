@@ -309,6 +309,7 @@ ftSprite::ftSprite()
 	color = FT_White;
 	setPosition(0, 0);
 	setRectSize(0, 0);
+	scale = 1.0f;
 }
 
 void ftSprite::setColor(const ftColor & c)
@@ -406,6 +407,17 @@ std::string ftSprite::getTag()
 {
 	return tag;
 }
+
+/*
+void ftSprite::drawBegin()
+{
+}
+
+void ftSprite::drawEnd()
+{
+	ftRender::
+}
+*/
 
 //class ftColor
 float ftColor::checkValue(float v)

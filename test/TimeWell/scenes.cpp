@@ -90,10 +90,26 @@ void MC::draw()
 			1.0f, this->getColor());
 }
 
+void OC::draw()
+{
+	ftVec2 pos = this->getPosition();
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f, this->getColor());
+	ftRender::drawShape(shape);
+	ftRender::transformEnd();
+}
+
+void OC::update()
+{
+}
+
 void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 	mc.image = ftRender::getImage("res/image/me.png"); 
+
+	OC x;
+	x.shape = ftShape(100.0f);
+	ocPool.add(x);
 }
 
 void GameScene::otherUpdate()
@@ -107,17 +123,19 @@ void GameScene::otherUpdate()
 	if (deltaV.x > 0) d -= 3.14159f / 2.0f;
 	else d += 3.14159f / 2.0f;
 	mc.setAngle(d);
-	std::printf("%f\n", d);
 
 	ftVec2 camPos = mainCamera.getPosition();
 	deltaV = mcPos - camPos;
 	mainCamera.move(deltaV * (mainClock.getDeltaT() * 2.0f));
+
+	ocPool.update();
 }
 
 void GameScene::otherDraw()
 {
 	mainCamera.update();
 	mc.draw();
+	ocPool.draw();
 	ftRender::drawLine(-100, 0, 100, 0);
 }
 

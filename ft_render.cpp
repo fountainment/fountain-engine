@@ -632,13 +632,18 @@ void ftRender::drawImage(SubImage & im)
 	disableTexture2D();
 }
 
-void ftRender::drawImage(SubImage & im, float x, float y, float degree, float scale, ftColor c)
+void ftRender::transformBegin(float x, float y, float degree, float scale, ftColor c)
 {
 	ftRender::useColor(c);
 	ftRender::transformBegin();
 	ftRender::ftTranslate(x, y);
 	ftRender::ftRotate(0, 0, degree);
 	ftRender::ftScale(scale);
+}
+
+void ftRender::drawImage(SubImage & im, float x, float y, float degree, float scale, ftColor c)
+{
+	ftRender::transformBegin(x, y, degree, scale, c);
 	ftRender::drawImage(im);
 	ftRender::transformEnd();
 	ftRender::useColor(FT_White);

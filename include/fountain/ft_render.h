@@ -32,6 +32,7 @@ bool isAlive();
 void clearColorDepthBuffer();
 
 void transformBegin();
+void transformBegin(float x, float y, float degree = 0.0f, float scale = 1.0f, ftColor c = FT_White);
 void transformEnd();
 void ftTranslate(float x, float y, float z = 0.0f);
 void ftTranslate(ftVec2 xy, float z = 0.0f);

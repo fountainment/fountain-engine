@@ -283,7 +283,6 @@ World::~World()
 
 bool World::addBody(Body* bd)
 {
-	std::printf("1\n");
 	ftVec2 pos = bd->getPosition();
 	defaultBodyDef.position.Set(pos.x / ratio, pos.y / ratio);
 	switch (bd->bodyType) {
@@ -296,19 +295,13 @@ bool World::addBody(Body* bd)
 		break;
 
 	case FT_Kinematic:
-	std::printf("2\n");
 		defaultBodyDef.type = b2_kinematicBody;
 		break;
 	}
 
-	std::printf("3\n");
 	if (World::bodyCon.add(bd) == true) {
-	std::printf("4\n");
 		bd->setBody(world->CreateBody(&defaultBodyDef));
-	std::printf("5\n");
-	std::printf("5\n");
 		bd->autoCreateFixtures();
-	std::printf("6\n");
 		return true;
 	} else {
 		return false;

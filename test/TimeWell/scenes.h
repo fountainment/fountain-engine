@@ -34,18 +34,19 @@ public:
 	void draw();
 };
 
-class FX : public ftSprite
+class OC : public ftSprite
 {
 public:
-	ftColor foreColor;
 	ftShape shape;
 	void draw();
+	void update();
 };
 
 class GameScene : public BaseScene
 {
 private:
 	MC mc;
+	container<OC, 1000> ocPool;
 public:
 	void otherInit();
 	void otherUpdate();
