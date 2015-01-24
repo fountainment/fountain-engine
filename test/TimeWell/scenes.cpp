@@ -307,5 +307,15 @@ void GameScene::otherDraw()
 		ftRender::drawLine(a.x, a.y, b.x, b.y);
 	}
 	ftRender::setLineWidth(1.0f);
+	ftRender::useColor(FT_White);
+	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
+	ftVec2 line = target - mc.getPosition();
+	line = line * 0.125f;
+	for (int i = 1; i < 8; i++) {
+		ftRender::transformBegin();
+		ftRender::ftTranslate(mc.getPosition() + (line * i));
+		ftRender::drawCircle(5);
+		ftRender::transformEnd();
+	}
 }
 
