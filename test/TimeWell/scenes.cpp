@@ -97,6 +97,11 @@ void GameScene::otherInit()
 
 void GameScene::otherUpdate()
 {
+	ftVec2 mcPos = mc.getPosition();
+	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
+	ftVec2 deltaV = target - mcPos;
+
+	mc.move(deltaV * (mainClock.getDeltaT() * 3.0f));
 }
 
 void GameScene::otherDraw()
