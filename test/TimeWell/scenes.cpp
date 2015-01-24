@@ -272,9 +272,15 @@ void GameScene::otherUpdate()
 		b2Body *bb = bbStack.top();
 		baStack.pop();
 		bbStack.pop();
+		/*
 		b2WeldJointDef jd;
 		jd.frequencyHz = 5.0f;
 		jd.dampingRatio = 0.7f;
+		jd.Initialize(ba, bb, ba->GetPosition());
+		*/
+		b2RevoluteJointDef jd;
+		jd.collideConnected = true;
+		jd.enableLimit = true;
 		jd.Initialize(ba, bb, ba->GetPosition());
 		world->CreateJoint(&jd);
 	}
