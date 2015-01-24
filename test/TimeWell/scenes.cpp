@@ -141,7 +141,8 @@ void CL::BeginContact(b2Contact *contact)
 		ftSprite *A = (ftSprite*)userDataA;
 		atag = A->getTag();
 		if (atag == 1) {
-			bb->SetLinearVelocity(b2Vec2(10.0, 0));
+			b2Vec2 t = ba->GetPosition() - bb->GetPosition();
+			bb->ApplyForceToCenter(100.0f * t, true);
 		}
 	}
 
@@ -150,6 +151,8 @@ void CL::BeginContact(b2Contact *contact)
 		ftSprite *B = (ftSprite*)userDataB;
 		btag = B->getTag();
 		if (btag == 1) {
+			b2Vec2 t = bb->GetPosition() - ba->GetPosition();
+			ba->ApplyForceToCenter(100.0f * t, true);
 		}
 	}
 }
