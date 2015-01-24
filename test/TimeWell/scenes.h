@@ -51,12 +51,19 @@ public:
 	void update();
 };
 
+class CL : public b2ContactListener
+{
+public:
+	void BeginContact(b2Contact *contact);
+};
+
 class GameScene : public BaseScene
 {
 private:
 	b2World *world;
 	MC mc;
 	container<OC, 1000> ocPool;
+	CL cListener;
 public:
 	void otherInit();
 	void otherUpdate();

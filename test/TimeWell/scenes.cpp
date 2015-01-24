@@ -3,28 +3,6 @@
 #include <cstdio>
 #include <cmath>
 
-/*
-MC::MC()
-{
-}
-
-MC::MC(ftRender::SubImage image)
-{
-	im = image;
-	this->body = NULL;
-	this->bodyType = FT_Kinematic;
-	setPosition(0, 0);
-	setRectSize(ftVec2(1.0f, 1.0f));
-	scale = 1.0f;
-}
-
-void MC::draw()
-{
-	ftVec2 pos = this->getPosition();
-	drawImage(im, pos.x, pos.y, this->getAngle(), scale, this->getColor());
-}
-*/
-
 void BaseScene::init()
 {
 	screenC.setViewport(fountain::getWinRect());
@@ -145,19 +123,59 @@ void OC::update()
 	this->setAngle(angle);
 }
 
+void CL::BeginContact(b2Contact *contact)
+{
+	b2Fixture* fixtureA = contact->GetFixtureA();
+	b2Fixture* fixtureB = contact->GetFixtureB();
+
+	b2Body *ba = fixtureA->GetBody();
+	b2Body *bb = fixtureB->GetBody();
+
+	void* userDataA = ba->GetUserData();
+	void* userDataB = bb->GetUserData();
+	
+	int atag, btag; 
+
+	if (userDataA)
+	{
+		ftSprite *A = (ftSprite*)userDataA;
+		atag = A->getTag();
+		if (atag == 1) {
+			bb->SetLinearVelocity(b2Vec2(10.0, 0));
+		}
+	}
+
+	if (userDataB)
+	{
+		ftSprite *B = (ftSprite*)userDataB;
+		btag = B->getTag();
+		if (btag == 1) {
+		}
+	}
+}
+
+void ocSetUserData(OC & oc)
+{
+	oc.body->SetUserData((ftSprite*)&oc);
+}
+
 void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 
 	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
-	
+	world->SetContactListener(&cListener);
 
 	mc.image = ftRender::getImage("res/image/me.png"); 
 	mc.body = ftPhysics::createBodyInWorld(world, 0, 0, FT_Dynamic);
 	ftShape seven = ftShape::makeRegularPolygonShape(7, 50);
 	b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(seven);
 	mc.body->CreateFixture(b2shape, 1.0f);
+	mc.body->SetUserData((ftSprite*)&mc);
+	mc.setTag(1);
+	b2Fixture *fx = mc.body->GetFixtureList();
+	fx->SetSensor(true);	
 	delete b2shape;
 
 	OC tmp;
@@ -180,6 +198,7 @@ void GameScene::otherInit()
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
 		ocPool.add(tmp);
 	}
+	ocPool.doWith(ocSetUserData);
 }
 
 void GameScene::otherUpdate()
@@ -189,7 +208,6 @@ void GameScene::otherUpdate()
 	ftVec2 mcPos = mc.getPosition();
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 deltaV = target - mcPos;
-	//mc.move(deltaV * (mainClock.getDeltaT() * 3.0f));
 	ftVec2 tv = deltaV * (mainClock.getDeltaT() * 3.0f);
 	
 	float d = std::atan(deltaV.y / deltaV.x);

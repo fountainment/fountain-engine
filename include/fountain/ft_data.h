@@ -230,7 +230,7 @@ public:
 	bool delHead();
 	void update();
 	void draw();
-	void doWith(void(*func)(_tp));
+	void doWith(void(*func)(_tp &node));
 	bool empty();
 	int getAvailN();
 	virtual bool willLive(_tp &node);
@@ -328,7 +328,7 @@ void container<_tp, _size>::draw()
 }
 
 template <typename _tp, int _size>
-void container<_tp, _size>::doWith(void (*func) (_tp))
+void container<_tp, _size>::doWith(void (*func) (_tp &node))
 {
 	int cur = head;
 	while (cur != -1) {
