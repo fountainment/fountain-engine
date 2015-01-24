@@ -3,6 +3,9 @@
 #include <cstdio>
 #include <cmath>
 
+b2Body *ccb;
+bool ccbb = false;
+
 void BaseScene::init()
 {
 	screenC.setViewport(fountain::getWinRect());
@@ -121,8 +124,26 @@ void OC::update()
 	float angle = body->GetAngle();
 	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
 	this->setAngle(angle);
+	if (this->getTag() == 3) {
+		ccb = body;
+		ccbb = true;
+		this->setTag(1);
+	}
 }
 
+void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
+//void CL::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
+{
+	const b2Manifold* manifold = contact->GetManifold();
+
+
+
+	 if (manifold->pointCount == 0){
+
+		   return;
+
+		    }
+}
 void CL::BeginContact(b2Contact *contact)
 {
 	b2Fixture* fixtureA = contact->GetFixtureA();
@@ -130,6 +151,7 @@ void CL::BeginContact(b2Contact *contact)
 
 	b2Body *ba = fixtureA->GetBody();
 	b2Body *bb = fixtureB->GetBody();
+	//b2World *world = ba->GetWorld();
 
 	void* userDataA = ba->GetUserData();
 	void* userDataB = bb->GetUserData();
@@ -141,8 +163,17 @@ void CL::BeginContact(b2Contact *contact)
 		ftSprite *A = (ftSprite*)userDataA;
 		atag = A->getTag();
 		if (atag == 1) {
-			b2Vec2 t = ba->GetPosition() - bb->GetPosition();
-			bb->ApplyForceToCenter(100.0f * t, true);
+			//b2Vec2 t = ba->GetPosition() - bb->GetPosition();
+			//bb->ApplyForceToCenter(-10000.0f * t, true);
+			//b2WeldJointDef jd;
+			//b2DistanceJointDef jd;
+			//jd.frequencyHz = 5.0f;
+			//jd.dampingRatio = 0.7f;
+			//jd.Initialize(bb, ba, ba->GetPosition());
+			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
+			//world->CreateJoint(&jd);
+			ftSprite *B = (ftSprite*)userDataB;
+			B->setTag(3);
 		}
 	}
 
@@ -151,8 +182,16 @@ void CL::BeginContact(b2Contact *contact)
 		ftSprite *B = (ftSprite*)userDataB;
 		btag = B->getTag();
 		if (btag == 1) {
-			b2Vec2 t = bb->GetPosition() - ba->GetPosition();
-			ba->ApplyForceToCenter(100.0f * t, true);
+			//b2Vec2 t = bb->GetPosition() - ba->GetPosition();
+			//ba->ApplyForceToCenter(-10000.0f * t, true);
+			//b2DistanceJointDef jd;
+			//jd.frequencyHz = 5.0f;
+			//jd.dampingRatio = 0.7f;
+			//jd.Initialize(ba, bb, bb->GetPosition());
+			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
+			//world->CreateJoint(&jd);
+			ftSprite *A = (ftSprite*)userDataB;
+			A->setTag(3);
 		}
 	}
 }
@@ -227,6 +266,13 @@ void GameScene::otherUpdate()
 	mainCamera.move(deltaV * (mainClock.getDeltaT() * 2.0f));
 
 	ocPool.update();
+
+	if (ccbb) {
+		b2DistanceJointDef jd;
+		jd.Initialize(mc.body, ccb, mc.body->GetPosition(), ccb->GetPosition());
+		world->CreateJoint(&jd);
+		ccbb = false;
+	}
 }
 
 void GameScene::otherDraw()
