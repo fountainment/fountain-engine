@@ -96,6 +96,7 @@ ftColor OC::randColor()
 	a[0] = ftAlgorithm::randRangef(0.6f, 1.0f);
 	a[1] = ftAlgorithm::randRangef(0.0f, 0.45f);
 	a[2] = ftAlgorithm::randRangef(0.0f, 0.2f);
+/*
 	int rn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
 	float r = a[rn];
 
@@ -108,8 +109,12 @@ ftColor OC::randColor()
 	while (bn == rn || bn == gn)
 		bn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
 	float b = a[bn];
-
 	return ftColor(r, g, b);
+*/
+	float c[3];
+       	for (int i = 0; i < 3; i++)
+		c[i] = a[(int)ftAlgorithm::randRangef(0.0f, 2.99f)];
+	return ftColor(c[0], c[1], c[2]);
 }
 
 void OC::draw()
