@@ -1,5 +1,7 @@
 #include <fountain/fountaindef.h>
 
+#include <cstdio>
+
 using ftPhysics::Body;
 using ftPhysics::World;
 
@@ -146,6 +148,10 @@ Body::Body()
 	bodyType = FT_Dynamic;
 }
 
+Body::~Body()
+{
+}
+
 Body::Body(float x, float y, int bodyT)
 {
 	body = NULL;
@@ -157,7 +163,12 @@ Body::Body(float x, float y, int bodyT)
 void Body::setBody(b2Body* b2bd)
 {
 	body = b2bd;
-	body->SetUserData(body);
+	body->SetUserData(this);
+}
+
+void Body::setImage(const ftRender::SubImage & image)
+{
+	im = image;
 }
 
 void Body::autoCreateFixtures()
@@ -272,9 +283,9 @@ World::~World()
 
 bool World::addBody(Body* bd)
 {
+	std::printf("1\n");
 	ftVec2 pos = bd->getPosition();
 	defaultBodyDef.position.Set(pos.x / ratio, pos.y / ratio);
-
 	switch (bd->bodyType) {
 	case FT_Dynamic:
 		defaultBodyDef.type = b2_dynamicBody;
@@ -285,13 +296,19 @@ bool World::addBody(Body* bd)
 		break;
 
 	case FT_Kinematic:
+	std::printf("2\n");
 		defaultBodyDef.type = b2_kinematicBody;
 		break;
 	}
 
+	std::printf("3\n");
 	if (World::bodyCon.add(bd) == true) {
+	std::printf("4\n");
 		bd->setBody(world->CreateBody(&defaultBodyDef));
+	std::printf("5\n");
+	std::printf("5\n");
 		bd->autoCreateFixtures();
+	std::printf("6\n");
 		return true;
 	} else {
 		return false;

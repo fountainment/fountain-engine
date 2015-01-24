@@ -27,9 +27,17 @@ public:
 	void otherDraw();
 };
 
+class MC : public ftSprite
+{
+public:
+	ftRender::SubImage image;
+	void draw();
+};
+
 class GameScene : public BaseScene
 {
 private:
+	MC mc;
 public:
 	void otherInit();
 	void otherUpdate();

@@ -29,10 +29,13 @@ public:
 	ftShape shape;
 	b2Body* body;
 	int bodyType;
+	ftRender::SubImage im;
 
 	Body();
+	~Body();
 	Body(float x, float y, int bodyT = FT_Dynamic);
 	void setBody(b2Body* b2bd);
+	void setImage(const ftRender::SubImage & image);
 	void autoCreateFixtures();
 	void update();
 	void draw();

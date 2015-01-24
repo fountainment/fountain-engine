@@ -397,6 +397,16 @@ void ftSprite::move(float x, float y)
 	position.y += y;
 }
 
+void ftSprite::setTag(std::string tag)
+{
+	this->tag = tag;
+}
+
+std::string ftSprite::getTag()
+{
+	return tag;
+}
+
 //class ftColor
 float ftColor::checkValue(float v)
 {
