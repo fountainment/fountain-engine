@@ -39,8 +39,11 @@ class OC : public ftSprite
 public:
 	static ftColor randColor();
 	static ftShape randShape();
+	float r;
+	int en;
 	ftShape shape;
 	ftVec2 speed;
+	float aSpeed;
 	void draw();
 	void update();
 };

@@ -57,7 +57,7 @@ public:
 		ftRender::useColor(ftColor(color.r, color.g, color.b, color.a));
 		ftRender::transformBegin();
 		ftRender::ftTranslate(ftVec2(center.x, center.y) * ratio);
-		ftRender::drawCircleLine(radius * ratio);
+		ftRender::drawCircleEdge(radius * ratio);
 		ftRender::transformEnd();
 	}
 

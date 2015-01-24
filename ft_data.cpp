@@ -409,6 +409,11 @@ void ftSprite::move(float x, float y)
 	position.y += y;
 }
 
+void ftSprite::rotate(float aSpeed)
+{
+	angle += aSpeed;
+}
+
 void ftSprite::setTag(std::string tag)
 {
 	this->tag = tag;

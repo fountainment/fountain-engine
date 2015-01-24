@@ -114,8 +114,13 @@ ftColor OC::randColor()
 void OC::draw()
 {
 	ftVec2 pos = this->getPosition();
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f + (5.0f / (this->r * std::cos(3.14159f / this->en))), FT_Black);
+	ftRender::drawShape(shape);
+	ftRender::drawShapeEdge(shape);
+	ftRender::transformEnd();
 	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f, this->getColor());
 	ftRender::drawShape(shape);
+	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 	ftRender::useColor(FT_White);
 }
@@ -123,6 +128,7 @@ void OC::draw()
 void OC::update()
 {
 	this->move(speed);
+	this->rotate(aSpeed);
 }
 
 void GameScene::otherInit()
@@ -132,9 +138,14 @@ void GameScene::otherInit()
 
 	OC tmp;
 	for (int i = 0; i < 100; i++) {
-		tmp.shape = ftShape::makeRegularPolygonShape(ftAlgorithm::randRangef(3, 6.99),ftAlgorithm::randRangef(20, 40));
+		float r = ftAlgorithm::randRangef(20, 40);
+		int en = ftAlgorithm::randRangef(3, 6.99);
+		tmp.r = r;
+		tmp.en = en;
+		tmp.shape = ftShape::makeRegularPolygonShape(en, r);
 		tmp.setColor(OC::randColor());
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
+		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
 		ocPool.add(tmp);
 	}
 }

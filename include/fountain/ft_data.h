@@ -183,6 +183,7 @@ public:
 	void update();
 	void move(const ftVec2 & x);
 	void move(float x, float y);
+	void rotate(float aSpeed);
 	void setTag(std::string tag);
 	std::string getTag();
 /*

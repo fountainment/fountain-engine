@@ -44,6 +44,8 @@ void ftColor3f(float r, float g, float b);
 void useColor(ftColor c);
 ftColor getGlobalColor();
 
+void setLineWidth(float w);
+
 void openLineSmooth();
 void openPointSmooth();
 void openPolygonSmooth();
@@ -52,10 +54,12 @@ void setClearColor(ftColor c);
 void drawLine(float x1, float y1, float x2, float y2);
 void drawLine(const ftVec2 & p1, const ftVec2 & p2);
 void drawQuad(float w, float h);
+void drawQuadEdge(float w, float h);
 void drawRect(ftRect & rct, float angle = 0.0f);
 void drawCircle(float radius);
-void drawCircleLine(float radius);
+void drawCircleEdge(float radius);
 void drawShape(ftShape & shape, float angle = 0.0f);
+void drawShapeEdge(ftShape & shape, float angle = 0.0f);
 
 //TODO: implement this function drawBitmap
 void drawBitmap(unsigned char *bits, int width, int height, int dataType = FT_RGBA, int x = 0, int y = 0);

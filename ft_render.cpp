@@ -203,6 +203,11 @@ ftColor ftRender::getGlobalColor()
 	return ftColor(globalR, globalG, globalB, globalA);
 }
 
+void ftRender::setLineWidth(float w)
+{
+	glLineWidth(w);
+}
+
 void ftRender::openLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);
@@ -334,6 +339,17 @@ void ftRender::drawQuad(float w, float h)
 	glDisable(GL_BLEND);
 }
 
+void ftRender::drawQuadEdge(float w, float h)
+{
+	float w2 = w / 2.0f;
+	float h2 = h / 2.0f;
+	GLfloat vtx[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	drawFloat2(vtx, 4, GL_LINE_LOOP);
+	glDisable(GL_BLEND);
+}
+
 void ftRender::drawRect(ftRect & rct, float angle)
 {
 	ftVec2 rPos = rct.getCenter();
@@ -353,7 +369,7 @@ void ftRender::drawCircle(float radius)
 	ftRender::transformEnd();
 }
 
-void ftRender::drawCircleLine(float radius)
+void ftRender::drawCircleEdge(float radius)
 {
 	ftRender::transformBegin();
 	ftRender::ftScale(radius);
@@ -366,7 +382,6 @@ void ftRender::drawShape(ftShape & shape, float angle)
 	int type = shape.getType();
 	const float *v = shape.getData();
 	int n = shape.getN();
-	ftRender::ftRotate(0.0f, 0.0f, angle);
 
 	switch (type)
 	{
@@ -384,6 +399,32 @@ void ftRender::drawShape(ftShape & shape, float angle)
 
 	case FT_Rect:
 		ftRender::drawQuad(v[0], v[1]);
+		break;
+	}
+}
+
+void ftRender::drawShapeEdge(ftShape & shape, float angle)
+{
+	int type = shape.getType();
+	const float *v = shape.getData();
+	int n = shape.getN();
+
+	switch (type)
+	{
+	case FT_Circle:
+		ftRender::drawCircleEdge(shape.getR());
+		break;
+
+	case FT_Polygon:
+		drawFloat2(v, n, GL_LINE_LOOP);
+		break;
+
+	case FT_Line:
+		drawFloat2(v, n, GL_LINE_STRIP);
+		break;
+
+	case FT_Rect:
+		ftRender::drawQuadEdge(v[0], v[1]);
 		break;
 	}
 }
