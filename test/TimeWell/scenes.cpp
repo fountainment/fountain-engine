@@ -2,9 +2,10 @@
 
 #include <cstdio>
 #include <cmath>
+#include <stack>
 
-b2Body *ccb;
-bool ccbb = false;
+std::stack<b2Body*> baStack;
+std::stack<b2Body*> bbStack;
 
 void BaseScene::init()
 {
@@ -124,25 +125,17 @@ void OC::update()
 	float angle = body->GetAngle();
 	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
 	this->setAngle(angle);
-	if (this->getTag() == 3) {
-		ccb = body;
-		ccbb = true;
-	}
 }
-
+/*
 void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
 //void CL::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
 	const b2Manifold* manifold = contact->GetManifold();
-
-
-
-	 if (manifold->pointCount == 0){
-
-		   return;
-
-		    }
+	if (manifold->pointCount == 0){
+		return;
+	}
 }
+*/
 void CL::BeginContact(b2Contact *contact)
 {
 	b2Fixture* fixtureA = contact->GetFixtureA();
@@ -172,8 +165,11 @@ void CL::BeginContact(b2Contact *contact)
 			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
 			//world->CreateJoint(&jd);
 			ftSprite *B = (ftSprite*)userDataB;
-			if (B->getTag() != 1)
-				B->setTag(3);
+			if (B->getTag() != 1) {
+				baStack.push(ba);
+				bbStack.push(bb);
+				B->setTag(1);
+			}
 		}
 	}
 
@@ -191,8 +187,11 @@ void CL::BeginContact(b2Contact *contact)
 			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
 			//world->CreateJoint(&jd);
 			ftSprite *A = (ftSprite*)userDataB;
-			if (A->getTag() != 1)
-				A->setTag(3);
+			if (A->getTag() != 1) {
+				baStack.push(ba);
+				bbStack.push(bb);
+				A->setTag(1);
+			}
 		}
 	}
 }
@@ -217,8 +216,8 @@ void GameScene::otherInit()
 	mc.body->CreateFixture(b2shape, 1.0f);
 	mc.body->SetUserData((ftSprite*)&mc);
 	mc.setTag(1);
-	b2Fixture *fx = mc.body->GetFixtureList();
-	fx->SetSensor(true);	
+	//b2Fixture *fx = mc.body->GetFixtureList();
+	//fx->SetSensor(true);
 	delete b2shape;
 
 	OC tmp;
@@ -268,12 +267,16 @@ void GameScene::otherUpdate()
 
 	ocPool.update();
 
-	if (ccbb) {
-		b2DistanceJointDef jd;
-		jd.Initialize(mc.body, ccb, mc.body->GetPosition(), ccb->GetPosition());
+	while (baStack.size()) {
+		b2Body *ba = baStack.top();
+		b2Body *bb = bbStack.top();
+		baStack.pop();
+		bbStack.pop();
+		b2WeldJointDef jd;
+		jd.frequencyHz = 5.0f;
+		jd.dampingRatio = 0.7f;
+		jd.Initialize(ba, bb, ba->GetPosition());
 		world->CreateJoint(&jd);
-		ccbb = false;
-		((ftSprite*)(ccb->GetUserData()))->setTag(1);
 	}
 }
 
