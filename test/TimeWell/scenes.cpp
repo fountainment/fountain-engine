@@ -122,15 +122,12 @@ void OC::draw()
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 
-	if (this->getTag() == 1)
-		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), FT_White);
-	else 
-		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), this->getColor());
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), this->getColor());
 	ftRender::drawShape(shape);
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 
-	if (this->getTag() == 1) {
+	if (this->getTag() == 3) {
 		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))) - 0.5, FT_Black);
 		ftRender::drawShape(shape);
 		ftRender::drawShapeEdge(shape);
@@ -179,8 +176,10 @@ void CL::BeginContact(b2Contact *contact)
 	if ((atag == 1) ^ (btag == 1)) {
 		if (atag == 1) {
 			bStack.push(bb);
+			B->setTag(3);
 		} else {
 			bStack.push(ba);
+			A->setTag(3);
 		}
 		//A->setTag(1);
 		//B->setTag(1);
@@ -300,5 +299,13 @@ void GameScene::otherDraw()
 	mainCamera.update();
 	mc.draw();
 	ocPool.draw();
+	ftRender::useColor(FT_Black);
+	ftRender::setLineWidth(5.0f);
+	for (unsigned i = 0; i < rpVector.size() - 1; i++) {
+		b2Vec2 a = ftPhysics::getRatio() * rpVector[i].slave->GetPosition(); 
+		b2Vec2 b = ftPhysics::getRatio() * rpVector[i + 1].slave->GetPosition(); 
+		ftRender::drawLine(a.x, a.y, b.x, b.y);
+	}
+	ftRender::setLineWidth(1.0f);
 }
 
