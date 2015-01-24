@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <cmath>
+
 /*
 MC::MC()
 {
@@ -23,6 +24,7 @@ void MC::draw()
 	drawImage(im, pos.x, pos.y, this->getAngle(), scale, this->getColor());
 }
 */
+
 void BaseScene::init()
 {
 	screenC.setViewport(fountain::getWinRect());
@@ -83,6 +85,14 @@ void OpenScene::otherDraw()
 	mainCamera.update();
 }
 
+void MC::update()
+{
+	b2Vec2 bv = body->GetPosition();
+	float angle = body->GetAngle();
+	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
+	this->setAngle(angle);
+}
+
 void MC::draw()
 {
 	ftVec2 pos = this->getPosition();
@@ -138,9 +148,17 @@ void OC::update()
 void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
-	mc.image = ftRender::getImage("res/image/me.png"); 
 
+	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
+	
+
+	mc.image = ftRender::getImage("res/image/me.png"); 
+	mc.body = ftPhysics::createBodyInWorld(world, 0, 0, FT_Dynamic);
+	ftShape seven = ftShape::makeRegularPolygonShape(7, 50);
+	b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(seven);
+	mc.body->CreateFixture(b2shape, 1.0f);
+	delete b2shape;
 
 	OC tmp;
 	for (int i = 0; i < 500; i++) {
@@ -171,12 +189,17 @@ void GameScene::otherUpdate()
 	ftVec2 mcPos = mc.getPosition();
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 deltaV = target - mcPos;
-	mc.move(deltaV * (mainClock.getDeltaT() * 3.0f));
+	//mc.move(deltaV * (mainClock.getDeltaT() * 3.0f));
+	ftVec2 tv = deltaV * (mainClock.getDeltaT() * 3.0f);
 	
 	float d = std::atan(deltaV.y / deltaV.x);
 	if (deltaV.x > 0) d -= 3.14159f / 2.0f;
 	else d += 3.14159f / 2.0f;
-	mc.setAngle(d);
+
+	mc.body->SetTransform(mc.body->GetPosition(), d);
+	mc.body->SetLinearVelocity(b2Vec2(tv.x, tv.y));
+
+	mc.update();
 
 	ftVec2 camPos = mainCamera.getPosition();
 	deltaV = mcPos - camPos;

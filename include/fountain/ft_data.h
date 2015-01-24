@@ -164,7 +164,7 @@ private:
 	float angle;
 	ftColor color;
 	float scale;
-	std::string tag;
+	int tag;
 public:
 	ftSprite();
 	void setPosition(const ftVec2 & pos);
@@ -184,8 +184,8 @@ public:
 	void move(const ftVec2 & x);
 	void move(float x, float y);
 	void rotate(float aSpeed);
-	void setTag(std::string tag);
-	std::string getTag();
+	void setTag(int tag);
+	int getTag();
 /*
 	void drawBegin();
 	void drawEnd();

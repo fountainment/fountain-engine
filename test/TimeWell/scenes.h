@@ -30,7 +30,9 @@ public:
 class MC : public ftSprite
 {
 public:
+	b2Body *body;
 	ftRender::SubImage image;
+	void update();
 	void draw();
 };
 

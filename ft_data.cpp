@@ -414,12 +414,12 @@ void ftSprite::rotate(float aSpeed)
 	angle += aSpeed;
 }
 
-void ftSprite::setTag(std::string tag)
+void ftSprite::setTag(int tag)
 {
 	this->tag = tag;
 }
 
-std::string ftSprite::getTag()
+int ftSprite::getTag()
 {
 	return tag;
 }
