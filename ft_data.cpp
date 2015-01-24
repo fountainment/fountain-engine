@@ -1,6 +1,7 @@
 #include <fountain/ft_data.h>
 #include <cstdio>
 #include <cstring>
+#include <cmath>
 
 namespace fountain {
 
@@ -301,6 +302,16 @@ float ftShape::getR()
 int ftShape::getType()
 {
 	return type;
+}
+
+ftShape ftShape::makeRegularPolygonShape(int edgeN, float r)
+{
+	float d = 3.14159f * 2.0f / edgeN;
+	std::vector<ftVec2> v;
+	for (int i = 0; i < edgeN; i++) {
+		v.push_back(ftVec2(std::cos(d * i) * r, std::sin(d * i) * r));
+	}
+	return ftShape(v, edgeN, true);
 }
 
 //class ftSprite

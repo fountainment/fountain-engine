@@ -132,7 +132,7 @@ void GameScene::otherInit()
 
 	OC tmp;
 	for (int i = 0; i < 100; i++) {
-		tmp.shape = ftShape(ftAlgorithm::randRangef(20, 40));
+		tmp.shape = ftShape::makeRegularPolygonShape(ftAlgorithm::randRangef(3, 6.99),ftAlgorithm::randRangef(20, 40));
 		tmp.setColor(OC::randColor());
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
 		ocPool.add(tmp);

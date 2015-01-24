@@ -132,6 +132,8 @@ public:
 	float getR();
 
 	int getType();
+
+	static ftShape makeRegularPolygonShape(int edgeN, float r);
 };
 
 class ftColor
