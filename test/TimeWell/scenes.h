@@ -34,6 +34,14 @@ public:
 	void draw();
 };
 
+class FX : public ftSprite
+{
+public:
+	ftColor foreColor;
+	ftShape shape;
+	void draw();
+};
+
 class GameScene : public BaseScene
 {
 private:
