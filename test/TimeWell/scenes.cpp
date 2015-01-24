@@ -3,11 +3,18 @@
 #include <cstdio>
 #include <cmath>
 #include <stack>
+#include <vector>
 
-std::stack<b2Body*> baStack;
-std::stack<b2Body*> bbStack;
-std::vector<b2Body*> baVector;
-std::vector<b2Body*> bbVector;
+std::stack<b2Body*> bStack;
+
+typedef struct {
+	b2Body *master;
+	b2Body *slave;
+	b2Vec2 rp;
+	float rd;
+} RP;
+
+std::vector<RP> rpVector;
 
 void BaseScene::init()
 {
@@ -168,9 +175,12 @@ void CL::PreSolve(b2Contact *contact, const b2Manifold* oldManifold)
 	ftSprite *B = (ftSprite*)userDataB;
 	btag = B->getTag();
 	
-	if (atag == 1 || btag == 1) {
-		baStack.push(ba);
-		bbStack.push(bb);
+	if ((atag == 1) ^ (btag == 1)) {
+		if (atag == 1) {
+			bStack.push(bb);
+		} else {
+			bStack.push(ba);
+		}
 		A->setTag(1);
 		B->setTag(1);
 	}
@@ -185,8 +195,7 @@ void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 
-	baVector.clear();
-	bbVector.clear();
+	rpVector.clear();
 
 	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
@@ -250,21 +259,19 @@ void GameScene::otherUpdate()
 	deltaV = mcPos - camPos;
 	mainCamera.move(deltaV * (mainClock.getDeltaT() * 2.0f));
 
-	ocPool.update();
+	while (bStack.size()) {
+		b2Body *ba = bStack.top();
 
-	while (baStack.size()) {
-		b2Body *ba = baStack.top();
-		b2Body *bb = bbStack.top();
+		ba->SetType(b2_kinematicBody);
 
-		//ba->SetType(b2_kinematicBody);
-		//bb->SetType(b2_kinematicBody);
+		RP tmp;
+		tmp.master = mc.body;
+		tmp.slave = ba;
+		tmp.rp = ba->GetPosition() - mc.body->GetPosition();
+		tmp.rd = ba->GetAngle() - mc.body->GetAngle();
+		rpVector.push_back(tmp);
 
-		baStack.pop();
-		bbStack.pop();
-
-		baVector.push_back(ba);
-		baVector.push_back(bb);
-		
+		bStack.pop();
 		/* dangerous
 		b2RevoluteJointDef jd;
 		jd.collideConnected = true;
@@ -273,6 +280,17 @@ void GameScene::otherUpdate()
 		world->CreateJoint(&jd);
 		*/
 	}
+
+	for (int i = 0; i < rpVector.size(); i++) {
+		RP tmp = rpVector[i];
+		b2Vec2 xyz;
+		float md = tmp.master->GetAngle();
+		xyz.x = tmp.rp.x * std::cos(md) - tmp.rp.y * std::sin(md);
+		xyz.y = tmp.rp.x * std::sin(md) + tmp.rp.y * std::cos(md);
+		tmp.slave->SetTransform(tmp.master->GetPosition() + xyz, tmp.master->GetAngle() + tmp.rd);
+	}
+
+	ocPool.update();
 }
 
 void GameScene::otherDraw()
