@@ -104,7 +104,7 @@ void GameScene::otherUpdate()
 
 	ftVec2 camPos = mainCamera.getPosition();
 	deltaV = mcPos - camPos;
-	mainCamera.move(deltaV * (mainClock.getDeltaT()));
+	mainCamera.move(deltaV * (mainClock.getDeltaT() * 2.0f));
 }
 
 void GameScene::otherDraw()
