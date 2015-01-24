@@ -127,7 +127,6 @@ void OC::update()
 	if (this->getTag() == 3) {
 		ccb = body;
 		ccbb = true;
-		this->setTag(1);
 	}
 }
 
@@ -173,7 +172,8 @@ void CL::BeginContact(b2Contact *contact)
 			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
 			//world->CreateJoint(&jd);
 			ftSprite *B = (ftSprite*)userDataB;
-			B->setTag(3);
+			if (B->getTag() != 1)
+				B->setTag(3);
 		}
 	}
 
@@ -191,7 +191,8 @@ void CL::BeginContact(b2Contact *contact)
 			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
 			//world->CreateJoint(&jd);
 			ftSprite *A = (ftSprite*)userDataB;
-			A->setTag(3);
+			if (A->getTag() != 1)
+				A->setTag(3);
 		}
 	}
 }
@@ -272,6 +273,7 @@ void GameScene::otherUpdate()
 		jd.Initialize(mc.body, ccb, mc.body->GetPosition(), ccb->GetPosition());
 		world->CreateJoint(&jd);
 		ccbb = false;
+		((ftSprite*)(ccb->GetUserData()))->setTag(1);
 	}
 }
 
