@@ -12,6 +12,7 @@ typedef struct {
 	b2Body *slave;
 	b2Vec2 rp;
 	float rd;
+	float md;
 } RP;
 
 std::vector<RP> rpVector;
@@ -156,8 +157,8 @@ void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
 	}
 }
 */
-void CL::PreSolve(b2Contact *contact, const b2Manifold* oldManifold)
-//void CL::BeginContact(b2Contact *contact)
+//void CL::PreSolve(b2Contact *contact, const b2Manifold* oldManifold)
+void CL::BeginContact(b2Contact *contact)
 {
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
@@ -181,8 +182,8 @@ void CL::PreSolve(b2Contact *contact, const b2Manifold* oldManifold)
 		} else {
 			bStack.push(ba);
 		}
-		A->setTag(1);
-		B->setTag(1);
+		//A->setTag(1);
+		//B->setTag(1);
 	}
 }
 
@@ -262,13 +263,14 @@ void GameScene::otherUpdate()
 	while (bStack.size()) {
 		b2Body *ba = bStack.top();
 
-		ba->SetType(b2_kinematicBody);
+		//ba->SetType(b2_kinematicBody);
 
 		RP tmp;
 		tmp.master = mc.body;
 		tmp.slave = ba;
 		tmp.rp = ba->GetPosition() - mc.body->GetPosition();
 		tmp.rd = ba->GetAngle() - mc.body->GetAngle();
+		tmp.md = mc.body->GetAngle();
 		rpVector.push_back(tmp);
 
 		bStack.pop();
@@ -281,10 +283,10 @@ void GameScene::otherUpdate()
 		*/
 	}
 
-	for (int i = 0; i < rpVector.size(); i++) {
+	for (unsigned i = 0; i < rpVector.size(); i++) {
 		RP tmp = rpVector[i];
-		b2Vec2 xyz;
-		float md = tmp.master->GetAngle();
+		b2Vec2 xyz = tmp.rp;
+		float md = tmp.master->GetAngle() - tmp.md;
 		xyz.x = tmp.rp.x * std::cos(md) - tmp.rp.y * std::sin(md);
 		xyz.y = tmp.rp.x * std::sin(md) + tmp.rp.y * std::cos(md);
 		tmp.slave->SetTransform(tmp.master->GetPosition() + xyz, tmp.master->GetAngle() + tmp.rd);
