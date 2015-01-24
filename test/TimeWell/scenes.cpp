@@ -137,11 +137,12 @@ void GameScene::otherInit()
 	mc.image = ftRender::getImage("res/image/me.png"); 
 
 	OC tmp;
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 500; i++) {
 		float r = ftAlgorithm::randRangef(20, 40);
 		int en = ftAlgorithm::randRangef(3, 6.99);
 		tmp.r = r;
 		tmp.en = en;
+		tmp.setPosition(ftAlgorithm::randRangef(-2000, 2000), ftAlgorithm::randRangef(-1000, 1000));
 		tmp.shape = ftShape::makeRegularPolygonShape(en, r);
 		tmp.setColor(OC::randColor());
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
