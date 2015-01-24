@@ -92,9 +92,23 @@ void MC::draw()
 
 ftColor OC::randColor()
 {
-	float r = ftAlgorithm::randRangef(0.6f, 1.0f);
-	float g = ftAlgorithm::randRangef(0.45f, 1.0f);
-	float b = ftAlgorithm::randRangef(0.0f, 0.2f);
+	float a[3];
+	a[0] = ftAlgorithm::randRangef(0.6f, 1.0f);
+	a[1] = ftAlgorithm::randRangef(0.0f, 0.45f);
+	a[2] = ftAlgorithm::randRangef(0.0f, 0.2f);
+	int rn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
+	float r = a[rn];
+
+	int gn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
+	while (gn == rn)
+		gn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
+	float g = a[gn];
+
+	int bn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
+	while (bn == rn || bn == gn)
+		bn = (int)ftAlgorithm::randRangef(0.0f, 2.99f);
+	float b = a[bn];
+
 	return ftColor(r, g, b);
 }
 
@@ -120,9 +134,9 @@ void GameScene::otherInit()
 	OC x;
 	x.shape = ftShape(10.0f);
 	for (int i = 0; i < 100; i++) {
-	x.setColor(OC::randColor());
-	x.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
-	ocPool.add(x);
+		x.setColor(OC::randColor());
+		x.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
+		ocPool.add(x);
 	}
 }
 
