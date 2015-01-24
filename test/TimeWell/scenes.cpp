@@ -62,7 +62,7 @@ void BaseScene::drawCursor()
 {
 	screenC.update();
 	ftRender::transformBegin();
-	ftRender::ftTranslate(mainCamera.mouseToWorld(fountain::sysMouse.getPos()));
+	ftRender::ftTranslate(screenC.mouseToWorld(fountain::sysMouse.getPos()));
 	ftRender::drawAlphaPic(cursorID);
 	ftRender::transformEnd();
 }
@@ -100,13 +100,17 @@ void GameScene::otherUpdate()
 	ftVec2 mcPos = mc.getPosition();
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 deltaV = target - mcPos;
-
 	mc.move(deltaV * (mainClock.getDeltaT() * 3.0f));
+
+	ftVec2 camPos = mainCamera.getPosition();
+	deltaV = mcPos - camPos;
+	mainCamera.move(deltaV * (mainClock.getDeltaT()));
 }
 
 void GameScene::otherDraw()
 {
 	mainCamera.update();
 	mc.draw();
+	ftRender::drawLine(-100, 0, 100, 0);
 }
 

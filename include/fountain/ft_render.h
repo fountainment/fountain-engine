@@ -122,6 +122,7 @@ public:
 	void setPosition(float x, float y);
 	void setPosition(float x, float y, float z);
 	const ftVec2 getPosition();
+	void move(const ftVec2 & v);
 	void move(float x, float y);
 	void setViewport(int w, int h, int x = 0, int y = 0);
 	void setViewport(ftRect vp);

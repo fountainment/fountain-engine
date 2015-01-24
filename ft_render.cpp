@@ -680,6 +680,12 @@ const ftVec2 Camera::getPosition()
 	return ftVec2(x, y);
 }
 
+void Camera::move(const ftVec2 & v)
+{
+	x += v.x;
+	y += v.y;
+}
+
 void Camera::move(float x, float y)
 {
 	this->x += x;
