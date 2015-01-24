@@ -6,6 +6,8 @@
 
 std::stack<b2Body*> baStack;
 std::stack<b2Body*> bbStack;
+std::vector<b2Body*> baVector;
+std::vector<b2Body*> bbVector;
 
 void BaseScene::init()
 {
@@ -112,10 +114,21 @@ void OC::draw()
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 
-	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), this->getColor());
+	if (this->getTag() == 1)
+		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), FT_White);
+	else 
+		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), this->getColor());
 	ftRender::drawShape(shape);
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
+
+	if (this->getTag() == 1) {
+		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))) - 0.5, FT_Black);
+		ftRender::drawShape(shape);
+		ftRender::drawShapeEdge(shape);
+		ftRender::transformEnd();
+	}
+
 	ftRender::useColor(FT_White);
 }
 
@@ -136,63 +149,30 @@ void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
 	}
 }
 */
-void CL::BeginContact(b2Contact *contact)
+void CL::PreSolve(b2Contact *contact, const b2Manifold* oldManifold)
+//void CL::BeginContact(b2Contact *contact)
 {
 	b2Fixture* fixtureA = contact->GetFixtureA();
 	b2Fixture* fixtureB = contact->GetFixtureB();
 
 	b2Body *ba = fixtureA->GetBody();
 	b2Body *bb = fixtureB->GetBody();
-	//b2World *world = ba->GetWorld();
 
 	void* userDataA = ba->GetUserData();
 	void* userDataB = bb->GetUserData();
 	
 	int atag, btag; 
 
-	if (userDataA)
-	{
-		ftSprite *A = (ftSprite*)userDataA;
-		atag = A->getTag();
-		if (atag == 1) {
-			//b2Vec2 t = ba->GetPosition() - bb->GetPosition();
-			//bb->ApplyForceToCenter(-10000.0f * t, true);
-			//b2WeldJointDef jd;
-			//b2DistanceJointDef jd;
-			//jd.frequencyHz = 5.0f;
-			//jd.dampingRatio = 0.7f;
-			//jd.Initialize(bb, ba, ba->GetPosition());
-			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
-			//world->CreateJoint(&jd);
-			ftSprite *B = (ftSprite*)userDataB;
-			if (B->getTag() != 1) {
-				baStack.push(ba);
-				bbStack.push(bb);
-				B->setTag(1);
-			}
-		}
-	}
-
-	if (userDataB)
-	{
-		ftSprite *B = (ftSprite*)userDataB;
-		btag = B->getTag();
-		if (btag == 1) {
-			//b2Vec2 t = bb->GetPosition() - ba->GetPosition();
-			//ba->ApplyForceToCenter(-10000.0f * t, true);
-			//b2DistanceJointDef jd;
-			//jd.frequencyHz = 5.0f;
-			//jd.dampingRatio = 0.7f;
-			//jd.Initialize(ba, bb, bb->GetPosition());
-			//jd.Initialize(ba, bb, ba->GetPosition(), bb->GetPosition());
-			//world->CreateJoint(&jd);
-			ftSprite *A = (ftSprite*)userDataB;
-			if (A->getTag() != 1) {
-				baStack.push(ba);
-				bbStack.push(bb);
-				A->setTag(1);
-			}
-		}
+	ftSprite *A = (ftSprite*)userDataA;
+	atag = A->getTag();
+	ftSprite *B = (ftSprite*)userDataB;
+	btag = B->getTag();
+	
+	if (atag == 1 || btag == 1) {
+		baStack.push(ba);
+		bbStack.push(bb);
+		A->setTag(1);
+		B->setTag(1);
 	}
 }
 
@@ -205,12 +185,16 @@ void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 
+	baVector.clear();
+	bbVector.clear();
+
 	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
 	world->SetContactListener(&cListener);
+	world->SetAllowSleeping(false);
 
 	mc.image = ftRender::getImage("res/image/me.png"); 
-	mc.body = ftPhysics::createBodyInWorld(world, 0, 0, FT_Dynamic);
+	mc.body = ftPhysics::createBodyInWorld(world, 0, 0, FT_Kinematic);
 	ftShape seven = ftShape::makeRegularPolygonShape(7, 50);
 	b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(seven);
 	mc.body->CreateFixture(b2shape, 1.0f);
@@ -238,6 +222,7 @@ void GameScene::otherInit()
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
 		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
+		tmp.setTag(0);
 		ocPool.add(tmp);
 	}
 	ocPool.doWith(ocSetUserData);
@@ -245,7 +230,7 @@ void GameScene::otherInit()
 
 void GameScene::otherUpdate()
 {
-	world->Step(mainClock.getDeltaT(), 8, 3);
+	world->Step(mainClock.getDeltaT(), 20, 20);
 
 	ftVec2 mcPos = mc.getPosition();
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
@@ -270,19 +255,23 @@ void GameScene::otherUpdate()
 	while (baStack.size()) {
 		b2Body *ba = baStack.top();
 		b2Body *bb = bbStack.top();
+
+		//ba->SetType(b2_kinematicBody);
+		//bb->SetType(b2_kinematicBody);
+
 		baStack.pop();
 		bbStack.pop();
-		/*
-		b2WeldJointDef jd;
-		jd.frequencyHz = 5.0f;
-		jd.dampingRatio = 0.7f;
-		jd.Initialize(ba, bb, ba->GetPosition());
-		*/
+
+		baVector.push_back(ba);
+		baVector.push_back(bb);
+		
+		/* dangerous
 		b2RevoluteJointDef jd;
 		jd.collideConnected = true;
 		jd.enableLimit = true;
 		jd.Initialize(ba, bb, ba->GetPosition());
 		world->CreateJoint(&jd);
+		*/
 	}
 }
 
