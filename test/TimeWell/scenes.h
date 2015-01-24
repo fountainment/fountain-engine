@@ -37,7 +37,9 @@ public:
 class OC : public ftSprite
 {
 public:
+	static ftColor randColor();
 	ftShape shape;
+	ftVec2 speed;
 	void draw();
 	void update();
 };

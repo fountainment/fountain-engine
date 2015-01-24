@@ -90,16 +90,26 @@ void MC::draw()
 			1.0f, this->getColor());
 }
 
+ftColor OC::randColor()
+{
+	float r = ftAlgorithm::randRangef(0.6f, 1.0f);
+	float g = ftAlgorithm::randRangef(0.45f, 1.0f);
+	float b = ftAlgorithm::randRangef(0.0f, 0.2f);
+	return ftColor(r, g, b);
+}
+
 void OC::draw()
 {
 	ftVec2 pos = this->getPosition();
 	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f, this->getColor());
 	ftRender::drawShape(shape);
 	ftRender::transformEnd();
+	ftRender::useColor(FT_White);
 }
 
 void OC::update()
 {
+	this->move(speed);
 }
 
 void GameScene::otherInit()
@@ -108,8 +118,12 @@ void GameScene::otherInit()
 	mc.image = ftRender::getImage("res/image/me.png"); 
 
 	OC x;
-	x.shape = ftShape(100.0f);
+	x.shape = ftShape(10.0f);
+	for (int i = 0; i < 100; i++) {
+	x.setColor(OC::randColor());
+	x.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
 	ocPool.add(x);
+	}
 }
 
 void GameScene::otherUpdate()
@@ -136,6 +150,5 @@ void GameScene::otherDraw()
 	mainCamera.update();
 	mc.draw();
 	ocPool.draw();
-	ftRender::drawLine(-100, 0, 100, 0);
 }
 
