@@ -2,17 +2,6 @@
 
 extern ftRender::ShaderProgram bg;
 
-class MC : public ftPhysics::Body
-{
-private:
-	ftRender::SubImage im;
-	float scale;
-public:
-	MC();
-	MC(ftRender::SubImage image);
-	void draw();
-};
-
 class BaseScene : public ftScene::Scene
 {
 private:
@@ -38,11 +27,17 @@ public:
 	void otherDraw();
 };
 
+class MC : public ftSprite
+{
+public:
+	ftRender::SubImage image;
+	void draw();
+};
+
 class GameScene : public BaseScene
 {
 private:
-	ftPhysics::World myWorld;
-	MC mainC;
+	MC mc;
 public:
 	void otherInit();
 	void otherUpdate();

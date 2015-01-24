@@ -29,14 +29,16 @@ public:
 	ftShape shape;
 	b2Body* body;
 	int bodyType;
+	ftRender::SubImage im;
 
 	Body();
-	virtual ~Body();
+	~Body();
 	Body(float x, float y, int bodyT = FT_Dynamic);
 	void setBody(b2Body* b2bd);
+	void setImage(const ftRender::SubImage & image);
 	void autoCreateFixtures();
 	void update();
-	virtual void draw();
+	void draw();
 	void setShape(const ftShape & shape);
 	void setVelocity(ftVec2 v);
 };

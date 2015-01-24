@@ -1,7 +1,7 @@
 #include "scenes.h"
 
 #include <cstdio>
-
+/*
 MC::MC()
 {
 }
@@ -21,7 +21,7 @@ void MC::draw()
 	ftVec2 pos = this->getPosition();
 	drawImage(im, pos.x, pos.y, this->getAngle(), scale, this->getColor());
 }
-
+*/
 void BaseScene::init()
 {
 	screenC.setViewport(fountain::getWinRect());
@@ -82,13 +82,17 @@ void OpenScene::otherDraw()
 	mainCamera.update();
 }
 
+void MC::draw()
+{
+	ftVec2 pos = this->getPosition();
+	drawImage(image, pos.x, pos.y, this->getAngle(),
+			1.0f, this->getColor());
+}
+
 void GameScene::otherInit()
 {
-	ftPhysics::setRatio(100.0f);
-	myWorld = ftPhysics::World(ftVec2(0, 0));
-	ftRender::setClearColor(ftColor("#CC3333"));
-	mainC = MC(ftRender::getImage("res/image/me.png"));
-	mainC.setShape(ftShape(100.0f));
+	ftRender::setClearColor(ftColor("#E30039"));
+	mc.image = ftRender::getImage("res/image/me.png"); 
 }
 
 void GameScene::otherUpdate()
@@ -98,6 +102,6 @@ void GameScene::otherUpdate()
 void GameScene::otherDraw()
 {
 	mainCamera.update();
-	mainC.draw();
+	mc.draw();
 }
 

@@ -166,6 +166,11 @@ void Body::setBody(b2Body* b2bd)
 	body->SetUserData(this);
 }
 
+void Body::setImage(const ftRender::SubImage & image)
+{
+	im = image;
+}
+
 void Body::autoCreateFixtures()
 {
 	//Test Code
