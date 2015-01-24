@@ -51,10 +51,8 @@
 			<Add library="Box2D" />
 			<Add library="OpenAL32" />
 		</Linker>
-		<Unit filename="icon.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
 		<Unit filename="test/TimeWell/TimeWell.cpp" />
+		<Unit filename="test/TimeWell/icon.rc" />
 		<Unit filename="test/TimeWell/scenes.cpp" />
 		<Unit filename="test/TimeWell/scenes.h" />
 		<Extensions>

@@ -7,7 +7,7 @@ void fountain::setBasicVarible()
 {
 	mainWin.title = "TimeWell";
 	mainWin.setSize(800, 600);
-	mainWin.icon = "fountain.ico";
+	mainWin.icon = "timewell.ico";
 	mainWin.hideCursor = true;
 	mainWin.isFullScreen = true;
 }
