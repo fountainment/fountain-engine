@@ -114,11 +114,13 @@ ftColor OC::randColor()
 void OC::draw()
 {
 	ftVec2 pos = this->getPosition();
-	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f + (5.0f / (this->r * std::cos(3.14159f / this->en))), FT_Black);
+
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.01f, FT_Black);
 	ftRender::drawShape(shape);
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
-	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f, this->getColor());
+
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), this->getColor());
 	ftRender::drawShape(shape);
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
