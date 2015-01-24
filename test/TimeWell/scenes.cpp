@@ -1,6 +1,7 @@
 #include "scenes.h"
 
 #include <cstdio>
+#include <cmath>
 /*
 MC::MC()
 {
@@ -101,6 +102,12 @@ void GameScene::otherUpdate()
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 deltaV = target - mcPos;
 	mc.move(deltaV * (mainClock.getDeltaT() * 3.0f));
+	
+	float d = std::atan(deltaV.y / deltaV.x);
+	if (deltaV.x > 0) d -= 3.14159f / 2.0f;
+	else d += 3.14159f / 2.0f;
+	mc.setAngle(d);
+	std::printf("%f\n", d);
 
 	ftVec2 camPos = mainCamera.getPosition();
 	deltaV = mcPos - camPos;
