@@ -39,6 +39,7 @@ class OC : public ftSprite
 public:
 	static ftColor randColor();
 	static ftShape randShape();
+	b2Body *body;
 	float r;
 	int en;
 	ftShape shape;
@@ -51,6 +52,7 @@ public:
 class GameScene : public BaseScene
 {
 private:
+	b2World *world;
 	MC mc;
 	container<OC, 1000> ocPool;
 public:

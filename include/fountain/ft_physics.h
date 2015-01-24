@@ -22,6 +22,9 @@ void setIterations(int vIter, int pIter);
 ftVec2 render2Physics(ftVec2 v);
 ftVec2 physics2Render(ftVec2 v);
 
+b2Shape* createb2ShapeWithFtShape(ftShape & shape);
+b2Body* createBodyInWorld(b2World* world, float x, float y, int type);
+
 class Body : public ftSprite
 {
 private:

@@ -127,8 +127,10 @@ void OC::draw()
 
 void OC::update()
 {
-	this->move(speed);
-	this->rotate(aSpeed);
+	b2Vec2 bv = body->GetPosition();
+	float angle = body->GetAngle();
+	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
+	this->setAngle(angle);
 }
 
 void GameScene::otherInit()
@@ -136,16 +138,25 @@ void GameScene::otherInit()
 	ftRender::setClearColor(ftColor("#E30039"));
 	mc.image = ftRender::getImage("res/image/me.png"); 
 
+	world = new b2World(b2Vec2(0, 0));
+
 	OC tmp;
 	for (int i = 0; i < 500; i++) {
 		float r = ftAlgorithm::randRangef(20, 40);
 		int en = ftAlgorithm::randRangef(3, 6.99);
+		float x = ftAlgorithm::randRangef(-1500, 1500);
+		float y = ftAlgorithm::randRangef(-750, 750);
 		tmp.r = r;
 		tmp.en = en;
-		tmp.setPosition(ftAlgorithm::randRangef(-2000, 2000), ftAlgorithm::randRangef(-1000, 1000));
+		tmp.setPosition(x, y);
 		tmp.shape = ftShape::makeRegularPolygonShape(en, r);
+		b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(tmp.shape);
+		tmp.body = ftPhysics::createBodyInWorld(world, x, y, FT_Dynamic);
+		tmp.body->CreateFixture(b2shape, 1.0f);
+		delete b2shape;
 		tmp.setColor(OC::randColor());
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
+		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
 		ocPool.add(tmp);
 	}
@@ -153,6 +164,8 @@ void GameScene::otherInit()
 
 void GameScene::otherUpdate()
 {
+	world->Step(mainClock.getDeltaT(), 8, 3);
+
 	ftVec2 mcPos = mc.getPosition();
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 deltaV = target - mcPos;

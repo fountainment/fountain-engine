@@ -139,6 +139,79 @@ ftVec2 ftPhysics::physics2Render(ftVec2 v)
 	return v * ratio;
 }
 
+b2Shape* ftPhysics::createb2ShapeWithFtShape(ftShape & shape)
+{
+	b2Shape *b2shape;
+	b2PolygonShape *pShape;
+	b2CircleShape *cShape;
+	b2ChainShape *chShape;
+	int type = shape.getType();
+	const float * v;
+	b2Vec2 bv[16];
+	int n;
+	switch (type) {
+	case FT_Circle:
+		cShape = new b2CircleShape;
+		cShape->m_radius = shape.getR() / ratio;
+		b2shape = cShape;
+		break;
+
+	case FT_Polygon:
+		v = shape.getData();
+		n = shape.getN();
+		for (int i = 0; i < n; i++) {
+			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
+		}
+		pShape = new b2PolygonShape;
+		pShape->Set(bv, n);
+		b2shape = pShape;
+		break;
+
+	//TODO: complete FT_LINE shape support(loop)
+	case FT_Line:
+		v = shape.getData();
+		n = shape.getN();
+		for (int i = 0; i < n; i++) {
+			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
+		}
+		chShape = new b2ChainShape;
+		chShape->CreateChain(bv, n);
+		b2shape = chShape;
+		break;
+
+	case FT_Rect:
+		v = shape.getData();
+		pShape = new b2PolygonShape;
+		pShape->SetAsBox(v[0] / 2.0f / ratio, v[1] / 2.0f / ratio);
+		b2shape = pShape;
+		break;
+
+	default:
+		b2shape = NULL;
+		break;
+	}
+	return b2shape;
+}
+
+b2Body* ftPhysics::createBodyInWorld(b2World* world, float x, float y, int type)
+{
+	defaultBodyDef.position.Set(x / ratio, y / ratio);
+	switch (type) {
+	case FT_Dynamic:
+		defaultBodyDef.type = b2_dynamicBody;
+		break;
+
+	case FT_Static:
+		defaultBodyDef.type = b2_staticBody;
+		break;
+
+	case FT_Kinematic:
+		defaultBodyDef.type = b2_kinematicBody;
+		break;
+	}
+	return world->CreateBody(&defaultBodyDef);
+}
+
 //class ftPhysics::Body
 Body::Body()
 {
@@ -174,52 +247,7 @@ void Body::setImage(const ftRender::SubImage & image)
 void Body::autoCreateFixtures()
 {
 	//Test Code
-	b2Shape *b2shape;
-	b2PolygonShape pShape;
-	b2CircleShape cShape;
-	b2ChainShape chShape;
-	int type = shape.getType();
-	const float * v;
-	b2Vec2 bv[16];
-	int n;
-	switch (type) {
-	case FT_Circle:
-		cShape.m_radius = shape.getR() / ratio;
-		b2shape = &cShape;
-		break;
-
-	case FT_Polygon:
-		v = shape.getData();
-		n = shape.getN();
-		for (int i = 0; i < n; i++) {
-			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
-		}
-		pShape.Set(bv, n);
-		b2shape = &pShape;
-		break;
-
-	//TODO: complete FT_LINE shape support(loop)
-	case FT_Line:
-		v = shape.getData();
-		n = shape.getN();
-		for (int i = 0; i < n; i++) {
-			bv[i].Set(v[i * 2] / ratio, v[i * 2 + 1] / ratio);
-		}
-		chShape.CreateChain(bv, n);
-		b2shape = &chShape;
-		break;
-
-	case FT_Rect:
-		v = shape.getData();
-		pShape.SetAsBox(v[0] / 2.0f / ratio, v[1] / 2.0f / ratio);
-		b2shape = &pShape;
-		break;
-
-	default:
-		b2shape = NULL;
-		return;
-		break;
-	}
+	b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(shape);
 
 	switch (bodyType) {
 	case FT_Dynamic:
@@ -234,6 +262,8 @@ void Body::autoCreateFixtures()
 		body->CreateFixture(b2shape, 0.0f);
 		break;
 	}
+
+	delete b2shape;
 }
 
 void Body::update()
@@ -247,10 +277,8 @@ void Body::update()
 void Body::draw()
 {
 	ftVec2 pos = getPosition();
-	ftRender::transformBegin();
-	ftRender::useColor(getColor());
-	ftRender::ftTranslate(pos.x, pos.y);
-	ftRender::drawShape(shape, getAngle());
+	ftRender::transformBegin(pos.x, pos.y, getAngle(), 1.0f, getColor());
+	ftRender::drawShape(shape);
 	ftRender::transformEnd();
 }
 
@@ -284,23 +312,8 @@ World::~World()
 bool World::addBody(Body* bd)
 {
 	ftVec2 pos = bd->getPosition();
-	defaultBodyDef.position.Set(pos.x / ratio, pos.y / ratio);
-	switch (bd->bodyType) {
-	case FT_Dynamic:
-		defaultBodyDef.type = b2_dynamicBody;
-		break;
-
-	case FT_Static:
-		defaultBodyDef.type = b2_staticBody;
-		break;
-
-	case FT_Kinematic:
-		defaultBodyDef.type = b2_kinematicBody;
-		break;
-	}
-
 	if (World::bodyCon.add(bd) == true) {
-		bd->setBody(world->CreateBody(&defaultBodyDef));
+		bd->setBody(ftPhysics::createBodyInWorld(world, pos.x, pos.y, bd->bodyType));
 		bd->autoCreateFixtures();
 		return true;
 	} else {
