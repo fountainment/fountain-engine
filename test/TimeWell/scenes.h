@@ -36,6 +36,13 @@ public:
 	void draw();
 };
 
+typedef struct {
+	b2Body *master;
+	b2Vec2 rp;
+	float rd;
+	float md;
+} RP;
+
 class OC : public ftSprite
 {
 public:
@@ -44,6 +51,7 @@ public:
 	b2Body *body;
 	float r;
 	int en;
+	RP tmp;
 	ftShape shape;
 	ftVec2 speed;
 	float aSpeed;
@@ -59,7 +67,7 @@ public:
 	//void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 };
 
-class ocContainer : public container<OC, 1000>
+class ocContainer : public container<OC, 500>
 {
 public:
 	bool willLive(OC & oc);

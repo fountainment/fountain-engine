@@ -7,19 +7,10 @@
 
 std::stack<b2Body*> bStack;
 
-typedef struct {
-	b2Body *master;
-	b2Body *slave;
-	b2Vec2 rp;
-	float rd;
-	float md;
-} RP;
-
-std::vector<RP> rpVector;
-
 void BaseScene::init()
 {
 	screenC.setViewport(fountain::getWinRect());
+	mainCamera.setViewport(fountain::getWinRect());
 	cursorID = ftRender::getPicture("res/image/cursor.png");
 	otherInit();
 }
@@ -139,10 +130,18 @@ void OC::draw()
 
 void OC::update()
 {
+	if (this->getTag() == 3) {
+		b2Vec2 xyz = tmp.rp;
+		float md = tmp.master->GetAngle() - tmp.md;
+		xyz.x = tmp.rp.x * std::cos(md) - tmp.rp.y * std::sin(md);
+		xyz.y = tmp.rp.x * std::sin(md) + tmp.rp.y * std::cos(md);
+		body->SetTransform(tmp.master->GetPosition() + xyz, tmp.master->GetAngle() + tmp.rd);
+	}
 	b2Vec2 bv = body->GetPosition();
 	float angle = body->GetAngle();
 	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
 	this->setAngle(angle);
+
 }
 /*
 void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
@@ -211,8 +210,6 @@ void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 
-	rpVector.clear();
-
 	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
 	world->SetContactListener(&cListener);
@@ -230,17 +227,20 @@ void GameScene::otherInit()
 	delete b2shape;
 
 	OC tmp;
-	for (int i = 0; i < 500; i++) {
+	float xxxx, yyyy;
+	for (int ixx = 0; ixx < 300; ixx++) {
 		float r = ftAlgorithm::randRangef(20, 40);
-		int en = ftAlgorithm::randRangef(3, 6.99);
-		float x = ftAlgorithm::randRangef(-1500, 1500);
-		float y = ftAlgorithm::randRangef(-750, 750);
+		int en = ftAlgorithm::randRangef(3.01, 6.99);
+		xxxx = ftAlgorithm::randRangef(-2000, -1500);
+		if (ftAlgorithm::randRangef(0, 1) > 0.5) xxxx *= -1;
+		yyyy = ftAlgorithm::randRangef(-1250, -750);
+		if (ftAlgorithm::randRangef(0, 1) > 0.5) yyyy *= -1;
 		tmp.r = r;
 		tmp.en = en;
-		tmp.setPosition(x, y);
+		tmp.setPosition(xxxx, yyyy);
 		tmp.shape = ftShape::makeRegularPolygonShape(en, r);
 		b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(tmp.shape);
-		tmp.body = ftPhysics::createBodyInWorld(world, x, y, FT_Dynamic);
+		tmp.body = ftPhysics::createBodyInWorld(world, xxxx, yyyy, FT_Dynamic);
 		tmp.body->CreateFixture(b2shape, 1.0f);
 		delete b2shape;
 		tmp.setColor(OC::randColor());
@@ -282,11 +282,12 @@ void GameScene::otherUpdate()
 
 		RP tmp;
 		tmp.master = mc.body;
-		tmp.slave = ba;
 		tmp.rp = ba->GetPosition() - mc.body->GetPosition();
 		tmp.rd = ba->GetAngle() - mc.body->GetAngle();
 		tmp.md = mc.body->GetAngle();
-		rpVector.push_back(tmp);
+
+		OC *oc = (OC*)ba->GetUserData();
+		oc->tmp = tmp;
 
 		bStack.pop();
 		/* dangerous
@@ -298,18 +299,10 @@ void GameScene::otherUpdate()
 		*/
 	}
 
-	for (unsigned i = 0; i < rpVector.size(); i++) {
-		RP tmp = rpVector[i];
-		b2Vec2 xyz = tmp.rp;
-		float md = tmp.master->GetAngle() - tmp.md;
-		xyz.x = tmp.rp.x * std::cos(md) - tmp.rp.y * std::sin(md);
-		xyz.y = tmp.rp.x * std::sin(md) + tmp.rp.y * std::cos(md);
-		tmp.slave->SetTransform(tmp.master->GetPosition() + xyz, tmp.master->GetAngle() + tmp.rd);
-	}
 
 	ocPool.update();
 	OC tmp;
-	if (ocPool.getAvailN() > 500) {
+	if (ocPool.getAvailN() > 200) {
 		float r = ftAlgorithm::randRangef(20, 40);
 		int en = ftAlgorithm::randRangef(3, 6.99);
 		float x, y;
@@ -343,11 +336,13 @@ void GameScene::otherDraw()
 	ocPool.draw();
 	ftRender::useColor(FT_Black);
 	ftRender::setLineWidth(5.0f);
+	/*
 	for (unsigned i = 0; i < rpVector.size() - 1; i++) {
 		b2Vec2 a = ftPhysics::getRatio() * rpVector[i].slave->GetPosition(); 
 		b2Vec2 b = ftPhysics::getRatio() * rpVector[i + 1].slave->GetPosition(); 
 		ftRender::drawLine(a.x, a.y, b.x, b.y);
 	}
+	*/
 	ftRender::setLineWidth(1.0f);
 	ftRender::useColor(FT_White);
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
