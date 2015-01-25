@@ -323,9 +323,8 @@ void GameScene::otherInit()
 	ocPool.doWith(ocSetUserData);
 
 	bh = BH::create();
-	//float xx = ftAlgorithm::randRangef(-5000, 5000);
-	//float yy = ftAlgorithm::randRangef(-5000, 5000);
-	float xx = 0, yy = 0;
+	float xx = ftAlgorithm::randRangef(-5000, 5000);
+	float yy = ftAlgorithm::randRangef(-5000, 5000);
 	bh.setPosition(xx, yy);
 	bh.hole = ftPhysics::createBodyInWorld(world, xx, yy, FT_Kinematic);
 	b2Shape *b2shape1 = ftPhysics::createb2ShapeWithFtShape(bh.shape);
@@ -423,15 +422,9 @@ void GameScene::otherDraw()
 {
 	mainCamera.update();
 	bh.draw();
-	if (bh.enable) {
-		ftRender::drawLine(mc.getPosition(), bh.getPosition());
-	}
 	mc.draw();
 	ocPool.draw();
 	ftRender::useColor(FT_White);
-	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
-	ftVec2 line = target - mc.getPosition();
-	line *= 0.125f;
 
 	/*
 	for (unsigned j = 0; j < ls.size() - 1; j++) {
@@ -441,11 +434,27 @@ void GameScene::otherDraw()
 	}
 	*/
 
+	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
+	ftVec2 line = target - mc.getPosition();
+	line *= 0.125f;
 	for (int i = 1; i < 8; i++) {
 		ftRender::transformBegin();
 		ftRender::ftTranslate(mc.getPosition() + (line * i));
 		ftRender::drawCircle(5);
 		ftRender::transformEnd();
+	}
+
+	ftVec2 line2 = bh.getPosition() - target;
+	line2 = line2 / 30.0f;
+	if (bh.enable) {
+	ftRender::useColor(FT_Black);
+	for (int i = 1; i < 30; i++) {
+		ftRender::transformBegin();
+		ftRender::ftTranslate(target + (line2 * i));
+		ftRender::drawCircle(5);
+		ftRender::transformEnd();
+	}
+	ftRender::useColor(FT_White);
 	}
 }
 
