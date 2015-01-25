@@ -32,6 +32,7 @@ class MC : public ftSprite
 public:
 	b2Body *body;
 	ftRender::SubImage image;
+	int score;
 	void update();
 	void draw();
 };
@@ -47,7 +48,6 @@ class OC : public ftSprite
 {
 public:
 	static ftColor randColor();
-	static ftShape randShape();
 	b2Body *body;
 	float r;
 	int en;
@@ -57,6 +57,18 @@ public:
 	float aSpeed;
 	void draw();
 	void update();
+};
+
+class BH : public ftSprite
+{
+public:
+	static BH create();
+	void draw();
+	void update();
+	int en;
+	b2Body *hole;
+	ftRender::SubImage image;
+	ftShape shape;
 };
 
 class CL : public b2ContactListener
@@ -80,6 +92,7 @@ private:
 	MC mc;
 	ocContainer ocPool;
 	CL cListener;
+	BH bh;
 public:
 	void otherInit();
 	void otherUpdate();

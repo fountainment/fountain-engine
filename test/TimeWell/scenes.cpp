@@ -6,6 +6,7 @@
 #include <vector>
 
 std::stack<b2Body*> bStack;
+std::vector<ftVec2> ls;
 
 void BaseScene::init()
 {
@@ -141,8 +142,63 @@ void OC::update()
 	float angle = body->GetAngle();
 	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
 	this->setAngle(angle);
-
+	if (this->getTag() == 3) {
+		fountain::sceneSelector.getCurScene()->mainCamera.update();
+		b2Vec2 a = tmp.master->GetPosition();
+		a = ftPhysics::getRatio() * a;
+		b2Vec2 b = body->GetPosition();
+		b = ftPhysics::getRatio() * b;
+		ftRender::useColor(FT_Black);
+		ftRender::setLineWidth(5.0f);
+		ftRender::drawLine(a.x, a.y, b.x, b.y);
+		ftRender::setLineWidth(1.0f);
+		ftRender::useColor(FT_White);
+	}
 }
+
+BH BH::create()
+{
+	BH x;
+	x.enable = false;
+	x.en = (int)ftAlgorithm::randRangef(3, 6.99);
+	x.shape = ftShape(50.0f);
+	switch (x.en) {
+	case 3:
+		x.image = ftRender::getImage("res/image/blackhole3.png");
+		break;
+	case 4:
+		x.image = ftRender::getImage("res/image/blackhole4.png");
+		break;
+	case 5:
+		x.image = ftRender::getImage("res/image/blackhole5.png");
+		break;
+	case 6:
+		x.image = ftRender::getImage("res/image/blackhole6.png");
+		break;
+	}
+	x.setColor(FT_White);
+	return x;
+}
+
+void BH::update()
+{
+	if (enable) {
+		rotate(1.0f);
+	}
+}
+
+void BH::draw()
+{
+	if (enable) {
+		ftVec2 pos = getPosition();
+		ftRender::transformBegin(pos.x, pos.y, getAngle(), 1.0f, FT_White);
+		ftRender::drawImage(image);
+		ftRender::transformEnd();
+		ftRender::useColor(FT_White);
+	}
+}
+
+
 /*
 void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
 //void CL::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
@@ -172,7 +228,17 @@ void CL::BeginContact(b2Contact *contact)
 	ftSprite *B = (ftSprite*)userDataB;
 	btag = B->getTag();
 	
-	if ((atag == 1) ^ (btag == 1)) {
+	if ((atag == 2) || (btag == 2)) {
+		if (A->enable && B->enable) {
+		if (atag == 0) {
+			A->die = true;
+		}
+		else if (btag == 0) {
+			B->die = true;
+		}
+		}
+	}
+	else if ((atag == 1) ^ (btag == 1)) {
 		if (atag == 1) {
 			bStack.push(bb);
 			B->setTag(3);
@@ -194,7 +260,7 @@ bool ocContainer::willLive(OC & oc)
 		cr.inflate(2, 2);
 		cr.setCenter(xy);
 		bool die = !cr.collidePoint(oc.getPosition());
-		if (die) {
+		if (die || oc.die) {
 			(oc.body->GetWorld())->DestroyBody(oc.body);
 			return false;
 		} else return true;
@@ -210,6 +276,8 @@ void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 
+	ls.clear();
+
 	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
 	world->SetContactListener(&cListener);
@@ -222,15 +290,16 @@ void GameScene::otherInit()
 	mc.body->CreateFixture(b2shape, 1.0f);
 	mc.body->SetUserData((ftSprite*)&mc);
 	mc.setTag(1);
+	mc.score = 0;
 	//b2Fixture *fx = mc.body->GetFixtureList();
 	//fx->SetSensor(true);
 	delete b2shape;
 
 	OC tmp;
 	float xxxx, yyyy;
-	for (int ixx = 0; ixx < 300; ixx++) {
+	for (int ixx = 0; ixx < 150; ixx++) {
 		float r = ftAlgorithm::randRangef(20, 40);
-		int en = ftAlgorithm::randRangef(3.01, 6.99);
+		int en = ftAlgorithm::randRangef(3, 6.99);
 		xxxx = ftAlgorithm::randRangef(-2000, -1500);
 		if (ftAlgorithm::randRangef(0, 1) > 0.5) xxxx *= -1;
 		yyyy = ftAlgorithm::randRangef(-1250, -750);
@@ -248,9 +317,24 @@ void GameScene::otherInit()
 		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
 		tmp.setTag(0);
+		tmp.die = false;
 		ocPool.add(tmp);
 	}
 	ocPool.doWith(ocSetUserData);
+
+	bh = BH::create();
+	//float xx = ftAlgorithm::randRangef(-5000, 5000);
+	//float yy = ftAlgorithm::randRangef(-5000, 5000);
+	float xx = 0, yy = 0;
+	bh.setPosition(xx, yy);
+	bh.hole = ftPhysics::createBodyInWorld(world, xx, yy, FT_Kinematic);
+	b2Shape *b2shape1 = ftPhysics::createb2ShapeWithFtShape(bh.shape);
+	bh.hole->CreateFixture(b2shape1, 1.0f);
+	delete b2shape1;
+	b2Fixture *fx = bh.hole->GetFixtureList();
+	fx->SetSensor(true);
+	bh.setTag(2);
+	bh.hole->SetUserData((ftSprite*)&bh);
 }
 
 void GameScene::otherUpdate()
@@ -261,12 +345,14 @@ void GameScene::otherUpdate()
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 deltaV = target - mcPos;
 	ftVec2 tv = deltaV * (mainClock.getDeltaT() * 3.0f);
-	
+
+	/*	
 	float d = std::atan(deltaV.y / deltaV.x);
 	if (deltaV.x > 0) d -= 3.14159f / 2.0f;
 	else d += 3.14159f / 2.0f;
-
 	mc.body->SetTransform(mc.body->GetPosition(), d);
+	*/
+
 	mc.body->SetLinearVelocity(b2Vec2(tv.x, tv.y));
 
 	mc.update();
@@ -288,6 +374,8 @@ void GameScene::otherUpdate()
 
 		OC *oc = (OC*)ba->GetUserData();
 		oc->tmp = tmp;
+		mc.score++;
+		if (mc.score == 7) bh.enable = true;
 
 		bStack.pop();
 		/* dangerous
@@ -299,10 +387,10 @@ void GameScene::otherUpdate()
 		*/
 	}
 
-
+	ls.clear();
 	ocPool.update();
 	OC tmp;
-	if (ocPool.getAvailN() > 200) {
+	if (ocPool.getAvailN() > 300) {
 		float r = ftAlgorithm::randRangef(20, 40);
 		int en = ftAlgorithm::randRangef(3, 6.99);
 		float x, y;
@@ -324,30 +412,35 @@ void GameScene::otherUpdate()
 		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
 		tmp.setTag(0);
+		tmp.die = false;
 		ocPool.add(tmp);
 	}
 	ocPool.doWith(ocSetUserData);
+	bh.update();
 }
 
 void GameScene::otherDraw()
 {
 	mainCamera.update();
+	bh.draw();
+	if (bh.enable) {
+		ftRender::drawLine(mc.getPosition(), bh.getPosition());
+	}
 	mc.draw();
 	ocPool.draw();
-	ftRender::useColor(FT_Black);
-	ftRender::setLineWidth(5.0f);
-	/*
-	for (unsigned i = 0; i < rpVector.size() - 1; i++) {
-		b2Vec2 a = ftPhysics::getRatio() * rpVector[i].slave->GetPosition(); 
-		b2Vec2 b = ftPhysics::getRatio() * rpVector[i + 1].slave->GetPosition(); 
-		ftRender::drawLine(a.x, a.y, b.x, b.y);
-	}
-	*/
-	ftRender::setLineWidth(1.0f);
 	ftRender::useColor(FT_White);
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 line = target - mc.getPosition();
 	line *= 0.125f;
+
+	/*
+	for (unsigned j = 0; j < ls.size() - 1; j++) {
+		ftVec2 a = ls[j];
+		ftVec2 b = ls[j + 1];
+		ftRender::drawLine(a, b);
+	}
+	*/
+
 	for (int i = 1; i < 8; i++) {
 		ftRender::transformBegin();
 		ftRender::ftTranslate(mc.getPosition() + (line * i));

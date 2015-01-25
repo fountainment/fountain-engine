@@ -166,6 +166,8 @@ private:
 	float scale;
 	int tag;
 public:
+	bool die;
+	bool enable;
 	ftSprite();
 	void setPosition(const ftVec2 & pos);
 	void setPosition(float x, float y);

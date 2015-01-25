@@ -321,6 +321,8 @@ ftSprite::ftSprite()
 	setPosition(0, 0);
 	setRectSize(0, 0);
 	scale = 1.0f;
+	die = false;
+	enable = true;
 }
 
 void ftSprite::setColor(const ftColor & c)
