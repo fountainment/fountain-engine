@@ -6,6 +6,7 @@
 #include <vector>
 
 std::stack<b2Body*> bStack;
+bool over;
 
 void BaseScene::init()
 {
@@ -15,6 +16,8 @@ void BaseScene::init()
 	otherInit();
 	fm.loadFont("res/font/wqy.ttc");
 	fm.genAsciiTable(128.0f);
+	lf.loadFont("res/font/wqy.ttc");
+	lf.genAsciiTable(32.0f);
 	ftUI::setDefaultFont(&fm);
 }
 
@@ -232,6 +235,7 @@ void CL::BeginContact(b2Contact *contact)
 	
 	if (((atag == 1) && (btag == 2)) || 
 			((atag == 2) && (btag == 1))) {
+		over = true;
 	}
 	else if ((atag == 2) || (btag == 2)) {
 		if (A->enable && B->enable) {
@@ -293,11 +297,34 @@ void ocSetContact(OC & oc)
 
 void GameScene::otherInit()
 {
-	ftRender::setClearColor(ftColor("#E30039"));
+	state = 0;
+	ocPool = ocContainer(); 
+	bh = BH();
+
+	over = false;
+
+	startB = ftUI::Button();
+	startB.setRectSize(ftVec2(400, 200));
+	startB.setPosition(0, -200);
+	startB.setCaption("Start");
+	startB.label.move(-140, -44);
+
+	title = ftUI::Button();
+	title.setPosition(0, 200);
+	title.setCaption("TimeWell");
+	title.label.move(-250, -44);
+
+	repl = ftUI::Button();
+	repl.setRectSize(ftVec2(600, 200));
+	repl.setPosition(0, 50);
+	repl.setCaption("replay");
+	repl.label.move(-250, -44);
+
+	ftRender::setClearColor(OC::randColor());
 
 	scoreB.setPosition(fountain::mainWin.w / 2.0f - 300.0f, fountain::mainWin.h / 2.0f - 128.0f);
+	timeB.setPosition(-fountain::mainWin.w / 2.0f + 50.0f, fountain::mainWin.h / 2.0f - 128.0f);
 
-	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
 	world->SetContactListener(&cListener);
 	world->SetAllowSleeping(false);
@@ -342,8 +369,8 @@ void GameScene::otherInit()
 	ocPool.doWith(ocSetUserData);
 
 	bh = BH::create();
-	float xx = ftAlgorithm::randRangef(-5000, 5000);
-	float yy = ftAlgorithm::randRangef(-5000, 5000);
+	float xx = ftAlgorithm::randRangef(-2500, 2500);
+	float yy = ftAlgorithm::randRangef(-2500, 2500);
 	bh.setPosition(xx, yy);
 	bh.hole = ftPhysics::createBodyInWorld(world, xx, yy, FT_Dynamic);
 	b2Shape *b2shape1 = ftPhysics::createb2ShapeWithFtShape(bh.shape);
@@ -357,6 +384,24 @@ void GameScene::otherInit()
 
 void GameScene::otherUpdate()
 {
+	if (state == 0) {
+		startB.update();
+		title.draw();
+		ftRender::transformBegin(-500, 50);
+		lf.drawString("Rule:Adsorb the polygons will add score befor the balck hole appear, ");
+		ftRender::transformEnd();
+		ftRender::transformBegin(-500, 0);
+		lf.drawString("but it will be opposite after the balck hole appear.");
+		ftRender::transformEnd();
+		ftRender::transformBegin(-500, -50);
+		lf.drawString("Tips:Try to get a high score.And try not get a negative one.");
+		ftRender::transformEnd();
+		if (startB.getState() == FT_ButtonDown) {
+			state = 1;	
+			mainClock.resume();
+		}
+	}
+	if (state == 1) {
 	world->Step(mainClock.getDeltaT(), 20, 20);
 
 	ftVec2 mcPos = mc.getPosition();
@@ -364,13 +409,14 @@ void GameScene::otherUpdate()
 	ftVec2 deltaV = target - mcPos;
 	ftVec2 tv = deltaV * (mainClock.getDeltaT() * 3.0f);
 
-	/*	
-	float d = std::atan(deltaV.y / deltaV.x);
-	if (deltaV.x > 0) d -= 3.14159f / 2.0f;
-	else d += 3.14159f / 2.0f;
-	mc.body->SetTransform(mc.body->GetPosition(), d);
+	/*
+	if (bh.enable) {
+		float d = std::atan(deltaV.y / deltaV.x);
+		if (deltaV.x > 0) d -= 3.14159f / 2.0f;
+		else d += 3.14159f / 2.0f;
+		mc.body->SetTransform(mc.body->GetPosition(), d);
+	}
 	*/
-
 	mc.body->SetLinearVelocity(b2Vec2(tv.x, tv.y));
 
 	mc.update();
@@ -407,7 +453,7 @@ void GameScene::otherUpdate()
 
 	ocPool.update();
 	OC tmp;
-	if (ocPool.getAvailN() > 300) {
+	if (ocPool.getAvailN() > 350) {
 		float r = ftAlgorithm::randRangef(20, 40);
 		int en = ftAlgorithm::randRangef(3, 6.99);
 		float x, y;
@@ -436,7 +482,7 @@ void GameScene::otherUpdate()
 		ocPool.add(tmp);
 	}
 	ocPool.doWith(ocSetUserData);
-	if (mainClock.secondsFromInit() >= 5.0f) {
+	if (mainClock.secondsFromContinue() >= 10.0f) {
 		if (bh.enable == false) {
 			bh.enable = true;
 			ocPool.doWith(ocSetColor);
@@ -450,16 +496,38 @@ void GameScene::otherUpdate()
 	char tt[10];
 	std::sprintf(tt, "%d", mc.score);
 	scoreB.setString(tt);
+	if (!bh.enable) {
+		std::sprintf(tt, "%.1f", 10.0f - mainClock.secondsFromContinue());
+		timeB.setString(tt);
+	}
+	
+	}
+	if (over == true) state = 2;
+	if (state == 2) {
+		screenC.update();
+		repl.update();
+		if (repl.getState() == FT_ButtonDown) {
+			state = 0;
+			init();	
+		}
+	}
 }
 
 void GameScene::otherDraw()
 {
 	mainCamera.update();
+
+	if (state == 0) {
+		startB.draw();
+	}
+	if (state == 1 || state == 2) {
+
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 line = target - mc.getPosition();
 	line *= 0.125f;
 	ftVec2 line2 = bh.getPosition() - mc.getPosition();
 	line2 = line2 / 40.0f;
+	if (state == 1) {
 	if (bh.enable && line2.length() > 12.0f) {
 		ftRender::useColor(FT_Black);
 		for (int i = 1; i < 40; i++) {
@@ -469,6 +537,8 @@ void GameScene::otherDraw()
 			ftRender::transformEnd();
 		}
 		ftRender::useColor(FT_White);
+	}
+
 	}
 	bh.draw();
 	mc.draw();
@@ -482,6 +552,7 @@ void GameScene::otherDraw()
 		ftRender::drawLine(a, b);
 	}
 	*/
+	if (state == 1) {
 
 	for (int i = 1; i < 8; i++) {
 		ftRender::transformBegin();
@@ -489,7 +560,18 @@ void GameScene::otherDraw()
 		ftRender::drawCircle(5);
 		ftRender::transformEnd();
 	}
+
+	}
 	screenC.update();
 	scoreB.draw();
+	timeB.draw();
+
+	}
+	if (state == 2) {
+		screenC.update();
+		ftRender::useColor(FT_Black);
+		ftRender::drawQuad(fountain::mainWin.w, 400);	
+		repl.draw();
+	}
 }
 

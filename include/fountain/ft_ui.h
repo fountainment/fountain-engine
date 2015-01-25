@@ -42,10 +42,10 @@ public:
 class Button : public ftSprite
 {
 private:
-	Label label;
 	int state;
 	ftColor backColor;
 public:
+	Label label;
 	Button();
 	virtual void click();
 	void update();

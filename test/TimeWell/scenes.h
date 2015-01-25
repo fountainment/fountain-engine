@@ -8,6 +8,7 @@ private:
 	int cursorID;
 public:
 	ftType::FontMan fm;
+	ftType::FontMan lf;
 	ftRender::Camera screenC;
 	void init();
 	void update();
@@ -89,12 +90,17 @@ public:
 class GameScene : public BaseScene
 {
 private:
+	int state;
 	b2World *world;
 	MC mc;
 	ocContainer ocPool;
 	CL cListener;
 	BH bh;
 	ftUI::Label scoreB;
+	ftUI::Label timeB;
+	ftUI::Button startB;
+	ftUI::Button title;
+	ftUI::Button repl;
 public:
 	void otherInit();
 	void otherUpdate();

@@ -15,7 +15,7 @@ void fountain::setBasicVarible()
 void fountain::gameInit()
 {
 	ftRender::setClearColor(FT_Black);
-	ftPhysics::setRatio(100.0f);
+	ftPhysics::setRatio(64.0f);
 	sceneSelector.gotoScene(new GameScene());
 }
 
