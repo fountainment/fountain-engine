@@ -28,6 +28,11 @@ void ftVec2::move(float x, float y)
 	this->y += y;
 }
 
+float ftVec2::length()
+{
+	return std::pow(x * x + y * y, 0.5);
+}
+
 const ftVec2 ftVec2::operator-(const ftVec2 & v)
 {
 	return ftVec2(x - v.x, y - v.y);

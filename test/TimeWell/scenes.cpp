@@ -444,15 +444,17 @@ void GameScene::otherDraw()
 		ftRender::transformEnd();
 	}
 
-	ftVec2 line2 = bh.getPosition() - target;
-	line2 = line2 / 30.0f;
+	ftVec2 line2 = bh.getPosition() - mc.getPosition();
+	line2 = line2 / 40.0f;
 	if (bh.enable) {
 	ftRender::useColor(FT_Black);
-	for (int i = 1; i < 30; i++) {
+	if (line2.length() > 30.0f) {
+	for (int i = 1; i < 40; i++) {
 		ftRender::transformBegin();
-		ftRender::ftTranslate(target + (line2 * i));
-		ftRender::drawCircle(5);
+		ftRender::ftTranslate(mc.getPosition() + (line2 * i));
+		ftRender::drawCircle(10);
 		ftRender::transformEnd();
+	}
 	}
 	ftRender::useColor(FT_White);
 	}

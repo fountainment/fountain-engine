@@ -52,6 +52,7 @@ public:
 	ftVec2();
 	ftVec2(float x, float y);
 	void move(float x, float y);
+	float length();
 	const ftVec2 operator-(const ftVec2 & v);
 	void operator-=(const ftVec2 & v);
 	const ftVec2 operator+(const ftVec2 & v);
