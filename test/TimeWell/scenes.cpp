@@ -309,11 +309,15 @@ void GameScene::otherUpdate()
 
 	ocPool.update();
 	OC tmp;
-	while (ocPool.getAvailN() > 500) {
+	if (ocPool.getAvailN() > 500) {
 		float r = ftAlgorithm::randRangef(20, 40);
 		int en = ftAlgorithm::randRangef(3, 6.99);
-		float x = ftAlgorithm::randRangef(mcPos.x - 1500, mcPos.x + 1500);
-		float y = ftAlgorithm::randRangef(mcPos.y - 750, mcPos.y + 750);
+		float x, y;
+		ftRect rct = mainCamera.getCameraRect();
+		do {
+			x = ftAlgorithm::randRangef(mcPos.x - 1500, mcPos.x + 1500);
+			y = ftAlgorithm::randRangef(mcPos.y - 750, mcPos.y + 750);
+		} while(rct.collidePoint(ftVec2(x, y)));
 		tmp.r = r;
 		tmp.en = en;
 		tmp.setPosition(x, y);
