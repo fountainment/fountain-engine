@@ -6,8 +6,9 @@ class BaseScene : public ftScene::Scene
 {
 private:
 	int cursorID;
-	ftRender::Camera screenC;
 public:
+	ftType::FontMan fm;
+	ftRender::Camera screenC;
 	void init();
 	void update();
 	void draw();
@@ -93,6 +94,7 @@ private:
 	ocContainer ocPool;
 	CL cListener;
 	BH bh;
+	ftUI::Label scoreB;
 public:
 	void otherInit();
 	void otherUpdate();

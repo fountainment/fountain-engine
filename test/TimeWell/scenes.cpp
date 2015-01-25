@@ -6,7 +6,6 @@
 #include <vector>
 
 std::stack<b2Body*> bStack;
-std::vector<ftVec2> ls;
 
 void BaseScene::init()
 {
@@ -14,6 +13,9 @@ void BaseScene::init()
 	mainCamera.setViewport(fountain::getWinRect());
 	cursorID = ftRender::getPicture("res/image/cursor.png");
 	otherInit();
+	fm.loadFont("res/font/wqy.ttc");
+	fm.genAsciiTable(128.0f);
+	ftUI::setDefaultFont(&fm);
 }
 
 void BaseScene::otherInit()
@@ -119,7 +121,7 @@ void OC::draw()
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 
-	if (this->getTag() == 3) {
+	if (this->getTag() > 0) {
 		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))) - 0.5, FT_Black);
 		ftRender::drawShape(shape);
 		ftRender::drawShapeEdge(shape);
@@ -131,7 +133,7 @@ void OC::draw()
 
 void OC::update()
 {
-	if (this->getTag() == 3) {
+	if (this->getTag() > 0) {
 		b2Vec2 xyz = tmp.rp;
 		float md = tmp.master->GetAngle() - tmp.md;
 		xyz.x = tmp.rp.x * std::cos(md) - tmp.rp.y * std::sin(md);
@@ -142,7 +144,7 @@ void OC::update()
 	float angle = body->GetAngle();
 	this->setPosition(ftVec2(bv.x, bv.y) * ftPhysics::getRatio());
 	this->setAngle(angle);
-	if (this->getTag() == 3) {
+	if (this->getTag() > 0) {
 		fountain::sceneSelector.getCurScene()->mainCamera.update();
 		b2Vec2 a = tmp.master->GetPosition();
 		a = ftPhysics::getRatio() * a;
@@ -282,11 +284,18 @@ void ocSetColor(OC & oc)
 	}
 }
 
+void ocSetContact(OC & oc)
+{
+	if (oc.getTag() == 3) {
+		oc.setTag(1);
+	}
+}
+
 void GameScene::otherInit()
 {
 	ftRender::setClearColor(ftColor("#E30039"));
 
-	ls.clear();
+	scoreB.setPosition(fountain::mainWin.w / 2.0f - 300.0f, fountain::mainWin.h / 2.0f - 128.0f);
 
 	ftPhysics::setRatio(64.0f);
 	world = new b2World(b2Vec2(0, 0));
@@ -396,7 +405,6 @@ void GameScene::otherUpdate()
 		*/
 	}
 
-	ls.clear();
 	ocPool.update();
 	OC tmp;
 	if (ocPool.getAvailN() > 300) {
@@ -432,9 +440,16 @@ void GameScene::otherUpdate()
 		if (bh.enable == false) {
 			bh.enable = true;
 			ocPool.doWith(ocSetColor);
+			ocPool.doWith(ocSetContact);
 		}
+	} else {
+		
 	}
 	bh.update();
+
+	char tt[10];
+	std::sprintf(tt, "%d", mc.score);
+	scoreB.setString(tt);
 }
 
 void GameScene::otherDraw()
@@ -474,5 +489,7 @@ void GameScene::otherDraw()
 		ftRender::drawCircle(5);
 		ftRender::transformEnd();
 	}
+	screenC.update();
+	scoreB.draw();
 }
 
