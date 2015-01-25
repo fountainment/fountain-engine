@@ -228,14 +228,17 @@ void CL::BeginContact(b2Contact *contact)
 	ftSprite *B = (ftSprite*)userDataB;
 	btag = B->getTag();
 	
-	if ((atag == 2) || (btag == 2)) {
+	if (((atag == 1) && (btag == 2)) || 
+			((atag == 2) && (btag == 1))) {
+	}
+	else if ((atag == 2) || (btag == 2)) {
 		if (A->enable && B->enable) {
-		if (atag == 0) {
-			A->die = true;
-		}
-		else if (btag == 0) {
-			B->die = true;
-		}
+			if (atag == 0) {
+				A->die = true;
+			}
+			else if (btag == 0) {
+				B->die = true;
+			}
 		}
 	}
 	else if ((atag == 1) ^ (btag == 1)) {
@@ -270,6 +273,13 @@ bool ocContainer::willLive(OC & oc)
 void ocSetUserData(OC & oc)
 {
 	oc.body->SetUserData((ftSprite*)&oc);
+}
+
+void ocSetColor(OC & oc)
+{
+	if (oc.getTag() != 3) {
+		oc.setColor(FT_Black);
+	}
 }
 
 void GameScene::otherInit()
@@ -326,7 +336,7 @@ void GameScene::otherInit()
 	float xx = ftAlgorithm::randRangef(-5000, 5000);
 	float yy = ftAlgorithm::randRangef(-5000, 5000);
 	bh.setPosition(xx, yy);
-	bh.hole = ftPhysics::createBodyInWorld(world, xx, yy, FT_Kinematic);
+	bh.hole = ftPhysics::createBodyInWorld(world, xx, yy, FT_Dynamic);
 	b2Shape *b2shape1 = ftPhysics::createb2ShapeWithFtShape(bh.shape);
 	bh.hole->CreateFixture(b2shape1, 1.0f);
 	delete b2shape1;
@@ -373,8 +383,8 @@ void GameScene::otherUpdate()
 
 		OC *oc = (OC*)ba->GetUserData();
 		oc->tmp = tmp;
-		mc.score++;
-		if (mc.score == 7) bh.enable = true;
+		if (!bh.enable) mc.score++;
+		else mc.score--;
 
 		bStack.pop();
 		/* dangerous
@@ -406,7 +416,10 @@ void GameScene::otherUpdate()
 		tmp.body = ftPhysics::createBodyInWorld(world, x, y, FT_Dynamic);
 		tmp.body->CreateFixture(b2shape, 1.0f);
 		delete b2shape;
-		tmp.setColor(OC::randColor());
+		if (!bh.enable)
+			tmp.setColor(OC::randColor());
+		else
+			tmp.setColor(FT_Black);
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
 		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
@@ -415,12 +428,33 @@ void GameScene::otherUpdate()
 		ocPool.add(tmp);
 	}
 	ocPool.doWith(ocSetUserData);
+	if (mainClock.secondsFromInit() >= 5.0f) {
+		if (bh.enable == false) {
+			bh.enable = true;
+			ocPool.doWith(ocSetColor);
+		}
+	}
 	bh.update();
 }
 
 void GameScene::otherDraw()
 {
 	mainCamera.update();
+	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
+	ftVec2 line = target - mc.getPosition();
+	line *= 0.125f;
+	ftVec2 line2 = bh.getPosition() - mc.getPosition();
+	line2 = line2 / 40.0f;
+	if (bh.enable && line2.length() > 12.0f) {
+		ftRender::useColor(FT_Black);
+		for (int i = 1; i < 40; i++) {
+			ftRender::transformBegin();
+			ftRender::ftTranslate(mc.getPosition() + (line2 * i));
+			ftRender::drawCircle(10);
+			ftRender::transformEnd();
+		}
+		ftRender::useColor(FT_White);
+	}
 	bh.draw();
 	mc.draw();
 	ocPool.draw();
@@ -434,29 +468,11 @@ void GameScene::otherDraw()
 	}
 	*/
 
-	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
-	ftVec2 line = target - mc.getPosition();
-	line *= 0.125f;
 	for (int i = 1; i < 8; i++) {
 		ftRender::transformBegin();
 		ftRender::ftTranslate(mc.getPosition() + (line * i));
 		ftRender::drawCircle(5);
 		ftRender::transformEnd();
-	}
-
-	ftVec2 line2 = bh.getPosition() - mc.getPosition();
-	line2 = line2 / 40.0f;
-	if (bh.enable) {
-	ftRender::useColor(FT_Black);
-	if (line2.length() > 12.0f) {
-	for (int i = 1; i < 40; i++) {
-		ftRender::transformBegin();
-		ftRender::ftTranslate(mc.getPosition() + (line2 * i));
-		ftRender::drawCircle(10);
-		ftRender::transformEnd();
-	}
-	}
-	ftRender::useColor(FT_White);
 	}
 }
 
