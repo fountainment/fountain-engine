@@ -95,6 +95,11 @@ void SceneSelector::draw()
 	}
 }
 
+Scene* SceneSelector::getCurScene()
+{
+	return curScene;
+}
+
 void SceneSelector::doAll()
 {
 	update();

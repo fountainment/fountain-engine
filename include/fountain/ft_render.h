@@ -135,6 +135,7 @@ public:
 	void setAngle(float x, float y, float z);
 	void setProjectionType(int type);
 	const ftVec2 mouseToWorld(const ftVec2 & mPos);
+	ftRect getCameraRect();
 };
 
 Camera* getCurrentCamera();

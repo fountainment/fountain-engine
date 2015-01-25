@@ -805,6 +805,14 @@ const ftVec2 Camera::mouseToWorld(const ftVec2 & mPos)
 	return ans;
 }
 
+ftRect Camera::getCameraRect()
+{
+	ftRect rct;
+	rct.setSize(ftVec2(W2, H2) * (2.0f / scale));
+	rct.setCenter(ftVec2(x, y));
+	return rct;
+}
+
 Camera* ftRender::getCurrentCamera()
 {
 	return currentCamera;

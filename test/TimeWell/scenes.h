@@ -59,12 +59,18 @@ public:
 	//void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 };
 
+class ocContainer : public container<OC, 1000>
+{
+public:
+	bool willLive(OC & oc);
+};
+
 class GameScene : public BaseScene
 {
 private:
 	b2World *world;
 	MC mc;
-	container<OC, 1000> ocPool;
+	ocContainer ocPool;
 	CL cListener;
 public:
 	void otherInit();

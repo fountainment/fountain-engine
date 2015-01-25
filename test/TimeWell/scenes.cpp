@@ -186,6 +186,22 @@ void CL::BeginContact(b2Contact *contact)
 	}
 }
 
+bool ocContainer::willLive(OC & oc)
+{
+	ftRender::Camera *cam = &((fountain::sceneSelector.getCurScene())->mainCamera);
+	if (cam != NULL) {
+		ftRect cr = cam->getCameraRect();
+		ftVec2 xy = cr.getCenter();
+		cr.inflate(2, 2);
+		cr.setCenter(xy);
+		bool die = !cr.collidePoint(oc.getPosition());
+		if (die) {
+			(oc.body->GetWorld())->DestroyBody(oc.body);
+			return false;
+		} else return true;
+	} else return true;
+}
+
 void ocSetUserData(OC & oc)
 {
 	oc.body->SetUserData((ftSprite*)&oc);
@@ -292,6 +308,28 @@ void GameScene::otherUpdate()
 	}
 
 	ocPool.update();
+	OC tmp;
+	while (ocPool.getAvailN() > 500) {
+		float r = ftAlgorithm::randRangef(20, 40);
+		int en = ftAlgorithm::randRangef(3, 6.99);
+		float x = ftAlgorithm::randRangef(mcPos.x - 1500, mcPos.x + 1500);
+		float y = ftAlgorithm::randRangef(mcPos.y - 750, mcPos.y + 750);
+		tmp.r = r;
+		tmp.en = en;
+		tmp.setPosition(x, y);
+		tmp.shape = ftShape::makeRegularPolygonShape(en, r);
+		b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(tmp.shape);
+		tmp.body = ftPhysics::createBodyInWorld(world, x, y, FT_Dynamic);
+		tmp.body->CreateFixture(b2shape, 1.0f);
+		delete b2shape;
+		tmp.setColor(OC::randColor());
+		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
+		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
+		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
+		tmp.setTag(0);
+		ocPool.add(tmp);
+	}
+	ocPool.doWith(ocSetUserData);
 }
 
 void GameScene::otherDraw()
@@ -310,7 +348,7 @@ void GameScene::otherDraw()
 	ftRender::useColor(FT_White);
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 line = target - mc.getPosition();
-	line = line * 0.125f;
+	line *= 0.125f;
 	for (int i = 1; i < 8; i++) {
 		ftRender::transformBegin();
 		ftRender::ftTranslate(mc.getPosition() + (line * i));

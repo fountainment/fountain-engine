@@ -40,6 +40,7 @@ private:
 public:
 	ftTime::Clock mainClock;
 	SceneSelector(ftTime::Clock *masterClock);
+	Scene* getCurScene();
 	void doAll();
 	void gotoScene(Scene *nextScene, int animeSceneIndex = FT_None, bool destroyCurScene = true);
 };
