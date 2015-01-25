@@ -448,7 +448,7 @@ void GameScene::otherDraw()
 	line2 = line2 / 40.0f;
 	if (bh.enable) {
 	ftRender::useColor(FT_Black);
-	if (line2.length() > 30.0f) {
+	if (line2.length() > 12.0f) {
 	for (int i = 1; i < 40; i++) {
 		ftRender::transformBegin();
 		ftRender::ftTranslate(mc.getPosition() + (line2 * i));
