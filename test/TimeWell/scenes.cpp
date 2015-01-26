@@ -53,6 +53,7 @@ void BaseScene::otherDraw()
 void BaseScene::drawCursor()
 {
 	screenC.update();
+	ftRender::useColor(FT_White);
 	ftRender::transformBegin();
 	ftRender::ftTranslate(screenC.mouseToWorld(fountain::sysMouse.getPos()));
 	ftRender::drawAlphaPic(cursorID);
@@ -303,22 +304,23 @@ void GameScene::otherInit()
 
 	over = false;
 
+	mainCamera.setPosition(0, 0);
 	startB = ftUI::Button();
 	startB.setRectSize(ftVec2(400, 200));
 	startB.setPosition(0, -200);
 	startB.setCaption("Start");
-	startB.label.move(-140, -44);
+	startB.label.setPosition(-140, -244);
 
 	title = ftUI::Button();
 	title.setPosition(0, 200);
 	title.setCaption("TimeWell");
-	title.label.move(-250, -44);
+	title.label.setPosition(-250, 154);
 
 	repl = ftUI::Button();
-	repl.setRectSize(ftVec2(600, 200));
-	repl.setPosition(0, 50);
+	repl.setRectSize(ftVec2(500, 200));
+	repl.setPosition(300, 0);
 	repl.setCaption("replay");
-	repl.label.move(-250, -44);
+	repl.label.setPosition(125, -44);
 
 	ftRender::setClearColor(OC::randColor());
 
