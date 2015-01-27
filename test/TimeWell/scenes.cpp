@@ -53,10 +53,21 @@ void BaseScene::drawCursor()
 	ftRender::transformEnd();
 }
 
+void OSButton::update()
+{
+	Button::update();
+	if (getState() == FT_None) {
+		setBackColor(FT_White);
+	} else {
+		setBackColor(bcolor);
+	}
+}
+
 void OpenScene::otherInit()
 {
 	ftRender::setClearColor(OC::randColor());
 
+	startB.bcolor = OC::randColor();
 	startB.setRectSize(ftVec2(500, 200));
 	startB.setPosition(0, -200);
 	startB.setCaption("Start");
@@ -319,7 +330,7 @@ void GameScene::otherInit()
 
 	mainCamera.setPosition(0, 0);
 
-	repl = ftUI::Button();
+	repl.bcolor = OC::randColor();
 	repl.setRectSize(ftVec2(500, 200));
 	repl.setPosition(300, 0);
 	repl.setCaption("replay");

@@ -21,10 +21,17 @@ public:
 	virtual void otherUpdate();
 };
 
+class OSButton : public ftUI::Button
+{
+public:
+	ftColor bcolor;
+	void update();
+};
+
 class OpenScene : public BaseScene
 {
 private:
-	ftUI::Button startB;
+	OSButton startB;
 	ftUI::Button title;
 	ftUI::Button intro;
 public:
@@ -104,7 +111,7 @@ private:
 	ftUI::Label timeB;
 	ftUI::Button startB;
 	ftUI::Button title;
-	ftUI::Button repl;
+	OSButton repl;
 public:
 	void otherInit();
 	void otherUpdate();
