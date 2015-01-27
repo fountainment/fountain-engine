@@ -34,6 +34,7 @@ class SceneSelector
 private:
 	Scene *curScene;
 	Scene *oldScene;
+	Scene *nextScene;
 	bool destroyOldScene;
 	void update();
 	void draw();

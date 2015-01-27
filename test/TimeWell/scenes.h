@@ -2,13 +2,14 @@
 
 extern ftRender::ShaderProgram bg;
 
+extern ftType::FontMan fm;
+extern ftType::FontMan lf;
+
 class BaseScene : public ftScene::Scene
 {
 private:
 	int cursorID;
 public:
-	ftType::FontMan fm;
-	ftType::FontMan lf;
 	ftRender::Camera screenC;
 	void init();
 	void update();

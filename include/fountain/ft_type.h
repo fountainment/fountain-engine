@@ -45,4 +45,6 @@ public:
 
 }
 
+extern ftType::FontMan *defaultFontMan;
+
 #endif

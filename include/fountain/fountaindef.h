@@ -90,6 +90,17 @@
 
 #define FT_ABS(x) ((x)>0?(x):(-(x)))
 
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <map>
+
 #include <fountain/ft_data.h>
 #include <fountain/ft_time.h>
 #include <fountain/ft_3dmodel.h>

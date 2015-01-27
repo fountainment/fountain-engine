@@ -1,12 +1,8 @@
 #include <fountain/fountaindef.h>
 
-#include <cstdio>
-
 using ftUI::Button;
 using ftUI::NineSprite;
 using ftUI::Label;
-
-static ftType::FontMan *defaultFont = NULL;
 
 bool ftUI::init()
 {
@@ -19,20 +15,20 @@ void ftUI::close()
 
 void ftUI::setDefaultFont(ftType::FontMan *font)
 {
-	defaultFont = font;
+	defaultFontMan = font;
 }
 
 //class ftUI::Label
 Label::Label()
 {
-	font = defaultFont;
+	font = defaultFontMan;
 	align = FT_AlignLeft;
 	strLength = 0;
 }
 
 Label::Label(const char *str)
 {
-	font = defaultFont;
+	font = defaultFontMan;
 	setString(str);
 	align = FT_AlignLeft;
 	strLength = 0;
@@ -40,7 +36,7 @@ Label::Label(const char *str)
 
 Label::Label(std::string str)
 {
-	font = defaultFont;
+	font = defaultFontMan;
 	setString(str.c_str());
 	align = FT_AlignLeft;
 	strLength = 0;
@@ -49,7 +45,7 @@ Label::Label(std::string str)
 void Label::setString(const char *str)
 {
 	text = ftAlgorithm::utf8toUnicode(str);
-	if (font == NULL) setFont(defaultFont);
+	if (font == NULL) setFont(defaultFontMan);
 	if (font != NULL) strLength = font->getStringLength(text);
 }
 
@@ -71,7 +67,7 @@ void Label::draw()
 	if (font != NULL) {
 		strLength = font->drawString(text);
 	} else {
-		font = defaultFont;
+		font = defaultFontMan;
 	}
 	ftRender::transformEnd();
 }

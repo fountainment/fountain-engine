@@ -29,6 +29,7 @@ Scene::~Scene()
 
 void Scene::baseInit()
 {
+	mainCamera.setViewport(fountain::getWinRect());
 	mainClock = ftTime::Clock(&fountain::sceneSelector.mainClock);
 	mainClock.init();
 }
@@ -104,10 +105,12 @@ void SceneSelector::doAll()
 {
 	update();
 	if (destroyOldScene && oldScene != NULL) {
+		curScene = nextScene;
 		delete oldScene;
 		oldScene = NULL;
 		destroyOldScene = false;
-	} else draw();
+	}
+	draw();
 }
 
 void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destroyCurScene)
@@ -117,11 +120,14 @@ void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destro
 		oldScene = curScene;
 		destroyOldScene = true;
 	}
-	curScene = nextScene;
+	this->nextScene = nextScene;
 	//TODO: to init or not
-	if (curScene != NULL) {
-		curScene->baseInit();
-		curScene->init();
-		curScene->update();
+	if (nextScene != NULL) {
+		nextScene->baseInit();
+		nextScene->init();
+		nextScene->update();
+	}
+	if (curScene == NULL) {
+		curScene = nextScene;
 	}
 }

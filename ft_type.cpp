@@ -8,6 +8,8 @@ using ftType::FontMan;
 static bool alive = false;
 FT_Library library;
 
+FontMan *defaultFontMan;
+
 bool ftType::init()
 {
 	int error = FT_Init_FreeType(&library);
@@ -66,6 +68,7 @@ FontMan::~FontMan()
 {
 	if (ftType::isAlive()) FT_Done_Face(face);
 	if (ftRender::isAlive()) ftRender::deletePicture(picID);
+	if (defaultFontMan == this) defaultFontMan = NULL;
 }
 
 bool FontMan::loadFont(const char *fontname)

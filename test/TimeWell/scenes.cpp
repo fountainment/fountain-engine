@@ -1,12 +1,10 @@
 #include "scenes.h"
 
-#include <cstdio>
-#include <cmath>
-#include <stack>
-#include <vector>
-
 std::stack<b2Body*> bStack;
 bool over;
+
+ftType::FontMan fm;
+ftType::FontMan lf;
 
 void BaseScene::init()
 {
@@ -14,11 +12,6 @@ void BaseScene::init()
 	mainCamera.setViewport(fountain::getWinRect());
 	cursorID = ftRender::getPicture("res/image/cursor.png");
 	otherInit();
-	fm.loadFont("res/font/wqy.ttc");
-	fm.genAsciiTable(128.0f);
-	lf.loadFont("res/font/wqy.ttc");
-	lf.genAsciiTable(32.0f);
-	ftUI::setDefaultFont(&fm);
 }
 
 void BaseScene::otherInit()
@@ -518,7 +511,6 @@ void GameScene::otherUpdate()
 void GameScene::otherDraw()
 {
 	mainCamera.update();
-
 	if (state == 0) {
 		startB.draw();
 	}
