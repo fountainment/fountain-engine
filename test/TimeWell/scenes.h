@@ -34,6 +34,7 @@ private:
 	OSButton startB;
 	ftUI::Button title;
 	ftUI::Button intro;
+	ftUI::Button intro1;
 public:
 	void otherInit();
 	void otherUpdate();

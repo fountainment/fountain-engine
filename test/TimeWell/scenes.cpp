@@ -75,11 +75,17 @@ void OpenScene::otherInit()
 	title.setPosition(0, 200);
 	title.setCaption("TimeWell");
 
-	intro.setPosition(0, 0);
+	intro.setPosition(0, 40);
 	intro.label.setFont(&lf);
 	intro.setCaption("Color blocks raise your score, black blocks reduce your score!");
 	intro.label.setFont(&lf);
 	intro.setColor(FT_White);
+
+	intro1.setPosition(0, -40);
+	intro1.label.setFont(&lf);
+	intro1.setCaption("Your target is the blackhole!");
+	intro1.label.setFont(&lf);
+	intro1.setColor(FT_White);
 }
 
 void OpenScene::otherUpdate()
@@ -96,6 +102,7 @@ void OpenScene::otherDraw()
 	mainCamera.update();
 	title.draw();
 	intro.draw();
+	intro1.draw();
 	startB.draw();
 }
 
@@ -260,7 +267,8 @@ void CL::BeginContact(b2Contact *contact)
 	
 	if (((atag == 1) && (btag == 2)) || 
 			((atag == 2) && (btag == 1))) {
-		over = true;
+		if (atag == 2 && A->enable) over = true;
+		if (btag == 2 && B->enable) over = true;
 	}
 	else if ((atag == 2) || (btag == 2)) {
 		if (A->enable && B->enable) {
@@ -514,7 +522,6 @@ void GameScene::otherUpdate()
 void GameScene::otherDraw()
 {
 	mainCamera.update();
-
 
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 line = target - mc.getPosition();
