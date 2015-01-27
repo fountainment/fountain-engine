@@ -24,6 +24,9 @@ public:
 class OpenScene : public BaseScene
 {
 private:
+	ftUI::Button startB;
+	ftUI::Button title;
+	ftUI::Button intro;
 public:
 	void otherInit();
 	void otherUpdate();

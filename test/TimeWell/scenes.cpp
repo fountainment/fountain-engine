@@ -55,17 +55,37 @@ void BaseScene::drawCursor()
 
 void OpenScene::otherInit()
 {
+	ftRender::setClearColor(OC::randColor());
+
+	startB.setRectSize(ftVec2(500, 200));
+	startB.setPosition(0, -200);
+	startB.setCaption("Start");
+
+	title.setPosition(0, 200);
+	title.setCaption("TimeWell");
+
+	intro.setPosition(0, 0);
+	intro.label.setFont(&lf);
+	intro.setCaption("Touch color blocks, and avoid touching black blocks!");
+	intro.label.setFont(&lf);
+	intro.setColor(FT_White);
 }
 
 void OpenScene::otherUpdate()
 {
-	if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown)
+	startB.update();
+	title.update();
+	if (startB.getState() == FT_ButtonDown) {
 		fountain::sceneSelector.gotoScene(new GameScene());
+	}
 }
 
 void OpenScene::otherDraw()
 {
 	mainCamera.update();
+	title.draw();
+	intro.draw();
+	startB.draw();
 }
 
 void MC::update()
@@ -291,31 +311,18 @@ void ocSetContact(OC & oc)
 
 void GameScene::otherInit()
 {
-	state = 0;
+	state = 1;
 	ocPool = ocContainer(); 
 	bh = BH();
 
 	over = false;
 
 	mainCamera.setPosition(0, 0);
-	startB = ftUI::Button();
-	startB.setRectSize(ftVec2(400, 200));
-	startB.setPosition(0, -200);
-	startB.setCaption("Start");
-	startB.label.setPosition(-140, -244);
-
-	title = ftUI::Button();
-	title.setPosition(0, 200);
-	title.setCaption("TimeWell");
-	title.label.setPosition(-250, 154);
 
 	repl = ftUI::Button();
 	repl.setRectSize(ftVec2(500, 200));
 	repl.setPosition(300, 0);
 	repl.setCaption("replay");
-	repl.label.setPosition(125, -44);
-
-	ftRender::setClearColor(OC::randColor());
 
 	scoreB.setPosition(fountain::mainWin.w / 2.0f - 300.0f, fountain::mainWin.h / 2.0f - 128.0f);
 	timeB.setPosition(-fountain::mainWin.w / 2.0f + 50.0f, fountain::mainWin.h / 2.0f - 128.0f);
@@ -379,23 +386,6 @@ void GameScene::otherInit()
 
 void GameScene::otherUpdate()
 {
-	if (state == 0) {
-		startB.update();
-		title.draw();
-		ftRender::transformBegin(-500, 50);
-		lf.drawString("Rule:Adsorb the polygons will add score befor the balck hole appear, ");
-		ftRender::transformEnd();
-		ftRender::transformBegin(-500, 0);
-		lf.drawString("but it will be opposite after the balck hole appear.");
-		ftRender::transformEnd();
-		ftRender::transformBegin(-500, -50);
-		lf.drawString("Tips:Try to get a high score.And try not get a negative one.");
-		ftRender::transformEnd();
-		if (startB.getState() == FT_ButtonDown) {
-			state = 1;	
-			mainClock.resume();
-		}
-	}
 	if (state == 1) {
 	world->Step(mainClock.getDeltaT(), 20, 20);
 
@@ -502,8 +492,7 @@ void GameScene::otherUpdate()
 		screenC.update();
 		repl.update();
 		if (repl.getState() == FT_ButtonDown) {
-			state = 0;
-			init();	
+			fountain::sceneSelector.gotoScene(new OpenScene());
 		}
 	}
 }
@@ -511,9 +500,7 @@ void GameScene::otherUpdate()
 void GameScene::otherDraw()
 {
 	mainCamera.update();
-	if (state == 0) {
-		startB.draw();
-	}
+
 	if (state == 1 || state == 2) {
 
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
