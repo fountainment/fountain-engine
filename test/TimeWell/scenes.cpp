@@ -77,7 +77,7 @@ void OpenScene::otherInit()
 
 	intro.setPosition(0, 0);
 	intro.label.setFont(&lf);
-	intro.setCaption("Touch color blocks, and avoid touching black blocks!");
+	intro.setCaption("Color blocks raise your score, black blocks reduce your score!");
 	intro.label.setFont(&lf);
 	intro.setColor(FT_White);
 }
@@ -139,7 +139,7 @@ void OC::draw()
 {
 	ftVec2 pos = this->getPosition();
 
-	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.01f, FT_Black);
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.01f, bcolor);
 	ftRender::drawShape(shape);
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
@@ -178,7 +178,7 @@ void OC::update()
 		a = ftPhysics::getRatio() * a;
 		b2Vec2 b = body->GetPosition();
 		b = ftPhysics::getRatio() * b;
-		ftRender::useColor(FT_Black);
+		ftRender::useColor(this->bcolor);
 		ftRender::setLineWidth(5.0f);
 		ftRender::drawLine(a.x, a.y, b.x, b.y);
 		ftRender::setLineWidth(1.0f);
@@ -310,6 +310,7 @@ void ocSetColor(OC & oc)
 {
 	if (oc.getTag() != 3) {
 		oc.setColor(FT_Black);
+		oc.bcolor = FT_White;
 	}
 }
 
@@ -323,8 +324,6 @@ void ocSetContact(OC & oc)
 void GameScene::otherInit()
 {
 	state = 1;
-	ocPool = ocContainer(); 
-	bh = BH();
 
 	over = false;
 
@@ -377,6 +376,7 @@ void GameScene::otherInit()
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
 		tmp.setTag(0);
 		tmp.die = false;
+		tmp.bcolor = FT_Black;
 		ocPool.add(tmp);
 	}
 	ocPool.doWith(ocSetUserData);
@@ -466,10 +466,13 @@ void GameScene::otherUpdate()
 		tmp.body = ftPhysics::createBodyInWorld(world, x, y, FT_Dynamic);
 		tmp.body->CreateFixture(b2shape, 1.0f);
 		delete b2shape;
-		if (!bh.enable)
+		if (!bh.enable) {
 			tmp.setColor(OC::randColor());
-		else
+			tmp.bcolor = FT_Black;
+		} else {
 			tmp.setColor(FT_Black);
+			tmp.bcolor = FT_White;
+		}
 		tmp.speed = ftVec2(ftAlgorithm::randRangef(-5.0f, 5.0f), ftAlgorithm::randRangef(-5.0f, 5.0f));
 		tmp.body->SetLinearVelocity(b2Vec2(tmp.speed.x, tmp.speed.y));
 		tmp.aSpeed = ftAlgorithm::randRangef(-1.0f, 1.0f);
@@ -512,7 +515,6 @@ void GameScene::otherDraw()
 {
 	mainCamera.update();
 
-	if (state == 1 || state == 2) {
 
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 line = target - mc.getPosition();
@@ -558,12 +560,16 @@ void GameScene::otherDraw()
 	scoreB.draw();
 	timeB.draw();
 
-	}
 	if (state == 2) {
 		screenC.update();
 		ftRender::useColor(FT_Black);
 		ftRender::drawQuad(fountain::mainWin.w, 400);	
 		repl.draw();
 	}
+}
+
+void GameScene::destroy()
+{
+	delete world;
 }
 

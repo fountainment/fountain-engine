@@ -62,6 +62,7 @@ class OC : public ftSprite
 public:
 	static ftColor randColor();
 	b2Body *body;
+	ftColor bcolor;
 	float r;
 	int en;
 	RP tmp;
@@ -116,6 +117,7 @@ public:
 	void otherInit();
 	void otherUpdate();
 	void otherDraw();
+	void destroy();
 };
 
 class ScoreScene : public BaseScene
