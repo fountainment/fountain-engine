@@ -2,6 +2,7 @@
 //TODO: provide RTT(render to texture) function
 #include <fountain/ft_render.h>
 #include <fountain/ft_data.h>
+#include <fountain/ft_math.h>
 #include <fountain/ft_algorithm.h>
 #define GLEW_STATIC
 #include <GL/glew.h>

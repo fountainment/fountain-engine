@@ -57,6 +57,7 @@
 		<Unit filename="include/fountain/ft_audio.h" />
 		<Unit filename="include/fountain/ft_data.h" />
 		<Unit filename="include/fountain/ft_input.h" />
+		<Unit filename="include/fountain/ft_math.h" />
 		<Unit filename="include/fountain/ft_physics.h" />
 		<Unit filename="include/fountain/ft_render.h" />
 		<Unit filename="include/fountain/ft_scene.h" />
