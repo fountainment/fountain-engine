@@ -257,15 +257,15 @@ void CL::BeginContact(b2Contact *contact)
 
 	void* userDataA = ba->GetUserData();
 	void* userDataB = bb->GetUserData();
-	
-	int atag, btag; 
+
+	int atag, btag;
 
 	ftSprite *A = (ftSprite*)userDataA;
 	atag = A->getTag();
 	ftSprite *B = (ftSprite*)userDataB;
 	btag = B->getTag();
-	
-	if (((atag == 1) && (btag == 2)) || 
+
+	if (((atag == 1) && (btag == 2)) ||
 			((atag == 2) && (btag == 1))) {
 		if (atag == 2 && A->enable) over = true;
 		if (btag == 2 && B->enable) over = true;
@@ -349,7 +349,7 @@ void GameScene::otherInit()
 	world->SetContactListener(&cListener);
 	world->SetAllowSleeping(false);
 
-	mc.image = ftRender::getImage("res/image/me.png"); 
+	mc.image = ftRender::getImage("res/image/me.png");
 	mc.body = ftPhysics::createBodyInWorld(world, 0, 0, FT_Kinematic);
 	ftShape seven = ftShape::makeRegularPolygonShape(7, 50);
 	b2Shape *b2shape = ftPhysics::createb2ShapeWithFtShape(seven);
@@ -496,7 +496,7 @@ void GameScene::otherUpdate()
 			ocPool.doWith(ocSetContact);
 		}
 	} else {
-		
+
 	}
 	bh.update();
 
@@ -507,7 +507,7 @@ void GameScene::otherUpdate()
 		std::sprintf(tt, "%.1f", 10.0f - mainClock.secondsFromContinue());
 		timeB.setString(tt);
 	}
-	
+
 	}
 	if (over == true) state = 2;
 	if (state == 2) {
@@ -570,7 +570,7 @@ void GameScene::otherDraw()
 	if (state == 2) {
 		screenC.update();
 		ftRender::useColor(FT_Black);
-		ftRender::drawQuad(fountain::mainWin.w, 400);	
+		ftRender::drawQuad(fountain::mainWin.w, 400);
 		repl.draw();
 	}
 }

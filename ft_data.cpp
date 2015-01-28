@@ -364,7 +364,7 @@ void ftSprite::setAngle(float agl)
 
 float ftSprite::getAngle()
 {
-	return FT_D2R(angle);
+	return angle;
 }
 
 void ftSprite::setRectSize(const ftVec2 & rts)
