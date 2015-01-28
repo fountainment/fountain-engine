@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#define FT_Pi 3.14159f
-
 namespace ftAlgorithm {
 
 bool init();

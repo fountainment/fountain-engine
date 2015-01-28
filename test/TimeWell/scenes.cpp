@@ -151,13 +151,13 @@ void OC::draw()
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 
-	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))), this->getColor());
+	ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(FT_Pi / this->en))), this->getColor());
 	ftRender::drawShape(shape);
 	ftRender::drawShapeEdge(shape);
 	ftRender::transformEnd();
 
 	if (this->getTag() > 0) {
-		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(3.14159f / this->en))) - 0.5, FT_Black);
+		ftRender::transformBegin(pos.x, pos.y, this->getAngle(), 1.0f - (5.0f / (this->r * std::cos(FT_Pi / this->en))) - 0.5, FT_Black);
 		ftRender::drawShape(shape);
 		ftRender::drawShapeEdge(shape);
 		ftRender::transformEnd();
@@ -416,8 +416,8 @@ void GameScene::otherUpdate()
 	/*
 	if (bh.enable) {
 		float d = std::atan(deltaV.y / deltaV.x);
-		if (deltaV.x > 0) d -= 3.14159f / 2.0f;
-		else d += 3.14159f / 2.0f;
+		if (deltaV.x > 0) d -= FT_Pi / 2.0f;
+		else d += FT_Pi / 2.0f;
 		mc.body->SetTransform(mc.body->GetPosition(), d);
 	}
 	*/

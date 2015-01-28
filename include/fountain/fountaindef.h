@@ -101,6 +101,7 @@
 #include <queue>
 #include <map>
 
+#include <fountain/ft_math.h>
 #include <fountain/ft_data.h>
 #include <fountain/ft_time.h>
 #include <fountain/ft_3dmodel.h>

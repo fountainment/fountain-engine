@@ -1,7 +1,7 @@
 #include <fountain/ft_data.h>
+#include <fountain/ft_math.h>
 #include <cstdio>
 #include <cstring>
-#include <cmath>
 
 namespace fountain {
 
@@ -311,7 +311,7 @@ int ftShape::getType()
 
 ftShape ftShape::makeRegularPolygonShape(int edgeN, float r)
 {
-	float d = 3.14159f * 2.0f / edgeN;
+	float d = FT_Pi * 2.0f / edgeN;
 	std::vector<ftVec2> v;
 	for (int i = 0; i < edgeN; i++) {
 		v.push_back(ftVec2(std::cos(d * i) * r, std::sin(d * i) * r));
@@ -358,13 +358,13 @@ ftVec2 ftSprite::getPosition()
 
 void ftSprite::setAngle(float agl)
 {
-	agl *= 180.0f / 3.14159f;
+	agl = FT_R2D(agl);
 	angle = agl;
 }
 
 float ftSprite::getAngle()
 {
-	return angle;
+	return FT_D2R(angle);
 }
 
 void ftSprite::setRectSize(const ftVec2 & rts)
@@ -430,17 +430,6 @@ int ftSprite::getTag()
 {
 	return tag;
 }
-
-/*
-void ftSprite::drawBegin()
-{
-}
-
-void ftSprite::drawEnd()
-{
-	ftRender::
-}
-*/
 
 //class ftColor
 float ftColor::checkValue(float v)

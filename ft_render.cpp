@@ -740,9 +740,9 @@ void Camera::move(float x, float y)
 
 void Camera::setAngle(float x, float y, float z)
 {
-	this->xAngle = x;
-	this->yAngle = y;
-	this->zAngle = z;
+	this->xAngle = FT_R2D(x);
+	this->yAngle = FT_R2D(y);
+	this->zAngle = FT_R2D(z);
 }
 
 void Camera::setViewport(int w, int h, int x, int y)

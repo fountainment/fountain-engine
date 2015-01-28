@@ -189,10 +189,10 @@ public:
 	void rotate(float aSpeed);
 	void setTag(int tag);
 	int getTag();
-/*
-	void drawBegin();
-	void drawEnd();
-*/
+	/*
+		void drawBegin();
+		void drawEnd();
+	*/
 };
 
 class ftFile
