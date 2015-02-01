@@ -14,17 +14,21 @@ void main()
 	vec4 srAvg = vec4(0.);
 	vec2 tmp;
 	float pxNum = 0.;
+	float len;
+	float powX;
 	if (useTex == 1.) {
 		for (int i = -ti; i <= ti; i++) {
 			for (int j = -ti; j <= ti; j++) {
 				tmp = vec2(i, j);
 				sr = vec4(.0);
-				if (length(tmp) <= float(ti)) {
+				len = length(tmp);
+				if (len <= float(ti)) {
 					tmp = gl_TexCoord[0].st + tmp / texSize;
 					if (tmp.x >= 0.0 && tmp.x <= 1.0 && tmp.y >= 0.0 && tmp.y <= 1.0) {
 						sr = texture2D(tex, tmp);
-						srAvg += sr;
-						pxNum += 1.;
+						powX = float(ti) - len + 1.;
+						srAvg += sr * powX;
+						pxNum += powX;
 					}
 				}
 			}
