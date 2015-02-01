@@ -144,7 +144,7 @@ private:
 	float checkValue(float v);
 public:
 	ftColor();
-	ftColor(std::string s);
+	ftColor(std::string s, float a = 1.0f);
 	ftColor(float r, float g, float b, float a = 1.0f);
 	void inverse();
 	void setR(float r);

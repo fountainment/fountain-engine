@@ -6,33 +6,21 @@ void TDAScene::init()
 	mainCamera.setViewport(fountain::getWinRect());
 
 	std::vector<ftVec2> v;
-	v.push_back(ftVec2(-10, -5));
-	v.push_back(ftVec2(-10, 5));
-	v.push_back(ftVec2(10, 7));
-	v.push_back(ftVec2(25, -5));
-	ftShape x = ftShape(v, 4, true);
+	v.push_back(ftVec2(-12, -20));
+	v.push_back(ftVec2(12, -20));
+	v.push_back(ftVec2(0, 27));
+	ftShape x = ftShape(v, 3, true);
 
 	fly = Body(-200, 0);
 	fly.setShape(x);
-	fly.setColor(ftColor("#CCCCFF"));
-
-	ground = Body(0, -250, FT_Static);
-	ground.setShape(ftRect(0, 0, 800, 50));
-	ground.setColor(ftColor("#88FF88"));
+	fly.setColor(ftColor("#F99", 0.5f));
 
 	ball = Body(0, 100);
 	ball.setShape(ftShape(10));
 
-	for (int i = 0; i < 10; i++) {
-		Body *b = new Body();
-		*b = ball;
-		world.addBody(b);
-	}
-
 	world.addBody(&fly);
 	fly.body->SetFixedRotation(true);
 	fly.body->SetGravityScale(0.0f);
-	world.addBody(&ground);
 	flySpeed = 400.0f;
 }
 

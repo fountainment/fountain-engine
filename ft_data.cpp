@@ -469,7 +469,7 @@ int Hex2Dec(std::string hexs)
 	return ans;
 }
 
-ftColor::ftColor(std::string s)
+ftColor::ftColor(std::string s, float a)
 {
 	float r = 1.0f;
 	float g = 1.0f;
@@ -503,7 +503,7 @@ ftColor::ftColor(std::string s)
 	setR(r);
 	setG(g);
 	setB(b);
-	setAlpha(1.0f);
+	setAlpha(a);
 }
 
 ftColor::ftColor(float r, float g, float b, float a)
