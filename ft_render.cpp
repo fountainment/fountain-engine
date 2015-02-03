@@ -88,6 +88,8 @@ bool ftRender::init()
 	globalB = 1.0f;
 	globalA = 1.0f;
 
+	glEnable(GL_ALPHA_TEST);
+
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
