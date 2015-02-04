@@ -1,6 +1,7 @@
 #include "scenes.h"
 
 std::stack<b2Body*> bStack;
+container<OC, 1000> drawCon;
 bool over;
 
 ftType::FontMan fm;
@@ -328,6 +329,8 @@ void GameScene::otherInit()
 {
 	state = 1;
 
+	drawCon.clear();
+
 	over = false;
 
 	mainCamera.setPosition(0, 0);
@@ -441,6 +444,7 @@ void GameScene::otherUpdate()
 		if (!bh.enable) mc.score++;
 		else mc.score--;
 
+		drawCon.add(*oc);
 		bStack.pop();
 	}
 
@@ -498,7 +502,13 @@ void GameScene::otherUpdate()
 	}
 
 	}
-	if (over == true) state = 2;
+	if (over == true && state != 2) {
+		state = 2;
+		mc.body->SetTransform(b2Vec2(-fountain::mainWin.w / 4.0f / ftPhysics::getRatio(), 0), mc.body->GetAngle());
+		mc.update();
+		drawCon.update();
+		ocPool.update();
+	}
 	if (state == 2) {
 		screenC.update();
 		repl.update();
@@ -538,6 +548,18 @@ void GameScene::otherDraw()
 	}
 
 	screenC.update();
+
+	scoreB.setColor(FT_Black);
+	timeB.setColor(FT_Black);
+	scoreB.move(5, -5);
+	timeB.move(5, -5);
+	scoreB.draw();
+	timeB.draw();
+
+	scoreB.setColor(FT_White);
+	timeB.setColor(FT_White);
+	scoreB.move(-5, 5);
+	timeB.move(-5, 5);
 	scoreB.draw();
 	timeB.draw();
 
@@ -547,6 +569,7 @@ void GameScene::otherDraw()
 		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h / 2.0f);
 		repl.draw();
 		mc.drawAt(-fountain::mainWin.w / 4.0f, 0);
+		drawCon.draw();
 	}
 }
 
