@@ -121,6 +121,12 @@ void MC::draw()
 			1.0f, this->getColor());
 }
 
+void MC::drawAt(float x, float y)
+{
+	drawImage(image, x, y, this->getAngle(),
+			1.0f, this->getColor());
+}
+
 ftColor OC::randColor()
 {
 	float a[3];
@@ -538,8 +544,9 @@ void GameScene::otherDraw()
 	if (state == 2) {
 		screenC.update();
 		ftRender::useColor(FT_Black);
-		ftRender::drawQuad(fountain::mainWin.w, 400);
+		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h / 2.0f);
 		repl.draw();
+		mc.drawAt(-fountain::mainWin.w / 4.0f, 0);
 	}
 }
 

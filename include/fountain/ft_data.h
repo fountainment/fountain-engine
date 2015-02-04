@@ -236,6 +236,7 @@ public:
 	void draw();
 	void doWith(void(*func)(_tp &node));
 	bool empty();
+	void clear();
 	int getAvailN();
 	virtual bool willLive(_tp &node);
 };
@@ -243,12 +244,7 @@ public:
 template <typename _tp, int _size>
 container<_tp, _size>::container()
 {
-	head = -1;
-	tail = -1;
-	for (int i = 0; i < _size; i++) {
-		avail[i] = i;
-	}
-	availN = _size;
+	clear();
 }
 
 template <typename _tp, int _size>
@@ -348,6 +344,17 @@ bool container<_tp, _size>::empty()
 		return true;
 	else
 		return false;
+}
+
+template <typename _tp, int _size>
+void container<_tp, _size>::clear()
+{
+	head = -1;
+	tail = -1;
+	for (int i = 0; i < _size; i++) {
+		avail[i] = i;
+	}
+	availN = _size;
 }
 
 template <typename _tp, int _size>
