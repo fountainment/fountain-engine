@@ -33,6 +33,14 @@ float ftVec2::length()
 	return std::pow(x * x + y * y, 0.5);
 }
 
+float ftVec2::getDegree()
+{
+	float d = std::atan(y / x);
+	if (x > 0) d -= FT_Pi / 2.0f;
+	else d += FT_Pi / 2.0f;
+	return d;
+}
+
 const ftVec2 ftVec2::operator-(const ftVec2 & v)
 {
 	return ftVec2(x - v.x, y - v.y);

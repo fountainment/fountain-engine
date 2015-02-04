@@ -53,6 +53,7 @@ public:
 	ftVec2(float x, float y);
 	void move(float x, float y);
 	float length();
+	float getDegree();
 	const ftVec2 operator-(const ftVec2 & v);
 	void operator-=(const ftVec2 & v);
 	const ftVec2 operator+(const ftVec2 & v);
@@ -191,10 +192,6 @@ public:
 	void rotate(float aSpeed);
 	void setTag(int tag);
 	int getTag();
-	/*
-		void drawBegin();
-		void drawEnd();
-	*/
 };
 
 class ftFile
