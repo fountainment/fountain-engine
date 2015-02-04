@@ -107,6 +107,7 @@ public:
 	void inflate(float x, float y);
 	bool collidePoint(const ftVec2 & p);
 	bool collideRect(const ftRect & r);
+	std::vector<ftVec2> collideSegment(const ftVec2 & pa, const ftVec2 & pb);
 };
 
 class ftShape

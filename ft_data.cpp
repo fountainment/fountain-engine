@@ -249,6 +249,44 @@ bool ftRect::collideRect(const ftRect & r)
 	return (xD <= wSum) && (yD <= hSum);
 }
 
+std::vector<ftVec2> ftRect::collideSegment(const ftVec2 & pa, const ftVec2 & pb)
+{
+	std::vector<ftVec2> prev;
+	std::vector<ftVec2> v;
+	ftVec2 kv(pb.x - pa.x, pb.y - pa.y);
+	ftVec2 tmp;
+	float k, b;
+	float rX, rY;
+	if (kv.x == 0.0f) {
+		//TODO: finish this function
+	} else {
+		k = kv.y / kv.x;
+		b = pa.y - k * pa.x;
+		rX = x;
+		rY = k * rX + b;
+		prev.push_back(ftVec2(rX, rY));
+		rX = x + w;
+		rY = k * rX + b;
+		prev.push_back(ftVec2(rX, rY));
+		if (k != 0.0f) {
+			rY = y;
+			rX = (rY - b) / k;
+			prev.push_back(ftVec2(rX, rY));
+			rY = y + h;
+			rX = (rY - b) / k;
+			prev.push_back(ftVec2(rX, rY));
+		}
+	}
+	for (unsigned i = 0; i < prev.size(); i++) {
+		tmp = prev[i];
+		if (collidePoint(tmp)) {
+			if ((tmp.x - pa.x) * (tmp.x - pb.x) <= 0 &&
+				(tmp.y - pa.y) * (tmp.y - pb.y) <= 0) v.push_back(prev[i]);
+		}
+	}
+	return v;
+}
+
 //class ftShape
 ftShape::ftShape(ftRect rct)
 {

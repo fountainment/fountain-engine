@@ -526,17 +526,25 @@ void GameScene::otherDraw()
 	ftVec2 line = target - mc.getPosition();
 	line *= 0.125f;
 	ftVec2 lineHM = bh.getPosition() - mainCamera.getPosition();
-	if (state == 1) {
-		if (bh.enable && !bh.getRect().collideRect(mainCamera.getCameraRect())) {
-			ftRender::useColor(FT_Black);
-			ftRender::drawLine(mainCamera.getPosition(), bh.getPosition());
-			ftRender::useColor(FT_White);
-		}
-	}
 	bh.draw();
 	mc.draw();
 	ocPool.draw();
 	ftRender::useColor(FT_White);
+	if (state == 1) {
+		if (bh.enable && !bh.getRect().collideRect(mainCamera.getCameraRect())) {
+			ftRender::useColor(FT_Black);
+			ftRect rct;
+			rct = mainCamera.getCameraRect();
+			std::vector<ftVec2> vv = rct.collideSegment(mainCamera.getPosition(), bh.getPosition());
+			if (vv.size() > 0) {
+				ftRender::transformBegin();
+				ftRender::ftTranslate(vv[0]);
+				ftRender::drawCircle(50);
+				ftRender::transformEnd();
+			}
+			ftRender::useColor(FT_White);
+		}
+	}
 
 	if (state == 1) {
 		for (int i = 1; i < 8; i++) {
