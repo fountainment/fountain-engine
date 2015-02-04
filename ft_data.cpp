@@ -238,6 +238,17 @@ bool ftRect::collidePoint(const ftVec2 & p)
 	return ((((x - p.x) * (xx - p.x)) <= 0) && (((y - p.y) * (yy - p.y)) <= 0));
 }
 
+bool ftRect::collideRect(const ftRect & r)
+{
+	ftRect rect = r;
+	ftVec2 dv = getCenter() - rect.getCenter();
+	float wSum = getW() + rect.getW();
+	float hSum = getH() + rect.getH();
+	float xD = FT_ABS(dv.x * 2.0f);
+	float yD = FT_ABS(dv.y * 2.0f);
+	return (xD <= wSum) && (yD <= hSum);
+}
+
 //class ftShape
 ftShape::ftShape(ftRect rct)
 {

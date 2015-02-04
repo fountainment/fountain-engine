@@ -724,7 +724,7 @@ void Camera::setPosition(float x, float y, float z)
 	this->z = z;
 }
 
-const ftVec2 Camera::getPosition()
+ftVec2 Camera::getPosition()
 {
 	return ftVec2(x, y);
 }

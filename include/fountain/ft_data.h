@@ -106,6 +106,7 @@ public:
 	void normalize();
 	void inflate(float x, float y);
 	bool collidePoint(const ftVec2 & p);
+	bool collideRect(const ftRect & r);
 };
 
 class ftShape
