@@ -1,6 +1,7 @@
 #include "scenes.h"
 
 std::stack<b2Body*> bStack;
+container<OC, 1000> drawCon;
 bool over;
 
 ftType::FontMan fm;
@@ -121,6 +122,12 @@ void MC::draw()
 			1.0f, this->getColor());
 }
 
+void MC::drawAt(float x, float y)
+{
+	drawImage(image, x, y, this->getAngle(),
+			1.0f, this->getColor());
+}
+
 ftColor OC::randColor()
 {
 	float a[3];
@@ -214,6 +221,7 @@ BH BH::create()
 		break;
 	}
 	x.setColor(FT_White);
+	x.setRectSize(200, 200);
 	return x;
 }
 
@@ -235,18 +243,6 @@ void BH::draw()
 	}
 }
 
-
-/*
-void CL::Presolve(b2Contact *contact, const b2Manifold* oldManifold)
-//void CL::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-{
-	const b2Manifold* manifold = contact->GetManifold();
-	if (manifold->pointCount == 0){
-		return;
-	}
-}
-*/
-//void CL::PreSolve(b2Contact *contact, const b2Manifold* oldManifold)
 void CL::BeginContact(b2Contact *contact)
 {
 	b2Fixture* fixtureA = contact->GetFixtureA();
@@ -333,6 +329,8 @@ void GameScene::otherInit()
 {
 	state = 1;
 
+	drawCon.clear();
+
 	over = false;
 
 	mainCamera.setPosition(0, 0);
@@ -414,6 +412,7 @@ void GameScene::otherUpdate()
 	ftVec2 tv = deltaV * (mainClock.getDeltaT() * 3.0f);
 
 	/*
+	//Rotate MC
 	if (bh.enable) {
 		float d = std::atan(deltaV.y / deltaV.x);
 		if (deltaV.x > 0) d -= FT_Pi / 2.0f;
@@ -445,14 +444,8 @@ void GameScene::otherUpdate()
 		if (!bh.enable) mc.score++;
 		else mc.score--;
 
+		drawCon.add(*oc);
 		bStack.pop();
-		/* dangerous
-		b2RevoluteJointDef jd;
-		jd.collideConnected = true;
-		jd.enableLimit = true;
-		jd.Initialize(ba, bb, ba->GetPosition());
-		world->CreateJoint(&jd);
-		*/
 	}
 
 	ocPool.update();
@@ -509,7 +502,13 @@ void GameScene::otherUpdate()
 	}
 
 	}
-	if (over == true) state = 2;
+	if (over == true && state != 2) {
+		state = 2;
+		mc.body->SetTransform(b2Vec2(-fountain::mainWin.w / 4.0f / ftPhysics::getRatio(), 0), mc.body->GetAngle());
+		mc.update();
+		drawCon.update();
+		ocPool.update();
+	}
 	if (state == 2) {
 		screenC.update();
 		repl.update();
@@ -526,52 +525,62 @@ void GameScene::otherDraw()
 	ftVec2 target = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
 	ftVec2 line = target - mc.getPosition();
 	line *= 0.125f;
-	ftVec2 line2 = bh.getPosition() - mc.getPosition();
-	line2 = line2 / 40.0f;
-	if (state == 1) {
-	if (bh.enable && line2.length() > 12.0f) {
-		ftRender::useColor(FT_Black);
-		for (int i = 1; i < 40; i++) {
-			ftRender::transformBegin();
-			ftRender::ftTranslate(mc.getPosition() + (line2 * i));
-			ftRender::drawCircle(10);
-			ftRender::transformEnd();
-		}
-		ftRender::useColor(FT_White);
-	}
-
-	}
+	ftVec2 lineHM = bh.getPosition() - mainCamera.getPosition();
+	ftVec2 lineHMC = bh.getPosition() - mc.getPosition();
+	float vecH = lineHMC.getDegree();
 	bh.draw();
 	mc.draw();
 	ocPool.draw();
 	ftRender::useColor(FT_White);
-
-	/*
-	for (unsigned j = 0; j < ls.size() - 1; j++) {
-		ftVec2 a = ls[j];
-		ftVec2 b = ls[j + 1];
-		ftRender::drawLine(a, b);
-	}
-	*/
 	if (state == 1) {
-
-	for (int i = 1; i < 8; i++) {
-		ftRender::transformBegin();
-		ftRender::ftTranslate(mc.getPosition() + (line * i));
-		ftRender::drawCircle(5);
-		ftRender::transformEnd();
+		if (bh.enable && !bh.getRect().collideRect(mainCamera.getCameraRect())) {
+			ftRender::useColor(FT_White);
+			ftRect rct;
+			rct = mainCamera.getCameraRect();
+			std::vector<ftVec2> vv = rct.collideSegment(mainCamera.getPosition(), bh.getPosition());
+			if (vv.size() > 0) {
+				vv[0] -= lineHM / (lineHM.length() / 79.0f);
+				ftRender::transformBegin();
+				ftRender::ftTranslate(vv[0]);
+				ftRender::ftRotate(0, 0, FT_R2D(vecH));
+				ftRender::drawAlphaPic(ftRender::getPicture("res/image/arrow.png"));
+				ftRender::transformEnd();
+			}
+		}
 	}
 
+	if (state == 1) {
+		for (int i = 1; i < 8; i++) {
+			ftRender::transformBegin();
+			ftRender::ftTranslate(mc.getPosition() + (line * i));
+			ftRender::drawCircle(5);
+			ftRender::transformEnd();
+		}
 	}
+
 	screenC.update();
+
+	scoreB.setColor(FT_Black);
+	timeB.setColor(FT_Black);
+	scoreB.move(5, -5);
+	timeB.move(5, -5);
+	scoreB.draw();
+	timeB.draw();
+
+	scoreB.setColor(FT_White);
+	timeB.setColor(FT_White);
+	scoreB.move(-5, 5);
+	timeB.move(-5, 5);
 	scoreB.draw();
 	timeB.draw();
 
 	if (state == 2) {
 		screenC.update();
 		ftRender::useColor(FT_Black);
-		ftRender::drawQuad(fountain::mainWin.w, 400);
+		ftRender::drawQuad(fountain::mainWin.w, fountain::mainWin.h / 2.0f);
 		repl.draw();
+		mc.drawAt(-fountain::mainWin.w / 4.0f, 0);
+		drawCon.draw();
 	}
 }
 

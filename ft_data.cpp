@@ -33,6 +33,14 @@ float ftVec2::length()
 	return std::pow(x * x + y * y, 0.5);
 }
 
+float ftVec2::getDegree()
+{
+	float d = std::atan(y / x);
+	if (x > 0) d -= FT_Pi / 2.0f;
+	else d += FT_Pi / 2.0f;
+	return d;
+}
+
 const ftVec2 ftVec2::operator-(const ftVec2 & v)
 {
 	return ftVec2(x - v.x, y - v.y);
@@ -236,6 +244,55 @@ bool ftRect::collidePoint(const ftVec2 & p)
 	int xx = x + w;
 	int yy = y + h;
 	return ((((x - p.x) * (xx - p.x)) <= 0) && (((y - p.y) * (yy - p.y)) <= 0));
+}
+
+bool ftRect::collideRect(const ftRect & r)
+{
+	ftRect rect = r;
+	ftVec2 dv = getCenter() - rect.getCenter();
+	float wSum = getW() + rect.getW();
+	float hSum = getH() + rect.getH();
+	float xD = FT_ABS(dv.x * 2.0f);
+	float yD = FT_ABS(dv.y * 2.0f);
+	return (xD <= wSum) && (yD <= hSum);
+}
+
+std::vector<ftVec2> ftRect::collideSegment(const ftVec2 & pa, const ftVec2 & pb)
+{
+	std::vector<ftVec2> prev;
+	std::vector<ftVec2> v;
+	ftVec2 kv(pb.x - pa.x, pb.y - pa.y);
+	ftVec2 tmp;
+	float k, b;
+	float rX, rY;
+	if (kv.x == 0.0f) {
+		//TODO: finish this function
+	} else {
+		k = kv.y / kv.x;
+		b = pa.y - k * pa.x;
+		rX = x;
+		rY = k * rX + b;
+		prev.push_back(ftVec2(rX, rY));
+		rX = x + w;
+		rY = k * rX + b;
+		prev.push_back(ftVec2(rX, rY));
+		if (k != 0.0f) {
+			rY = y;
+			rX = (rY - b) / k;
+			prev.push_back(ftVec2(rX, rY));
+			rY = y + h;
+			rX = (rY - b) / k;
+			prev.push_back(ftVec2(rX, rY));
+		}
+	}
+	for (unsigned i = 0; i < prev.size(); i++) {
+		tmp = prev[i];
+		if (collidePoint(tmp)) {
+			if ((tmp.x - pa.x) * (tmp.x - pb.x) <= 0 &&
+				(tmp.y - pa.y) * (tmp.y - pb.y) <= 0) v.push_back(prev[i]);
+		}
+	}
+	return v;
 }
 
 //class ftShape

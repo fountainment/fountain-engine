@@ -49,6 +49,7 @@ public:
 	int score;
 	void update();
 	void draw();
+	void drawAt(float x, float y);
 };
 
 typedef struct {

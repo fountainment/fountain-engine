@@ -88,8 +88,6 @@
 #define FT_ON 1
 #define FT_OFF 0
 
-#define FT_ABS(x) ((x)>0?(x):(-(x)))
-
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>

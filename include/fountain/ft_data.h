@@ -53,6 +53,7 @@ public:
 	ftVec2(float x, float y);
 	void move(float x, float y);
 	float length();
+	float getDegree();
 	const ftVec2 operator-(const ftVec2 & v);
 	void operator-=(const ftVec2 & v);
 	const ftVec2 operator+(const ftVec2 & v);
@@ -106,6 +107,8 @@ public:
 	void normalize();
 	void inflate(float x, float y);
 	bool collidePoint(const ftVec2 & p);
+	bool collideRect(const ftRect & r);
+	std::vector<ftVec2> collideSegment(const ftVec2 & pa, const ftVec2 & pb);
 };
 
 class ftShape
@@ -189,10 +192,6 @@ public:
 	void rotate(float aSpeed);
 	void setTag(int tag);
 	int getTag();
-	/*
-		void drawBegin();
-		void drawEnd();
-	*/
 };
 
 class ftFile
@@ -235,6 +234,7 @@ public:
 	void draw();
 	void doWith(void(*func)(_tp &node));
 	bool empty();
+	void clear();
 	int getAvailN();
 	virtual bool willLive(_tp &node);
 };
@@ -242,12 +242,7 @@ public:
 template <typename _tp, int _size>
 container<_tp, _size>::container()
 {
-	head = -1;
-	tail = -1;
-	for (int i = 0; i < _size; i++) {
-		avail[i] = i;
-	}
-	availN = _size;
+	clear();
 }
 
 template <typename _tp, int _size>
@@ -347,6 +342,17 @@ bool container<_tp, _size>::empty()
 		return true;
 	else
 		return false;
+}
+
+template <typename _tp, int _size>
+void container<_tp, _size>::clear()
+{
+	head = -1;
+	tail = -1;
+	for (int i = 0; i < _size; i++) {
+		avail[i] = i;
+	}
+	availN = _size;
 }
 
 template <typename _tp, int _size>

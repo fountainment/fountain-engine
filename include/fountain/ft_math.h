@@ -8,4 +8,6 @@
 #define FT_D2R(x) ((x) * 0.0174532924)
 #define FT_R2D(x) ((x) * 57.29577951)
 
+#define FT_ABS(x) ((x)>0?(x):(-(x)))
+
 #endif
