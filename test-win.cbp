@@ -53,6 +53,7 @@
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="main.cpp" />
+		<Unit filename="testscene.cpp" />
 		<Unit filename="testscene.h" />
 		<Extensions>
 			<code_completion />

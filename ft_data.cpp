@@ -1,7 +1,5 @@
 #include <fountain/ft_data.h>
-#include <fountain/ft_render.h>
-
-//debug
+#include <fountain/ft_math.h>
 #include <cstdio>
 #include <cstring>
 
@@ -24,9 +22,34 @@ ftVec2::ftVec2(float x, float y)
 	this->y = y;
 }
 
+void ftVec2::move(float x, float y)
+{
+	this->x += x;
+	this->y += y;
+}
+
+float ftVec2::length()
+{
+	return std::pow(x * x + y * y, 0.5);
+}
+
+float ftVec2::getDegree()
+{
+	float d = std::atan(y / x);
+	if (x > 0) d -= FT_Pi / 2.0f;
+	else d += FT_Pi / 2.0f;
+	return d;
+}
+
 const ftVec2 ftVec2::operator-(const ftVec2 & v)
 {
 	return ftVec2(x - v.x, y - v.y);
+}
+
+void ftVec2::operator-=(const ftVec2 & v)
+{
+	x -= v.x;
+	y -= v.y;
 }
 
 const ftVec2 ftVec2::operator+(const ftVec2 & v)
@@ -34,14 +57,31 @@ const ftVec2 ftVec2::operator+(const ftVec2 & v)
 	return ftVec2(x + v.x, y + v.y);
 }
 
+void ftVec2::operator+=(const ftVec2 & v)
+{
+	x += v.x;
+	y += v.y;
+}
+
 const ftVec2 ftVec2::operator*(float k)
 {
 	return ftVec2(x * k, y * k);
 }
 
+void ftVec2::operator*=(float k)
+{
+	x *= k;
+	y *= k;
+}
+
 const ftVec2 ftVec2::operator/(float k)
 {
 	return ftVec2(x / k, y / k);
+}
+
+const ftVec2 ftVec2::operator/(const ftVec2 & v)
+{
+	return ftVec2(x / v.x, y / v.y);
 }
 
 //class ftVec3
@@ -76,7 +116,7 @@ ftRect::ftRect()
 	h = 0;
 }
 
-ftRect::ftRect(ftVec2 pos, ftVec2 rSize)
+ftRect::ftRect(const ftVec2 & pos, const ftVec2 & rSize)
 {
 	x = pos.x;
 	y = pos.y;
@@ -92,7 +132,7 @@ ftVec2 ftRect::getCenter()
 	return p;
 }
 
-void ftRect::setCenter(ftVec2 p)
+void ftRect::setCenter(const ftVec2 & p)
 {
 	x = p.x - ftRect::w / 2.0f;
 	y = p.y - ftRect::h / 2.0f;
@@ -104,7 +144,7 @@ ftVec2 ftRect::getSize()
 	return p;
 }
 
-void ftRect::setSize(ftVec2 sz)
+void ftRect::setSize(const ftVec2 & sz)
 {
 	w = sz.x;
 	h = sz.y;
@@ -115,7 +155,7 @@ ftVec2 ftRect::getXY()
 	return ftVec2(ftRect::x, ftRect::y);
 }
 
-void ftRect::setXY(ftVec2 XY)
+void ftRect::setXY(const ftVec2 & XY)
 {
 	x = XY.x;
 	y = XY.y;
@@ -141,22 +181,22 @@ float ftRect::getH()
 	return h;
 }
 
-ftVec2 ftRect::getLB()
+const ftVec2 ftRect::getLB()
 {
 	return ftVec2(x, y);
 }
 
-ftVec2 ftRect::getLT()
+const ftVec2 ftRect::getLT()
 {
 	return ftVec2(x, y + h);
 }
 
-ftVec2 ftRect::getRT()
+const ftVec2 ftRect::getRT()
 {
 	return ftVec2(x + w, y + h);
 }
 
-ftVec2 ftRect::getRB()
+const ftVec2 ftRect::getRB()
 {
 	return ftVec2(x + w, y);
 }
@@ -199,11 +239,60 @@ void ftRect::normalize()
 	}
 }
 
-bool ftRect::collidePoint(ftVec2 p)
+bool ftRect::collidePoint(const ftVec2 & p)
 {
 	int xx = x + w;
 	int yy = y + h;
 	return ((((x - p.x) * (xx - p.x)) <= 0) && (((y - p.y) * (yy - p.y)) <= 0));
+}
+
+bool ftRect::collideRect(const ftRect & r)
+{
+	ftRect rect = r;
+	ftVec2 dv = getCenter() - rect.getCenter();
+	float wSum = getW() + rect.getW();
+	float hSum = getH() + rect.getH();
+	float xD = FT_ABS(dv.x * 2.0f);
+	float yD = FT_ABS(dv.y * 2.0f);
+	return (xD <= wSum) && (yD <= hSum);
+}
+
+std::vector<ftVec2> ftRect::collideSegment(const ftVec2 & pa, const ftVec2 & pb)
+{
+	std::vector<ftVec2> prev;
+	std::vector<ftVec2> v;
+	ftVec2 kv(pb.x - pa.x, pb.y - pa.y);
+	ftVec2 tmp;
+	float k, b;
+	float rX, rY;
+	if (kv.x == 0.0f) {
+		//TODO: finish this function
+	} else {
+		k = kv.y / kv.x;
+		b = pa.y - k * pa.x;
+		rX = x;
+		rY = k * rX + b;
+		prev.push_back(ftVec2(rX, rY));
+		rX = x + w;
+		rY = k * rX + b;
+		prev.push_back(ftVec2(rX, rY));
+		if (k != 0.0f) {
+			rY = y;
+			rX = (rY - b) / k;
+			prev.push_back(ftVec2(rX, rY));
+			rY = y + h;
+			rX = (rY - b) / k;
+			prev.push_back(ftVec2(rX, rY));
+		}
+	}
+	for (unsigned i = 0; i < prev.size(); i++) {
+		tmp = prev[i];
+		if (collidePoint(tmp)) {
+			if ((tmp.x - pa.x) * (tmp.x - pb.x) <= 0 &&
+				(tmp.y - pa.y) * (tmp.y - pb.y) <= 0) v.push_back(prev[i]);
+		}
+	}
+	return v;
 }
 
 //class ftShape
@@ -212,20 +301,8 @@ ftShape::ftShape(ftRect rct)
 	setN(1);
 	type = FT_Rect;
 	loop = true;
-//	data = new float[2];
 	data[0] = rct.getSize().x;
 	data[1] = rct.getSize().y;
-}
-
-ftShape::~ftShape()
-{
-	/*
-	if (data != NULL) {
-		std::printf("123\n");
-		delete data;
-		data = NULL;
-	}
-	*/
 }
 
 ftShape::ftShape(float r)
@@ -234,7 +311,6 @@ ftShape::ftShape(float r)
 	type = FT_Circle;
 	loop = true;
 	this->r = r;
-//	data = NULL;
 }
 
 ftShape::ftShape(const std::vector<ftVec2> & a, int n, bool loop)
@@ -245,8 +321,11 @@ ftShape::ftShape(const std::vector<ftVec2> & a, int n, bool loop)
 	else
 		type = FT_Line;
 	this->loop = loop;
-//	data = NULL;
 	setData(a);
+}
+
+ftShape::~ftShape()
+{
 }
 
 const float * ftShape::getData()
@@ -256,8 +335,6 @@ const float * ftShape::getData()
 
 void ftShape::setData(const std::vector<ftVec2> & a)
 {
-//	if (data != NULL) delete data;
-//	data = new float[a.size() * 2];
 	for (unsigned i = 0; i < a.size(); i++) {
 		data[i * 2] = a[i].x;
 		data[i * 2 + 1] = a[i].y;
@@ -289,31 +366,25 @@ int ftShape::getType()
 	return type;
 }
 
-/*
-ftShape::ftShape(const ftShape & shape)
+ftShape ftShape::makeRegularPolygonShape(int edgeN, float r)
 {
-	if (this != &shape) {
-		r = shape.r;
-		n = shape.n;
-		loop = shape.loop;
-		type = shape.type;
-		if (shape.data != NULL) {
-			data = new float[n * 2];
-			for (int i = 0; i < n * 2; i++) {
-				data[i] = shape.data[i];
-			}
-		}
-		else data = NULL;
+	float d = FT_Pi * 2.0f / edgeN;
+	std::vector<ftVec2> v;
+	for (int i = 0; i < edgeN; i++) {
+		v.push_back(ftVec2(std::cos(d * i) * r, std::sin(d * i) * r));
 	}
+	return ftShape(v, edgeN, true);
 }
-*/
 
 //class ftSprite
 ftSprite::ftSprite()
 {
 	color = FT_White;
-	setPosition(ftVec2(0, 0));
-	setRectSize(ftVec2(0, 0));
+	setPosition(0, 0);
+	setRectSize(0, 0);
+	scale = 1.0f;
+	die = false;
+	enable = true;
 }
 
 void ftSprite::setColor(const ftColor & c)
@@ -326,14 +397,15 @@ const ftColor & ftSprite::getColor()
 	return color;
 }
 
-void ftSprite::setPosition(ftVec2 pos)
+void ftSprite::setPosition(const ftVec2 & pos)
 {
 	position = pos;
 }
 
 void ftSprite::setPosition(float x, float y)
 {
-	position = ftVec2(x, y);
+	position.x = x;
+	position.y = y;
 }
 
 ftVec2 ftSprite::getPosition()
@@ -343,7 +415,7 @@ ftVec2 ftSprite::getPosition()
 
 void ftSprite::setAngle(float agl)
 {
-	agl *= 180.0f / 3.14159f;
+	agl = FT_R2D(agl);
 	angle = agl;
 }
 
@@ -352,9 +424,15 @@ float ftSprite::getAngle()
 	return angle;
 }
 
-void ftSprite::setRectSize(ftVec2 rts)
+void ftSprite::setRectSize(const ftVec2 & rts)
 {
 	rectSize = rts;
+}
+
+void ftSprite::setRectSize(float x, float y)
+{
+	rectSize.x = x;
+	rectSize.y = y;
 }
 
 ftVec2 ftSprite::getRectSize()
@@ -376,24 +454,38 @@ ftRect ftSprite::getRect()
 	return rct;
 }
 
-void ftSprite::setShape(const ftShape & shape)
-{
-	this->shape = shape;
-}
-
 void ftSprite::draw()
 {
-	ftVec2 pos = getPosition();
-	ftRender::transformBegin();
-	ftRender::useColor(color);
-	ftRender::ftTranslate(pos.x, pos.y);
-	ftRender::drawShape(shape, getAngle());
-	ftRender::transformEnd();
 }
 
-void ftSprite::move(ftVec2 x)
+void ftSprite::update()
 {
-	position = position + x;
+}
+
+void ftSprite::move(const ftVec2 & x)
+{
+	position += x;
+}
+
+void ftSprite::move(float x, float y)
+{
+	position.x += x;
+	position.y += y;
+}
+
+void ftSprite::rotate(float aSpeed)
+{
+	angle += aSpeed;
+}
+
+void ftSprite::setTag(int tag)
+{
+	this->tag = tag;
+}
+
+int ftSprite::getTag()
+{
+	return tag;
 }
 
 //class ftColor
@@ -434,7 +526,7 @@ int Hex2Dec(std::string hexs)
 	return ans;
 }
 
-ftColor::ftColor(std::string s)
+ftColor::ftColor(std::string s, float a)
 {
 	float r = 1.0f;
 	float g = 1.0f;
@@ -463,11 +555,12 @@ ftColor::ftColor(std::string s)
 	}
 	if (!correct) {
 		//TODO: debug output
+		return;
 	}
 	setR(r);
 	setG(g);
 	setB(b);
-	setAlpha(1.0f);
+	setAlpha(a);
 }
 
 ftColor::ftColor(float r, float g, float b, float a)
@@ -570,15 +663,15 @@ bool ftFile::load(const char *filename)
 	if (f != NULL) {
 		std::fseek(f, 0, SEEK_END);
 		length = std::ftell(f);
-		std::printf("%s: size %d\n", filename, length);
 		str = new char[length + 1];
 		std::fseek(f, 0, SEEK_SET);
 		while (std::fscanf(f, "%c", &tmpChar) != EOF) {
 			str[index] = tmpChar;
 			index++;
 		}
-		str[length] = '\0';
+		str[index] = '\0';
 		std::fclose(f);
+		std::printf("%s: size %d\n", filename, index);
 		return true;
 	} else {
 		std::printf("Open \"%s\" error!\n", filename);

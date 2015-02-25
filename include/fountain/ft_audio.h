@@ -8,7 +8,8 @@ namespace ftAudio {
 bool init();
 void close();
 
-class Channel {
+class Channel
+{
 private:
 	ALuint source;
 	ALuint buffer;
@@ -20,8 +21,9 @@ public:
 	void play();
 	void pause();
 	void stop();
+	void setLoop(bool loop);
 };
 
-};
+}
 
 #endif

@@ -1,4 +1,4 @@
-#include <fountain/ft_render.h>
+#include <fountain/fountaindef.h>
 #include <GL/glx.h>
 #include <X11/X.h>
 #include <X11/keysym.h>
@@ -167,6 +167,7 @@ int main(int argc, char **argv)
 
 	for (;;)
 	{
+		ftTime::initPerFrame();
 		//TODO: use a better way to solve input frame init
 		ftInput::initPerFrame();
 

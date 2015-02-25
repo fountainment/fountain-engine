@@ -4,8 +4,13 @@
 using ftScene::Scene;
 using ftScene::SceneSelector;
 
+namespace fountain {
+SceneSelector sceneSelector(&fountain::mainClock);
+}
+
 bool ftScene::init()
 {
+	fountain::sceneSelector.mainClock.init();
 	return true;
 }
 
@@ -13,85 +18,71 @@ void ftScene::close()
 {
 }
 
-Scene::Scene(void (*init)(Scene *sc), void (*update)(Scene *sc), void (*draw)(Scene *sc), void (*uninit)(Scene *sc)) {
-	initPtr = init;
-	updatePtr = update;
-	drawPtr = draw;
-	destroyPtr = uninit;
-	end = false;
-	isInit = false;
-	needDestroy = false;
+//class ftScene::Scene
+Scene::Scene()
+{
+}
+
+Scene::~Scene()
+{
+}
+
+void Scene::baseInit()
+{
+	mainCamera.setViewport(fountain::getWinRect());
+	mainClock = ftTime::Clock(&fountain::sceneSelector.mainClock);
+	mainClock.init();
 }
 
 void Scene::init()
 {
-	if (initPtr != NULL)
-		initPtr(this);
-	mainClock.init();
-	isInit = true;
+}
+
+void Scene::baseUpdate()
+{
+	mainClock.tick();
 }
 
 void Scene::update()
 {
-	mainClock.tick();
-	if (updatePtr != NULL)
-		updatePtr(this);
 }
 
 void Scene::draw()
 {
-	if (drawPtr != NULL)
-		drawPtr(this);
 }
 
 void Scene::destroy()
 {
-	if (destroyPtr != NULL)
-		destroyPtr(this);
-	isInit = false;
 }
 
-void Scene::Pause()
+void Scene::pause()
 {
-	mainClock.Pause();
-	pause = true;
+	mainClock.pause();
+	isPause = true;
 }
 
-void Scene::Continue()
+void Scene::resume()
 {
-	mainClock.Continue();
-	pause = false;
+	mainClock.resume();
+	isPause = false;
 }
 
-void Scene::gotoScene(int next, int animeSceneIndex, bool destroyCurScene)
+//class ftScene::SceneSelector
+SceneSelector::SceneSelector(ftTime::Clock *masterClock)
 {
-	end = true;
-	needDestroy = destroyCurScene;
-	this->next = next;
-}
-
-SceneSelector::SceneSelector()
-{
-	for (int i = 0; i < FT_SceneMax; i++)
-		scene[i] = NULL;
-	cur = FT_StartScene;
-}
-
-void SceneSelector::registerScene(Scene *sc, int index)
-{
-	if (index >= 0 && index < FT_SceneMax) {
-		scene[index] = sc;
-		if (index == FT_StartScene) sc->init();
-	} else {
-		//TODO:add debug info output
-	}
+	curScene = NULL;
+	oldScene = NULL;
+	destroyOldScene = false;
+	mainClock = ftTime::Clock(masterClock);
 }
 
 void SceneSelector::update()
 {
-	Scene *sc = scene[cur];
 	mainClock.tick();
-	if (sc != NULL) sc->update();
+	if (curScene != NULL) {
+		curScene->baseUpdate();
+		curScene->update();
+	}
 	else {
 		//TODO:add debug info output
 	}
@@ -99,23 +90,44 @@ void SceneSelector::update()
 
 void SceneSelector::draw()
 {
-	Scene *sc = scene[cur];
-	if (sc != NULL) sc->draw();
+	if (curScene != NULL) curScene->draw();
 	else {
 		//TODO:add debug info output
 	}
 }
 
-void SceneSelector::sceneSolve()
+Scene* SceneSelector::getCurScene()
 {
-	Scene *sc = scene[cur];
-	if (sc != NULL && sc->end) {
-		if (sc->needDestroy)
-			sc->destroy();
-		cur = sc->next;
-		sc->end = false;
-		sc = scene[cur];
-		if (!sc->isInit) sc->init();
-	}
+	return curScene;
 }
 
+void SceneSelector::doAll()
+{
+	update();
+	if (destroyOldScene && oldScene != NULL) {
+		curScene = nextScene;
+		delete oldScene;
+		oldScene = NULL;
+		destroyOldScene = false;
+	}
+	draw();
+}
+
+void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destroyCurScene)
+{
+	if (curScene != NULL && destroyCurScene) {
+		curScene->destroy();
+		oldScene = curScene;
+		destroyOldScene = true;
+	}
+	this->nextScene = nextScene;
+	//TODO: to init or not
+	if (nextScene != NULL) {
+		nextScene->baseInit();
+		nextScene->init();
+		nextScene->update();
+	}
+	if (curScene == NULL) {
+		curScene = nextScene;
+	}
+}

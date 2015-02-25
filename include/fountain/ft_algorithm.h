@@ -3,8 +3,6 @@
 
 #include <vector>
 
-#define FT_Pi 3.14159f
-
 namespace ftAlgorithm {
 
 bool init();
@@ -16,6 +14,6 @@ float randRangef(float l, float r);
 std::vector<unsigned long> utf8toUnicode(const char *input);
 int nextPower2(int num);
 
-};
+}
 
 #endif

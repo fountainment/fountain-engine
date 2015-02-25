@@ -88,16 +88,48 @@
 #define FT_ON 1
 #define FT_OFF 0
 
-#define FT_StartScene 0
-#define FT_Scene1 1
-#define FT_Scene2 2
-#define FT_Scene3 3
-#define FT_Scene4 4
-#define FT_Scene5 5
-#define FT_Scene6 6
-#define FT_Scene7 7
-#define FT_Scene8 8
-#define FT_Scene9 9
-#define FT_EndScene -1
+#include <cstdlib>
+#include <cstdio>
+#include <cstring>
+#include <cmath>
+
+#include <algorithm>
+#include <vector>
+#include <stack>
+#include <queue>
+#include <map>
+
+#include <fountain/ft_math.h>
+#include <fountain/ft_data.h>
+#include <fountain/ft_time.h>
+#include <fountain/ft_3dmodel.h>
+#include <fountain/ft_render.h>
+#include <fountain/ft_physics.h>
+#include <fountain/ft_input.h>
+#include <fountain/ft_algorithm.h>
+#include <fountain/ft_scene.h>
+#include <fountain/ft_type.h>
+#include <fountain/ft_audio.h>
+#include <fountain/ft_ui.h>
+
+namespace fountain {
+
+void checkSysState();
+void readSettingFile();
+
+void basicSetting();
+
+void initAllSystem();
+void closeAllSystem();
+
+//these three functions are what you should implement
+void setBasicVarible();
+void gameInit();
+void singleFrame();
+
+ftVec2 getWinSize();
+ftRect getWinRect();
+
+}
 
 #endif

@@ -38,28 +38,43 @@ typedef struct {
 		h4 = h / 4.0f;
 	}
 
+	void setSize(int w, int h) {
+		setW(w);
+		setH(h);
+	}
+
 } winState;
 
-class ftVec2 {
+class ftVec2
+{
 public:
 	float x, y;
 	ftVec2();
 	ftVec2(float x, float y);
+	void move(float x, float y);
+	float length();
+	float getDegree();
 	const ftVec2 operator-(const ftVec2 & v);
+	void operator-=(const ftVec2 & v);
 	const ftVec2 operator+(const ftVec2 & v);
+	void operator+=(const ftVec2 & v);
 	const ftVec2 operator*(float k);
+	void operator*=(float k);
 	const ftVec2 operator/(float k);
+	const ftVec2 operator/(const ftVec2 & v);
 };
 
 
-class ftVec3 {
+class ftVec3
+{
 public:
 	float xyz[3];
 	ftVec3();
 	ftVec3(float x, float y, float z);
 };
 
-class ftRect {
+class ftRect
+{
 private:
 	float x;
 	float y;
@@ -68,33 +83,36 @@ private:
 public:
 	ftRect(float x, float y, float w, float h);
 	ftRect();
-	ftRect(ftVec2 pos, ftVec2 rSize);
+	ftRect(const ftVec2 & pos, const ftVec2 & rSize);
 	ftVec2 getCenter();
 
-	void setCenter(ftVec2 p);
+	void setCenter(const ftVec2 & p);
 	ftVec2 getXY();
-	void setXY(ftVec2 XY);
+	void setXY(const ftVec2 & XY);
 	ftVec2 getSize();
-	void setSize(ftVec2 sz);
+	void setSize(const ftVec2 & sz);
 
 	float getX();
 	float getY();
 	float getW();
 	float getH();
 
-	ftVec2 getLB();
-	ftVec2 getLT();
-	ftVec2 getRT();
-	ftVec2 getRB();
+	const ftVec2 getLB();
+	const ftVec2 getLT();
+	const ftVec2 getRT();
+	const ftVec2 getRB();
 	void getFloatVertex(float *v);
 
 	void move(float x, float y);
 	void normalize();
 	void inflate(float x, float y);
-	bool collidePoint(ftVec2 p);
+	bool collidePoint(const ftVec2 & p);
+	bool collideRect(const ftRect & r);
+	std::vector<ftVec2> collideSegment(const ftVec2 & pa, const ftVec2 & pb);
 };
 
-class ftShape {
+class ftShape
+{
 private:
 	float data[32];
 	float r;
@@ -105,10 +123,9 @@ private:
 	void setN(int n);
 public:
 	ftShape(ftRect rct);
-	//ftShape(const ftShape & shape);
-	~ftShape();
 	ftShape(float r = 0.1f);
 	ftShape(const std::vector<ftVec2> & a, int n, bool loop = true);
+	~ftShape();
 
 	const float * getData();
 	void setData(const std::vector<ftVec2> & a);
@@ -119,6 +136,8 @@ public:
 	float getR();
 
 	int getType();
+
+	static ftShape makeRegularPolygonShape(int edgeN, float r);
 };
 
 class ftColor
@@ -128,7 +147,7 @@ private:
 	float checkValue(float v);
 public:
 	ftColor();
-	ftColor(std::string);
+	ftColor(std::string s, float a = 1.0f);
 	ftColor(float r, float g, float b, float a = 1.0f);
 	void inverse();
 	void setR(float r);
@@ -141,31 +160,38 @@ public:
 	float getAlpha();
 };
 
-class ftSprite {
+class ftSprite
+{
 private:
 	ftVec2 position;
 	ftVec2 rectSize;
 	float angle;
 	ftColor color;
+	float scale;
+	int tag;
 public:
-	//TODO: move the shape out
-	ftShape shape;
+	bool die;
+	bool enable;
 	ftSprite();
-	void setPosition(ftVec2 pos);
+	void setPosition(const ftVec2 & pos);
 	void setPosition(float x, float y);
 	ftVec2 getPosition();
 	void setAngle(float agl);
 	float getAngle();
-	void setRectSize(ftVec2 rts);
+	void setRectSize(const ftVec2 & rts);
+	void setRectSize(float x, float y);
 	ftVec2 getRectSize();
 	void setRect(ftRect rct);
 	ftRect getRect();
 	void setColor(const ftColor & c);
-	void setShape(const ftShape & shape);
 	const ftColor & getColor();
 	void draw();
 	void update();
-	void move(ftVec2 x);
+	void move(const ftVec2 & x);
+	void move(float x, float y);
+	void rotate(float aSpeed);
+	void setTag(int tag);
+	int getTag();
 };
 
 class ftFile
@@ -184,17 +210,20 @@ public:
 	const char* getStr();
 };
 
-//TODO: add bool container::willLive(_tp & node)
 template <typename _tp, int _size>
-class container : public ftSprite {
+class container : public ftSprite
+{
 private:
-	_tp list[_size];
-	int head;
 	int tail;
 	int avail[_size];
 	int availN;
 	int prev[_size];
+
+protected:
+	_tp list[_size];
+	int head;
 	int next[_size];
+
 public:
 	container();
 	_tp getHead();
@@ -203,21 +232,17 @@ public:
 	bool delHead();
 	void update();
 	void draw();
-	void doWith(void(*func)(_tp));
+	void doWith(void(*func)(_tp &node));
 	bool empty();
+	void clear();
 	int getAvailN();
-	bool willLive(_tp &node);
+	virtual bool willLive(_tp &node);
 };
 
 template <typename _tp, int _size>
 container<_tp, _size>::container()
 {
-	head = -1;
-	tail = -1;
-	for (int i = 0; i < _size; i++) {
-		avail[i] = i;
-	}
-	availN = _size;
+	clear();
 }
 
 template <typename _tp, int _size>
@@ -276,9 +301,17 @@ template <typename _tp, int _size>
 void container<_tp, _size>::update()
 {
 	int cur = head;
+	bool kill;
+	int kn;
 	while (cur != -1) {
 		list[cur].update();
+		kill = false;
+		if (!willLive(list[cur])) {
+			kill = true;
+			kn = cur;
+		}
 		cur = next[cur];
+		if (kill) del(kn);
 	}
 }
 
@@ -293,7 +326,7 @@ void container<_tp, _size>::draw()
 }
 
 template <typename _tp, int _size>
-void container<_tp, _size>::doWith(void (*func) (_tp))
+void container<_tp, _size>::doWith(void (*func) (_tp &node))
 {
 	int cur = head;
 	while (cur != -1) {
@@ -312,6 +345,17 @@ bool container<_tp, _size>::empty()
 }
 
 template <typename _tp, int _size>
+void container<_tp, _size>::clear()
+{
+	head = -1;
+	tail = -1;
+	for (int i = 0; i < _size; i++) {
+		avail[i] = i;
+	}
+	availN = _size;
+}
+
+template <typename _tp, int _size>
 int container<_tp, _size>::getAvailN()
 {
 	return availN;
@@ -323,10 +367,47 @@ bool container<_tp, _size>::willLive(_tp &node)
 	return true;
 }
 
+//pointer specification
+template <typename _tp, int _size>
+class ptrContainer : public container<_tp, _size>
+{
+public:
+	void update();
+	void draw();
+};
+
+template <typename _tp, int _size>
+void ptrContainer<_tp, _size>::update()
+{
+	int cur = this->head;
+	bool kill;
+	int kn;
+	while (cur != -1) {
+		this->list[cur]->update();
+		kill = false;
+		if (!this->willLive(this->list[cur])) {
+			kill = true;
+			kn = cur;
+		}
+		cur = this->next[cur];
+		if (kill) this->del(kn);
+	}
+}
+
+template <typename _tp, int _size>
+void ptrContainer<_tp, _size>::draw()
+{
+	int cur = this->head;
+	while (cur != -1) {
+		this->list[cur]->draw();
+		cur = this->next[cur];
+	}
+}
+
 namespace fountain {
 
 extern winState mainWin;
 
-};
+}
 
 #endif

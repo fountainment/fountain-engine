@@ -26,7 +26,7 @@
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
 				<Compiler>
-					<Add option="-O1" />
+					<Add option="-O2" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -34,7 +34,6 @@
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
 			<Add directory="include" />
 			<Add directory="." />
 			<Add directory="/usr/include/freetype2" />
@@ -43,6 +42,7 @@
 		<Unit filename="ft_algorithm.cpp" />
 		<Unit filename="ft_audio.cpp" />
 		<Unit filename="ft_data.cpp" />
+		<Unit filename="ft_fountain.cpp" />
 		<Unit filename="ft_input.cpp" />
 		<Unit filename="ft_physics.cpp" />
 		<Unit filename="ft_render.cpp" />
@@ -57,6 +57,7 @@
 		<Unit filename="include/fountain/ft_audio.h" />
 		<Unit filename="include/fountain/ft_data.h" />
 		<Unit filename="include/fountain/ft_input.h" />
+		<Unit filename="include/fountain/ft_math.h" />
 		<Unit filename="include/fountain/ft_physics.h" />
 		<Unit filename="include/fountain/ft_render.h" />
 		<Unit filename="include/fountain/ft_scene.h" />

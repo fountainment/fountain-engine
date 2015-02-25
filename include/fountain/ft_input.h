@@ -2,7 +2,6 @@
 #define _FT_INPUT_H_
 
 #include <fountain/fountaindef.h>
-#include <fountain/ft_data.h>
 
 #define FT_KEYBOARDSTATE_SIZE 0x01ff
 #define FT_MOUSESTATE_SIZE 10
@@ -14,7 +13,8 @@ void close();
 
 void initPerFrame();
 
-class Mouse {
+class Mouse
+{
 private:
 	ftVec2 coor;
 	ftVec2 lastCoorNor;
@@ -31,7 +31,8 @@ public:
 	void clearState();
 };
 
-class Keyboard {
+class Keyboard
+{
 private:
 	int state[FT_KEYBOARDSTATE_SIZE];
 public:
@@ -48,6 +49,6 @@ namespace fountain {
 extern ftInput::Mouse sysMouse;
 extern ftInput::Keyboard sysKeyboard;
 
-};
+}
 
 #endif

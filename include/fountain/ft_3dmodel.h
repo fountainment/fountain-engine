@@ -6,17 +6,17 @@ namespace ft3DModel {
 bool init();
 void close();
 
-class ObjModel {
+class ObjModel
+{
 private:
 	int vecN;
 	int indexN;
 	float (*vtx)[3];
-	int neverRendered;
-	int listIndex;
 public:
+	ObjModel();
 	explicit ObjModel(const char *fileName);
 	~ObjModel();
-	void openFile(const char *fileName);
+	void loadObj(const char *fileName);
 	void render();
 };
 

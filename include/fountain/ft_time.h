@@ -4,35 +4,49 @@
 namespace ftTime {
 
 bool init();
+void initPerFrame();
 void close();
+float getFps();
 
-class Clock {
+class Clock
+{
 private:
-	double secondPerFrame;
+	float secondPerFrame;
+	float perFrameWaitTime;
+	float beginT;
+	float endT;
+	float deltaT;
 	bool isPaused;
-	double firstT;
-	double beginT;
-	double pauseT;
-	double continueT;
-	double endT;
-	double deltaT;
-	double timeScale;
-	//TODO: use frameCount to calculate real fps
+	float timeScale;
+	float firstT;
+	float pauseT;
+	float continueT;
+	float totalT;
 	long long frameCount;
-	//TODO: use totalT to add slave mode
-	double totalT;
+	Clock *masterClock;
+	bool slave;
+	float getCurTime();
 public:
-	explicit Clock(double fps = 0.0);
+	explicit Clock(float fps = 0.0);
+	explicit Clock(Clock *mClock);
 	void init();
 	void tick();
-	void Pause();
-	void Continue();
+	void pause();
+	void resume();
 	bool isPause();
-	double getDeltaT();
-	double secondsFromInit();
-	double secondsFromPause();
-	double secondsFromContinue();
+	void setFps(float fps);
+	float getDeltaT();
+	float getTotalT();
+	long long getFrameCount();
+	float secondsFromInit();
+	float secondsFromPause();
+	float secondsFromContinue();
 };
+
+}
+
+namespace fountain {
+extern ftTime::Clock mainClock;
 }
 
 #endif

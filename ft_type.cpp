@@ -1,13 +1,14 @@
-#include <fountain/ft_type.h>
-#include <fountain/ft_render.h>
-#include <fountain/ft_algorithm.h>
+#include <fountain/fountaindef.h>
 #include <cstdio>
 #include <vector>
 
 using ftType::charInfo;
 using ftType::FontMan;
 
+static bool alive = false;
 FT_Library library;
+
+FontMan *defaultFontMan;
 
 bool ftType::init()
 {
@@ -15,12 +16,19 @@ bool ftType::init()
 	if (error) {
 		return false;
 	}
+	alive = true;
 	return true;
 }
 
 void ftType::close()
 {
 	FT_Done_FreeType(library);
+	alive = false;
+}
+
+bool ftType::isAlive()
+{
+	return alive;
 }
 
 //class ftType::charInfo
@@ -30,7 +38,7 @@ charInfo::charInfo()
 	advance = ftVec2(0.0f, 0.0f);
 }
 
-charInfo::charInfo(ftVec2 ct, ftVec2 adv)
+charInfo::charInfo(const ftVec2 & ct, const ftVec2 & adv)
 {
 	center = ct;
 	advance = adv;
@@ -58,10 +66,9 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
-	//FIXME: double free when delete the pic
-	//ftRender::deletePicture(picID);
-	//TODO: try to do the FT_Done_Face before the module close
-	//FT_Done_Face(face);
+	if (ftType::isAlive()) FT_Done_Face(face);
+	if (ftRender::isAlive()) ftRender::deletePicture(picID);
+	if (defaultFontMan == this) defaultFontMan = NULL;
 }
 
 bool FontMan::loadFont(const char *fontname)
@@ -129,7 +136,7 @@ void FontMan::genStringTable(const char *str, int h)
 }
 
 //TODO: complete this function
-int FontMan::drawString(std::vector<unsigned long> s)
+int FontMan::drawString(const std::vector<unsigned long> & s)
 {
 	ftVec2 pen(0, 0);
 	FT_Int previous = 0;
@@ -139,9 +146,28 @@ int FontMan::drawString(std::vector<unsigned long> s)
 		ftRender::SubImage im = unicode2SubImage[s[i]];
 		ftRender::transformBegin();
 		ftRender::ftTranslate(pen + ch.center);
-		ftRender::useColor(ftRender::getGlobalColor());
 		ftRender::drawImage(im);
 		ftRender::transformEnd();
+		pen = pen + ch.advance;
+		//kerning
+		glyphIndex = FT_Get_Char_Index(face, s[i]);
+		if (useKerning && previous && glyphIndex) {
+			FT_Vector delta;
+			FT_Get_Kerning(face, previous, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			pen.x += delta.x >> 6;
+		}
+		previous = glyphIndex;
+	}
+	return pen.x;
+}
+
+int FontMan::getStringLength(const std::vector<unsigned long> & s)
+{
+	ftVec2 pen(0, 0);
+	FT_Int previous = 0;
+	FT_UInt glyphIndex;
+	for (unsigned i = 0; i < s.size(); i++) {
+		charInfo ch = unicode2charInfo[s[i]];
 		pen = pen + ch.advance;
 		//kerning
 		glyphIndex = FT_Get_Char_Index(face, s[i]);

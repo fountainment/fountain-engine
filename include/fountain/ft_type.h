@@ -10,17 +10,19 @@ namespace ftType {
 
 bool init();
 void close();
+bool isAlive();
 
 class charInfo
 {
 public:
 	charInfo();
-	charInfo(ftVec2 ct, ftVec2 adv);
+	charInfo(const ftVec2 & ct, const ftVec2 & adv);
 	ftVec2 center;
 	ftVec2 advance;
 };
 
-class FontMan {
+class FontMan
+{
 private:
 	int picID;
 	FT_Face face;
@@ -36,10 +38,13 @@ public:
 	void genAsciiTable(int h = 16);
 	void genStringTable(const char *str, int h = 16);
 	int drawString(const char *str);
-	int drawString(std::vector<unsigned long> s);
+	int drawString(const std::vector<unsigned long> & s);
+	int getStringLength(const std::vector<unsigned long> & s);
 	int getFontSize();
 };
 
-};
+}
+
+extern ftType::FontMan *defaultFontMan;
 
 #endif

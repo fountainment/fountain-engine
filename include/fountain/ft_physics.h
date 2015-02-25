@@ -17,39 +17,53 @@ bool init();
 void close();
 
 void setRatio(float rt);
+float getRatio();
 void setIterations(int vIter, int pIter);
 ftVec2 render2Physics(ftVec2 v);
 ftVec2 physics2Render(ftVec2 v);
+
+b2Shape* createb2ShapeWithFtShape(ftShape & shape);
+b2Body* createBodyInWorld(b2World* world, float x, float y, int type);
 
 class Body : public ftSprite
 {
 private:
 public:
+	ftShape shape;
 	b2Body* body;
 	int bodyType;
+	ftRender::SubImage im;
 
 	Body();
+	~Body();
 	Body(float x, float y, int bodyT = FT_Dynamic);
 	void setBody(b2Body* b2bd);
+	void setImage(const ftRender::SubImage & image);
 	void autoCreateFixtures();
 	void update();
+	void draw();
+	void setShape(const ftShape & shape);
+	void setVelocity(ftVec2 v);
 };
 
 class World
 {
 private:
-	container<Body*, BODY_MAXNUM> bodyCon;
+	ptrContainer<Body*, BODY_MAXNUM> bodyCon;
+	bool doDebugDraw;
 public:
 	b2World* world;
-	World(ftVec2 gravity);
+	World(ftVec2 gravity = ftVec2(0, -10));
+	~World();
 	bool addBody(Body* bd);
 	void delHeadBody();
 	void update();
 	void update(float timeStep);
 	void draw();
 	bool empty();
+	void setDebugDraw(bool dd);
 };
 
-};
+}
 
 #endif

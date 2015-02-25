@@ -50,6 +50,7 @@
 			<Add library="openal" />
 		</Linker>
 		<Unit filename="main.cpp" />
+		<Unit filename="testscene.cpp" />
 		<Unit filename="testscene.h" />
 		<Extensions>
 			<code_completion />

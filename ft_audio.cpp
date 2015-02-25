@@ -1,4 +1,4 @@
-#include <fountain/ft_audio.h>
+#include <fountain/fountaindef.h>
 #include <AL/al.h>
 #include <AL/alc.h>
 
@@ -151,6 +151,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		             *size, *frequency);
 		//errorCheck();
 		//clean up and return true if successful
+		delete [] data;
 		fclose(soundFile);
 		return true;
 	} catch(const char *error) {
@@ -198,9 +199,8 @@ Channel::Channel()
 
 Channel::~Channel()
 {
-	//seem to be unnecessary to do these
-	//alDeleteSources(1, &source);
-	//alDeleteBuffers(1, &buffer);
+	alDeleteSources(1, &source);
+	alDeleteBuffers(1, &buffer);
 }
 
 void Channel::init()
@@ -210,7 +210,7 @@ void Channel::init()
 	alSourcef(source, AL_GAIN, 1.0f);
 	alSourcefv(source, AL_POSITION, sourcePos);
 	alSourcefv(source, AL_VELOCITY, sourceVel);
-	alSourcei(source, AL_LOOPING, AL_FALSE);
+	setLoop(false);
 }
 
 bool Channel::load(const char *filename)
@@ -238,4 +238,13 @@ void Channel::pause()
 void Channel::stop()
 {
 	alSourceStop(source);
+}
+
+void Channel::setLoop(bool loop)
+{
+	if (loop) {
+		alSourcei(source, AL_LOOPING, AL_TRUE);
+	} else {
+		alSourcei(source, AL_LOOPING, AL_FALSE);
+	}
 }

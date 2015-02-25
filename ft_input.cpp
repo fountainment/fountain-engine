@@ -1,5 +1,4 @@
-#include <fountain/ft_input.h>
-#include <fountain/ft_data.h>
+#include <fountain/fountaindef.h>
 #include <cstring>
 #include <stack>
 
@@ -44,7 +43,7 @@ void ftInput::initPerFrame()
 	}
 }
 
-//Mouse
+//class ftInput::Mouse
 Mouse::Mouse()
 {
 	clearState();
@@ -96,7 +95,7 @@ void Mouse::clearState()
 	std::memset(state, 0, sizeof(state));
 }
 
-//Keyboard
+//class ftInput::Keyboard
 Keyboard::Keyboard()
 {
 	clearState();

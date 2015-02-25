@@ -1,4 +1,4 @@
-#include <fountain/ft_algorithm.h>
+#include <fountain/fountaindef.h>
 #include <cstdlib>
 #include <cstring>
 

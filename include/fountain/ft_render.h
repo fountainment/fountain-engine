@@ -5,7 +5,7 @@
 #include <map>
 
 #define FT_CAMERA_NEAR 100.0f
-#define FT_CAMERA_FAR 1000.0f
+#define FT_CAMERA_FAR 2000.0f
 
 #define FT_PLANE 1
 #define FT_PERSPECTIVE 2
@@ -27,10 +27,12 @@ namespace ftRender {
 
 bool init();
 void close();
+bool isAlive();
 
 void clearColorDepthBuffer();
 
 void transformBegin();
+void transformBegin(float x, float y, float degree = 0.0f, float scale = 1.0f, ftColor c = FT_White);
 void transformEnd();
 void ftTranslate(float x, float y, float z = 0.0f);
 void ftTranslate(ftVec2 xy, float z = 0.0f);
@@ -42,17 +44,22 @@ void ftColor3f(float r, float g, float b);
 void useColor(ftColor c);
 ftColor getGlobalColor();
 
+void setLineWidth(float w);
+
 void openLineSmooth();
 void openPointSmooth();
 void openPolygonSmooth();
-void setClearColor(int r, int g, int b);
+void setClearColor(ftColor c);
 
 void drawLine(float x1, float y1, float x2, float y2);
-void drawLine(ftVec2 p1, ftVec2 p2);
+void drawLine(const ftVec2 & p1, const ftVec2 & p2);
 void drawQuad(float w, float h);
-void drawRect(ftRect rct, float angle = 0.0f);
-void drawCircle();
+void drawQuadEdge(float w, float h);
+void drawRect(ftRect & rct, float angle = 0.0f);
+void drawCircle(float radius);
+void drawCircleEdge(float radius);
 void drawShape(ftShape & shape, float angle = 0.0f);
+void drawShapeEdge(ftShape & shape, float angle = 0.0f);
 
 //TODO: implement this function drawBitmap
 void drawBitmap(unsigned char *bits, int width, int height, int dataType = FT_RGBA, int x = 0, int y = 0);
@@ -68,7 +75,8 @@ void deleteAllPictures();
 void useShader();
 void useFFP();
 
-class SubImage {
+class SubImage
+{
 private:
 	int picID;
 	ftVec2 size;
@@ -76,21 +84,23 @@ private:
 public:
 	SubImage();
 	SubImage(int picID);
-	SubImage(int picID, ftRect rect);
-	SubImage(const char *picName, ftRect rect);
-	SubImage(SubImage image, ftRect rect);
+	SubImage(int picID, ftRect & rect);
+	SubImage(const char *picName, ftRect & rect);
+	SubImage(SubImage image, ftRect & rect);
 	void setPicID(int id);
 	int getPicID();
 	const ftVec2 & getSize();
-	void setSize(ftVec2 size);
+	void setSize(const ftVec2 size);
 	const float * getTexCoor();
 };
 
 SubImage getImage(int picID);
 SubImage getImage(const char *filename);
 void drawImage(SubImage & im);
+void drawImage(SubImage & im, float x, float y, float degree = 0.0f, float scale = 1.0f, ftColor c = FT_White);
 
-class SubImagePool {
+class SubImagePool
+{
 private:
 	int picID;
 	std::map<int, SubImage> nameHash2SubImage;
@@ -100,7 +110,8 @@ public:
 	const SubImage & getImage(const char *imageName);
 };
 
-class Camera {
+class Camera
+{
 private:
 	float x, y, z;
 	float W2, H2;
@@ -115,30 +126,37 @@ public:
 	void update();
 	void setPosition(float x, float y);
 	void setPosition(float x, float y, float z);
+	ftVec2 getPosition();
+	void move(const ftVec2 & v);
 	void move(float x, float y);
 	void setViewport(int w, int h, int x = 0, int y = 0);
 	void setViewport(ftRect vp);
 	void setScale(float scale);
 	void setAngle(float x, float y, float z);
 	void setProjectionType(int type);
-	ftVec2 mouseToWorld(ftVec2 mPos);
+	const ftVec2 mouseToWorld(const ftVec2 & mPos);
+	ftRect getCameraRect();
 };
 
 Camera* getCurrentCamera();
 
-class ShaderProgram {
+class ShaderProgram
+{
 private:
 	ftFile vsFile, fsFile;
 	unsigned vs, fs;
 	unsigned program;
 public:
+	ShaderProgram();
 	ShaderProgram(const char *vs, const char *vf);
 	~ShaderProgram();
+	void load(const char *vs, const char *vf);
 	bool init();
 	bool reload();
 	void use();
+	virtual void update();
 	void setUniform(const char *varName, float value);
-	void setUniform(const char *varName, ftVec2 value);
+	void setUniform(const char *varName, const ftVec2 & value);
 	void free();
 };
 

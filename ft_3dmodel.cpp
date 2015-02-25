@@ -1,5 +1,4 @@
-#include <fountain/ft_3dmodel.h>
-#include <fountain/ft_data.h>
+#include <fountain/fountaindef.h>
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <cstdio>
@@ -20,18 +19,25 @@ void ft3DModel::close()
 {
 }
 
+ObjModel::ObjModel()
+{
+	vtx = NULL;
+}
+
 ObjModel::ObjModel(const char *fileName)
 {
-	openFile(fileName);
-	neverRendered = 1;
+	loadObj(fileName);
 }
 
 ObjModel::~ObjModel()
 {
-	delete [] vtx;
+	if (vtx != NULL) {
+		delete [] vtx;
+		vtx = NULL;
+	}
 }
 
-void ObjModel::openFile(const char *fileName)
+void ObjModel::loadObj(const char *fileName)
 {
 	char tmp;
 	int tmpInt;
@@ -85,7 +91,6 @@ void ObjModel::openFile(const char *fileName)
 					vtx[tri * 3 + vti][coori] = v[p[tri].i[vti]].xyz[coori];
 			}
 		}
-		neverRendered = 1;
 	} else {
 		std::printf("Open \"%s\" error!\n", fileName);
 	}
@@ -108,5 +113,6 @@ void ObjModel::render()
 	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_DEPTH_TEST);
+	glLineWidth(1.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

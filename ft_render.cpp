@@ -1,6 +1,8 @@
 //TODO: replace "//GLSL exp" with better solution
 //TODO: provide RTT(render to texture) function
 #include <fountain/ft_render.h>
+#include <fountain/ft_data.h>
+#include <fountain/ft_math.h>
 #include <fountain/ft_algorithm.h>
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -13,6 +15,8 @@ using ftRender::SubImage;
 using ftRender::SubImagePool;
 using ftRender::Camera;
 using ftRender::ShaderProgram;
+
+static bool alive = false;
 
 static std::map<int, int> Hash2PicID;
 static std::map<int, texInfo> PicID2TexInfo;
@@ -84,22 +88,29 @@ bool ftRender::init()
 	globalB = 1.0f;
 	globalA = 1.0f;
 
+	glEnable(GL_ALPHA_TEST);
+
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
+	alive = state;
 	return state;
 }
 
 void ftRender::close()
 {
+	alive = false;
+}
+
+bool ftRender::isAlive()
+{
+	return alive;
 }
 
 //some OpenGL functions
 inline void enableTexture2D()
 {
 	glEnable(GL_TEXTURE_2D);
-
-	//GLSL exp
 	if (currentShader != NULL)
 		currentShader->setUniform("useTex", 1.0f);
 }
@@ -107,8 +118,6 @@ inline void enableTexture2D()
 inline void disableTexture2D()
 {
 	glDisable(GL_TEXTURE_2D);
-
-	//GLSL exp
 	if (currentShader != NULL)
 		currentShader->setUniform("useTex", 0.0f);
 }
@@ -116,8 +125,6 @@ inline void disableTexture2D()
 inline void bindTexture(int id)
 {
 	glBindTexture(GL_TEXTURE_2D, id);
-
-	//GLSL exp
 	if (currentShader != NULL)
 		currentShader->setUniform("tex", id);
 }
@@ -143,7 +150,6 @@ void ftRender::transformBegin()
 void ftRender::transformEnd()
 {
 	glPopMatrix();
-	glColor4f(1.0f, 1.0, 1.0f, 1.0f);
 }
 
 void ftRender::ftTranslate(float x, float y, float z)
@@ -200,6 +206,11 @@ ftColor ftRender::getGlobalColor()
 	return ftColor(globalR, globalG, globalB, globalA);
 }
 
+void ftRender::setLineWidth(float w)
+{
+	glLineWidth(w);
+}
+
 void ftRender::openLineSmooth()
 {
 	glEnable(GL_LINE_SMOOTH);
@@ -221,9 +232,9 @@ void ftRender::openPolygonSmooth()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void ftRender::setClearColor(int r, int g, int b)
+void ftRender::setClearColor(ftColor c)
 {
-	glClearColor(r / 255.0f, g / 255.0f, b / 255.0f, 1.0f);
+	glClearColor(c.getR(), c.getG(), c.getB(), 1.0f);
 }
 
 int data2Texture(unsigned char *bits, int width, int height, int dataType)
@@ -231,11 +242,12 @@ int data2Texture(unsigned char *bits, int width, int height, int dataType)
 	GLuint gl_texID;
 	glGenTextures(1, &gl_texID);
 	glBindTexture(GL_TEXTURE_2D, gl_texID);
+	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 //	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	GLenum internalFormat = FT2InternalFormat[dataType];
 	GLenum format = FT2Format[dataType];
@@ -314,7 +326,7 @@ void ftRender::drawLine(float x1, float y1, float x2, float y2)
 	drawFloat2(vtx, 2, GL_LINES);
 }
 
-void ftRender::drawLine(ftVec2 p1, ftVec2 p2)
+void ftRender::drawLine(const ftVec2 & p1, const ftVec2 & p2)
 {
 	ftRender::drawLine(p1.x, p1.y, p2.x, p2.y);
 }
@@ -330,7 +342,18 @@ void ftRender::drawQuad(float w, float h)
 	glDisable(GL_BLEND);
 }
 
-void ftRender::drawRect(ftRect rct, float angle)
+void ftRender::drawQuadEdge(float w, float h)
+{
+	float w2 = w / 2.0f;
+	float h2 = h / 2.0f;
+	GLfloat vtx[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	drawFloat2(vtx, 4, GL_LINE_LOOP);
+	glDisable(GL_BLEND);
+}
+
+void ftRender::drawRect(ftRect & rct, float angle)
 {
 	ftVec2 rPos = rct.getCenter();
 	ftVec2 rSize = rct.getSize();
@@ -341,22 +364,32 @@ void ftRender::drawRect(ftRect rct, float angle)
 	ftRender::transformEnd();
 }
 
-void ftRender::drawCircle()
+void ftRender::drawCircle(float radius)
 {
+	ftRender::transformBegin();
+	ftRender::ftScale(radius);
 	drawFloat2(circle32, 32, GL_TRIANGLE_FAN);
+	ftRender::transformEnd();
 }
 
-void ftRender::drawShape(ftShape &shape, float angle)
+void ftRender::drawCircleEdge(float radius)
+{
+	ftRender::transformBegin();
+	ftRender::ftScale(radius);
+	drawFloat2(circle32, 32, GL_LINE_LOOP);
+	ftRender::transformEnd();
+}
+
+void ftRender::drawShape(ftShape & shape, float angle)
 {
 	int type = shape.getType();
 	const float *v = shape.getData();
 	int n = shape.getN();
-	ftRender::ftRotate(0.0f, 0.0f, angle);
+
 	switch (type)
 	{
 	case FT_Circle:
-		ftRender::ftScale(shape.getR());
-		ftRender::drawCircle();
+		ftRender::drawCircle(shape.getR());
 		break;
 
 	case FT_Polygon:
@@ -369,6 +402,32 @@ void ftRender::drawShape(ftShape &shape, float angle)
 
 	case FT_Rect:
 		ftRender::drawQuad(v[0], v[1]);
+		break;
+	}
+}
+
+void ftRender::drawShapeEdge(ftShape & shape, float angle)
+{
+	int type = shape.getType();
+	const float *v = shape.getData();
+	int n = shape.getN();
+
+	switch (type)
+	{
+	case FT_Circle:
+		ftRender::drawCircleEdge(shape.getR());
+		break;
+
+	case FT_Polygon:
+		drawFloat2(v, n, GL_LINE_LOOP);
+		break;
+
+	case FT_Line:
+		drawFloat2(v, n, GL_LINE_STRIP);
+		break;
+
+	case FT_Rect:
+		ftRender::drawQuadEdge(v[0], v[1]);
 		break;
 	}
 }
@@ -473,7 +532,7 @@ SubImage::SubImage(int picID)
 	texRect.getFloatVertex(texCoor);
 }
 
-SubImage::SubImage(int picID, ftRect rect)
+SubImage::SubImage(int picID, ftRect & rect)
 {
 	this->picID = picID;
 	ftVec2 pSize = ftRender::getPicSize(picID);
@@ -484,7 +543,7 @@ SubImage::SubImage(int picID, ftRect rect)
 	texRect.getFloatVertex(texCoor);
 }
 
-SubImage::SubImage(const char * picName, ftRect rect)
+SubImage::SubImage(const char * picName, ftRect & rect)
 {
 	picID = ftRender::getPicture(picName);
 	ftVec2 pSize = ftRender::getPicSize(picID);
@@ -495,7 +554,7 @@ SubImage::SubImage(const char * picName, ftRect rect)
 	texRect.getFloatVertex(texCoor);
 }
 
-SubImage::SubImage(SubImage image, ftRect rect)
+SubImage::SubImage(SubImage image, ftRect & rect)
 {
 	picID = image.getPicID();
 	ftVec2 pSize = ftRender::getPicSize(picID);
@@ -523,7 +582,7 @@ const ftVec2 & SubImage::getSize()
 	return size;
 }
 
-void SubImage::setSize(ftVec2 size)
+void SubImage::setSize(const ftVec2 size)
 {
 	this->size = size;
 }
@@ -617,6 +676,23 @@ void ftRender::drawImage(SubImage & im)
 	disableTexture2D();
 }
 
+void ftRender::transformBegin(float x, float y, float degree, float scale, ftColor c)
+{
+	ftRender::useColor(c);
+	ftRender::transformBegin();
+	ftRender::ftTranslate(x, y);
+	ftRender::ftRotate(0, 0, degree);
+	ftRender::ftScale(scale);
+}
+
+void ftRender::drawImage(SubImage & im, float x, float y, float degree, float scale, ftColor c)
+{
+	ftRender::transformBegin(x, y, degree, scale, c);
+	ftRender::drawImage(im);
+	ftRender::transformEnd();
+	ftRender::useColor(FT_White);
+}
+
 void ftRender::useFFP()
 {
 	glUseProgram(0);
@@ -648,6 +724,17 @@ void Camera::setPosition(float x, float y, float z)
 	this->z = z;
 }
 
+ftVec2 Camera::getPosition()
+{
+	return ftVec2(x, y);
+}
+
+void Camera::move(const ftVec2 & v)
+{
+	x += v.x;
+	y += v.y;
+}
+
 void Camera::move(float x, float y)
 {
 	this->x += x;
@@ -656,9 +743,9 @@ void Camera::move(float x, float y)
 
 void Camera::setAngle(float x, float y, float z)
 {
-	this->xAngle = x;
-	this->yAngle = y;
-	this->zAngle = z;
+	this->xAngle = FT_R2D(x);
+	this->yAngle = FT_R2D(y);
+	this->zAngle = FT_R2D(z);
 }
 
 void Camera::setViewport(int w, int h, int x, int y)
@@ -708,7 +795,7 @@ void Camera::update()
 	currentCamera = this;
 }
 
-ftVec2 Camera::mouseToWorld(ftVec2 mPos)
+const ftVec2 Camera::mouseToWorld(const ftVec2 & mPos)
 {
 	float l, b, w2, h2;
 	w2 = W2 / scale;
@@ -719,6 +806,14 @@ ftVec2 Camera::mouseToWorld(ftVec2 mPos)
 	ans.x = mPos.x / scale + l;
 	ans.y = mPos.y / scale + b;
 	return ans;
+}
+
+ftRect Camera::getCameraRect()
+{
+	ftRect rct;
+	rct.setSize(ftVec2(W2, H2) * (2.0f / scale));
+	rct.setCenter(ftVec2(x, y));
+	return rct;
 }
 
 Camera* ftRender::getCurrentCamera()
@@ -760,23 +855,37 @@ GLuint linkShaderProgram(GLuint vs, GLuint fs)
 	GLuint program = glCreateProgram();
 	glAttachShader(program, vs);
 	glAttachShader(program, fs);
+	glDeleteShader(vs);
+	glDeleteShader(fs);
 	glLinkProgram(program);
 	return program;
 }
 
 //class ftRender::ShaderProgram
+ShaderProgram::ShaderProgram()
+{
+	program = 0;
+	vs = 0;
+	fs = 0;
+}
+
 ShaderProgram::ShaderProgram(const char *vsf, const char *fsf)
 {
 	program = 0;
 	vs = 0;
 	fs = 0;
-	vsFile.load(vsf);
-	fsFile.load(fsf);
+	load(vsf, fsf);
 }
 
 ShaderProgram::~ShaderProgram()
 {
 	free();
+}
+
+void ShaderProgram::load(const char *vsf, const char *fsf)
+{
+	vsFile.load(vsf);
+	fsFile.load(fsf);
 }
 
 //TODO: add words to check the process
@@ -799,7 +908,6 @@ bool ShaderProgram::init()
 bool ShaderProgram::reload()
 {
 	bool res;
-	ftRender::useFFP();
 	free();
 	vsFile.reload();
 	fsFile.reload();
@@ -812,10 +920,16 @@ void ShaderProgram::use()
 {
 	glUseProgram(program);
 	currentShader = this;
+	update();
+}
+
+void ShaderProgram::update()
+{
 }
 
 void ShaderProgram::setUniform(const char *varName, float value)
 {
+	if (currentShader != this) return;
 	GLint loc = glGetUniformLocation(program, varName);
 	GLfloat v = value;
 	if (loc != -1) {
@@ -823,8 +937,9 @@ void ShaderProgram::setUniform(const char *varName, float value)
 	}
 }
 
-void ShaderProgram::setUniform(const char *varName, ftVec2 value)
+void ShaderProgram::setUniform(const char *varName, const ftVec2 & value)
 {
+	if (currentShader != this) return;
 	const GLfloat v[] = {value.x, value.y};
 	GLint loc = glGetUniformLocation(program, varName);
 	if (loc != -1) {
@@ -834,9 +949,10 @@ void ShaderProgram::setUniform(const char *varName, ftVec2 value)
 
 void ShaderProgram::free()
 {
+	if (currentShader == this) {
+		ftRender::useFFP();
+	}
 	glDeleteProgram(program);
-	glDeleteShader(vs);
-	glDeleteShader(fs);
 	vsFile.free();
 	fsFile.free();
 }
