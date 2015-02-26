@@ -326,23 +326,28 @@ void ShaderScene::customInit()
 	spb.load("resources/shader/vs.vert", "resources/shader/wave.frag");
 	spc.load("resources/shader/vs.vert", "resources/shader/purple.frag");
 	spd.load("resources/shader/vs.vert", "resources/shader/blur.frag");
+	spe.load("resources/shader/vs.vert", "resources/shader/normalmap.frag");
 	spa.init();
 	spb.init();
 	spc.init();
 	spd.init();
+	spe.init();
 	use = 1;
-	ba.setPosition(-300, -220);
-	ba.setRectSize(ftVec2(180, 70));
+	ba.setPosition(-300, -200);
+	ba.setRectSize(ftVec2(180, 50));
 	ba.setCaption("magicStar");
-	bb.setPosition(-100, -220);
-	bb.setRectSize(ftVec2(180, 70));
+	bb.setPosition(-100, -200);
+	bb.setRectSize(ftVec2(180, 50));
 	bb.setCaption("wave");
-	bc.setPosition(100, -220);
-	bc.setRectSize(ftVec2(180, 70));
+	bc.setPosition(100, -200);
+	bc.setRectSize(ftVec2(180, 50));
 	bc.setCaption("purple");
-	bd.setPosition(300, -220);
-	bd.setRectSize(ftVec2(180, 70));
+	bd.setPosition(300, -200);
+	bd.setRectSize(ftVec2(180, 50));
 	bd.setCaption("blur");
+	be.setPosition(-300, -260);
+	be.setRectSize(ftVec2(180, 50));
+	be.setCaption("normal");
 }
 
 void ShaderScene::customUpdate()
@@ -363,6 +368,10 @@ void ShaderScene::customUpdate()
 	if (bd.getState() == FT_ButtonUp) {
 		use = 4;
 	}
+	be.update();
+	if (be.getState() == FT_ButtonUp) {
+		use = 5;
+	}
 }
 
 void ShaderScene::customDraw()
@@ -379,6 +388,7 @@ void ShaderScene::customDraw()
 	if (use == 2) spb.use();
 	if (use == 3) spc.use();
 	if (use == 4) spd.use();
+	if (use == 5) spe.use();
 	ftRender::useColor(FT_White);
 	if (use == 4) {
 		ftRender::useColor(FT_White);
@@ -387,19 +397,26 @@ void ShaderScene::customDraw()
 		ftRender::ftScale(0.6f);
 		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/logo.png"));
 		ftRender::transformEnd();
+	} else if (use == 5) {
+		spe.setTexture("nmTex", ftRender::getPicture("resources/image/banner-nmm.png"), 1);
+		ftRender::useColor(FT_White);
+		ftRender::transformBegin();
+		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/banner.png"));
+		ftRender::transformEnd();
 	} else {
 		ftRender::drawQuad(300, 300);
 	}
-	ftRender::useFFP();
+	ftRender::useBasicShader();
 	ba.draw();
 	bb.draw();
 	bc.draw();
 	bd.draw();
+	be.draw();
 }
 
 void ShaderScene::destroy()
 {
-	ftRender::useFFP();
+	ftRender::useBasicShader();
 }
 
 //class InputScene

@@ -129,8 +129,8 @@ public:
 class ShaderScene : public TestScene
 {
 private:
-	MyShaderProgram spa, spb, spc, spd;
-	SButton ba, bb, bc, bd;
+	MyShaderProgram spa, spb, spc, spd, spe;
+	SButton ba, bb, bc, bd, be;
 	int use;
 public:
 	void customInit();

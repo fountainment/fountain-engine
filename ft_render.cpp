@@ -28,6 +28,8 @@ static GLfloat circle128[128 * 2];
 
 static GLfloat defaultTexCoor[] = {0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f};
 
+static ShaderProgram basicShader;
+
 //TODO: make this transform more simple
 GLuint FT2InternalFormat[FT_FORMAT_MAX] = {GL_RGBA, GL_RGB, GL_RGBA, GL_RGB,
                                            GL_RGBA, GL_RGB, GL_RGBA, GL_RGBA
@@ -60,6 +62,9 @@ bool GLinit()
 		std::printf("GLSL Version: %s\n",
 		            glGetString(GL_SHADING_LANGUAGE_VERSION));
 		std::printf("Shader supported!\n");
+		basicShader.load("resources/shader/basicVs.vert", "resources/shader/basicFs.frag");
+		basicShader.init();
+		basicShader.use();
 	} else {
 		std::printf("Shader unsupported -_-|||\n");
 	}
@@ -124,9 +129,10 @@ inline void disableTexture2D()
 
 inline void bindTexture(int id)
 {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, id);
 	if (currentShader != NULL)
-		currentShader->setUniform("tex", id);
+		currentShader->setUniform("tex", 0);
 }
 
 inline void drawFloat2(const GLfloat *v, int n, GLuint glType)
@@ -693,6 +699,12 @@ void ftRender::drawImage(SubImage & im, float x, float y, float degree, float sc
 	ftRender::useColor(FT_White);
 }
 
+void ftRender::useBasicShader()
+{
+	basicShader.use();
+	currentShader = &basicShader;
+}
+
 void ftRender::useFFP()
 {
 	glUseProgram(0);
@@ -945,6 +957,15 @@ void ShaderProgram::setUniform(const char *varName, const ftVec2 & value)
 	if (loc != -1) {
 		glUniform2fv(loc, 1, v);
 	}
+}
+
+void ShaderProgram::setTexture(const char *texName, int picID, int texN)
+{
+	texInfo tex = PicID2TexInfo[picID];
+	float texID = tex.id;
+	glActiveTexture(GL_TEXTURE0 + texN);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	glUniform1i(glGetUniformLocation(program, texName), texN);
 }
 
 void ShaderProgram::free()

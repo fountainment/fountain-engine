@@ -72,7 +72,7 @@ void drawAlphaPic(int picID);
 void deletePicture(int picID);
 void deleteAllPictures();
 
-void useShader();
+void useBasicShader();
 void useFFP();
 
 class SubImage
@@ -157,6 +157,7 @@ public:
 	virtual void update();
 	void setUniform(const char *varName, float value);
 	void setUniform(const char *varName, const ftVec2 & value);
+	void setTexture(const char *texName, int picID, int texID = 0);
 	void free();
 };
 
