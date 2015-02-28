@@ -44,10 +44,10 @@ charInfo::charInfo(const ftVec2 & ct, const ftVec2 & adv)
 	advance = adv;
 }
 
-void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int imgW, int w, int h, int row, int col)
+void copyBitmapToBufferData(FT_Bitmap &bitmap, unsigned char *expanded_data, int imgW, unsigned w, unsigned h, int row, int col)
 {
-	for(int j = 0; j < h; j++) {
-		for(int i = 0; i < w; i++) {
+	for(unsigned j = 0; j < h; j++) {
+		for(unsigned i = 0; i < w; i++) {
 			int r = row * h + j;
 			int c = col * w + i;
 			expanded_data[2 * (r * imgW + c)] = 255;
