@@ -129,18 +129,27 @@ void TestScene::customDraw() {}
 void TextureScene::customInit()
 {
 	picID = ftRender::getPicture("resources/image/logo.png");
+	animeIndex = 0;
+	animeTest = ftRender::SubImagePool("resources/image/PlaceWeapon.png", "resources/image/PlaceWeapon.sip");
 }
 
 void TextureScene::customUpdate()
 {
+	animeIndex++;
+	animeIndex %= animeTest.getImageNumber();
 }
 
 void TextureScene::customDraw()
 {
+	ftRender::SubImage image = animeTest.getImageFromIndex(animeIndex);
 	ftRender::useColor(FT_White);
-	ftRender::transformBegin();
+	ftRender::transformBegin(-100, 0);
 	ftRender::ftScale(0.5f);
 	ftRender::drawAlphaPic(picID);
+	ftRender::transformEnd();
+	ftRender::transformBegin(100, 0);
+	ftRender::ftScale(2.0f);
+	ftRender::drawImage(image);
 	ftRender::transformEnd();
 }
 

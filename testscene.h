@@ -46,6 +46,8 @@ class TextureScene : public TestScene
 {
 private:
 	int picID;
+	int animeIndex;
+	ftRender::SubImagePool animeTest;
 public:
 	void customInit();
 	void customUpdate();

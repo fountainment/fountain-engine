@@ -602,7 +602,6 @@ const float * SubImage::getTexCoor()
 std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName)
 {
 	int x, y;
-	int picN;
 	char name[100];
 	int rx, ry, rw, rh;
 	int tmp;
@@ -611,16 +610,23 @@ std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName
 	if (sipF == NULL) return ans;
 	tmp = std::fscanf(sipF, "%d %d", &x, &y);
 	tmp = std::fscanf(sipF, "%d", &picN);
+	subImageVec.clear();
 	for (int i = 0; i < picN; i++) {
 		tmp = std::fscanf(sipF, "%s %d %d %d %d", name, &rw, &rh, &rx, &ry);
 		if (tmp == EOF) break;
 		ftRect r(rx, y - ry - rh, rw, rh);
 		int hash = ftAlgorithm::bkdrHash(name);
-		ans[hash] = SubImage(pid, r);
+		SubImage tmpSI = SubImage(pid, r); 
+		ans[hash] = tmpSI;
+		subImageVec.push_back(tmpSI);
 	}
 	std::fclose(sipF);
 
 	return ans;
+}
+
+SubImagePool::SubImagePool()
+{
 }
 
 SubImagePool::SubImagePool(const char * picName, const char *sipName)
@@ -635,10 +641,22 @@ const SubImage & SubImagePool::getImage(const char *imageName)
 	return nameHash2SubImage[hash];
 }
 
+const SubImage & SubImagePool::getImageFromIndex(int index)
+{
+	//TODO: write ftDebug module
+	//if (index < 0 || index >= picN) ftDebug::error("");
+	return subImageVec[index];
+}
+
+int SubImagePool::getImageNumber()
+{
+	return picN;
+}
+
 //TODO: complete ftRender::getImage
 SubImage ftRender::getImage(int picID)
 {
-	return SubImage(picID);;
+	return SubImage(picID);
 }
 
 SubImage ftRender::getImage(const char *filename)

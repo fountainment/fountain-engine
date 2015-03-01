@@ -103,11 +103,16 @@ class SubImagePool
 {
 private:
 	int picID;
+	int picN;
 	std::map<int, SubImage> nameHash2SubImage;
-	static std::map<int, SubImage> getMapFromSip(int pid, const char * sipName);
+	std::vector<SubImage> subImageVec;
+	std::map<int, SubImage> getMapFromSip(int pid, const char * sipName);
 public:
+	SubImagePool();
 	SubImagePool(const char *picName, const char *sipName);
 	const SubImage & getImage(const char *imageName);
+	const SubImage & getImageFromIndex(int index);
+	int getImageNumber();
 };
 
 class Camera
