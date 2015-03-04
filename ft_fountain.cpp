@@ -34,10 +34,12 @@ void initAllSystem() {
 	ftType::init();
 	ftAudio::init();
 	ftUI::init();
+	ftAnime::close();
 }
 
 void closeAllSystem()
 {
+	ftAnime::close();
 	ftUI::close();
 	ftAudio::close();
 	//FIXME: ftType close bug

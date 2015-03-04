@@ -111,6 +111,7 @@
 #include <fountain/ft_type.h>
 #include <fountain/ft_audio.h>
 #include <fountain/ft_ui.h>
+#include <fountain/ft_anime.h>
 
 namespace fountain {
 

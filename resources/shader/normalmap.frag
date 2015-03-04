@@ -5,9 +5,9 @@ uniform sampler2D tex;
 uniform float useTex;
 uniform sampler2D nmTex;
 //uniform vec3 lightPos;
-vec3 lightPos = vec3((mouse / resolution - vec2(0.5)), 1.0);
+vec3 lightPos = vec3(mouse - 0.5 * resolution, 400.0);
 varying vec3 pixelPos;
-vec3 eyePos = vec3(0.0, 0.0, 1.0);
+vec3 eyePos = vec3(0.0, 0.0, 1000.0);
 
 void main( void ) {
 

@@ -129,19 +129,19 @@ void TestScene::customDraw() {}
 void TextureScene::customInit()
 {
 	picID = ftRender::getPicture("resources/image/logo.png");
-	animeIndex = 0;
 	animeTest = ftRender::SubImagePool("resources/image/PlaceWeapon.png", "resources/image/PlaceWeapon.sip");
+	anime = ftAnime::FrameAnime(animeTest, 15.0f);
+
 }
 
 void TextureScene::customUpdate()
 {
-	animeIndex++;
-	animeIndex %= animeTest.getImageNumber();
+	if (fountain::sysKeyboard.getState(FT_Space) == FT_KeyUp) anime.play();
+	anime.update();
 }
 
 void TextureScene::customDraw()
 {
-	ftRender::SubImage image = animeTest.getImageFromIndex(animeIndex);
 	ftRender::useColor(FT_White);
 	ftRender::transformBegin(-100, 0);
 	ftRender::ftScale(0.5f);
@@ -149,7 +149,7 @@ void TextureScene::customDraw()
 	ftRender::transformEnd();
 	ftRender::transformBegin(100, 0);
 	ftRender::ftScale(2.0f);
-	ftRender::drawImage(image);
+	anime.draw();
 	ftRender::transformEnd();
 }
 
@@ -331,61 +331,54 @@ void UIScene::customDraw()
 //class ShaderScene
 void ShaderScene::customInit()
 {
-	spa.load("resources/shader/vs.vert", "resources/shader/magicStar.frag");
-	spb.load("resources/shader/vs.vert", "resources/shader/wave.frag");
-	spc.load("resources/shader/vs.vert", "resources/shader/purple.frag");
-	spd.load("resources/shader/vs.vert", "resources/shader/blur.frag");
-	spe.load("resources/shader/vs.vert", "resources/shader/normalmap.frag");
-	spa.init();
-	spb.init();
-	spc.init();
-	spd.init();
-	spe.init();
-	use = 1;
-	ba.setPosition(-300, -200);
-	ba.setRectSize(ftVec2(180, 50));
-	ba.setCaption("magicStar");
-	bb.setPosition(-100, -200);
-	bb.setRectSize(ftVec2(180, 50));
-	bb.setCaption("wave");
-	bc.setPosition(100, -200);
-	bc.setRectSize(ftVec2(180, 50));
-	bc.setCaption("purple");
-	bd.setPosition(300, -200);
-	bd.setRectSize(ftVec2(180, 50));
-	bd.setCaption("blur");
-	be.setPosition(-300, -260);
-	be.setRectSize(ftVec2(180, 50));
-	be.setCaption("normal");
+	scale = 150.0f;
+	observePos = ftVec2(0.0, 0.0);
+	shaderNumber = 6;
+	sp[0].load("resources/shader/vs.vert", "resources/shader/magicStar.frag");
+	sp[1].load("resources/shader/vs.vert", "resources/shader/wave.frag");
+	sp[2].load("resources/shader/vs.vert", "resources/shader/purple.frag");
+	sp[3].load("resources/shader/vs.vert", "resources/shader/blur.frag");
+	sp[4].load("resources/shader/vs.vert", "resources/shader/normalmap.frag");
+	sp[5].load("resources/shader/vs.vert", "resources/shader/mandelbrot.frag");
+	for (int i = 0; i < shaderNumber ;i++) sp[i].init();
+	use = 0;
+	for (int i = 0; i < shaderNumber ;i++) b[i].setRectSize(ftVec2(180, 50));
+	b[0].setPosition(-300, -200);
+	b[0].setCaption("magicStar");
+	b[1].setPosition(-100, -200);
+	b[1].setCaption("wave");
+	b[2].setPosition(100, -200);
+	b[2].setCaption("purple");
+	b[3].setPosition(300, -200);
+	b[3].setCaption("blur");
+	b[4].setPosition(-300, -260);
+	b[4].setCaption("normal");
+	b[5].setPosition(-100, -260);
+	b[5].setCaption("mandelbrot");
 }
 
 void ShaderScene::customUpdate()
 {
-	ba.update();
-	if (ba.getState() == FT_ButtonUp) {
-		use = 1;
+	if (use == 5) {
+		if (fountain::sysMouse.getState(FT_ScrollUp)) scale *= 0.8;
+		if (fountain::sysMouse.getState(FT_ScrollDown)) scale *= 1.2;
+		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+			ftVec2 v = fountain::sysMouse.getDeltaV();
+			v = v / scale;
+			observePos += v;
+		}
 	}
-	bb.update();
-	if (bb.getState() == FT_ButtonUp) {
-		use = 2;
-	}
-	bc.update();
-	if (bc.getState() == FT_ButtonUp) {
-		use = 3;
-	}
-	bd.update();
-	if (bd.getState() == FT_ButtonUp) {
-		use = 4;
-	}
-	be.update();
-	if (be.getState() == FT_ButtonUp) {
-		use = 5;
+	for (int i = 0; i < shaderNumber; i++) {
+		b[i].update();
+		if (b[i].getState() == FT_ButtonUp) {
+			use = i;
+		}
 	}
 }
 
 void ShaderScene::customDraw()
 {
-	if (use == 4) {
+	if (use == 3) {
 		ftRender::useColor(FT_White);
 		ftRender::transformBegin();
 		ftRender::ftTranslate(-154, 0);
@@ -393,34 +386,30 @@ void ShaderScene::customDraw()
 		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/logo.png"));
 		ftRender::transformEnd();
 	}
-	if (use == 1) spa.use();
-	if (use == 2) spb.use();
-	if (use == 3) spc.use();
-	if (use == 4) spd.use();
-	if (use == 5) spe.use();
+	sp[use].use();
 	ftRender::useColor(FT_White);
-	if (use == 4) {
+	if (use == 3) {
 		ftRender::useColor(FT_White);
 		ftRender::transformBegin();
 		ftRender::ftTranslate(154, 0);
 		ftRender::ftScale(0.6f);
 		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/logo.png"));
 		ftRender::transformEnd();
-	} else if (use == 5) {
-		spe.setTexture("nmTex", ftRender::getPicture("resources/image/banner-nmm.png"), 1);
+	} else if (use == 4) {
+		sp[4].setTexture("nmTex", ftRender::getPicture("resources/image/banner-nmm.png"), 1);
 		ftRender::useColor(FT_White);
 		ftRender::transformBegin();
 		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/banner.png"));
 		ftRender::transformEnd();
+	} else if (use == 5) {
+		sp[5].setUniform("scale", scale);
+		sp[5].setUniform("observePos", observePos);
+		ftRender::drawQuad(800, 400);
 	} else {
 		ftRender::drawQuad(300, 300);
 	}
 	ftRender::useBasicShader();
-	ba.draw();
-	bb.draw();
-	bc.draw();
-	bd.draw();
-	be.draw();
+	for (int i = 0; i < shaderNumber; i++) b[i].draw();
 }
 
 void ShaderScene::destroy()

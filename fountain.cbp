@@ -40,6 +40,7 @@
 		</Compiler>
 		<Unit filename="ft_3dmodel.cpp" />
 		<Unit filename="ft_algorithm.cpp" />
+		<Unit filename="ft_anime.cpp" />
 		<Unit filename="ft_audio.cpp" />
 		<Unit filename="ft_data.cpp" />
 		<Unit filename="ft_fountain.cpp" />
@@ -54,6 +55,7 @@
 		<Unit filename="include/fountain/fountaindef.h" />
 		<Unit filename="include/fountain/ft_3dmodel.h" />
 		<Unit filename="include/fountain/ft_algorithm.h" />
+		<Unit filename="include/fountain/ft_anime.h" />
 		<Unit filename="include/fountain/ft_audio.h" />
 		<Unit filename="include/fountain/ft_data.h" />
 		<Unit filename="include/fountain/ft_input.h" />

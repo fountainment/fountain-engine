@@ -46,8 +46,8 @@ class TextureScene : public TestScene
 {
 private:
 	int picID;
-	int animeIndex;
 	ftRender::SubImagePool animeTest;
+	ftAnime::FrameAnime anime;
 public:
 	void customInit();
 	void customUpdate();
@@ -131,9 +131,12 @@ public:
 class ShaderScene : public TestScene
 {
 private:
-	MyShaderProgram spa, spb, spc, spd, spe;
-	SButton ba, bb, bc, bd, be;
+	int shaderNumber;
+	MyShaderProgram sp[6];
+	SButton b[6];
 	int use;
+	float scale;
+	ftVec2 observePos;
 public:
 	void customInit();
 	void customUpdate();
