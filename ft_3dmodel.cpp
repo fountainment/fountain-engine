@@ -2,6 +2,7 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include <cstdio>
+#include <cstring>
 #include <vector>
 
 using ft3DModel::ObjModel;
@@ -39,26 +40,26 @@ ObjModel::~ObjModel()
 
 void ObjModel::loadObj(const char *fileName)
 {
-	char tmp;
+	char tmp[10];
 	int tmpInt;
-	std::vector<ftVec3> v;
-	std::vector<ftVec3Index> p;
-	ftVec3 tmpV;
-	ftVec3Index tmpP;
+	std::vector<ftVec3> v, vn;
+	std::vector<ftVec3Index> p, n;
+	ftVec3 tmpV, tmpVN;
+	ftVec3Index tmpP, tmpN;
 	v.clear();
+	vn.clear();
 	p.clear();
+	n.clear();
 	v.push_back(tmpV);
 	std::FILE *objFile = std::fopen(fileName, "r");
 	vecN = 1;
+	int vecNN = 1;
 	indexN = 0;
 	if (objFile != NULL) {
 		for (;;) {
-			while (tmpInt =
-			            std::fscanf(objFile, "%c", &tmp), tmpInt != EOF
-			        && tmp != '\n') ;
-			if (std::fscanf(objFile, "%c", &tmp) == EOF)
+			if (std::fscanf(objFile, "%s", tmp) == EOF)
 				break;
-			if (tmp == 'v') {
+			if (std::strcmp(tmp, "v") == 0) {
 				for (int i = 0; i < 3; i++) {
 					tmpInt =
 					    std::fscanf(objFile, "%f",
@@ -69,26 +70,38 @@ void ObjModel::loadObj(const char *fileName)
 				}
 				v.push_back(tmpV);
 				vecN++;
-			} else {
-				if (tmp == 'f') {
+			} else if (std::strcmp(tmp, "vn") == 0) {
+				for (int i = 0; i < 3; i++) {
 					tmpInt =
-					    std::fscanf(objFile, "%d%d%d",
-					                &tmpP.i[0],
-					                &tmpP.i[1],
-					                &tmpP.i[2]);
-					if (tmpInt != 3)
-						continue;
-					p.push_back(tmpP);
-					indexN++;
+					    std::fscanf(objFile, "%f",
+					                &tmpVN.
+					                xyz[i]);
+					if (tmpInt != 1)
+						break;
 				}
+				vn.push_back(tmpVN);
+				vecNN++;
+			} else if (std::strcmp(tmp, "f") == 0) {
+					for (int i = 0; i < 3; i++) {
+						tmpInt = std::fscanf(objFile, "%d//%d", &tmpP.i[i], &tmpN.i[i]);
+					}
+					p.push_back(tmpP);
+					n.push_back(tmpN);
+					indexN++;
 			}
+			while (tmpInt =
+			            std::fscanf(objFile, "%c", tmp), tmpInt != EOF
+			        && tmp[0] != '\n');
 		}
 		std::fclose(objFile);
 		vtx = new float[indexN * 3][3];
+		vtxN = new float[indexN * 3][3];
 		for (int tri = 0; tri < indexN; tri++) {
 			for (int vti = 0; vti < 3; vti++) {
-				for (int coori = 0; coori < 3; coori++)
+				for (int coori = 0; coori < 3; coori++) {
 					vtx[tri * 3 + vti][coori] = v[p[tri].i[vti]].xyz[coori];
+					vtxN[tri * 3 + vti][coori] = vn[n[tri].i[vti]].xyz[coori];
+				}
 			}
 		}
 	} else {
@@ -99,20 +112,10 @@ void ObjModel::loadObj(const char *fileName)
 void ObjModel::render()
 {
 	glEnable(GL_DEPTH_TEST);
-	glColor3f(0.0f, 0.0f, 0.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vtx);
-	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glColor3f(1.0f, 1.0f, 1.0f);
-	glLineWidth(2.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vtx);
+	glNormalPointer(GL_FLOAT, 3, vtxN);
 	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisable(GL_DEPTH_TEST);
-	glLineWidth(1.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

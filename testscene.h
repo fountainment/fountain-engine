@@ -18,6 +18,18 @@ public:
 	void click();
 };
 
+class MyShaderProgram : public ftRender::ShaderProgram
+{
+public:
+	void update()
+	{
+		ftVec2 mp = fountain::sysMouse.getPos();
+		this->setUniform("time", fountain::mainClock.getTotalT());
+		this->setUniform("resolution", fountain::getWinSize());
+		this->setUniform("mouse", mp);
+	}
+};
+
 class HelloWorld : public ftScene::Scene
 {
 private:
@@ -58,6 +70,7 @@ private:
 	float y;
 	ft3DModel::ObjModel x;
 	ftRender::Camera modelCamera;
+	MyShaderProgram lightSP;
 public:
 	void customInit();
 	void customUpdate();
@@ -112,18 +125,6 @@ public:
 	void customInit();
 	void customUpdate();
 	void customDraw();
-};
-
-class MyShaderProgram : public ftRender::ShaderProgram
-{
-public:
-	void update()
-	{
-		ftVec2 mp = fountain::sysMouse.getPos();
-		this->setUniform("time", fountain::mainClock.getTotalT());
-		this->setUniform("resolution", fountain::getWinSize());
-		this->setUniform("mouse", mp);
-	}
 };
 
 class ShaderScene : public TestScene

@@ -148,6 +148,8 @@ void ModelScene::customInit()
 	modelCamera = ftRender::Camera(0, 0, 1000);
 	modelCamera.setProjectionType(FT_PERSPECTIVE);
 	x.loadObj("resources/model/first.obj");
+	lightSP.load("resources/shader/vs.vert", "resources/shader/model.frag");
+	lightSP.init();
 	y = 0;
 }
 
@@ -159,11 +161,14 @@ void ModelScene::customUpdate()
 void ModelScene::customDraw()
 {
 	modelCamera.update();
+	lightSP.use();
+	ftRender::useColor(FT_White);
 	ftRender::transformBegin();
 	ftRender::ftScale(130.0f);
 	ftRender::ftRotate(0, y, 0);
 	x.render();
 	ftRender::transformEnd();
+	ftRender::useBasicShader();
 }
 
 //class PhysicsScene

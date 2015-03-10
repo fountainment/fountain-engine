@@ -12,6 +12,7 @@ private:
 	int vecN;
 	int indexN;
 	float (*vtx)[3];
+	float (*vtxN)[3];
 public:
 	ObjModel();
 	explicit ObjModel(const char *fileName);
