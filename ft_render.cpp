@@ -46,6 +46,29 @@ static float globalR, globalG, globalB, globalA;
 static ShaderProgram *currentShader = NULL;
 static Camera *currentCamera = NULL;
 
+static const char *basicVS = {
+"void main()"
+"{"
+	"vec4 v = gl_Vertex;"
+	"gl_TexCoord[0] = gl_MultiTexCoord0;"
+	"gl_FrontColor = gl_Color;"
+	"v = gl_ModelViewProjectionMatrix * v;"
+	"gl_Position = v;"
+"}"
+};
+
+static const char *basicFS = {
+"uniform sampler2D tex;"
+"uniform float useTex;"
+
+"void main( void ) {"
+	"vec4 colorx = gl_Color;"
+	"if (useTex == 1.0) {"
+	"	colorx *= texture2D(tex, gl_TexCoord[0].st);"
+	"}"
+	"gl_FragColor = colorx;"
+"}"
+};
 
 bool GLinit()
 {
@@ -62,8 +85,7 @@ bool GLinit()
 		std::printf("GLSL Version: %s\n",
 		            glGetString(GL_SHADING_LANGUAGE_VERSION));
 		std::printf("Shader supported!\n");
-		basicShader.load("resources/shader/basicVs.vert", "resources/shader/basicFs.frag");
-		basicShader.init();
+		basicShader.init(basicVS, basicFS);
 		basicShader.use();
 	} else {
 		std::printf("Shader unsupported -_-|||\n");
@@ -616,7 +638,7 @@ std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName
 		if (tmp == EOF) break;
 		ftRect r(rx, y - ry - rh, rw, rh);
 		int hash = ftAlgorithm::bkdrHash(name);
-		SubImage tmpSI = SubImage(pid, r); 
+		SubImage tmpSI = SubImage(pid, r);
 		ans[hash] = tmpSI;
 		subImageVec.push_back(tmpSI);
 	}
@@ -927,11 +949,20 @@ bool ShaderProgram::init()
 	const char *fss = fsFile.getStr();
 	fs = compileShader(fss, GL_FRAGMENT_SHADER);
 
-	//link
 	program = linkShaderProgram(vs, fs);
 
 	vsFile.free();
 	fsFile.free();
+	return true;
+}
+
+bool ShaderProgram::init(const char *vss, const char *fss)
+{
+	vs = compileShader(vss, GL_VERTEX_SHADER);
+	fs = compileShader(fss, GL_FRAGMENT_SHADER);
+
+	program = linkShaderProgram(vs, fs);
+
 	return true;
 }
 

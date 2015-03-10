@@ -334,17 +334,17 @@ void ShaderScene::customInit()
 	for (int i = 0; i < shaderNumber; i++) sp[i].init();
 	use = 0;
 	for (int i = 0; i < shaderNumber; i++) b[i].setRectSize(ftVec2(190, 50));
-	b[0].setPosition(-300, -200);
+	b[0].setPosition(-300, -210);
 	b[0].setCaption("magicStar");
-	b[1].setPosition(-100, -200);
+	b[1].setPosition(-100, -210);
 	b[1].setCaption("wave");
-	b[2].setPosition(100, -200);
+	b[2].setPosition(100, -210);
 	b[2].setCaption("purple");
-	b[3].setPosition(300, -200);
+	b[3].setPosition(300, -210);
 	b[3].setCaption("blur");
-	b[4].setPosition(-300, -260);
+	b[4].setPosition(-300, -270);
 	b[4].setCaption("normal");
-	b[5].setPosition(-100, -260);
+	b[5].setPosition(-100, -270);
 	b[5].setCaption("mandelbrot");
 }
 

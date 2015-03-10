@@ -118,7 +118,6 @@ void Button::update()
 			state = FT_isOn;
 		} else if (state == FT_ButtonDown) {
 			haveDown = true;
-			state = FT_isDown;
 		} else if (state == FT_ButtonUp) {
 			if (haveDown) {
 				click();

@@ -93,7 +93,7 @@ void OpenScene::otherUpdate()
 {
 	startB.update();
 	title.update();
-	if (startB.getState() == FT_ButtonDown) {
+	if (startB.getState() == FT_ButtonUp) {
 		fountain::sceneSelector.gotoScene(new GameScene());
 	}
 }

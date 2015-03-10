@@ -157,6 +157,7 @@ public:
 	~ShaderProgram();
 	void load(const char *vs, const char *vf);
 	bool init();
+	bool init(const char *vss, const char *fss);
 	bool reload();
 	void use();
 	virtual void update();
