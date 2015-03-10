@@ -22,7 +22,7 @@ private:
 public:
 	FrameAnime();
 	FrameAnime(ftRender::SubImagePool sip, float fps = 60.0f);
-	void play();
+	void play(ftTime::Clock *playClock = NULL);
 	void pause();
 	void resume();
 	void stop();

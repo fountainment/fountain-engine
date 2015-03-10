@@ -2,8 +2,8 @@
 #include <cstdio>
 #include <cstring>
 
-const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎调用", "字体渲染", "音频播放", "UI组件", "着色器渲染", "输入模块示例", "时间模块示例"};
-const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "UI", "Shader", "Input", "Time"};
+const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎调用", "字体渲染", "音频播放", "动画演示", "着色器渲染", "输入模块示例", "时间模块示例"};
+const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "Anime", "Shader", "Input", "Time"};
 
 //class SButton
 SButton::SButton()
@@ -55,7 +55,7 @@ void HWButton::click()
 		fountain::sceneSelector.gotoScene(new AudioScene());
 		break;
 	case 5:
-		fountain::sceneSelector.gotoScene(new UIScene());
+		fountain::sceneSelector.gotoScene(new AnimeScene());
 		break;
 	case 6:
 		fountain::sceneSelector.gotoScene(new ShaderScene());
@@ -129,28 +129,17 @@ void TestScene::customDraw() {}
 void TextureScene::customInit()
 {
 	picID = ftRender::getPicture("resources/image/logo.png");
-	animeTest = ftRender::SubImagePool("resources/image/PlaceWeapon.png", "resources/image/PlaceWeapon.sip");
-	anime = ftAnime::FrameAnime(animeTest, 15.0f);
-
 }
 
 void TextureScene::customUpdate()
 {
-	if (fountain::sysKeyboard.getState(FT_Space) == FT_KeyUp) anime.play();
-	anime.update();
 }
 
 void TextureScene::customDraw()
 {
 	ftRender::useColor(FT_White);
-	ftRender::transformBegin(-100, 0);
 	ftRender::ftScale(0.5f);
 	ftRender::drawAlphaPic(picID);
-	ftRender::transformEnd();
-	ftRender::transformBegin(100, 0);
-	ftRender::ftScale(2.0f);
-	anime.draw();
-	ftRender::transformEnd();
 }
 
 //class ModelScene
@@ -309,23 +298,25 @@ void AudioScene::customDraw()
 }
 
 //class UIScene
-void UIScene::customInit()
+void AnimeScene::customInit()
 {
-	sz = 100.0f;
-	nineS = ftUI::NineSprite("resources/image/nine.png");
-	nineS.setSize(ftVec2(sz, sz));
+	animeTest = ftRender::SubImagePool("resources/image/PlaceWeapon.png", "resources/image/PlaceWeapon.sip");
+	anime = ftAnime::FrameAnime(animeTest, 15.0f);
+	anime.play(&mainClock);
 }
 
-void UIScene::customUpdate()
+void AnimeScene::customUpdate()
 {
-	if (fountain::sysMouse.getState(FT_LButton)) sz += 120.0f * mainClock.getDeltaT();
-	if (fountain::sysMouse.getState(FT_RButton)) sz -= 120.0f * mainClock.getDeltaT();
-	nineS.setSize(ftVec2(sz, sz));
+	anime.update();
 }
 
-void UIScene::customDraw()
+void AnimeScene::customDraw()
 {
-	nineS.draw();
+	ftRender::useColor(FT_White);
+	ftRender::transformBegin();
+	ftRender::ftScale(2.0f);
+	anime.draw();
+	ftRender::transformEnd();
 }
 
 //class ShaderScene

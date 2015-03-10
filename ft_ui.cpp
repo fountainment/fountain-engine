@@ -88,6 +88,7 @@ Button::Button()
 {
 	state = FT_None;
 	backColor = FT_White;
+	haveDown = false;
 	setColor(FT_Black);
 	label.setString("Button");
 	label.setRect(getRect());
@@ -106,13 +107,23 @@ void Button::update()
 	ftRect rct = getRect();
 	if (rct.collidePoint(mPos)) {
 		state = mState;
-		if (state == FT_isUp) {
+		if ((state == FT_isUp) || (state == FT_isDown && !haveDown)) {
 			state = FT_isOn;
+		} else if (state == FT_ButtonDown) {
+			haveDown = true;
+			state = FT_isDown;
+		} else if (state == FT_ButtonUp) {
+			if (haveDown) {
+				click();
+				haveDown = false;
+			} else {
+				state = FT_isOn;
+			}
 		}
 	} else {
+		if (haveDown && mState == FT_ButtonUp) haveDown = false;
 		state = FT_None;
 	}
-	if (state == FT_ButtonUp) click();
 }
 
 void Button::draw()

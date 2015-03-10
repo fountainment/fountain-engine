@@ -44,6 +44,7 @@ class Button : public ftSprite
 private:
 	int state;
 	ftColor backColor;
+	bool haveDown;
 public:
 	Label label;
 	Button();

@@ -33,10 +33,14 @@ FrameAnime::FrameAnime(ftRender::SubImagePool sip, float fps)
 	totalTime = totalFrame / fps;
 }
 
-void FrameAnime::play()
+void FrameAnime::play(ftTime::Clock *playClock)
 {
-	ftScene::Scene *scene = fountain::sceneSelector.getCurScene();
-	animeClock = ftTime::Clock(&(scene->mainClock));
+	if (playClock != NULL) {
+		animeClock = ftTime::Clock(playClock);
+	} else {
+		ftScene::Scene *scene = fountain::sceneSelector.getCurScene();
+		animeClock = ftTime::Clock(&(scene->mainClock));
+	}
 	animeClock.init();
 	state = 0.0f;
 	curFrame = 0;

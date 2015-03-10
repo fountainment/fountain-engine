@@ -46,8 +46,6 @@ class TextureScene : public TestScene
 {
 private:
 	int picID;
-	ftRender::SubImagePool animeTest;
-	ftAnime::FrameAnime anime;
 public:
 	void customInit();
 	void customUpdate();
@@ -105,11 +103,11 @@ public:
 	void customDraw();
 };
 
-class UIScene : public TestScene
+class AnimeScene : public TestScene
 {
 private:
-	float sz;
-	ftUI::NineSprite nineS;
+	ftRender::SubImagePool animeTest;
+	ftAnime::FrameAnime anime;
 public:
 	void customInit();
 	void customUpdate();
