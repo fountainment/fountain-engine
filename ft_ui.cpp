@@ -21,14 +21,14 @@ void ftUI::setDefaultFont(ftType::FontMan *font)
 //class ftUI::Label
 Label::Label()
 {
-	font = defaultFontMan;
+	font = NULL;
 	align = FT_AlignLeft;
 	strLength = 0;
 }
 
 Label::Label(const char *str)
 {
-	font = defaultFontMan;
+	font = NULL;
 	setString(str);
 	align = FT_AlignLeft;
 	strLength = 0;
@@ -36,7 +36,7 @@ Label::Label(const char *str)
 
 Label::Label(std::string str)
 {
-	font = defaultFontMan;
+	font = NULL;
 	setString(str.c_str());
 	align = FT_AlignLeft;
 	strLength = 0;
@@ -45,8 +45,11 @@ Label::Label(std::string str)
 void Label::setString(const char *str)
 {
 	text = ftAlgorithm::utf8toUnicode(str);
-	if (font == NULL) setFont(defaultFontMan);
-	if (font != NULL) strLength = font->getStringLength(text);
+	if (font != NULL) {
+		strLength = font->getStringLength(text);
+	} else {
+		strLength = defaultFontMan->getStringLength(text);
+	}
 }
 
 void Label::setFont(ftType::FontMan *font)
@@ -67,7 +70,7 @@ void Label::draw()
 	if (font != NULL) {
 		strLength = font->drawString(text);
 	} else {
-		font = defaultFontMan;
+		strLength = defaultFontMan->drawString(text);
 	}
 	ftRender::transformEnd();
 }
@@ -79,7 +82,11 @@ int Label::getStrLength()
 
 int Label::getFontSize()
 {
-	if (font != NULL) return font->getFontSize();
+	if (font != NULL) {
+		return font->getFontSize();
+	} else {
+		return defaultFontMan->getFontSize();
+	}
 	return 0;
 }
 

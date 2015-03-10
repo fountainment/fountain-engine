@@ -331,9 +331,9 @@ void ShaderScene::customInit()
 	sp[3].load("resources/shader/vs.vert", "resources/shader/blur.frag");
 	sp[4].load("resources/shader/vs.vert", "resources/shader/normalmap.frag");
 	sp[5].load("resources/shader/vs.vert", "resources/shader/mandelbrot.frag");
-	for (int i = 0; i < shaderNumber ;i++) sp[i].init();
+	for (int i = 0; i < shaderNumber; i++) sp[i].init();
 	use = 0;
-	for (int i = 0; i < shaderNumber ;i++) b[i].setRectSize(ftVec2(180, 50));
+	for (int i = 0; i < shaderNumber; i++) b[i].setRectSize(ftVec2(190, 50));
 	b[0].setPosition(-300, -200);
 	b[0].setCaption("magicStar");
 	b[1].setPosition(-100, -200);
