@@ -69,20 +69,37 @@ void HWButton::click()
 	case 9:
 		fountain::sceneSelector.gotoScene(new HelloWorld());
 		break;
+	case 10:
+		fountain::sceneSelector.gotoScene(new FragmentScene());
+		break;
 	};
+}
+
+//class MyShaderProgram
+void MyShaderProgram::update()
+{
+	ftVec2 mp = fountain::sysMouse.getPos();
+	this->setUniform("time", fountain::mainClock.getTotalT());
+	this->setUniform("resolution", fountain::getWinSize());
+	this->setUniform("mouse", mp);
 }
 
 //class HelloWorld
 void HelloWorld::init()
 {
+	HWButton t;
 	for (int i = 0; i < 9; i++) {
-		HWButton t;
 		t.setPosition(ftVec2(0, 240 - i * 60));
 		t.setRectSize(ftVec2(300, 50));
 		t.setCaption(str[i]);
 		t.id = i;
 		butCon.add(t);
 	}
+	t.setPosition(ftVec2(280, 180));
+	t.setRectSize(ftVec2(200, 200));
+	t.setCaption("demo");
+	t.id = 10;
+	butCon.add(t);
 	mainCamera.setViewport(fountain::getWinRect());
 }
 
@@ -463,3 +480,25 @@ void TimeScene::customDraw()
 	fps.draw();
 }
 
+//class FragmentScene
+void FragmentScene::customInit()
+{
+	nt.init();
+}
+
+void FragmentScene::customUpdate()
+{
+	if (fountain::sysKeyboard.getState(FT_Space)) nt.attack();
+	ftVec2 v(0.0, 0.0);
+	if (fountain::sysKeyboard.getState(FT_Up)) v += ftVec2(0.0, 200.0);
+	if (fountain::sysKeyboard.getState(FT_Down)) v += ftVec2(0.0, -200.0);
+	if (fountain::sysKeyboard.getState(FT_Left)) v += ftVec2(-200.0, 0.0);
+	if (fountain::sysKeyboard.getState(FT_Right)) v += ftVec2(200.0, 0.0);
+	nt.setSpeed(v);
+	nt.update();
+}
+
+void FragmentScene::customDraw()
+{
+	nt.draw();
+}

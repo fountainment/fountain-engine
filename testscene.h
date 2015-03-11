@@ -1,4 +1,5 @@
 #include <fountain/fountaindef.h>
+#include "STG.h"
 
 extern const char *str[];
 extern const char *strEn[];
@@ -21,13 +22,7 @@ public:
 class MyShaderProgram : public ftRender::ShaderProgram
 {
 public:
-	void update()
-	{
-		ftVec2 mp = fountain::sysMouse.getPos();
-		this->setUniform("time", fountain::mainClock.getTotalT());
-		this->setUniform("resolution", fountain::getWinSize());
-		this->setUniform("mouse", mp);
-	}
+	void update();
 };
 
 class HelloWorld : public ftScene::Scene
@@ -159,6 +154,16 @@ class TimeScene : public TestScene
 private:
 	char s[20];
 	ftUI::Button fps;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+};
+
+class FragmentScene : public TestScene
+{
+private:
+	STG::MainCharactor nt;
 public:
 	void customInit();
 	void customUpdate();

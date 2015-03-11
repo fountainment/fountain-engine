@@ -130,6 +130,7 @@ void singleFrame();
 
 ftVec2 getWinSize();
 ftRect getWinRect();
+float getCurSceneDeltaT();
 
 }
 
