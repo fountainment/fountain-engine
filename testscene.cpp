@@ -157,6 +157,8 @@ void ModelScene::customUpdate()
 {
 	if (fountain::sysMouse.getState(FT_LButton) == FT_isDown)
 		y += mainClock.getDeltaT() * 90.0f;
+	if (fountain::sysMouse.getState(FT_RButton) == FT_isDown)
+		y -= mainClock.getDeltaT() * 90.0f;
 }
 
 void ModelScene::customDraw()
@@ -303,7 +305,7 @@ void AudioScene::customDraw()
 	buttonCon.draw();
 }
 
-//class UIScene
+//class AnimeScene
 void AnimeScene::customInit()
 {
 	animeTest = ftRender::SubImagePool("resources/image/PlaceWeapon.png", "resources/image/PlaceWeapon.sip");
