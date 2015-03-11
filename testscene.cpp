@@ -155,7 +155,8 @@ void ModelScene::customInit()
 
 void ModelScene::customUpdate()
 {
-	y += mainClock.getDeltaT() * 90.0f;
+	if (fountain::sysMouse.getState(FT_LButton) == FT_isDown)
+		y += mainClock.getDeltaT() * 90.0f;
 }
 
 void ModelScene::customDraw()

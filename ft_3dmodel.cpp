@@ -23,6 +23,7 @@ void ft3DModel::close()
 ObjModel::ObjModel()
 {
 	vtx = NULL;
+	vtxN = NULL;
 }
 
 ObjModel::ObjModel(const char *fileName)
@@ -35,6 +36,10 @@ ObjModel::~ObjModel()
 	if (vtx != NULL) {
 		delete [] vtx;
 		vtx = NULL;
+	}
+	if (vtxN != NULL) {
+		delete [] vtxN;
+		vtxN = NULL;
 	}
 }
 
@@ -51,9 +56,9 @@ void ObjModel::loadObj(const char *fileName)
 	p.clear();
 	n.clear();
 	v.push_back(tmpV);
+	vn.push_back(tmpVN);
 	std::FILE *objFile = std::fopen(fileName, "r");
 	vecN = 1;
-	int vecNN = 1;
 	indexN = 0;
 	if (objFile != NULL) {
 		for (;;) {
@@ -80,7 +85,6 @@ void ObjModel::loadObj(const char *fileName)
 						break;
 				}
 				vn.push_back(tmpVN);
-				vecNN++;
 			} else if (std::strcmp(tmp, "f") == 0) {
 					for (int i = 0; i < 3; i++) {
 						tmpInt = std::fscanf(objFile, "%d//%d", &tmpP.i[i], &tmpN.i[i]);
