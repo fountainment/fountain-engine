@@ -18,6 +18,7 @@ private:
 	float state;
 	int totalFrame;
 	int curFrame;
+	bool loop;
 
 public:
 	FrameAnime();
@@ -31,6 +32,7 @@ public:
 	float getState();
 	void update();
 	void draw();
+	void setLoop(bool lp);
 };
 
 }

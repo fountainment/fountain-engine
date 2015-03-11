@@ -308,6 +308,7 @@ void AnimeScene::customInit()
 {
 	animeTest = ftRender::SubImagePool("resources/image/PlaceWeapon.png", "resources/image/PlaceWeapon.sip");
 	anime = ftAnime::FrameAnime(animeTest, 15.0f);
+	anime.setLoop(true);
 	anime.play(&mainClock);
 }
 
