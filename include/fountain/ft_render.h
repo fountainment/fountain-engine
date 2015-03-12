@@ -104,9 +104,9 @@ class SubImagePool
 private:
 	int picID;
 	int picN;
-	std::map<int, SubImage> nameHash2SubImage;
+	std::map<int, int> nameHash2SubImageIndex;
 	std::vector<SubImage> subImageVec;
-	std::map<int, SubImage> getMapFromSip(int pid, const char * sipName);
+	std::map<int, int> getMapFromSip(int pid, const char * sipName);
 public:
 	SubImagePool();
 	SubImagePool(const char *picName, const char *sipName);
