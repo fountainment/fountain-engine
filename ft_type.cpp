@@ -116,7 +116,7 @@ void FontMan::genStringTable(const char *str, int h)
 		FT_Load_Char(face, v[ci], FT_LOAD_RENDER);
 		FT_Bitmap& bitmap = slot->bitmap;
 		ftVec2 center(slot->bitmap_left + bitmap.width / 2.0f,
-		              slot->bitmap_top - bitmap.rows + bitmap.rows / 2.0f);
+		              slot->bitmap_top - bitmap.rows / 2.0f);
 		ftVec2 advance(slot->advance.x >> 6, slot->advance.y >> 6);
 		charInfo ch(center, advance);
 		unicode2charInfo[v[ci]] = ch;

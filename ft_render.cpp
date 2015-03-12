@@ -621,13 +621,13 @@ const float * SubImage::getTexCoor()
 }
 
 //class ftRender::SubImagePool
-std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName)
+std::map<int, int> SubImagePool::getMapFromSip(int pid, const char *sipName)
 {
 	int x, y;
 	char name[100];
 	int rx, ry, rw, rh;
 	int tmp;
-	std::map<int, SubImage> ans;
+	std::map<int, int> ans;
 	std::FILE *sipF = std::fopen(sipName, "r");
 	if (sipF == NULL) return ans;
 	tmp = std::fscanf(sipF, "%d %d", &x, &y);
@@ -639,8 +639,8 @@ std::map<int, SubImage> SubImagePool::getMapFromSip(int pid, const char *sipName
 		ftRect r(rx, y - ry - rh, rw, rh);
 		int hash = ftAlgorithm::bkdrHash(name);
 		SubImage tmpSI = SubImage(pid, r);
-		ans[hash] = tmpSI;
 		subImageVec.push_back(tmpSI);
+		ans[hash] = i;
 	}
 	std::fclose(sipF);
 
@@ -654,13 +654,13 @@ SubImagePool::SubImagePool()
 SubImagePool::SubImagePool(const char * picName, const char *sipName)
 {
 	picID = ftRender::getPicture(picName);
-	nameHash2SubImage = getMapFromSip(picID, sipName);
+	nameHash2SubImageIndex = getMapFromSip(picID, sipName);
 }
 
 const SubImage & SubImagePool::getImage(const char *imageName)
 {
 	int hash = ftAlgorithm::bkdrHash(imageName);
-	return nameHash2SubImage[hash];
+	return getImageFromIndex(nameHash2SubImageIndex[hash]);
 }
 
 const SubImage & SubImagePool::getImageFromIndex(int index)
