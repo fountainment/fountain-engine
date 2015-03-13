@@ -38,7 +38,7 @@ fi
 
 make
 
-$CC main.cpp testscene.cpp -o main $CFLAGS $LIBS
+$CC main.cpp testscene.cpp STG.cpp -o main $CFLAGS $LIBS
 
 if [ -f "main" ]; then
 	echo compilation finished!

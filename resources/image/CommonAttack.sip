@@ -1,0 +1,33 @@
+1024 512
+31
+B_CJpugong00.png 100 120 0 0
+B_CJpugong01.png 100 120 100 0
+B_CJpugong02.png 100 120 200 0
+B_CJpugong03.png 100 120 300 0
+B_CJpugong04.png 100 120 400 0
+B_CJpugong05.png 100 120 500 0
+B_CJpugong06.png 100 120 600 0
+B_CJpugong07.png 100 120 700 0
+B_CJpugong08.png 100 120 800 0
+B_CJpugong09.png 100 120 900 0
+B_CJpugong10.png 100 120 0 120
+B_CJpugong11.png 100 120 100 120
+B_CJpugong12.png 100 120 200 120
+B_CJpugong13.png 100 120 300 120
+B_CJpugong14.png 100 120 400 120
+B_CJpugong15.png 100 120 500 120
+B_CJpugong16.png 100 120 600 120
+B_CJpugong17.png 100 120 700 120
+B_CJpugong18.png 100 120 800 120
+B_CJpugong19.png 100 120 900 120
+B_CJpugong20.png 100 120 0 240
+B_CJpugong21.png 100 120 100 240
+B_CJpugong22.png 100 120 200 240
+B_CJpugong23.png 100 120 300 240
+B_CJpugong24.png 100 120 400 240
+B_CJpugong25.png 100 120 500 240
+B_CJpugong26.png 100 120 600 240
+B_CJpugong27.png 100 120 700 240
+B_CJpugong28.png 100 120 800 240
+B_CJpugong29.png 100 120 900 240
+B_CJpugong30.png 100 120 0 360

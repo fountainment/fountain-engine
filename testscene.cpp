@@ -483,12 +483,12 @@ void TimeScene::customDraw()
 //class FragmentScene
 void FragmentScene::customInit()
 {
-	nt.init();
+	nt.init(&mainClock);
 }
 
 void FragmentScene::customUpdate()
 {
-	if (fountain::sysKeyboard.getState(FT_Space)) nt.attack();
+	if (fountain::sysKeyboard.getState(FT_Z)) nt.attack();
 	ftVec2 v(0.0, 0.0);
 	if (fountain::sysKeyboard.getState(FT_Up)) v += ftVec2(0.0, 200.0);
 	if (fountain::sysKeyboard.getState(FT_Down)) v += ftVec2(0.0, -200.0);

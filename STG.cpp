@@ -43,14 +43,16 @@ bool BulletCon::willLive(Bullet & b)
 }
 
 //class STG::MainCharactor
-void MainCharactor::init()
+void MainCharactor::init(ftTime::Clock *masterClock)
 {
-	animeTest = ftRender::SubImagePool("resources/image/Breath.png", "resources/image/Breath.sip");
+	animeTest = ftRender::SubImagePool("resources/image/CommonAttack.png", "resources/image/CommonAttack.sip");
 	breath = ftAnime::FrameAnime(animeTest, 15.0f);
 	setCurAnime(&breath);
 	curAnime->setLoop(true);
 	speed = ftVec2(0.0, 0.0);
-	curAnime->play();
+	charClock = ftTime::Clock(masterClock);
+	charClock.init();
+	curAnime->play(&charClock);
 }
 
 void MainCharactor::setCurAnime(ftAnime::FrameAnime *ca)
@@ -73,8 +75,8 @@ void MainCharactor::setSpeed(ftVec2 v)
 
 void MainCharactor::update()
 {
-
-	float deltaT = fountain::getCurSceneDeltaT();
+	charClock.tick();
+	float deltaT = charClock.getDeltaT();
 	move(speed * deltaT);
 	bulletCon.update();
 	curAnime->update();

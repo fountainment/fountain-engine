@@ -24,6 +24,7 @@ class BulletCon : public container<Bullet, 1000>
 class MainCharactor : public ftSprite
 {
 private:
+	ftTime::Clock charClock;
 	BulletCon bulletCon;
 	ftVec2 speed;
 	ftRender::SubImagePool animeTest;
@@ -31,7 +32,7 @@ private:
 	ftAnime::FrameAnime *curAnime;
 	void setCurAnime(ftAnime::FrameAnime *ca);
 public:
-	void init();
+	void init(ftTime::Clock *masterClock);
 	void attack();
 	void setSpeed(ftVec2 v);
 	void update();

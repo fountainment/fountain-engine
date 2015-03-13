@@ -108,8 +108,12 @@ float ftTime::getFps()
 Clock::Clock(float fps)
 {
 	setFps(fps);
-	isPaused = true;
 	slave = false;
+	isPaused = true;
+	deltaT = 0.0f;
+	timeScale = 1.0f;
+	totalT = 0.0f;
+	frameCount = 0;
 }
 
 Clock::Clock(Clock *mClock)
@@ -117,8 +121,12 @@ Clock::Clock(Clock *mClock)
 	masterClock = mClock;
 	secondPerFrame = 0.0f;
 	perFrameWaitTime = 0.0f;
-	isPaused = true;
 	slave = true;
+	isPaused = true;
+	deltaT = 0.0f;
+	timeScale = 1.0f;
+	totalT = 0.0f;
+	frameCount = 0;
 }
 
 void Clock::init()
