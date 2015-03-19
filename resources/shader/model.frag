@@ -9,7 +9,7 @@ vec3 lightPos = vec3(mouse - 0.5 * resolution, 500.0);
 vec3 eyePos = vec3(0.0, 0.0, 1000.0);
 
 void main( void ) {
-	vec3 N = normal;
+	vec3 N = normalize(normal);
 	vec3 P = pixelPos;
 	vec4 color = gl_Color;
 	if (useTex == 1.0) {

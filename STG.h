@@ -10,10 +10,12 @@ class Bullet : public ftSprite
 private:
 	ftVec2 speed;
 	int type;
+	ftColor color;
 public:
 	void update();
 	void draw();
 	void setSpeed(ftVec2 v);
+	void setColor(ftColor c);
 };
 
 class BulletCon : public container<Bullet, 1000>

@@ -130,6 +130,8 @@ void singleFrame();
 
 ftVec2 getWinSize();
 ftRect getWinRect();
+ftTime::Clock* getCurSceneClock();
+ftRender::Camera* getCurSceneCamera();
 float getCurSceneDeltaT();
 
 }

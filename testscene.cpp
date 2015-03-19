@@ -496,9 +496,15 @@ void FragmentScene::customUpdate()
 	if (fountain::sysKeyboard.getState(FT_Right)) v += ftVec2(200.0, 0.0);
 	nt.setSpeed(v);
 	nt.update();
+	STG::Bullet tmpb;
+	tmpb.setColor(ftColor(std::cos(mainClock.getTotalT()), std::sin(mainClock.getTotalT()), 0.3, 1.0));
+	tmpb.setSpeed(ftVec2(std::cos(mainClock.getTotalT() * 10.0), std::sin(mainClock.getTotalT() * 10.0)) * 200.0);
+	enemyBulletCon.add(tmpb);
+	enemyBulletCon.update();
 }
 
 void FragmentScene::customDraw()
 {
 	nt.draw();
+	enemyBulletCon.draw();
 }

@@ -9,7 +9,6 @@ void main()
 	gl_FrontColor = gl_Color;
 	pixelPos = vec3(v * gl_ModelViewMatrix);
 	v = gl_ModelViewProjectionMatrix * v;
-	//normal = normalize(vec3(vec4(gl_Normal, 1.0) * gl_ModelViewMatrix));
-	normal = gl_Normal;
+	normal = normalize(gl_Normal);
 	gl_Position = v;
 }

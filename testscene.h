@@ -164,6 +164,7 @@ class FragmentScene : public TestScene
 {
 private:
 	STG::MainCharactor nt;
+	STG::BulletCon enemyBulletCon;
 public:
 	void customInit();
 	void customUpdate();

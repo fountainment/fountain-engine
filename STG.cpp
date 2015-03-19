@@ -21,17 +21,22 @@ void Bullet::draw()
 {
 	ftVec2 pos = getPosition();
 	ftRender::transformBegin(pos.x, pos.y);
-	ftRender::useColor(ftColor("#F99"));
+	ftRender::useColor(color);
 	ftRender::drawCircle(3.0f);
-	ftRender::useColor(FT_Red);
+	ftRender::useColor(color);
 	ftRender::drawCircleEdge(5.0f);
 	ftRender::transformEnd();
+}
+
+void Bullet::setColor(ftColor c)
+{
+	color = c;
 }
 
 //class STG::BulletCon
 bool BulletCon::willLive(Bullet & b)
 {
-	ftRender::Camera *cam = &((fountain::sceneSelector.getCurScene())->mainCamera);
+	ftRender::Camera *cam = fountain::getCurSceneCamera();
 	if (cam != NULL) {
 		ftRect cr = cam->getCameraRect();
 		ftVec2 xy = cr.getCenter();
@@ -65,6 +70,7 @@ void MainCharactor::attack()
 	Bullet b = Bullet();
 	b.setPosition(getPosition());
 	b.setSpeed(ftVec2(0.0, 2000.0));
+	b.setColor(ftColor("#533"));
 	bulletCon.add(b);
 }
 

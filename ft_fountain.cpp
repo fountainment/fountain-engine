@@ -63,6 +63,20 @@ ftRect getWinRect()
 	return ftRect(0, 0, mainWin.w, mainWin.h);
 }
 
+ftTime::Clock* getCurSceneClock()
+{
+	ftScene::Scene *sc = fountain::sceneSelector.getCurScene();
+	if (sc != NULL) return &(sc->mainClock);
+	else return NULL;
+}
+
+ftRender::Camera* getCurSceneCamera()
+{
+	ftScene::Scene *sc = fountain::sceneSelector.getCurScene();
+	if (sc != NULL) return &(sc->mainCamera);
+	else return NULL;
+}
+
 float getCurSceneDeltaT()
 {
 	ftScene::Scene *sc = fountain::sceneSelector.getCurScene();
