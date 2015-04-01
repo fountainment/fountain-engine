@@ -379,7 +379,7 @@ void ShaderScene::customUpdate()
 	if (use == 5) {
 		if (fountain::sysMouse.getState(FT_ScrollUp)) scale *= 0.8;
 		if (fountain::sysMouse.getState(FT_ScrollDown)) scale *= 1.2;
-		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+		if (fountain::sysMouse.getState(FT_RButton) == FT_isDown) {
 			ftVec2 v = fountain::sysMouse.getDeltaV();
 			v = v / scale;
 			observePos += v;
