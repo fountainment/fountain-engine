@@ -112,6 +112,7 @@
 #include <fountain/ft_audio.h>
 #include <fountain/ft_ui.h>
 #include <fountain/ft_anime.h>
+#include <fountain/ft_debug.h>
 
 namespace fountain {
 

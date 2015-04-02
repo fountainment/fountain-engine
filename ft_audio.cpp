@@ -21,7 +21,7 @@ ALfloat sourceVel[] = {0.0, 0.0, 0.0};
 #define TEST_ERROR(_msg)		\
 	error = alGetError();		\
 	if (error != AL_NO_ERROR) {	\
-		fprintf(stderr, _msg "\n");	\
+		FT_LOG(_msg "\n");	\
 		return -1;		\
 	}
 
@@ -170,13 +170,13 @@ bool ftAudio::init()
 {
 	dev = alcOpenDevice(NULL);
 	if (!dev) {
-		std::printf("Oops! Sound device not found!\n");
+		FT_OUT("Oops! Sound device not found!\n");
 		return false;
 	}
 	ctx = alcCreateContext(dev, NULL);
 	alcMakeContextCurrent(ctx);
 	if (!ctx) {
-		std::printf("Oops! Context create failed!\n");
+		FT_OUT("Oops! Context create failed!\n");
 		return false;
 	}
 	alListenerfv(AL_POSITION,listenerPos);

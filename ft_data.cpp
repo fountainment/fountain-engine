@@ -1,3 +1,4 @@
+#include <fountain/ft_debug.h>
 #include <fountain/ft_data.h>
 #include <fountain/ft_math.h>
 #include <cstdio>
@@ -671,10 +672,10 @@ bool ftFile::load(const char *filename)
 		}
 		str[index] = '\0';
 		std::fclose(f);
-		std::printf("%s: size %d\n", filename, index);
+		FT_OUT("%s: size %d\n", filename, index);
 		return true;
 	} else {
-		std::printf("Open \"%s\" error!\n", filename);
+		FT_OUT("Open \"%s\" error!\n", filename);
 		return false;
 	}
 }

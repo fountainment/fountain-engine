@@ -1,5 +1,6 @@
 //TODO: replace "//GLSL exp" with better solution
 //TODO: provide RTT(render to texture) function
+#include <fountain/ft_debug.h>
 #include <fountain/ft_render.h>
 #include <fountain/ft_data.h>
 #include <fountain/ft_math.h>
@@ -75,20 +76,20 @@ bool GLinit()
 	//TODO: complete the OpenGL init state checking
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
-		std::printf("GLEW init failed!\n");
+		FT_OUT("GLEW init failed!\n");
 		return false;
 	} else {
-		std::printf("GLEW Version: %s\n", glewGetString(GLEW_VERSION));
-		std::printf("OpenGL Version: %s\n", glGetString(GL_VERSION));
+		FT_OUT("GLEW Version: %s\n", glewGetString(GLEW_VERSION));
+		FT_OUT("OpenGL Version: %s\n", glGetString(GL_VERSION));
 	}
 	if (GLEW_VERSION_2_0) {
-		std::printf("GLSL Version: %s\n",
+		FT_OUT("GLSL Version: %s\n",
 		            glGetString(GL_SHADING_LANGUAGE_VERSION));
-		std::printf("Shader supported!\n");
+		FT_OUT("Shader supported!\n");
 		basicShader.init(basicVS, basicFS);
 		basicShader.use();
 	} else {
-		std::printf("Shader unsupported -_-|||\n");
+		FT_OUT("Shader unsupported -_-|||\n");
 	}
 	return true;
 }
@@ -886,14 +887,14 @@ GLuint compileShader(const GLchar *shaderStr, GLenum shaderType)
 		GLint length;
 		GLchar *log;
 		if (shaderType == GL_VERTEX_SHADER)
-			std::printf("vertex");
+			FT_OUT("vertex");
 		if (shaderType == GL_FRAGMENT_SHADER)
-			std::printf("fragment");
-		std::printf(" shader compile failed!!!\n");
+			FT_OUT("fragment");
+		FT_OUT(" shader compile failed!!!\n");
 		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
 		log = new GLchar[length];
 		glGetShaderInfoLog(shader, length, &length, log);
-		std::printf("//\n%s//\n\n", log);
+		FT_OUT("//\n%s//\n\n", log);
 		delete [] log;
 		glDeleteShader(shader);
 		return 0;

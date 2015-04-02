@@ -56,7 +56,7 @@ std::vector<unsigned long> ftAlgorithm::utf8toUnicode(const char *input)
 		switch (t) {
 		/*
 		case 1:
-			std::printf("error\n");
+			FT_OUT("error\n");
 			break;
 		*/
 		case 0:
@@ -76,7 +76,7 @@ std::vector<unsigned long> ftAlgorithm::utf8toUnicode(const char *input)
 				ulTmp <<= 6;
 				/*
 				if (i + j >= len) {
-					std::printf("error\n");
+					FT_OUT("error\n");
 					break;
 				}
 				*/

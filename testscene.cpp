@@ -37,7 +37,7 @@ HWButton::HWButton()
 
 void HWButton::click()
 {
-	std::printf("Button %d click!\n", id);
+	FT_OUT("Button %d click!\n", id);
 	switch (id) {
 	case 0:
 		fountain::sceneSelector.gotoScene(new TextureScene());

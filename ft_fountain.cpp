@@ -24,6 +24,7 @@ void basicSetting() {
 }
 
 void initAllSystem() {
+	ftDebug::init();
 	ftTime::init();
 	ftRender::init();
 	ft3DModel::init();
@@ -34,7 +35,7 @@ void initAllSystem() {
 	ftType::init();
 	ftAudio::init();
 	ftUI::init();
-	ftAnime::close();
+	ftAnime::init();
 }
 
 void closeAllSystem()
@@ -51,6 +52,7 @@ void closeAllSystem()
 	ft3DModel::close();
 	ftRender::close();
 	ftTime::close();
+	ftDebug::close();
 }
 
 ftVec2 getWinSize()

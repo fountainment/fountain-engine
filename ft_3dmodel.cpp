@@ -109,7 +109,7 @@ void ObjModel::loadObj(const char *fileName)
 			}
 		}
 	} else {
-		std::printf("Open \"%s\" error!\n", fileName);
+		FT_OUT("Open \"%s\" error!\n", fileName);
 	}
 }
 

@@ -25,6 +25,9 @@
 				<Option type="2" />
 				<Option compiler="gcc" />
 				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-DNDEBUG" />
+				</Compiler>
 				<Linker>
 					<Add option="-s" />
 				</Linker>
@@ -40,6 +43,7 @@
 		<Unit filename="ft_anime.cpp" />
 		<Unit filename="ft_audio.cpp" />
 		<Unit filename="ft_data.cpp" />
+		<Unit filename="ft_debug.cpp" />
 		<Unit filename="ft_fountain.cpp" />
 		<Unit filename="ft_input.cpp" />
 		<Unit filename="ft_physics.cpp" />
@@ -55,6 +59,7 @@
 		<Unit filename="include/fountain/ft_anime.h" />
 		<Unit filename="include/fountain/ft_audio.h" />
 		<Unit filename="include/fountain/ft_data.h" />
+		<Unit filename="include/fountain/ft_debug.h" />
 		<Unit filename="include/fountain/ft_input.h" />
 		<Unit filename="include/fountain/ft_math.h" />
 		<Unit filename="include/fountain/ft_physics.h" />
