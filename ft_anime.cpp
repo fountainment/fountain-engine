@@ -15,20 +15,20 @@ void ftAnime::close()
 //class ftAnime::FrameAnime
 FrameAnime::FrameAnime()
 {
-	totalTime = 0.0f;
-	state = -1.0f;
-	totalTime = 0.0f;
-	totalFrame = 1.0f;
+	totalTime = 0.0;
+	state = -1.0;
+	totalTime = 0.0;
+	totalFrame = 1.0;
 	curFrame = 0;
-	curTime = 0.0f;
+	curTime = 0.0;
 	loop = false;
 }
 
-FrameAnime::FrameAnime(ftRender::SubImagePool sip, float fps)
+FrameAnime::FrameAnime(ftRender::SubImagePool sip, double fps)
 {
-	state = -1.0f;
+	state = -1.0;
 	curFrame = 0;
-	curTime = 0.0f;
+	curTime = 0.0;
 	animeImage = sip;
 	totalFrame = animeImage.getImageNumber();
 	totalTime = totalFrame / fps;
@@ -44,7 +44,7 @@ void FrameAnime::play(ftTime::Clock *playClock)
 		animeClock = ftTime::Clock(&(scene->mainClock));
 	}
 	animeClock.init();
-	state = 0.0f;
+	state = 0.0;
 	curFrame = 0;
 }
 
@@ -70,12 +70,12 @@ bool FrameAnime::isPlay()
 	return state >= 0;
 }
 
-void FrameAnime::setState(float st)
+void FrameAnime::setState(double st)
 {
 	state = st;
 }
 
-float FrameAnime::getState()
+double FrameAnime::getState()
 {
 	return state;
 }
@@ -89,9 +89,9 @@ void FrameAnime::update()
 		curFrame = (int)(totalFrame * state);
 		if (curFrame >= totalFrame) {
 			if (loop) {
-				float tmp = state;
+				double tmp = state;
 				play();
-				state = tmp - 1.0f;
+				state = tmp - 1.0;
 			} else {
 				stop();
 			}

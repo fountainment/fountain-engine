@@ -13,23 +13,23 @@ class FrameAnime
 private:
 	ftTime::Clock animeClock;
 	ftRender::SubImagePool animeImage;
-	float totalTime;
-	float curTime;
-	float state;
+	double totalTime;
+	double curTime;
+	double state;
 	int totalFrame;
 	int curFrame;
 	bool loop;
 
 public:
 	FrameAnime();
-	FrameAnime(ftRender::SubImagePool sip, float fps = 60.0f);
+	FrameAnime(ftRender::SubImagePool sip, double fps = 60.0);
 	void play(ftTime::Clock *playClock = NULL);
 	void pause();
 	void resume();
 	void stop();
 	bool isPlay();
-	void setState(float st);
-	float getState();
+	void setState(double st);
+	double getState();
 	void update();
 	void draw();
 	void setLoop(bool lp);

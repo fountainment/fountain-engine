@@ -6,41 +6,41 @@ namespace ftTime {
 bool init();
 void initPerFrame();
 void close();
-float getFps();
+double getFps();
 
 class Clock
 {
 private:
-	float secondPerFrame;
-	float perFrameWaitTime;
-	float beginT;
-	float endT;
-	float deltaT;
+	double secondPerFrame;
+	double perFrameWaitTime;
+	double beginT;
+	double endT;
+	double deltaT;
 	bool isPaused;
-	float timeScale;
-	float firstT;
-	float pauseT;
-	float continueT;
-	float totalT;
+	double timeScale;
+	double firstT;
+	double pauseT;
+	double continueT;
+	double totalT;
 	long long frameCount;
 	Clock *masterClock;
 	bool slave;
-	float getCurTime();
+	double getCurTime();
 public:
-	explicit Clock(float fps = 0.0);
+	explicit Clock(double fps = 0.0);
 	explicit Clock(Clock *mClock);
 	void init();
 	void tick();
 	void pause();
 	void resume();
 	bool isPause();
-	void setFps(float fps);
-	float getDeltaT();
-	float getTotalT();
+	void setFps(double fps);
+	double getDeltaT();
+	double getTotalT();
 	long long getFrameCount();
-	float secondsFromInit();
-	float secondsFromPause();
-	float secondsFromContinue();
+	double secondsFromInit();
+	double secondsFromPause();
+	double secondsFromContinue();
 };
 
 }
