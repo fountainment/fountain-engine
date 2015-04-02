@@ -7,6 +7,7 @@ bool init();
 void initPerFrame();
 void close();
 double getFps();
+double getMsPerFrame();
 
 class Clock
 {

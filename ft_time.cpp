@@ -5,10 +5,13 @@ using ftTime::Clock;
 static double curTime, lastTime;
 static int nbFrames;
 static double realFps;
+static double msPerFrame;
 static double initT;
 
+static double mcFps = 60.0;
+
 namespace fountain {
-Clock mainClock(60.0);
+Clock mainClock(mcFps);
 }
 
 #ifdef linux
@@ -93,6 +96,9 @@ void ftTime::initPerFrame()
 	double deltaTime = curTime - lastTime;
 	if (deltaTime >= 1.0) {
 		realFps = nbFrames / deltaTime;
+		mcFps += (60.0 - realFps) * 0.3;
+		fountain::mainClock.setFps(mcFps);
+		msPerFrame = deltaTime * 1000.0 / nbFrames;
 		lastTime = curTime;
 		nbFrames = 0;
 	}
@@ -106,6 +112,11 @@ void ftTime::close()
 double ftTime::getFps()
 {
 	return realFps;
+}
+
+double ftTime::getMsPerFrame()
+{
+	return msPerFrame;
 }
 
 Clock::Clock(double fps)
@@ -223,8 +234,9 @@ void Clock::setFps(double fps)
 			secondPerFrame = 0.0;
 		else
 			secondPerFrame = 1.0 / fps;
-		perFrameWaitTime = secondPerFrame - littleSleepTime * 0.5f;
+		perFrameWaitTime = secondPerFrame - littleSleepTime * 0.5;
 	} else {
 		masterClock->setFps(fps);
 	}
 }
+

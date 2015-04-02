@@ -463,21 +463,30 @@ void InputScene::destroy()
 void TimeScene::customInit()
 {
 	float t = ftTime::getFps();
-	std::sprintf(s, "fps: %.1f", t);
+	float ms = ftTime::getMsPerFrame();
+	std::sprintf(s, "fps: %.2f", t);
+	std::sprintf(mss, "mspf: %.2f", ms);
 	fps.setCaption(s);
+	mspf.setCaption(mss);
 	fps.setForeColor(FT_White);
+	mspf.setForeColor(FT_White);
+	mspf.move(0, -50);
 }
 
 void TimeScene::customUpdate()
 {
 	float t = ftTime::getFps();
-	std::sprintf(s, "fps: %.1f", t);
+	float ms = ftTime::getMsPerFrame();
+	std::sprintf(s, "fps: %.3f", t);
+	std::sprintf(mss, "mspf: %.3f", ms);
 	fps.setCaption(s);
+	mspf.setCaption(mss);
 }
 
 void TimeScene::customDraw()
 {
 	fps.draw();
+	mspf.draw();
 }
 
 //class FragmentScene
