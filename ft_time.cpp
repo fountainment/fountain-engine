@@ -3,6 +3,7 @@
 using ftTime::Clock;
 
 static double curTime, lastTime;
+static int nbFrames;
 static double realFps;
 static double initT;
 
@@ -80,18 +81,20 @@ bool ftTime::init()
 	floatTimeInit();
 	fountain::mainClock.init();
 	curTime = lastTime = 0.0;
+	nbFrames = 0;
 	realFps = 0.0;
 	return true;
 }
 
 void ftTime::initPerFrame()
 {
-	if (fountain::mainClock.getFrameCount() % 128 == 0) {
-		curTime = fountain::mainClock.getTotalT();
-		double deltaTime = curTime - lastTime;
-		if (deltaTime > littleSleepTime)
-			realFps = 128.0 / deltaTime;
+	curTime = fountain::mainClock.getTotalT();
+	nbFrames++;
+	double deltaTime = curTime - lastTime;
+	if (deltaTime >= 1.0) {
+		realFps = nbFrames / deltaTime;
 		lastTime = curTime;
+		nbFrames = 0;
 	}
 }
 
