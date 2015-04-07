@@ -79,7 +79,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 	try {
 		soundFile = fopen(filename.c_str(), "rb");
 		if (!soundFile)
-			throw (filename.c_str());
+			throw ("File not found!");
 
 		// Read in the first chunk into the struct
 		tmp = fread(&riff_header, sizeof(RIFF_Header), 1, soundFile);
@@ -102,7 +102,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		        wave_format.subChunkID[1] != 'm' ||
 		        wave_format.subChunkID[2] != 't' ||
 		        wave_format.subChunkID[3] != ' ')
-			throw ("Invalid Wave Format");
+			throw ("Invalid Wave Format!");
 
 		//check for extra parameters;
 		if (wave_format.subChunkSize > 16)
@@ -116,14 +116,14 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		        wave_data.subChunkID[1] != 'a' ||
 		        wave_data.subChunkID[2] != 't' ||
 		        wave_data.subChunkID[3] != 'a')
-			throw ("Invalid data header");
+			throw ("Invalid data header!");
 
 		//Allocate memory for data
 		data = new unsigned char[wave_data.subChunk2Size];
 
 		// Read in the sound data into the soundData variable
 		if (!fread(data, wave_data.subChunk2Size, 1, soundFile))
-			throw ("error loading WAVE data into struct!");
+			throw ("Error loading WAVE data into struct!");
 
 		//Now we set the variables that we passed in with the
 		//data from the structs
@@ -156,8 +156,7 @@ bool loadWavFile(const std::string filename, ALuint* buffer,
 		return true;
 	} catch(const char *error) {
 		//our catch statement for if we throw a string
-		std::cerr << error << " : trying to load "
-		          << filename << std::endl;
+		FT_ERROR("ftAudio: Loading \"%s\": %s\n", filename.c_str(), error);
 		//clean up memory if wave loading fails
 		if (soundFile != NULL)
 			fclose(soundFile);

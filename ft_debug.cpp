@@ -1,4 +1,5 @@
 #include <fountain/ft_debug.h>
+#include <cstdlib>
 
 std::FILE *debugF;
 

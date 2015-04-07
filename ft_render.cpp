@@ -299,8 +299,10 @@ texInfo loadTexture(const char *filename)
 		fif = FreeImage_GetFIFFromFilename(filename);
 	if (FreeImage_FIFSupportsReading(fif))
 		dib = FreeImage_Load(fif, filename, 0);
-	else
+	else {
+		FT_ERROR("ftRender: \"%s\" Image type unknown!\n", filename);
 		return tex;
+	}
 
 	bits = FreeImage_GetBits(dib);
 	width = FreeImage_GetWidth(dib);
@@ -628,7 +630,10 @@ std::map<int, int> SubImagePool::getMapFromSip(int pid, const char *sipName)
 	int tmp;
 	std::map<int, int> ans;
 	std::FILE *sipF = std::fopen(sipName, "r");
-	if (sipF == NULL) return ans;
+	if (sipF == NULL) {
+		FT_ERROR("ftRender: Loading \"%s\": File not found!\n", sipName);
+		return ans;
+	}
 	tmp = std::fscanf(sipF, "%d %d", &x, &y);
 	tmp = std::fscanf(sipF, "%d", &picN);
 	subImageVec.clear();

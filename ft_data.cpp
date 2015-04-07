@@ -675,7 +675,7 @@ bool ftFile::load(const char *filename)
 		FT_OUT("%s: size %d\n", filename, index);
 		return true;
 	} else {
-		FT_OUT("Open \"%s\" error!\n", filename);
+		FT_ERROR("ftData: Loading \"%s\": File not found!\n", filename);
 		return false;
 	}
 }

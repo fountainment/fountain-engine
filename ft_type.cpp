@@ -75,6 +75,7 @@ bool FontMan::loadFont(const char *fontname)
 {
 	int error = FT_New_Face(library, fontname, 0, &face);
 	if (error) {
+		FT_ERROR("ftType: \"%s\" loading error!\n", fontname);
 		return false;
 	}
 	useKerning = FT_HAS_KERNING(face);
