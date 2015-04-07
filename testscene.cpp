@@ -2,8 +2,49 @@
 #include <cstdio>
 #include <cstring>
 
-const char *str[] = {"图片读取渲染", "3D模型读取渲染", "物理引擎调用", "字体渲染", "音频播放", "动画演示", "着色器渲染", "输入模块示例", "时间模块示例"};
-const char *strEn[] = {"Texture", "3DModel", "Physics", "Type", "Audio", "Anime", "Shader", "Input", "Time"};
+#define CN 0
+#define EN 1
+
+const char *str[] = {"图片读取渲染",
+		     "3D模型读取渲染",
+		     "物理引擎调用",
+		     "字体渲染",
+		     "音频播放",
+		     "动画演示",
+		     "着色器渲染",
+		     "输入模块示例",
+		     "时间模块示例",
+		     "返回",
+		     "Demo",
+		     "En",
+		     "调试绘图: 关",
+		     "调试绘图: 开",
+		     "播放",
+		     "停止",
+		     "循环: 关",
+		     "循环: 开",
+		     "按一下空格试试"};
+const char *strEn[] = {"Texture",
+		       "3DModel",
+		       "Physics",
+		       "Font",
+		       "Audio",
+		       "Anime",
+		       "Shader",
+		       "Input",
+		       "Time",
+		       "Back",
+		       "Demo",
+		       "中文",
+		       "DebugDraw: Off",
+		       "DebugDraw: On",
+		       "Play",
+		       "Stop",
+		       "Repeat: Off",
+		       "Repeat: On",
+		       "Press Space"};
+const char **useStr[] = {str, strEn};
+int language = CN;
 
 //class SButton
 SButton::SButton()
@@ -29,10 +70,21 @@ void SButton::update()
 	}
 }
 
+void SButton::setId(int idd)
+{
+	id = idd;
+	setCaption(useStr[language][id]);
+}
+
 //class HWButton
 HWButton::HWButton()
 {
 	SButton();
+}
+
+void updateCaption(HWButton & but)
+{
+	but.setId(but.id);
 }
 
 void HWButton::click()
@@ -72,6 +124,14 @@ void HWButton::click()
 	case 10:
 		fountain::sceneSelector.gotoScene(new FragmentScene());
 		break;
+	case 11:
+		if (language == CN) {
+			language = EN;
+		}
+		else {
+			language = CN;
+		}
+		break;
 	};
 }
 
@@ -91,14 +151,16 @@ void HelloWorld::init()
 	for (int i = 0; i < 9; i++) {
 		t.setPosition(ftVec2(0, 240 - i * 60));
 		t.setRectSize(ftVec2(300, 50));
-		t.setCaption(str[i]);
-		t.id = i;
+		t.setId(i);
 		butCon.add(t);
 	}
 	t.setPosition(ftVec2(280, 180));
 	t.setRectSize(ftVec2(200, 200));
-	t.setCaption("demo");
-	t.id = 10;
+	t.setId(10);
+	butCon.add(t);
+	t.setPosition(ftVec2(-320, -220));
+	t.setRectSize(ftVec2(100, 100));
+	t.setId(11);
 	butCon.add(t);
 	mainCamera.setViewport(fountain::getWinRect());
 }
@@ -106,6 +168,7 @@ void HelloWorld::init()
 void HelloWorld::update()
 {
 	butCon.update();
+	butCon.doWith(updateCaption);
 }
 
 void HelloWorld::draw()
@@ -119,8 +182,7 @@ void TestScene::init()
 {
 	button.setPosition(ftVec2(320, 260));
 	button.setRectSize(ftVec2(130, 50));
-	button.setCaption("返回");
-	button.id = 9;
+	button.setId(9);
 	mainCamera.setViewport(fountain::getWinRect());
 	customInit();
 }
@@ -213,7 +275,7 @@ void PhysicsScene::customInit()
 
 	debugDraw.setRectSize(ftVec2(300, 80));
 	debugDraw.setPosition(0, -180);
-	debugDraw.setCaption("调试绘图: 关");
+	debugDraw.setCaption(useStr[language][12]);
 	ddFlag = false;
 	world.setDebugDraw(ddFlag);
 }
@@ -226,10 +288,10 @@ void PhysicsScene::customUpdate()
 		ddFlag = !ddFlag;
 		if (ddFlag) {
 			world.setDebugDraw(true);
-			debugDraw.setCaption("调试绘图: 开");
+			debugDraw.setCaption(useStr[language][13]);
 		} else {
 			world.setDebugDraw(false);
-			debugDraw.setCaption("调试绘图: 关");
+			debugDraw.setCaption(useStr[language][12]);
 		}
 	}
 }
@@ -278,17 +340,17 @@ void AudioScene::customInit()
 {
 	play.setRectSize(ftVec2(100, 100));
 	play.setPosition(-70, 70);
-	play.setCaption("播放");
+	play.setCaption(useStr[language][14]);
 	buttonCon.add(&play);
 
 	stop.setRectSize(ftVec2(100, 100));
 	stop.setPosition(70, 70);
-	stop.setCaption("停止");
+	stop.setCaption(useStr[language][15]);
 	buttonCon.add(&stop);
 
 	loop.setRectSize(ftVec2(240, 100));
 	loop.setPosition(0, -60);
-	loop.setCaption("循环: 开");
+	loop.setCaption(useStr[language][17]);
 	buttonCon.add(&loop);
 
 	loopFlag = true;
@@ -310,10 +372,10 @@ void AudioScene::customUpdate()
 		loopFlag = !loopFlag;
 		ch.setLoop(loopFlag);
 		if (loopFlag) {
-			loop.setCaption("循环: 开");
+			loop.setCaption(useStr[language][17]);
 		}
 		else {
-			loop.setCaption("循环: 关");
+			loop.setCaption(useStr[language][16]);
 		}
 	}
 }
@@ -438,7 +500,7 @@ void ShaderScene::destroy()
 //class InputScene
 void InputScene::customInit()
 {
-	info.setCaption("按一下空格试试");
+	info.setCaption(useStr[language][18]);
 	info.setForeColor(FT_White);
 }
 

@@ -10,6 +10,7 @@ public:
 	SButton();
 	int id;
 	void update();
+	void setId(int idd);
 };
 
 class HWButton : public SButton
@@ -28,7 +29,7 @@ public:
 class HelloWorld : public ftScene::Scene
 {
 private:
-	container<HWButton, 10> butCon;
+	container<HWButton, 20> butCon;
 
 public:
 	void init();
