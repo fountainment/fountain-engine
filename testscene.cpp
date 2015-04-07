@@ -167,15 +167,16 @@ void ModelScene::customInit()
 	x.loadObj("resources/model/first.obj");
 	lightSP.load("resources/shader/vs.vert", "resources/shader/model.frag");
 	lightSP.init();
-	y = 0;
+	rx = ry = 0;
 }
 
 void ModelScene::customUpdate()
 {
-	if (fountain::sysMouse.getState(FT_LButton) == FT_isDown)
-		y += mainClock.getDeltaT() * 90.0f;
-	if (fountain::sysMouse.getState(FT_RButton) == FT_isDown)
-		y -= mainClock.getDeltaT() * 90.0f;
+	if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+		ftVec2 dv = fountain::sysMouse.getDeltaV();
+		ry += dv.x;
+		rx -= dv.y;
+	}
 }
 
 void ModelScene::customDraw()
@@ -184,8 +185,8 @@ void ModelScene::customDraw()
 	lightSP.use();
 	ftRender::useColor(FT_White);
 	ftRender::transformBegin();
-	ftRender::ftScale(130.0f);
-	ftRender::ftRotate(0, y, 0);
+	ftRender::ftScale(150.0f);
+	ftRender::ftRotate(rx, ry, 0);
 	x.render();
 	ftRender::transformEnd();
 	ftRender::useBasicShader();

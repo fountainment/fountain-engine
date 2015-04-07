@@ -62,7 +62,7 @@ public:
 class ModelScene : public TestScene
 {
 private:
-	float y;
+	float rx, ry;
 	ft3DModel::ObjModel x;
 	ftRender::Camera modelCamera;
 	MyShaderProgram lightSP;
