@@ -9,13 +9,27 @@ static const unsigned char rOne[] = {0x00, 0x01, 0x03, 0x07,
                                      0x0f, 0x1f, 0x3f, 0x7f, 0xff
                                     };
 
+static unsigned int randomSeed;
+
 bool ftAlgorithm::init()
 {
+	ftAlgorithm::setRandonSeed((unsigned)ftTime::getInitTime());
 	return true;
 }
 
 void ftAlgorithm::close()
 {
+}
+
+void ftAlgorithm::setRandonSeed(unsigned int rs)
+{
+        randomSeed = rs;
+        std::srand(randomSeed);
+}
+
+unsigned int ftAlgorithm::getRandomSeed()
+{
+        return randomSeed;
 }
 
 int ftAlgorithm::bkdrHash(const char *str)
@@ -30,7 +44,7 @@ int ftAlgorithm::bkdrHash(const char *str)
 
 float ftAlgorithm::randRangef(float l, float r)
 {
-	float zerone = (float)std::rand() / (float)RAND_MAX;
+	double zerone = (double)std::rand() / (double)RAND_MAX;
 	zerone *= r - l;
 	zerone += l;
 	return zerone;

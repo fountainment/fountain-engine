@@ -8,6 +8,9 @@ namespace ftAlgorithm {
 bool init();
 void close();
 
+void setRandonSeed(unsigned int rs);
+unsigned int getRandomSeed();
+
 int bkdrHash(const char *str);
 float randRangef(float l, float r);
 

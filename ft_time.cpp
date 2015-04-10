@@ -119,6 +119,11 @@ double ftTime::getMsPerFrame()
 	return msPerFrame;
 }
 
+double ftTime::getInitTime()
+{
+	return initT;
+}
+
 Clock::Clock(double fps)
 {
 	setFps(fps);
