@@ -4,37 +4,34 @@ uniform vec2 resolution;
 uniform sampler2D tex;
 uniform float useTex;
 
+vec4 ft_GaussianBlur(sampler2D, vec2, vec2, float, float);
+
 void main()
 {
-	int tNum = int(sin(time) * 15. + 16.);
-	int ti = tNum / 2;
 	vec2 texSize = vec2(512., 512.);
 	vec4 color = gl_Color;
-	vec4 sr;
-	vec4 srAvg = vec4(0.);
-	vec2 tmp;
-	float pxNum = 0.;
-	float len;
-	float powX;
 	if (useTex == 1.) {
-		for (int i = -ti; i <= ti; i++) {
-			for (int j = -ti; j <= ti; j++) {
-				tmp = vec2(i, j);
-				sr = vec4(.0);
-				len = length(tmp);
-				if (len <= float(ti)) {
-					tmp = gl_TexCoord[0].st + tmp / texSize;
-					if (tmp.x >= 0.0 && tmp.x <= 1.0 && tmp.y >= 0.0 && tmp.y <= 1.0) {
-						sr = texture2D(tex, tmp);
-						powX = float(ti) - len + 1.;
-						srAvg += sr * powX;
-						pxNum += powX;
-					}
-				}
-			}
-		}
-		srAvg /= pxNum;
-		color *= srAvg;
+		color *= ft_GaussianBlur(tex, gl_TexCoord[0].st, texSize, abs(sin(time / 3.14)) * 32.0, 6);
 	}
 	gl_FragColor = color;
+}
+
+vec4 ft_GaussianBlur(sampler2D text, vec2 p, vec2 texSize, float blurRadius, float sampleNum)
+{
+	if (blurRadius > 0.0 && sampleNum > 1.0) {
+		float r = blurRadius;
+		float sampleStep = r / sampleNum; 
+		vec2 unit = 1.0 / texSize; 
+		vec4 res = vec4(0.0);
+		float pow = 0.0;
+		for (float x = -r; x < r; x += sampleStep) {
+			for (float y = -r; y < r; y += sampleStep) {
+				float weight = (r - abs(x)) * (r - abs(y));
+				res += texture2D(text, p + vec2(x * unit.x, y * unit.y)) * weight; 
+				pow += weight;
+			}
+		}
+		return res / pow;
+	}
+	return texture2D(text, p);
 }
