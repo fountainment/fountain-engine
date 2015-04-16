@@ -12,7 +12,7 @@ void main()
 	gl_TexCoord[0] = gl_MultiTexCoord0;
 	gl_FrontColor = gl_Color;
 	pixelPos = vec3(gl_ModelViewMatrix * gl_Vertex);
-	normal = normalize(gl_Normal);
+	normal = normalize(gl_NormalMatrix * gl_Normal);
 	vec3 lightVec = normalize(lightPos - pixelPos);
 	vec3 reflectVec = reflect(-lightVec, normal);
 	vec3 viewVec = normalize(eyePos - pixelPos);
@@ -22,6 +22,6 @@ void main()
 		spec = max(dot(reflectVec, viewVec), 0.0);
 		spec = pow(spec, 16.0);
 	}
-	LightIntensity = 0.5 * diffuse + 0.5 * spec;
+	LightIntensity = 0.7 * diffuse + 0.3 * spec;
 	gl_Position = ftransform();
 }

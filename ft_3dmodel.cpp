@@ -117,9 +117,11 @@ void ObjModel::render()
 {
 	glEnable(GL_DEPTH_TEST);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
 	glVertexPointer(3, GL_FLOAT, 0, vtx);
-	glNormalPointer(GL_FLOAT, 3, vtxN);
+	glNormalPointer(GL_FLOAT, 0, vtxN);
 	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisable(GL_DEPTH_TEST);
 }
