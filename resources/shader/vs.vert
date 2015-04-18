@@ -6,6 +6,7 @@ uniform vec2 mouse;
 uniform vec2 resolution;
 vec3 lightPos = vec3(mouse - 0.5 * resolution, 500.0);
 vec3 eyePos = vec3(0.0, 0.0, 1000.0);
+varying vec3 reflectEyeVec;
 
 void main()
 {
@@ -23,5 +24,6 @@ void main()
 		spec = pow(spec, 16.0);
 	}
 	LightIntensity = 0.7 * diffuse + 0.3 * spec;
+	reflectEyeVec = reflect(-viewVec, normal);
 	gl_Position = ftransform();
 }

@@ -115,6 +115,9 @@ bool ftRender::init()
 	globalA = 1.0f;
 
 	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.1f);
+	glEnable(GL_TEXTURE_CUBE_MAP);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
@@ -283,7 +286,36 @@ int data2Texture(unsigned char *bits, int width, int height, int dataType)
 	return gl_texID;
 }
 
-texInfo loadTexture(const char *filename)
+int bitmap2CubeMap(FIBITMAP *dib, int width, int height, int dataType)
+{
+	GLuint gl_texID;
+	GLenum internalFormat = FT2InternalFormat[dataType];
+	GLenum format = FT2Format[dataType];
+	GLenum target[] = {GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+			GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z};
+	GLenum targetx[] = {GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+			GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+			GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, GL_TEXTURE_CUBE_MAP_POSITIVE_Z};
+	glGenTextures(1, &gl_texID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, gl_texID);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	for (int i = 0; i < 6; i++) {
+		FIBITMAP *subDib = FreeImage_Copy(dib, height * i, 0, height * (i + 1), height);
+		BYTE *bits;
+		FreeImage_FlipVertical(subDib);
+		bits = FreeImage_GetBits(subDib);
+		glTexImage2D(target[i], 0, internalFormat, height, height, 0, format, GL_UNSIGNED_BYTE, bits);
+		FreeImage_Unload(subDib);
+	}
+	return gl_texID;
+}
+
+texInfo loadTexture(const char *filename, bool cubeMap = false)
 {
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP *dib;
@@ -308,10 +340,17 @@ texInfo loadTexture(const char *filename)
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
 
-	if (fif == FIF_PNG)
-		gl_texID = data2Texture(bits, width, height, FT_BGRA);
-	else
-		gl_texID = data2Texture(bits, width, height, FT_BGR);
+	if (!cubeMap) {
+		if (fif == FIF_PNG)
+			gl_texID = data2Texture(bits, width, height, FT_BGRA);
+		else
+			gl_texID = data2Texture(bits, width, height, FT_BGR);
+	} else {
+		if (fif == FIF_PNG)
+			gl_texID = bitmap2CubeMap(dib, width, height, FT_BGRA);
+		else
+			gl_texID = bitmap2CubeMap(dib, width, height, FT_BGR);
+	}
 
 	FreeImage_Unload(dib);
 	tex.id = gl_texID;
@@ -336,12 +375,12 @@ int ftRender::getPicture(unsigned char *bits, int width, int height, int dataTyp
 	return curPicID++;
 }
 
-int ftRender::getPicture(const char *filename)
+int ftRender::getPicture(const char *filename, bool cubeMap)
 {
 	texInfo texIf;
 	int hash = ftAlgorithm::bkdrHash(filename);
 	if (Hash2PicID[hash] == 0) {
-		texIf = loadTexture(filename);
+		texIf = loadTexture(filename, cubeMap);
 		PicID2TexInfo[curPicID] = texIf;
 		Hash2PicID[hash] = curPicID;
 		return curPicID++;

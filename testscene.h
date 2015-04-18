@@ -127,11 +127,13 @@ class ShaderScene : public TestScene
 {
 private:
 	int shaderNumber;
-	MyShaderProgram sp[6];
-	SButton b[6];
+	MyShaderProgram sp[7];
+	SButton b[7];
 	int use;
 	float scale;
 	ftVec2 observePos;
+	ft3DModel::ObjModel teaPot;
+	float rx, ry;
 public:
 	void customInit();
 	void customUpdate();

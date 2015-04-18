@@ -100,6 +100,33 @@ ftVec3::ftVec3(float x, float y, float z)
 	xyz[2] = z;
 }
 
+void ftVec3::output(float *data)
+{
+	data[0] = xyz[0];
+	data[1] = xyz[1];
+	data[2] = xyz[2];
+}
+
+void ftVec3::operator+=(const ftVec3 & v)
+{
+	xyz[0] += v.xyz[0];
+	xyz[1] += v.xyz[1];
+	xyz[2] += v.xyz[2];
+}
+
+const ftVec3 ftVec3::operator/(float k)
+{
+	ftVec3 res(xyz[0] / k, xyz[1] / k, xyz[2] / k);
+	return res;
+}
+
+bool operator<(const ftVec3 & v1, const ftVec3 & v2)
+{
+	for (int i = 0; i < 3; i++)
+		if (v1.xyz[i] != v2.xyz[i]) return v1.xyz[i] < v2.xyz[i];
+	return false;
+}
+
 //class ftRect
 ftRect::ftRect(float x, float y, float w, float h)
 {

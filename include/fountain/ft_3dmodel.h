@@ -17,7 +17,7 @@ public:
 	ObjModel();
 	explicit ObjModel(const char *fileName);
 	~ObjModel();
-	void loadObj(const char *fileName);
+	void loadObj(const char *fileName, bool smooth = false);
 	void render();
 };
 

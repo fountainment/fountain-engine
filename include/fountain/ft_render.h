@@ -64,7 +64,7 @@ void drawShapeEdge(ftShape & shape, float angle = 0.0f);
 //TODO: implement this function drawBitmap
 void drawBitmap(unsigned char *bits, int width, int height, int dataType = FT_RGBA, int x = 0, int y = 0);
 int getPicture(unsigned char *bits, int width, int height, int dataType);
-int getPicture(const char *filename);
+int getPicture(const char *filename, bool cubeMap = false);
 ftVec2 getPicSize(int picID);
 void drawPic(int picID);
 void drawAlphaPic(int picID);
@@ -127,7 +127,7 @@ private:
 	ftRect viewport;
 	int projectionType;
 public:
-	Camera(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	Camera(float x = 0.0f, float y = 0.0f, float z = 1000.0f);
 	void update();
 	void setPosition(float x, float y);
 	void setPosition(float x, float y, float z);

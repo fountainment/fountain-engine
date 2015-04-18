@@ -71,7 +71,12 @@ public:
 	float xyz[3];
 	ftVec3();
 	ftVec3(float x, float y, float z);
+	void output(float *data);
+	void operator+=(const ftVec3 & v);
+	const ftVec3 operator/(float k);
 };
+
+bool operator<(const ftVec3 & v1, const ftVec3 & v2);
 
 class ftRect
 {

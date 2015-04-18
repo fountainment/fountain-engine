@@ -411,15 +411,18 @@ void AnimeScene::customDraw()
 //class ShaderScene
 void ShaderScene::customInit()
 {
+	teaPot.loadObj("resources/model/first.obj", true);
+	rx = ry = 0;
 	scale = 150.0f;
 	observePos = ftVec2(0.0, 0.0);
-	shaderNumber = 6;
+	shaderNumber = 7;
 	sp[0].load("resources/shader/vs.vert", "resources/shader/magicStar.frag");
 	sp[1].load("resources/shader/vs.vert", "resources/shader/wave.frag");
 	sp[2].load("resources/shader/vs.vert", "resources/shader/purple.frag");
 	sp[3].load("resources/shader/vs.vert", "resources/shader/blur.frag");
 	sp[4].load("resources/shader/vs.vert", "resources/shader/normalmap.frag");
 	sp[5].load("resources/shader/vs.vert", "resources/shader/mandelbrot.frag");
+	sp[6].load("resources/shader/vs.vert", "resources/shader/cubemap.frag");
 	for (int i = 0; i < shaderNumber; i++) sp[i].init();
 	use = 0;
 	for (int i = 0; i < shaderNumber; i++) b[i].setRectSize(ftVec2(190, 50));
@@ -435,6 +438,8 @@ void ShaderScene::customInit()
 	b[4].setCaption("normal");
 	b[5].setPosition(-100, -270);
 	b[5].setCaption("mandelbrot");
+	b[6].setPosition(100, -270);
+	b[6].setCaption("cubemap");
 }
 
 void ShaderScene::customUpdate()
@@ -446,6 +451,13 @@ void ShaderScene::customUpdate()
 			ftVec2 v = fountain::sysMouse.getDeltaV();
 			v = v / scale;
 			observePos += v;
+		}
+	}
+	if (use == 6) {
+		if (fountain::sysMouse.getState(FT_LButton) == FT_isDown) {
+			ftVec2 dv = fountain::sysMouse.getDeltaV();
+			ry += dv.x;
+			rx -= dv.y;
 		}
 	}
 	for (int i = 0; i < shaderNumber; i++) {
@@ -485,8 +497,20 @@ void ShaderScene::customDraw()
 		sp[5].setUniform("scale", scale);
 		sp[5].setUniform("observePos", observePos);
 		ftRender::drawQuad(800, 400);
+	} else if (use == 6) {
+		ftRender::Camera *camera = ftRender::getCurrentCamera();
+		camera->setProjectionType(FT_PERSPECTIVE);
+		camera->update();
+		sp[6].setTexture("cubeTex", ftRender::getPicture("resources/image/cube.png", true));
+		ftRender::transformBegin();
+		ftRender::ftScale(150.0);
+		ftRender::ftRotate(rx, ry, 0);
+		teaPot.render();
+		ftRender::transformEnd();
+		camera->setProjectionType(FT_PLANE);
+		camera->update();
 	} else {
-		ftRender::drawQuad(300, 300);
+		ftRender::drawQuad(800, 400);
 	}
 	ftRender::useBasicShader();
 	for (int i = 0; i < shaderNumber; i++) b[i].draw();

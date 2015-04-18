@@ -43,7 +43,7 @@ ObjModel::~ObjModel()
 	}
 }
 
-void ObjModel::loadObj(const char *fileName)
+void ObjModel::loadObj(const char *fileName, bool smooth)
 {
 	char tmp[10];
 	int tmpInt;
@@ -100,11 +100,25 @@ void ObjModel::loadObj(const char *fileName)
 		std::fclose(objFile);
 		vtx = new float[indexN * 3][3];
 		vtxN = new float[indexN * 3][3];
+		std::map<ftVec3, ftVec3> mapVertex2Normal;
+		std::map<ftVec3, int> mapVertex2NormalNum;
 		for (int tri = 0; tri < indexN; tri++) {
 			for (int vti = 0; vti < 3; vti++) {
-				for (int coori = 0; coori < 3; coori++) {
-					vtx[tri * 3 + vti][coori] = v[p[tri].i[vti]].xyz[coori];
-					vtxN[tri * 3 + vti][coori] = vn[n[tri].i[vti]].xyz[coori];
+				ftVec3 vertex = v[p[tri].i[vti]];
+				ftVec3 normal = vn[n[tri].i[vti]];
+				vertex.output(vtx[tri * 3 + vti]);
+				if (smooth) {
+					mapVertex2Normal[vertex] += normal;
+					mapVertex2NormalNum[vertex]++;
+				} else normal.output(vtxN[tri * 3 + vti]);
+			}
+		}
+		if (smooth) {
+			for (int tri = 0; tri < indexN; tri++) {
+				for (int vti = 0; vti < 3; vti++) {
+					ftVec3 vertex = v[p[tri].i[vti]];
+					ftVec3 normal = mapVertex2Normal[vertex] / mapVertex2NormalNum[vertex];
+					normal.output(vtxN[tri * 3 + vti]);
 				}
 			}
 		}
