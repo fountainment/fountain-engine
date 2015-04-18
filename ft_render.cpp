@@ -47,6 +47,12 @@ static float globalR, globalG, globalB, globalA;
 static ShaderProgram *currentShader = NULL;
 static Camera *currentCamera = NULL;
 
+//test
+/*
+static GLuint msaaTex;
+static GLuint msaaFbo;
+*/
+
 static const char *basicVS = {
 "void main()"
 "{"
@@ -119,6 +125,16 @@ bool ftRender::init()
 	glEnable(GL_TEXTURE_CUBE_MAP);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
+	//test
+	/*
+	glGenTextures(1, &msaaTex);
+	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, msaaTex);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 32, GL_RGBA8, 800, 600, GL_TRUE);
+	glGenFramebuffers(1, &msaaFbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, msaaFbo);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, msaaTex, 0);
+	*/
+
 	//TODO: find out how to use VAO
 	//glGenVertexArrays(1, &VertexArrayID);
 	//glBindVertexArray(VertexArrayID);
@@ -134,6 +150,23 @@ void ftRender::close()
 bool ftRender::isAlive()
 {
 	return alive;
+}
+
+void ftRender::frameBegin()
+{
+	//glBindFramebuffer(GL_DRAW_FRAMEBUFFER, msaaFbo);
+}
+
+void ftRender::frameEnd()
+{
+	/*
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);   // Make sure no FBO is set as the draw framebuffer
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, msaaFbo); // Make sure your multisampled FBO is the read framebuffer
+	glDrawBuffer(GL_BACK);                       // Set the back buffer as the draw buffer
+	glBlitFramebuffer(0, 0, 800, 600, 800, 600, 800, 600, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	*/
 }
 
 //some OpenGL functions

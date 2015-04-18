@@ -15,7 +15,7 @@ const char *str[] = {"图片读取渲染",
 		     "输入模块示例",
 		     "时间模块示例",
 		     "返回",
-		     "Demo",
+		     "测试",
 		     "En",
 		     "调试绘图: 关",
 		     "调试绘图: 开",
@@ -411,6 +411,9 @@ void AnimeScene::customDraw()
 //class ShaderScene
 void ShaderScene::customInit()
 {
+	const char *titleStr[][7] = {
+				{"效果1", "效果2", "效果3", "高斯模糊", "法线贴图", "曼德博集", "立方贴图"},
+				{"star", "wave", "smoke", "blur", "normal", "mandelbrot", "cubemap"}};
 	teaPot.loadObj("resources/model/first.obj", true);
 	rx = ry = 0;
 	scale = 150.0f;
@@ -425,21 +428,17 @@ void ShaderScene::customInit()
 	sp[6].load("resources/shader/vs.vert", "resources/shader/cubemap.frag");
 	for (int i = 0; i < shaderNumber; i++) sp[i].init();
 	use = 0;
-	for (int i = 0; i < shaderNumber; i++) b[i].setRectSize(ftVec2(190, 50));
 	b[0].setPosition(-300, -210);
-	b[0].setCaption("magicStar");
 	b[1].setPosition(-100, -210);
-	b[1].setCaption("wave");
 	b[2].setPosition(100, -210);
-	b[2].setCaption("purple");
 	b[3].setPosition(300, -210);
-	b[3].setCaption("blur");
 	b[4].setPosition(-300, -270);
-	b[4].setCaption("normal");
 	b[5].setPosition(-100, -270);
-	b[5].setCaption("mandelbrot");
 	b[6].setPosition(100, -270);
-	b[6].setCaption("cubemap");
+	for (int i = 0; i < shaderNumber; i++) {
+		b[i].setRectSize(ftVec2(190, 50));
+		b[i].setCaption(titleStr[language][i]);
+	}
 }
 
 void ShaderScene::customUpdate()
@@ -488,10 +487,10 @@ void ShaderScene::customDraw()
 		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/logo.png"));
 		ftRender::transformEnd();
 	} else if (use == 4) {
-		sp[4].setTexture("nmTex", ftRender::getPicture("resources/image/banner-nmm.png"), 1);
+		sp[4].setTexture("nmTex", ftRender::getPicture("resources/image/normalmap.png"), 1);
 		ftRender::useColor(FT_White);
 		ftRender::transformBegin();
-		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/banner.png"));
+		ftRender::drawAlphaPic(ftRender::getPicture("resources/image/normalmap.png"));
 		ftRender::transformEnd();
 	} else if (use == 5) {
 		sp[5].setUniform("scale", scale);

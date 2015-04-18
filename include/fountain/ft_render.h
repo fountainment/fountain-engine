@@ -29,6 +29,9 @@ bool init();
 void close();
 bool isAlive();
 
+void frameBegin();
+void frameEnd();
+
 void clearColorDepthBuffer();
 
 void transformBegin();

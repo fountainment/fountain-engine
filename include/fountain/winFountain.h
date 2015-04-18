@@ -133,10 +133,12 @@ WinMain(HINSTANCE hInstance,
 		GetCursorPos(&mousePos);
 		ScreenToClient(hwnd, &mousePos);
 		fountain::sysMouse.update(mousePos.x, mousePos.y);
+		ftRender::frameBegin();
 		ftRender::clearColorDepthBuffer();
 		ftRender::transformBegin();
 		fountain::singleFrame();
 		ftRender::transformEnd();
+		ftRender::frameEnd();
 		SwapBuffers(hDC);
 	}
 	fountain::closeAllSystem();
