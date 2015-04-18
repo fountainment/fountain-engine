@@ -79,6 +79,8 @@ private:
 	ftPhysics::World world;
 	ftPhysics::Body ground, ball;
 	ftPhysics::Body card[25];
+	ftPhysics::Body tmp[101];
+	int tmpn;
 	SButton debugDraw;
 	bool ddFlag;
 public:

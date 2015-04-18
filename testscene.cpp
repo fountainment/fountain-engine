@@ -278,12 +278,20 @@ void PhysicsScene::customInit()
 	debugDraw.setCaption(useStr[language][12]);
 	ddFlag = false;
 	world.setDebugDraw(ddFlag);
+	tmpn = 0;
 }
 
 void PhysicsScene::customUpdate()
 {
 	world.update(mainClock.getDeltaT());
 	debugDraw.update();
+	if (fountain::sysMouse.getState(FT_LButton) == FT_ButtonDown) {
+		ftVec2 pos = mainCamera.mouseToWorld(fountain::sysMouse.getPos());
+		tmp[tmpn] = ftPhysics::Body(pos.x, pos.y, FT_Dynamic);
+		tmp[tmpn].setShape(ftShape(15));
+		world.addBody(&tmp[tmpn]);
+		if (tmpn < 100) tmpn++;
+	}
 	if (debugDraw.getState() == FT_ButtonDown) {
 		ddFlag = !ddFlag;
 		if (ddFlag) {
