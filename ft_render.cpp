@@ -102,8 +102,9 @@ void initCircleData(GLfloat *v, int n)
 {
 	float d = 3.14159f * 2.0f / n;
 	for (int i = 0; i < n; i++) {
-		v[i * 2] = std::sin(d * i);
-		v[i * 2 + 1] = std::cos(d * i);
+		float degree = d * (n - i - 1);
+		v[i * 2] = std::sin(degree);
+		v[i * 2 + 1] = std::cos(degree);
 	}
 }
 
@@ -433,7 +434,7 @@ void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
 	float h2 = h / 2.0f;
-	GLfloat vtx[] = {-w2, -h2, -w2, h2, w2, h2, w2, -h2};
+	GLfloat vtx[] = {-w2, -h2, w2, -h2, w2, h2, -w2, h2};
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	drawFloat2(vtx, 4, GL_TRIANGLE_FAN);
