@@ -75,6 +75,13 @@ static const char *basicFS = {
 "}"
 };
 
+bool GLinit();
+void initCircleData(GLfloat* , int);
+inline void enableTexture2D();
+inline void disableTexture2D();
+inline void bindTexture(int);
+inline void drawFloat2(const GLfloat*, int, GLuint);
+
 bool GLinit()
 {
 	//TODO: complete the OpenGL init state checking
