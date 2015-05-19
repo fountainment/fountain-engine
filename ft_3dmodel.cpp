@@ -86,12 +86,12 @@ void ObjModel::loadObj(const char *fileName, bool smooth)
 				}
 				vn.push_back(tmpVN);
 			} else if (std::strcmp(tmp, "f") == 0) {
-					for (int i = 0; i < 3; i++) {
-						tmpInt = std::fscanf(objFile, "%d//%d", &tmpP.i[i], &tmpN.i[i]);
-					}
-					p.push_back(tmpP);
-					n.push_back(tmpN);
-					indexN++;
+				for (int i = 0; i < 3; i++) {
+					tmpInt = std::fscanf(objFile, "%d//%d", &tmpP.i[i], &tmpN.i[i]);
+				}
+				p.push_back(tmpP);
+				n.push_back(tmpN);
+				indexN++;
 			}
 			while (tmpInt =
 			            std::fscanf(objFile, "%c", tmp), tmpInt != EOF

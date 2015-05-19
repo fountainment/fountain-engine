@@ -317,7 +317,7 @@ std::vector<ftVec2> ftRect::collideSegment(const ftVec2 & pa, const ftVec2 & pb)
 		tmp = prev[i];
 		if (collidePoint(tmp)) {
 			if ((tmp.x - pa.x) * (tmp.x - pb.x) <= 0 &&
-				(tmp.y - pa.y) * (tmp.y - pb.y) <= 0) v.push_back(prev[i]);
+			        (tmp.y - pa.y) * (tmp.y - pb.y) <= 0) v.push_back(prev[i]);
 		}
 	}
 	return v;

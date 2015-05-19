@@ -6,43 +6,45 @@
 #define EN 1
 
 const char *str[] = {"图片读取渲染",
-		     "3D模型读取渲染",
-		     "物理引擎调用",
-		     "字体渲染",
-		     "音频播放",
-		     "动画演示",
-		     "着色器渲染",
-		     "输入模块示例",
-		     "时间模块示例",
-		     "返回",
-		     "测试",
-		     "En",
-		     "调试绘图: 关",
-		     "调试绘图: 开",
-		     "播放",
-		     "停止",
-		     "循环: 关",
-		     "循环: 开",
-		     "按一下空格试试"};
+                     "3D模型读取渲染",
+                     "物理引擎调用",
+                     "字体渲染",
+                     "音频播放",
+                     "动画演示",
+                     "着色器渲染",
+                     "输入模块示例",
+                     "时间模块示例",
+                     "返回",
+                     "测试",
+                     "En",
+                     "调试绘图: 关",
+                     "调试绘图: 开",
+                     "播放",
+                     "停止",
+                     "循环: 关",
+                     "循环: 开",
+                     "按一下空格试试"
+                    };
 const char *strEn[] = {"Texture",
-		       "3DModel",
-		       "Physics",
-		       "Font",
-		       "Audio",
-		       "Anime",
-		       "Shader",
-		       "Input",
-		       "Time",
-		       "Back",
-		       "Demo",
-		       "中文",
-		       "DebugDraw: Off",
-		       "DebugDraw: On",
-		       "Play",
-		       "Stop",
-		       "Repeat: Off",
-		       "Repeat: On",
-		       "Press Space"};
+                       "3DModel",
+                       "Physics",
+                       "Font",
+                       "Audio",
+                       "Anime",
+                       "Shader",
+                       "Input",
+                       "Time",
+                       "Back",
+                       "Demo",
+                       "中文",
+                       "DebugDraw: Off",
+                       "DebugDraw: On",
+                       "Play",
+                       "Stop",
+                       "Repeat: Off",
+                       "Repeat: On",
+                       "Press Space"
+                      };
 const char **useStr[] = {str, strEn};
 int language = CN;
 
@@ -420,8 +422,9 @@ void AnimeScene::customDraw()
 void ShaderScene::customInit()
 {
 	const char *titleStr[][7] = {
-				{"效果1", "效果2", "效果3", "高斯模糊", "法线贴图", "曼德博集", "立方贴图"},
-				{"star", "wave", "smoke", "blur", "normal", "mandelbrot", "cubemap"}};
+		{"效果1", "效果2", "效果3", "高斯模糊", "法线贴图", "曼德博集", "立方贴图"},
+		{"star", "wave", "smoke", "blur", "normal", "mandelbrot", "cubemap"}
+	};
 	teaPot.loadObj("resources/model/first.obj", true);
 	rx = ry = 0;
 	scale = 150.0f;

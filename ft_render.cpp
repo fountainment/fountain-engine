@@ -54,25 +54,25 @@ static GLuint msaaFbo;
 */
 
 static const char *basicVS = {
-"void main()"
-"{"
+	"void main()"
+	"{"
 	"gl_TexCoord[0] = gl_MultiTexCoord0;"
 	"gl_FrontColor = gl_Color;"
 	"gl_Position = ftransform();"
-"}"
+	"}"
 };
 
 static const char *basicFS = {
-"uniform sampler2D tex;"
-"uniform float useTex;"
+	"uniform sampler2D tex;"
+	"uniform float useTex;"
 
-"void main( void ) {"
+	"void main( void ) {"
 	"vec4 colorx = gl_Color;"
 	"if (useTex == 1.0) {"
 	"	colorx *= texture2D(tex, gl_TexCoord[0].st);"
 	"}"
 	"gl_FragColor = colorx;"
-"}"
+	"}"
 };
 
 bool GLinit();
@@ -95,7 +95,7 @@ bool GLinit()
 	}
 	if (GLEW_VERSION_2_0) {
 		FT_OUT("GLSL Version: %s\n",
-		            glGetString(GL_SHADING_LANGUAGE_VERSION));
+		       glGetString(GL_SHADING_LANGUAGE_VERSION));
 		FT_OUT("Shader supported!\n");
 		basicShader.init(basicVS, basicFS);
 		basicShader.use();
@@ -333,8 +333,9 @@ int bitmap2CubeMap(FIBITMAP *dib, int width, int height, int dataType)
 	GLenum internalFormat = FT2InternalFormat[dataType];
 	GLenum format = FT2Format[dataType];
 	GLenum target[] = {GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
-			GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
-			GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z};
+	                   GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+	                   GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+	                  };
 	glGenTextures(1, &gl_texID);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, gl_texID);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);

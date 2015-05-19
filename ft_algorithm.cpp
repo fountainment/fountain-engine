@@ -23,13 +23,13 @@ void ftAlgorithm::close()
 
 void ftAlgorithm::setRandonSeed(unsigned int rs)
 {
-        randomSeed = rs;
-        std::srand(randomSeed);
+	randomSeed = rs;
+	std::srand(randomSeed);
 }
 
 unsigned int ftAlgorithm::getRandomSeed()
 {
-        return randomSeed;
+	return randomSeed;
 }
 
 int ftAlgorithm::bkdrHash(const char *str)
