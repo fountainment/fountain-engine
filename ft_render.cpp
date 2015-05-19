@@ -931,14 +931,17 @@ void Camera::update()
 
 const ftVec2 Camera::mouseToWorld(const ftVec2 & mPos)
 {
-	float l, b, w2, h2;
-	w2 = W2 / scale;
-	h2 = H2 / scale;
-	l = x - w2;
-	b = y - h2;
 	ftVec2 ans;
-	ans.x = mPos.x / scale + l;
-	ans.y = mPos.y / scale + b;
+	ans.x = (mPos.x - W2) / scale + x;
+	ans.y = (mPos.y - H2) / scale + y;
+	return ans;
+}
+
+const ftVec2 Camera::worldToScreen(const ftVec2 & wCoord)
+{
+	ftVec2 ans;
+	ans.x = (wCoord.x - x) * scale + W2;
+	ans.y = (wCoord.y - y) * scale + H2;
 	return ans;
 }
 
