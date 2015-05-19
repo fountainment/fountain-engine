@@ -294,7 +294,13 @@ std::vector<ftVec2> ftRect::collideSegment(const ftVec2 & pa, const ftVec2 & pb)
 	float k, b;
 	float rX, rY;
 	if (kv.x == 0.0f) {
-		//TODO: finish this function
+		if (pa.x >= x && pa.x <= x + w) {
+			float y1, y2;
+			if (kv.y > 0) {y1 = pa.y; y2 = pb.y;}
+			else {y1 = pb.y; y2 = pa.y;}
+			if (y >= y1 && y <= y2) prev.push_back(ftVec2(pa.x, y));
+			if (y + h >= y1 && y + h <= y2) prev.push_back(ftVec2(pa.x, y + h));
+		}
 	} else {
 		k = kv.y / kv.x;
 		b = pa.y - k * pa.x;
