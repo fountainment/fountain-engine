@@ -103,7 +103,7 @@ void HWButton::click()
 		fountain::sceneSelector.gotoScene(new PhysicsScene());
 		break;
 	case 3:
-		fountain::sceneSelector.gotoScene(new TypeScene());
+		fountain::sceneSelector.gotoScene(new RakNetScene());
 		break;
 	case 4:
 		fountain::sceneSelector.gotoScene(new AudioScene());
@@ -613,4 +613,58 @@ void FragmentScene::customDraw()
 {
 	nt.draw();
 	enemyBulletCon.draw();
+}
+
+//class RakNetScene
+void RakNetScene::customInit()
+{
+	client = RakNet::RakPeerInterface::GetInstance();
+	server = RakNet::RakPeerInterface::GetInstance();
+	ssd = RakNet::SocketDescriptor(3000, 0);
+	server->Startup(1, &ssd, 1);
+	server->SetMaximumIncomingConnections(10);
+	client->Startup(1, &sd, 1);
+	show = false;
+	if (RakNet::CONNECTION_ATTEMPT_STARTED == client->Connect("127.0.0.1", 3000, 0, 0)) show = true;
+}
+
+void RakNetScene::customUpdate()
+{
+	FT_OUT("upd\n");
+	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyDown) {
+		RakNet::BitStream bs;
+		bs.Write((RakNet::MessageID)100);
+		bs.Write("H");
+		client->Send(&bs, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		FT_OUT("Send!\n");
+	}
+	for (RakNet::Packet* packet = server->Receive(); packet; server->DeallocatePacket(packet), packet = server->Receive()) {
+		switch (packet->data[0])
+		{
+		case 100:
+			FT_OUT("Get!\n");
+			RakNet::BitStream bsIn(packet->data, packet->length, false);
+			for (int i = 0; i < packet->length * 8; i++) {
+				bool t = bsIn.ReadBit();
+				if (t) printf("1");
+				else printf("0");
+			}
+			printf("\n");
+			show = !show;
+			break;
+		}
+	}
+}
+
+void RakNetScene::customDraw()
+{
+	if (show) ftRender::drawCircle(10);
+}
+
+void RakNetScene::destroy()
+{
+	client->Shutdown(0);
+	RakNet::RakPeerInterface::DestroyInstance(client);
+	RakNet::RakPeerInterface::DestroyInstance(server);
+	FT_OUT("des\n");
 }

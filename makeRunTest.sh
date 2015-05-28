@@ -1,9 +1,9 @@
 #!/bin/bash
 
 CC="g++"
-LIN_LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lfreetype -lBox2D -lopenal"
+LIN_LIBS="-lfountain -lX11 -lGL -lGLEW -lfreeimage -lfreetype -lBox2D -lopenal -lRakNetLibStatic -lpthread"
 WIN_LIBS="-lfountain -lgdi32 -lglew_static -lopengl32 -lglu32 -lFreeImage -lfreetype -lBox2D -lOpenAL32"
-CFLAGS="-fexceptions -Wall -g -DDEBUG -I./include -I. -I/usr/include/freetype2 -L./Box2D/Build/bin/Debug -L."
+CFLAGS="-fexceptions -Wall -g -DDEBUG -I./include -I. -I/usr/include/freetype2 -I./RakNet -L./Box2D/Build/bin/Debug -L."
 BOX2D="Box2D/Build/bin/Debug/libBox2D.a"
 FONT="resources/font/test.ttc"
 WAVE="resources/sound/test.wav"

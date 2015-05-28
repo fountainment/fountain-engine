@@ -1,5 +1,9 @@
 #include <fountain/fountaindef.h>
 #include "STG.h"
+#include "MessageIdentifiers.h"
+#include "RakPeerInterface.h"
+#include "RakNetTypes.h"
+#include "BitStream.h"
 
 extern const char *str[];
 extern const char *strEn[];
@@ -177,3 +181,18 @@ public:
 	void customUpdate();
 	void customDraw();
 };
+
+class RakNetScene : public TestScene
+{
+	RakNet::RakPeerInterface *client;
+	RakNet::RakPeerInterface *server;
+	RakNet::SocketDescriptor ssd;
+	RakNet::SocketDescriptor sd;
+	bool show;
+public:
+	void customInit();
+	void customUpdate();
+	void customDraw();
+	void destroy();
+};
+
