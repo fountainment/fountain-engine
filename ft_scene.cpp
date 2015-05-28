@@ -106,6 +106,7 @@ void SceneSelector::doAll()
 	update();
 	if (destroyOldScene && oldScene != NULL) {
 		curScene = nextScene;
+		oldScene->destroy();
 		delete oldScene;
 		oldScene = NULL;
 		destroyOldScene = false;
@@ -116,7 +117,6 @@ void SceneSelector::doAll()
 void SceneSelector::gotoScene(Scene *nextScene, int animeSceneIndex, bool destroyCurScene)
 {
 	if (curScene != NULL && destroyCurScene) {
-		curScene->destroy();
 		oldScene = curScene;
 		destroyOldScene = true;
 	}
