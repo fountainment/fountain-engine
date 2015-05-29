@@ -628,13 +628,25 @@ void RakNetScene::customInit()
 	if (RakNet::CONNECTION_ATTEMPT_STARTED == client->Connect("127.0.0.1", 3000, 0, 0)) show = true;
 }
 
+#pragma pack(push, 1)
+class SC
+{
+public:
+	unsigned char id;
+	unsigned char sp[3];
+	double a, b;
+};
+#pragma pack(pop)
+
 void RakNetScene::customUpdate()
 {
-	FT_OUT("upd\n");
 	if (fountain::sysKeyboard.getState(FT_S) == FT_KeyDown) {
 		RakNet::BitStream bs;
-		bs.Write((RakNet::MessageID)100);
-		bs.Write("H");
+		SC sc;
+		sc.id = 100;
+		sc.a = 128.9129312312321;
+		sc.b = 1024;
+		bs.Write((const char *)(&sc), sizeof(sc));
 		client->Send(&bs, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 		FT_OUT("Send!\n");
 	}
@@ -644,12 +656,17 @@ void RakNetScene::customUpdate()
 		case 100:
 			FT_OUT("Get!\n");
 			RakNet::BitStream bsIn(packet->data, packet->length, false);
-			for (int i = 0; i < packet->length * 8; i++) {
-				bool t = bsIn.ReadBit();
-				if (t) printf("1");
-				else printf("0");
+			for (unsigned i = 0; i < packet->length; i++) {
+				for (int j = 0; j < 8; j++) {
+					bool t = bsIn.ReadBit();
+					if (t) printf("1");
+					else printf("0");
+				}
+				printf(" ");
 			}
 			printf("\n");
+			SC * sc = (SC*)packet->data;
+			printf("%d %.20f %.20f\n", sc->id, sc->a, sc->b);
 			show = !show;
 			break;
 		}
@@ -666,5 +683,4 @@ void RakNetScene::destroy()
 	client->Shutdown(0);
 	RakNet::RakPeerInterface::DestroyInstance(client);
 	RakNet::RakPeerInterface::DestroyInstance(server);
-	FT_OUT("des\n");
 }
