@@ -31,7 +31,7 @@ void ftVec2::move(float x, float y)
 
 float ftVec2::length()
 {
-	return std::pow(x * x + y * y, 0.5);
+	return std::sqrt(x * x + y * y);
 }
 
 float ftVec2::getDegree()
