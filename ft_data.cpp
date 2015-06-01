@@ -335,6 +335,25 @@ std::vector<ftVec2> ftRect::collideSegment(const ftVec2 & pa, const ftVec2 & pb)
 	return v;
 }
 
+ftVec2 ftRect::distanceToPoint(const ftVec2 & p)
+{
+	ftVec2 tp = p;
+	ftVec2 ans(0, 0);
+	ftVec2 size = getSize();
+	size = size / 2;
+	ftVec2 center = getCenter();
+	ans = tp - center;
+	if (FT_ABS(ans.x) > size.x) {
+		ans.x -= FT_ABS(ans.x) / ans.x * size.x;
+	}
+	else ans.x = 0;
+	if (FT_ABS(ans.y) > size.y) {
+		ans.y -= FT_ABS(ans.y) / ans.y * size.y;
+	}
+	else ans.y = 0;
+	return ans;
+}
+
 //class ftShape
 ftShape::ftShape(ftRect rct)
 {

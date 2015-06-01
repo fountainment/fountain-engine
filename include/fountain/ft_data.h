@@ -114,6 +114,7 @@ public:
 	bool collidePoint(const ftVec2 & p);
 	bool collideRect(const ftRect & r);
 	std::vector<ftVec2> collideSegment(const ftVec2 & pa, const ftVec2 & pb);
+	ftVec2 distanceToPoint(const ftVec2 & p);
 };
 
 class ftShape
