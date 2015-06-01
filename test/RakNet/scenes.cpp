@@ -81,10 +81,10 @@ void RakNetScene::update()
                         }
 		}
 		speed = 0.0;
-		if (fountain::sysKeyboard.getState(FT_Up) == FT_isDown) {
+		if (fountain::sysKeyboard.getState(FT_Up)) {
                         speed += 5.0;
 		}
-		if (fountain::sysKeyboard.getState(FT_Down) == FT_isDown) {
+		if (fountain::sysKeyboard.getState(FT_Down)) {
                         speed -= 5.0;
 		}
 		right.move(0, speed);
@@ -94,10 +94,10 @@ void RakNetScene::update()
 		break;
 	case 2:
 		speed = 0.0;
-		if (fountain::sysKeyboard.getState(FT_Up) == FT_isDown) {
+		if (fountain::sysKeyboard.getState(FT_Up)) {
                         speed += 5.0;
 		}
-		if (fountain::sysKeyboard.getState(FT_Down) == FT_isDown) {
+		if (fountain::sysKeyboard.getState(FT_Down)) {
                         speed -= 5.0;
 		}
 		left.move(0, speed);
