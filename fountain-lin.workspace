@@ -11,5 +11,9 @@
 		<Project filename="TimeWell-lin.cbp">
 			<Depends filename="fountain.cbp" />
 		</Project>
+		<Project filename="netTest-lin.cbp">
+			<Depends filename="RakNet/RakNet.cbp" />
+		</Project>
+		<Project filename="RakNet/RakNet.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

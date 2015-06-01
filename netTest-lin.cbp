@@ -18,6 +18,7 @@
 				<Linker>
 					<Add directory="bin/Debug" />
 					<Add directory="Box2D/Build/bin/Debug" />
+					<Add directory="RakNet/bin/Debug" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -32,6 +33,7 @@
 					<Add option="-s" />
 					<Add directory="bin/Release" />
 					<Add directory="Box2D/Build/bin/Release" />
+					<Add directory="RakNet/bin/Release" />
 				</Linker>
 			</Target>
 		</Build>
@@ -50,7 +52,7 @@
 			<Add library="freetype" />
 			<Add library="Box2D" />
 			<Add library="openal" />
-			<Add library="RakNetLibStatic" />
+			<Add library="RakNet" />
 			<Add library="pthread" />
 			<Add directory="." />
 		</Linker>
