@@ -57,7 +57,8 @@ void MainCharactor::init(ftTime::Clock *masterClock)
 	speed = ftVec2(0.0, 0.0);
 	charClock = ftTime::Clock(masterClock);
 	charClock.init();
-	curAnime->play(&charClock);
+	curAnime->setMasterClock(&charClock);
+	curAnime->play();
 }
 
 void MainCharactor::setCurAnime(ftAnime::FrameAnime *ca)

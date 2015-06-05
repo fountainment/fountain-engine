@@ -1,5 +1,6 @@
 #include <fountain/fountaindef.h>
 
+using ftAnime::Anime;
 using ftAnime::FrameAnime;
 
 bool ftAnime::init()
@@ -12,86 +13,120 @@ void ftAnime::close()
 
 }
 
-//class ftAnime::FrameAnime
-FrameAnime::FrameAnime()
+//class ftAnime::Anime
+ftTime::Clock* Anime::getMasterClock()
 {
-	totalTime = 0.0;
-	state = -1.0;
-	totalTime = 0.0;
-	totalFrame = 1.0;
-	curFrame = 0;
-	curTime = 0.0;
-	loop = false;
+	return masterClock;
 }
 
-FrameAnime::FrameAnime(ftRender::SubImagePool sip, double fps)
+void Anime::setMasterClock(ftTime::Clock *clock)
 {
-	state = -1.0;
-	curFrame = 0;
-	curTime = 0.0;
-	animeImage = sip;
-	totalFrame = animeImage.getImageNumber();
-	totalTime = totalFrame / fps;
-	loop = false;
+	masterClock = clock;
 }
 
-void FrameAnime::play(ftTime::Clock *playClock)
+void Anime::play()
 {
-	if (playClock != NULL) {
-		animeClock = ftTime::Clock(playClock);
+	if (getMasterClock() != NULL) {
+		animeClock = ftTime::Clock(getMasterClock());
 	} else {
-		ftScene::Scene *scene = fountain::sceneSelector.getCurScene();
-		animeClock = ftTime::Clock(&(scene->mainClock));
+		animeClock = ftTime::Clock(&fountain::mainClock);
 	}
 	animeClock.init();
-	state = 0.0;
-	curFrame = 0;
+	setState(0.0);
 }
 
-void FrameAnime::pause()
+void Anime::pause()
 {
 	animeClock.pause();
 }
 
-void FrameAnime::resume()
+void Anime::resume()
 {
 	animeClock.resume();
 }
 
-void FrameAnime::stop()
+void Anime::stop()
 {
 	state = -1;
 	animeClock.init();
 	animeClock.pause();
 }
 
-bool FrameAnime::isPlay()
+bool Anime::isPlay()
 {
 	return state >= 0;
 }
 
-void FrameAnime::setState(double st)
+void Anime::setState(double st)
 {
 	state = st;
 }
 
-double FrameAnime::getState()
+double Anime::getState()
 {
 	return state;
 }
 
-void FrameAnime::update()
+double Anime::getDeltaT()
+{
+	return deltaT;
+}
+
+void Anime::updateTime()
 {
 	animeClock.tick();
-	if (state >= 0) {
-		curTime = animeClock.getTotalT();
-		state += animeClock.getDeltaT() / totalTime;
-		curFrame = (int)(totalFrame * state);
+	curTime = animeClock.getTotalT();
+	deltaT = animeClock.getDeltaT();
+}
+
+void Anime::update() {}
+void Anime::draw() {}
+
+void Anime::setLoop(bool lp)
+{
+	loop = lp;
+}
+
+bool Anime::isLoop()
+{
+	return loop;
+}
+
+//class ftAnime::FrameAnime
+FrameAnime::FrameAnime()
+{
+	totalTime = 0.0;
+	setState(-1.0);
+	totalTime = 0.0;
+	totalFrame = 1.0;
+	curFrame = 0;
+	setLoop(false);
+	setMasterClock(NULL);
+}
+
+FrameAnime::FrameAnime(ftRender::SubImagePool sip, double fps)
+{
+	setState(-1.0);
+	curFrame = 0;
+	animeImage = sip;
+	totalFrame = animeImage.getImageNumber();
+	totalTime = totalFrame / fps;
+	setLoop(false);
+	setMasterClock(NULL);
+}
+
+void FrameAnime::update()
+{
+	updateTime();
+	if (isPlay()) {
+		setState(getState() + getDeltaT() / totalTime);
+		curFrame = (int)(totalFrame * getState());
 		if (curFrame >= totalFrame) {
-			if (loop) {
-				double tmp = state;
+			if (isLoop()) {
+				double tmp = getState();
 				play();
-				state = tmp - 1.0;
+				setState(tmp - 1.0);
+				curFrame = (int)(totalFrame * getState());
 			} else {
 				stop();
 			}
@@ -101,13 +136,8 @@ void FrameAnime::update()
 
 void FrameAnime::draw()
 {
-	if (state >= 0) {
+	if (isPlay()) {
 		ftRender::SubImage curImage = animeImage.getImageFromIndex(curFrame);
 		ftRender::drawImage(curImage);
 	}
-}
-
-void FrameAnime::setLoop(bool lp)
-{
-	loop = lp;
 }

@@ -8,31 +8,45 @@ namespace ftAnime {
 bool init();
 void close();
 
-class FrameAnime
+class Anime
 {
 private:
 	ftTime::Clock animeClock;
-	ftRender::SubImagePool animeImage;
-	double totalTime;
-	double curTime;
+	ftTime::Clock *masterClock;
 	double state;
-	int totalFrame;
-	int curFrame;
+	double curTime;
+	double deltaT;
 	bool loop;
-
 public:
-	FrameAnime();
-	FrameAnime(ftRender::SubImagePool sip, double fps = 60.0);
-	void play(ftTime::Clock *playClock = NULL);
+	ftTime::Clock* getMasterClock();
+	void setMasterClock(ftTime::Clock *clock);
+	void play();
 	void pause();
 	void resume();
 	void stop();
 	bool isPlay();
 	void setState(double st);
 	double getState();
+	double getDeltaT();
+	void updateTime();
+	virtual void update();
+	virtual void draw();
+	void setLoop(bool lp);
+	bool isLoop();
+};
+
+class FrameAnime : public Anime
+{
+private:
+	ftRender::SubImagePool animeImage;
+	double totalTime;
+	int totalFrame;
+	int curFrame;
+public:
+	FrameAnime();
+	FrameAnime(ftRender::SubImagePool sip, double fps = 60.0);
 	void update();
 	void draw();
-	void setLoop(bool lp);
 };
 
 }
