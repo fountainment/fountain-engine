@@ -153,12 +153,12 @@ AFSM::AFSM()
 	setMasterClock(NULL);
 }
 
-void AFSM::regAnime(int index, const Anime & ani, bool lp, int lay)
+void AFSM::regAnime(int index, Anime* ani, bool lp, int lay)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
 	FT_ASSERT(lay >= 0 && lay < FT_MAXLAYER, "FT_MAXLAYER");
 	anime[index] = ani;
-	anime[index].setLoop(lp);
+	anime[index]->setLoop(lp);
 	use[index] = 1;
 	layer[index] = lay;
 }
@@ -196,8 +196,8 @@ void AFSM::inputSignal(int signal, int lay)
 		}
 		return;
 	}
-	anime[goAnime].setMasterClock(getMasterClock());
-	anime[goAnime].play();
+	anime[goAnime]->setMasterClock(getMasterClock());
+	anime[goAnime]->play();
 	curAnime[layer[goAnime]] = goAnime;
 }
 
@@ -205,8 +205,8 @@ void AFSM::update()
 {
 	for (int i = 0; i < FT_MAXLAYER; i++) {
 		if (curAnime[i] >= 0 && use[curAnime[i]]) {
-			anime[curAnime[i]].update();
-			if (!anime[curAnime[i]].isPlay()) {
+			anime[curAnime[i]]->update();
+			if (!anime[curAnime[i]]->isPlay()) {
 				inputSignal(0, i);
 			}
 		}
@@ -217,7 +217,7 @@ void AFSM::draw()
 {
 	for (int i = 0; i < FT_MAXLAYER; i++) {
 		if (curAnime[i] >= 0 && use[curAnime[i]]) {
-			anime[curAnime[i]].draw();
+			anime[curAnime[i]]->draw();
 		}
 	}
 }
@@ -225,7 +225,7 @@ void AFSM::draw()
 void AFSM::startWith(int index)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
-	anime[index].setMasterClock(getMasterClock());
-	anime[index].play();
+	anime[index]->setMasterClock(getMasterClock());
+	anime[index]->play();
 	curAnime[layer[index]] = index;
 }

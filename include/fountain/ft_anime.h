@@ -56,14 +56,14 @@ public:
 class AFSM : public Anime
 {
 private:
-	Anime anime[FT_MAXANIME];
+	Anime* anime[FT_MAXANIME];
 	int curAnime[FT_MAXLAYER];
 	int use[FT_MAXANIME];
 	int layer[FT_MAXANIME];
 	int fsm[FT_MAXANIME][FT_MAXSIGNAL];
 public:
 	AFSM();
-	void regAnime(int index, const Anime & ani, bool lp = true, int lay = 0);
+	void regAnime(int index, Anime* ani, bool lp = true, int lay = 0);
 	void unregAnime(int index);
 	void addConnection(int a, int signal, int b);
 	void inputSignal(int signal, int lay = 0);
