@@ -2,6 +2,7 @@
 
 using ftAnime::Anime;
 using ftAnime::FrameAnime;
+using ftAnime::AFSM;
 
 bool ftAnime::init()
 {
@@ -140,4 +141,91 @@ void FrameAnime::draw()
 		ftRender::SubImage curImage = animeImage.getImageFromIndex(curFrame);
 		ftRender::drawImage(curImage);
 	}
+}
+
+//class AFSM(Animation Finite State Machine)
+AFSM::AFSM()
+{
+	std::memset(use, 0, sizeof use);
+	std::memset(layer, 0, sizeof layer);
+	std::memset(fsm, -1, sizeof fsm);
+	std::memset(curAnime, -1, sizeof curAnime);
+	setMasterClock(NULL);
+}
+
+void AFSM::regAnime(int index, const Anime & ani, bool lp, int lay)
+{
+	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(lay >= 0 && lay < FT_MAXLAYER, "FT_MAXLAYER");
+	anime[index] = ani;
+	anime[index].setLoop(lp);
+	use[index] = 1;
+	layer[index] = lay;
+}
+
+void AFSM::unregAnime(int index)
+{
+	use[index] = 0;
+	for (int i = 0; i < FT_MAXANIME; i++) {
+		if (use[i]) {
+			for (int j = 0; j < FT_MAXSIGNAL; j++) {
+				if (fsm[i][j] == index)
+					fsm[i][j] = -1;
+			}
+		}
+	}
+}
+
+void AFSM::addConnection(int a, int signal, int b)
+{
+	FT_ASSERT(use[a] && use[b], "Anime must be registered!");
+	FT_ASSERT(a >= 0 && a < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(b >= 0 && b < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");
+	fsm[a][signal] = b;
+}
+
+void AFSM::inputSignal(int signal, int lay)
+{
+	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");
+	FT_ASSERT(lay >= 0 && lay < FT_MAXLAYER, "FT_MAXLAYER");
+	int goAnime = fsm[curAnime[lay]][signal];
+	if (goAnime == -1) {
+		if (signal == 0) {
+			curAnime[lay] = -1;
+		}
+		return;
+	}
+	anime[goAnime].setMasterClock(getMasterClock());
+	anime[goAnime].play();
+	curAnime[layer[goAnime]] = goAnime;
+}
+
+void AFSM::update()
+{
+	for (int i = 0; i < FT_MAXLAYER; i++) {
+		if (curAnime[i] >= 0 && use[curAnime[i]]) {
+			anime[curAnime[i]].update();
+			if (!anime[curAnime[i]].isPlay()) {
+				inputSignal(0, i);
+			}
+		}
+	}
+}
+
+void AFSM::draw()
+{
+	for (int i = 0; i < FT_MAXLAYER; i++) {
+		if (curAnime[i] >= 0 && use[curAnime[i]]) {
+			anime[curAnime[i]].draw();
+		}
+	}
+}
+
+void AFSM::startWith(int index)
+{
+	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	anime[index].setMasterClock(getMasterClock());
+	anime[index].play();
+	curAnime[layer[index]] = index;
 }
