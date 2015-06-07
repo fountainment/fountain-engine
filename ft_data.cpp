@@ -742,7 +742,7 @@ void ftFile::read(const char *fmt, ...)
 	}
 	std::va_list args;
 	va_start(args, fmt);
-	std::fscanf(fp, fmt, args);
+	std::vfscanf(fp, fmt, args);
 }
 
 void ftFile::write(const char *fmt, ...)
@@ -755,7 +755,7 @@ void ftFile::write(const char *fmt, ...)
 	}
 	std::va_list args;
 	va_start(args, fmt);
-	std::fprintf(fp, fmt, args);
+	std::vfprintf(fp, fmt, args);
 }
 
 bool ftFile::load(const char *filename)
