@@ -747,8 +747,7 @@ const SubImage & SubImagePool::getImage(const char *imageName)
 
 const SubImage & SubImagePool::getImageFromIndex(int index)
 {
-	//TODO: write ftDebug module
-	//if (index < 0 || index >= picN) ftDebug::error("");
+	FT_ASSERT(index >= 0 && index < picN, "getImageFromIndex(): index must in range(picN)");
 	return subImageVec[index];
 }
 
