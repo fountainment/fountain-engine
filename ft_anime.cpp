@@ -229,3 +229,31 @@ void AFSM::startWith(int index)
 	anime[index]->play();
 	curAnime[layer[index]] = index;
 }
+
+void AFSM::saveFSM(const char* filename)
+{
+	ftFile f;
+	f.open(filename);
+	f.write("%d %d\n", FT_MAXANIME, FT_MAXSIGNAL);
+	for (int i = 0; i < FT_MAXANIME; i++) {
+		for (int j = 0; j < FT_MAXSIGNAL; j++) {
+			f.write("%d ", fsm[i][j]);
+		}
+		f.write("\n");
+	}
+	f.close();
+}
+
+void AFSM::loadFSM(const char* filename)
+{
+	int ani, sig;
+	ftFile f;
+	f.open(filename);
+	f.read("%d%d", &ani, &sig);
+	for (int i = 0; i < ani; i++) {
+		for (int j = 0; j < sig; j++) {
+			f.read("%d", &fsm[i][j]);
+		}
+	}
+	f.close();
+}

@@ -205,12 +205,18 @@ class ftFile
 private:
 	char name[260];
 	char *str;
+	char state;
+	std::FILE* fp;
 public:
 	ftFile();
 	~ftFile();
 	ftFile(const char *filename);
 	bool isLoad();
 	void free();
+	void open(const char *filename);
+	void close();
+	void read(const char *fmt, ...);
+	void write(const char *fmt, ...);
 	bool load(const char *filename);
 	bool reload();
 	const char* getStr();

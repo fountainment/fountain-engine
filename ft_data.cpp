@@ -3,6 +3,7 @@
 #include <fountain/ft_math.h>
 #include <cstdio>
 #include <cstring>
+#include <cstdarg>
 
 namespace fountain {
 
@@ -685,6 +686,9 @@ float ftColor::getAlpha()
 ftFile::ftFile()
 {
 	str = NULL;
+	fp = NULL;
+	name[0] = '\0';
+	state = '\0';
 }
 
 ftFile::~ftFile()
@@ -695,6 +699,8 @@ ftFile::~ftFile()
 ftFile::ftFile(const char *filename)
 {
 	str = NULL;
+	fp = NULL;
+	state = '\0';
 	load(filename);
 }
 
@@ -711,11 +717,52 @@ void ftFile::free()
 	}
 }
 
+void ftFile::open(const char *filename)
+{
+	std::strcpy(name, filename);
+	state = 'a';
+}
+
+void ftFile::close()
+{
+	if (fp != NULL) {
+		std::fclose(fp);
+		fp = NULL;
+	}
+}
+
+void ftFile::read(const char *fmt, ...)
+{
+	if (!state) return;
+	if (state != 'r') {
+		close();
+		fp = std::fopen(name, "r");
+		FT_ASSERT(fp != NULL, "ftFile::read fail!");
+		state = 'r';
+	}
+	std::va_list args;
+	va_start(args, fmt);
+	std::fscanf(fp, fmt, args);
+}
+
+void ftFile::write(const char *fmt, ...)
+{
+	if (!state) return;
+	if (state != 'w') {
+		close();
+		fp = std::fopen(name, "w");
+		state = 'w';
+	}
+	std::va_list args;
+	va_start(args, fmt);
+	std::fprintf(fp, fmt, args);
+}
+
 bool ftFile::load(const char *filename)
 {
 	free();
 	std::strcpy(name, filename);
-	FILE *f = std::fopen(filename, "r");
+	std::FILE *f = std::fopen(filename, "r");
 	int length;
 	int index = 0;
 	char tmpChar;

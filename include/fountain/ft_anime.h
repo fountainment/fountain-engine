@@ -70,6 +70,8 @@ public:
 	void update();
 	void draw();
 	void startWith(int index);
+	void saveFSM(const char* filename);
+	void loadFSM(const char* filename);
 };
 
 }
