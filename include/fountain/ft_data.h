@@ -62,6 +62,7 @@ public:
 	void operator*=(float k);
 	const ftVec2 operator/(float k);
 	const ftVec2 operator/(const ftVec2 & v);
+	void unitize();
 };
 
 
@@ -71,9 +72,12 @@ public:
 	float xyz[3];
 	ftVec3();
 	ftVec3(float x, float y, float z);
+	float length();
+	void unitize();
 	void output(float *data);
 	void operator+=(const ftVec3 & v);
 	const ftVec3 operator/(float k);
+	const ftVec3 crossProduct(const ftVec3 & v);
 };
 
 bool operator<(const ftVec3 & v1, const ftVec3 & v2);

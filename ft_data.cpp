@@ -86,6 +86,15 @@ const ftVec2 ftVec2::operator/(const ftVec2 & v)
 	return ftVec2(x / v.x, y / v.y);
 }
 
+void ftVec2::unitize()
+{
+	float l = length();
+	if (l > 0) {
+		x /= l;
+		y /= l;
+	}
+}
+
 //class ftVec3
 ftVec3::ftVec3()
 {
@@ -99,6 +108,21 @@ ftVec3::ftVec3(float x, float y, float z)
 	xyz[0] = x;
 	xyz[1] = y;
 	xyz[2] = z;
+}
+
+float ftVec3::length()
+{
+	return sqrt(xyz[0] * xyz[0] + xyz[1] * xyz[1] + xyz[2] * xyz[2]);
+}
+
+void ftVec3::unitize()
+{
+	float l = length();
+	if (l > 0) {
+		xyz[0] /= l;
+		xyz[1] /= l;
+		xyz[2] /= l;
+	}
 }
 
 void ftVec3::output(float *data)
@@ -119,6 +143,15 @@ const ftVec3 ftVec3::operator/(float k)
 {
 	ftVec3 res(xyz[0] / k, xyz[1] / k, xyz[2] / k);
 	return res;
+}
+
+const ftVec3 ftVec3::crossProduct(const ftVec3 & v)
+{
+	float rx, ry, rz;
+	rx = xyz[1] * v.xyz[2] - v.xyz[1] * xyz[2];
+	ry = -(xyz[0] * v.xyz[2] - v.xyz[0] * xyz[2]);
+	rz = xyz[0] * v.xyz[1] - v.xyz[0] * xyz[1];
+	return ftVec3(rx, ry, rz);
 }
 
 bool operator<(const ftVec3 & v1, const ftVec3 & v2)
