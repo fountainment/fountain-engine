@@ -192,6 +192,14 @@ int AFSM::getConnection(int a, int signal)
 	return fsm[a][signal];
 }
 
+void AFSM::delConnection(int a, int signal)
+{
+	FT_ASSERT(use[a], "Anime must be registered!");
+	FT_ASSERT(a >= 0 && a < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");
+	fsm[a][signal] = -1;
+}
+
 void AFSM::inputSignal(int signal, int lay)
 {
 	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");

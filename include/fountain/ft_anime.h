@@ -67,6 +67,7 @@ public:
 	void unregAnime(int index);
 	void addConnection(int a, int signal, int b);
 	int getConnection(int a, int signal);
+	void delConnection(int a, int signal);
 	void inputSignal(int signal, int lay = 0);
 	void update();
 	void draw();
