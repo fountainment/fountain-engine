@@ -219,6 +219,7 @@ public:
 	bool isLoad();
 	void free();
 	void open(const char *filename);
+	bool exist();
 	void close();
 	void read(const char *fmt, ...);
 	void write(const char *fmt, ...);

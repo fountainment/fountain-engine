@@ -765,11 +765,25 @@ void ftFile::open(const char *filename)
 	state = 'a';
 }
 
+bool ftFile::exist()
+{
+	bool ans = false;
+	if (state == 'a') {
+		fp = std::fopen(name, "r");
+		if (fp != NULL) {
+			ans = true;
+			close();
+		}
+	}
+	return ans;
+}
+
 void ftFile::close()
 {
 	if (fp != NULL) {
 		std::fclose(fp);
 		fp = NULL;
+		if (state == 'r' || state == 'w') state = 'a';
 	}
 }
 
