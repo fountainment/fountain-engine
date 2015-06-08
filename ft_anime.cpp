@@ -225,6 +225,7 @@ void AFSM::draw()
 void AFSM::startWith(int index)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(use[index], "AFSM: must reg first!")
 	anime[index]->setMasterClock(getMasterClock());
 	anime[index]->play();
 	curAnime[layer[index]] = index;

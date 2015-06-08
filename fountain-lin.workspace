@@ -11,5 +11,8 @@
 		<Project filename="TimeWell-lin.cbp">
 			<Depends filename="fountain.cbp" />
 		</Project>
+		<Project filename="fsmeditor-lin.cbp">
+			<Depends filename="fountain.cbp" />
+		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>
