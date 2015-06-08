@@ -185,6 +185,13 @@ void AFSM::addConnection(int a, int signal, int b)
 	fsm[a][signal] = b;
 }
 
+int AFSM::getConnection(int a, int signal)
+{
+	FT_ASSERT(a >= 0 && a < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");
+	return fsm[a][signal];
+}
+
 void AFSM::inputSignal(int signal, int lay)
 {
 	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");
