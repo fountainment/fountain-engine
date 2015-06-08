@@ -429,8 +429,11 @@ int ftRender::getPicture(const char *filename, bool cubeMap)
 
 void ftRender::drawLine(float x1, float y1, float x2, float y2)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	GLfloat vtx[] = {x1, y1, x2, y2};
 	drawFloat2(vtx, 2, GL_LINES);
+	glDisable(GL_BLEND);
 }
 
 void ftRender::drawLine(const ftVec2 & p1, const ftVec2 & p2)
