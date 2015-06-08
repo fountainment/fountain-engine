@@ -56,6 +56,7 @@ void setClearColor(ftColor c);
 
 void drawLine(float x1, float y1, float x2, float y2);
 void drawLine(const ftVec2 & p1, const ftVec2 & p2);
+void drawLineArrow(const ftVec2 & p1, const ftVec2 & p2, float arrorSize = 10.0f);
 void drawQuad(float w, float h);
 void drawQuadEdge(float w, float h);
 void drawRect(ftRect & rct, float angle = 0.0f);

@@ -95,6 +95,15 @@ void ftVec2::unitize()
 	}
 }
 
+const ftVec2 ftVec2::getVectorVertical()
+{
+	ftVec3 v3(x, y, 0);
+	v3 = v3.crossProduct(ftVec3(0, 0, 1));
+	ftVec2 vec = ftVec2(v3.xyz[0], v3.xyz[1]);
+	vec.unitize();
+	return vec;
+}
+
 //class ftVec3
 ftVec3::ftVec3()
 {

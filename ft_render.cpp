@@ -441,6 +441,22 @@ void ftRender::drawLine(const ftVec2 & p1, const ftVec2 & p2)
 	ftRender::drawLine(p1.x, p1.y, p2.x, p2.y);
 }
 
+void ftRender::drawLineArrow(const ftVec2 & p1, const ftVec2 & p2, float arrowSize)
+{
+	ftRender::drawLine(p1.x, p1.y, p2.x, p2.y);
+	ftVec2 vec = ftVec2(p2) - ftVec2(p1);
+	ftVec2 vv = vec.getVectorVertical();
+	vec.unitize();
+	vec *= arrowSize * 1.618;
+	vv *= arrowSize;
+	ftVec2 tp = ftVec2(p2) + vv;
+	tp -= vec;
+	drawLine(p2, tp);
+	tp = ftVec2(p2) - vv;
+	tp -= vec;
+	drawLine(p2, tp);
+}
+
 void ftRender::drawQuad(float w, float h)
 {
 	float w2 = w / 2.0f;
