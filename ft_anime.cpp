@@ -282,6 +282,11 @@ void AFSM::saveFSM(const char* filename)
 		}
 		f.write("\n");
 	}
+	for (int i = 0; i < FT_MAXANIME; i++) {
+		int t = 0;
+		if (isLoop(i)) t = 1;
+		f.write("%d %d\n", t, getLayer(i));
+	}
 	f.close();
 }
 
