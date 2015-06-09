@@ -203,18 +203,21 @@ void AFSM::delConnection(int a, int signal)
 void AFSM::setLoop(int index, bool loop)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(use[index], "AFSM: must reg first!")
 	anime[index]->setLoop(loop);
 }
 
 bool AFSM::isLoop(int index)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(use[index], "AFSM: must reg first!")
 	return anime[index]->isLoop();
 }
 
 void AFSM::setLayer(int index, int lay)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(use[index], "AFSM: must reg first!")
 	FT_ASSERT(lay >= 0 && lay < FT_MAXLAYER, "FT_MAXLAYER");
 	layer[index] = lay;
 }
@@ -222,6 +225,7 @@ void AFSM::setLayer(int index, int lay)
 int AFSM::getLayer(int index)
 {
 	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(use[index], "AFSM: must reg first!")
 	return layer[index];
 }
 
@@ -283,9 +287,11 @@ void AFSM::saveFSM(const char* filename)
 		f.write("\n");
 	}
 	for (int i = 0; i < FT_MAXANIME; i++) {
-		int t = 0;
-		if (isLoop(i)) t = 1;
-		f.write("%d %d\n", t, getLayer(i));
+		if (use[i]) {
+			int t = 0;
+			if (isLoop(i)) t = 1;
+			f.write("%d %d %d\n", i, t, getLayer(i));
+		}
 	}
 	f.close();
 }
