@@ -280,12 +280,15 @@ void AFSM::saveFSM(const char* filename)
 	ftFile f;
 	f.open(filename);
 	f.write("%d %d\n", FT_MAXANIME, FT_MAXSIGNAL);
+	int useN = 0;
 	for (int i = 0; i < FT_MAXANIME; i++) {
+		if (use[i]) useN++;
 		for (int j = 0; j < FT_MAXSIGNAL; j++) {
 			f.write("%d ", fsm[i][j]);
 		}
 		f.write("\n");
 	}
+	f.write("%d\n", useN);
 	for (int i = 0; i < FT_MAXANIME; i++) {
 		if (use[i]) {
 			int t = 0;
@@ -298,13 +301,24 @@ void AFSM::saveFSM(const char* filename)
 
 void AFSM::loadFSM(const char* filename)
 {
-	int ani, sig;
+	int ani, sig, useN;
 	ftFile f;
 	f.open(filename);
 	f.read("%d%d", &ani, &sig);
 	for (int i = 0; i < ani; i++) {
 		for (int j = 0; j < sig; j++) {
 			f.read("%d", &fsm[i][j]);
+		}
+	}
+	int index, loop, lay;
+	f.read("%d", &useN);
+	for (int i = 0; i < useN; i++) {
+		f.read("%d%d%d", &index, &loop, &lay);
+		bool lp = true;
+		if (loop == 0) lp = false; 
+		if (use[index]) {
+			setLoop(index, lp);
+			setLayer(index, lay);
 		}
 	}
 	f.close();
