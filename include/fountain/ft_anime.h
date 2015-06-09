@@ -68,6 +68,10 @@ public:
 	void addConnection(int a, int signal, int b);
 	int getConnection(int a, int signal);
 	void delConnection(int a, int signal);
+	void setLoop(int index, bool loop);
+	bool isLoop(int index);
+	void setLayer(int index, int lay);
+	int getLayer(int index);
 	void inputSignal(int signal, int lay = 0);
 	void update();
 	void draw();

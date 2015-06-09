@@ -194,10 +194,35 @@ int AFSM::getConnection(int a, int signal)
 
 void AFSM::delConnection(int a, int signal)
 {
-	FT_ASSERT(use[a], "Anime must be registered!");
 	FT_ASSERT(a >= 0 && a < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(use[a], "Anime must be registered!");
 	FT_ASSERT(signal >= 0 && signal < FT_MAXSIGNAL, "FT_MAXSIGNAL");
 	fsm[a][signal] = -1;
+}
+
+void AFSM::setLoop(int index, bool loop)
+{
+	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	anime[index]->setLoop(loop);
+}
+
+bool AFSM::isLoop(int index)
+{
+	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	return anime[index]->isLoop();
+}
+
+void AFSM::setLayer(int index, int lay)
+{
+	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	FT_ASSERT(lay >= 0 && lay < FT_MAXLAYER, "FT_MAXLAYER");
+	layer[index] = lay;
+}
+
+int AFSM::getLayer(int index)
+{
+	FT_ASSERT(index >= 0 && index < FT_MAXANIME, "FT_MAXANIME");
+	return layer[index];
 }
 
 void AFSM::inputSignal(int signal, int lay)
