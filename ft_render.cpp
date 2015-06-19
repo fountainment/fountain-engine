@@ -500,10 +500,12 @@ void ftRender::drawCircle(float radius)
 
 void ftRender::drawCircleEdge(float radius)
 {
+	glEnable(GL_BLEND);
 	ftRender::transformBegin();
 	ftRender::ftScale(radius);
 	drawFloat2(circle32, 32, GL_LINE_LOOP);
 	ftRender::transformEnd();
+	glDisable(GL_BLEND);
 }
 
 void ftRender::drawShape(ftShape & shape, float angle)
@@ -538,6 +540,7 @@ void ftRender::drawShapeEdge(ftShape & shape, float angle)
 	const float *v = shape.getData();
 	int n = shape.getN();
 
+	glEnable(GL_BLEND);
 	switch (type)
 	{
 	case FT_Circle:
@@ -556,6 +559,7 @@ void ftRender::drawShapeEdge(ftShape & shape, float angle)
 		ftRender::drawQuadEdge(v[0], v[1]);
 		break;
 	}
+	glDisable(GL_BLEND);
 }
 
 ftVec2 ftRender::getPicSize(int picID)
