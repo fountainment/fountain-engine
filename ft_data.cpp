@@ -43,7 +43,7 @@ float ftVec2::getDegree()
 	return d;
 }
 
-const ftVec2 ftVec2::operator-(const ftVec2 & v)
+const ftVec2 ftVec2::operator-(const ftVec2 & v) const
 {
 	return ftVec2(x - v.x, y - v.y);
 }
@@ -54,7 +54,7 @@ void ftVec2::operator-=(const ftVec2 & v)
 	y -= v.y;
 }
 
-const ftVec2 ftVec2::operator+(const ftVec2 & v)
+const ftVec2 ftVec2::operator+(const ftVec2 & v) const
 {
 	return ftVec2(x + v.x, y + v.y);
 }
@@ -65,7 +65,7 @@ void ftVec2::operator+=(const ftVec2 & v)
 	y += v.y;
 }
 
-const ftVec2 ftVec2::operator*(float k)
+const ftVec2 ftVec2::operator*(float k) const
 {
 	return ftVec2(x * k, y * k);
 }
@@ -76,12 +76,12 @@ void ftVec2::operator*=(float k)
 	y *= k;
 }
 
-const ftVec2 ftVec2::operator/(float k)
+const ftVec2 ftVec2::operator/(float k) const
 {
 	return ftVec2(x / k, y / k);
 }
 
-const ftVec2 ftVec2::operator/(const ftVec2 & v)
+const ftVec2 ftVec2::operator/(const ftVec2 & v) const
 {
 	return ftVec2(x / v.x, y / v.y);
 }
