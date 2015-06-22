@@ -315,7 +315,7 @@ void AFSM::loadFSM(const char* filename)
 	for (int i = 0; i < useN; i++) {
 		f.read("%d%d%d", &index, &loop, &lay);
 		bool lp = true;
-		if (loop == 0) lp = false; 
+		if (loop == 0) lp = false;
 		if (use[index]) {
 			setLoop(index, lp);
 			setLayer(index, lay);
