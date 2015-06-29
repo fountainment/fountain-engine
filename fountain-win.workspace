@@ -11,5 +11,8 @@
 		<Project filename="TimeWell-win.cbp">
 			<Depends filename="fountain.cbp" />
 		</Project>
+		<Project filename="physicseditor-win.cbp">
+			<Depends filename="fountain.cbp" />
+		</Project>
 	</Workspace>
 </CodeBlocks_workspace_file>
