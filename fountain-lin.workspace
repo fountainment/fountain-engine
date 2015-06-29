@@ -14,5 +14,6 @@
 		<Project filename="fsmeditor-lin.cbp">
 			<Depends filename="fountain.cbp" />
 		</Project>
+		<Project filename="physicseditor-lin.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

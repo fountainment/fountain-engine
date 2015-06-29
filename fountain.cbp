@@ -31,6 +31,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add directory="include" />
 			<Add directory="." />
 			<Add directory="/usr/include/freetype2" />

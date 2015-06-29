@@ -5,7 +5,7 @@
 
 #ifndef FT_Console
 
-#ifdef linux
+#ifdef __linux
 #include <fountain/linFountain.h>
 #endif
 

@@ -11,6 +11,7 @@ obj/
 *.dll
 *.orig
 log.txt
+out.txt
 font/
 sound/
 main

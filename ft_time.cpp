@@ -14,7 +14,7 @@ namespace fountain {
 Clock mainClock(mcFps);
 }
 
-#ifdef linux
+#ifdef __linux
 
 // Linux
 #ifndef _BSD_SOURCE
