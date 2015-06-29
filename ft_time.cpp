@@ -34,14 +34,14 @@ void floatTimeInit()
 {
 	static struct timeval now;
 	gettimeofday(&now, NULL);
-	initT = (1000000 * now.tv_sec + now.tv_usec) / 1000000.0;
+	initT = (double)now.tv_sec + (double)now.tv_usec / 1000000.0;
 }
 
 inline double floatTime()
 {
 	static struct timeval now;
 	gettimeofday(&now, NULL);
-	return (double)(((1000000 * now.tv_sec + now.tv_usec) / 1000000.0) - initT);
+	return (double)now.tv_sec + (double)now.tv_usec / 1000000.0 - initT;
 }
 
 // Linux end
@@ -53,7 +53,6 @@ inline double floatTime()
 #include <windows.h>
 
 const double littleSleepTime = 0.001;
-static double freq = 1.0;
 
 inline void littleSleep()
 {
@@ -65,15 +64,15 @@ void floatTimeInit()
 	LARGE_INTEGER tickPerSecond, tick;
 	QueryPerformanceFrequency(&tickPerSecond);
 	QueryPerformanceCounter(&tick);
-	freq = 1.0 / (double)tickPerSecond.QuadPart;
-	initT = (double)tick.QuadPart * freq;
+	initT = (double)tick.QuadPart / (double)tickPerSecond.QuadPart;
 }
 
 inline double floatTime()
 {
-	LARGE_INTEGER tick;
+	LARGE_INTEGER tickPerSecond, tick;
+	QueryPerformanceFrequency(&tickPerSecond);
 	QueryPerformanceCounter(&tick);
-	return (double)((double)tick.QuadPart * freq - initT);
+	return (double)tick.QuadPart / (double)tickPerSecond.QuadPart - initT;
 }
 
 // Win32 end
