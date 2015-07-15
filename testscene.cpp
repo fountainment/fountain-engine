@@ -123,9 +123,11 @@ void HWButton::click()
 	case 9:
 		fountain::sceneSelector.gotoScene(new HelloWorld());
 		break;
+	/*
 	case 10:
 		fountain::sceneSelector.gotoScene(new FragmentScene());
 		break;
+	*/
 	case 11:
 		if (language == CN) {
 			language = EN;
@@ -156,10 +158,12 @@ void HelloWorld::init()
 		t.setId(i);
 		butCon.add(t);
 	}
+	/*
 	t.setPosition(ftVec2(280, 180));
 	t.setRectSize(ftVec2(200, 200));
 	t.setId(10);
 	butCon.add(t);
+	*/
 	t.setPosition(ftVec2(-320, -220));
 	t.setRectSize(ftVec2(100, 100));
 	t.setId(11);
@@ -587,6 +591,7 @@ void TimeScene::customDraw()
 	mspf.draw();
 }
 
+/*
 //class FragmentScene
 void FragmentScene::customInit()
 {
@@ -615,3 +620,4 @@ void FragmentScene::customDraw()
 	nt.draw();
 	enemyBulletCon.draw();
 }
+*/

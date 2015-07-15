@@ -50,7 +50,6 @@
 			<Add library="Box2D" />
 			<Add library="OpenAL32" />
 		</Linker>
-		<Unit filename="STG.cpp" />
 		<Unit filename="STG.h" />
 		<Unit filename="icon.rc">
 			<Option compilerVar="WINDRES" />
