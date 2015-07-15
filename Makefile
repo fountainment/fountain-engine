@@ -1,7 +1,7 @@
 CPPS = ft_time.cpp ft_3dmodel.cpp ft_render.cpp ft_input.cpp ft_data.cpp ft_algorithm.cpp ft_physics.cpp ft_scene.cpp ft_type.cpp ft_audio.cpp ft_ui.cpp ft_anime.cpp ft_debug.cpp ft_fountain.cpp
 OBJS = ft_time.o ft_3dmodel.o ft_render.o ft_input.o ft_data.o ft_algorithm.o ft_physics.o ft_scene.o ft_type.o ft_audio.o ft_ui.o ft_fountain.o ft_anime.o ft_debug.o
 CC = g++
-CFLAGS = -Wall -g -DDEBUG -fexceptions -Iinclude -I. -I/usr/include/freetype2 -c
+CFLAGS = -Wall -g -std=c++11 -DDEBUG -fexceptions -Iinclude -I. -I/usr/include/freetype2 -c
 FT_H = include/fountain
 
 libfountain.a: $(OBJS)
