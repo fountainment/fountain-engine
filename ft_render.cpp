@@ -366,10 +366,12 @@ texInfo loadTexture(const char *filename, bool cubeMap = false)
 	tex.w = 0;
 	tex.h = 0;
 	fif = FreeImage_GetFileType(filename, 0);
+
 	if (fif == FIF_UNKNOWN)
 		fif = FreeImage_GetFIFFromFilename(filename);
-	if (FreeImage_FIFSupportsReading(fif))
+	if (FreeImage_FIFSupportsReading(fif)) {
 		dib = FreeImage_Load(fif, filename, 0);
+	}
 	else {
 		FT_ERROR("ftRender: \"%s\" Image type unknown!\n", filename);
 		return tex;
@@ -380,17 +382,20 @@ texInfo loadTexture(const char *filename, bool cubeMap = false)
 	height = FreeImage_GetHeight(dib);
 
 	if (!cubeMap) {
-		if (fif == FIF_PNG)
+		if (FreeImage_GetBPP(dib) == 32) {
 			gl_texID = data2Texture(bits, width, height, FT_BGRA);
-		else
+		}
+		else {
 			gl_texID = data2Texture(bits, width, height, FT_BGR);
+		}
 	} else {
-		if (fif == FIF_PNG)
+		if (FreeImage_GetBPP(dib) == 32) {
 			gl_texID = bitmap2CubeMap(dib, width, height, FT_BGRA);
-		else
+		}
+		else {
 			gl_texID = bitmap2CubeMap(dib, width, height, FT_BGR);
+		}
 	}
-
 	FreeImage_Unload(dib);
 	tex.id = gl_texID;
 	tex.w = width;
