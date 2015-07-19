@@ -1172,7 +1172,7 @@ Bitmap ftRender::getBitmapFromScreen(int x, int y, int w, int h)
 	if (w > 0 && h > 0) {
                 res.width = w;
                 res.height = h;
-                unsigned char *bits = new unsigned char [w * h];
+                unsigned char *bits = new unsigned char [w * h * 3];
 		glReadPixels(x, y, w, h, GL_RGB, GL_UNSIGNED_BYTE, bits);
 		res.bits = bits;
 	}
