@@ -16,6 +16,7 @@ using ftRender::SubImage;
 using ftRender::SubImagePool;
 using ftRender::Camera;
 using ftRender::ShaderProgram;
+using ftRender::Bitmap;
 
 static bool alive = false;
 
@@ -1137,4 +1138,43 @@ void ShaderProgram::free()
 	glDeleteProgram(program);
 	vsFile.free();
 	fsFile.free();
+}
+
+//class ftRender::Bitmap
+
+Bitmap::Bitmap()
+{
+	width = 0;
+	height = 0;
+	bits = NULL;
+	type = FT_RGB;
+}
+
+Bitmap::~Bitmap()
+{
+        if (bits) {
+                delete [] bits;
+        }
+}
+
+int Bitmap::getPicture()
+{
+	int res = -1;
+	if (width > 0 && height > 0) {
+		res = ftRender::getPicture(bits, width, height, type);
+	}
+	return res;
+}
+
+Bitmap ftRender::getBitmapFromScreen(int x, int y, int w, int h)
+{
+	Bitmap res;
+	if (w > 0 && h > 0) {
+                res.width = w;
+                res.height = h;
+                unsigned char *bits = new unsigned char [w * h];
+		glReadPixels(x, y, w, h, GL_RGB, GL_UNSIGNED_BYTE, bits);
+		res.bits = bits;
+	}
+	return res;
 }
