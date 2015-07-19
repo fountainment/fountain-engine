@@ -180,7 +180,7 @@ public:
         int height;
         int type;
 	Bitmap();
-        ~Bitmap();
+        void free();
         int getPicture();
 };
 
