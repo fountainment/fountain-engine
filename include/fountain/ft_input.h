@@ -35,10 +35,12 @@ class Keyboard
 {
 private:
 	int state[FT_KEYBOARDSTATE_SIZE];
+	char asciiIn;
 public:
 	Keyboard();
 	void setState(int ch, int st);
 	int getState(int ch);
+	char getAsciiInput();
 	void clearState();
 };
 

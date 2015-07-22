@@ -105,11 +105,21 @@ void Keyboard::setState(int ch, int st)
 {
 	state[ch] = st;
 	keyChangeList.push(ch);
+	if (ch > 0 && ch < 256) {
+                asciiIn = ch;
+	} else {
+		asciiIn = 0;
+	}
 }
 
 int Keyboard::getState(int ch)
 {
 	return state[ch];
+}
+
+char Keyboard::getAsciiInput()
+{
+        return asciiIn;
 }
 
 void Keyboard::clearState()
