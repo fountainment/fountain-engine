@@ -381,12 +381,14 @@ texInfo loadTexture(const char *filename, bool cubeMap = false)
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
 
+	int bpp = FreeImage_GetBPP(dib);
 	if (!cubeMap) {
-		if (FreeImage_GetBPP(dib) == 32) {
+		if (bpp == 32) {
 			gl_texID = data2Texture(bits, width, height, FT_BGRA);
-		}
-		else {
+		} else if (bpp == 24) {
 			gl_texID = data2Texture(bits, width, height, FT_BGR);
+		} else if (bpp == 8) {
+			gl_texID = data2Texture(bits, width, height, FT_GRAY);
 		}
 	} else {
 		if (FreeImage_GetBPP(dib) == 32) {
@@ -428,8 +430,9 @@ int ftRender::getPicture(const char *filename, bool cubeMap)
 		PicID2TexInfo[curPicID] = texIf;
 		Hash2PicID[hash] = curPicID;
 		return curPicID++;
-	} else
+	} else {
 		return Hash2PicID[hash];
+	}
 }
 
 void ftRender::drawLine(float x1, float y1, float x2, float y2)
