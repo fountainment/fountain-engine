@@ -879,6 +879,12 @@ void Camera::setPosition(float x, float y)
 	this->y = y;
 }
 
+void Camera::setPosition(ftVec2 vec)
+{
+	this->x = vec.x;
+	this->y = vec.y;
+}
+
 void Camera::setPosition(float x, float y, float z)
 {
 	this->x = x;

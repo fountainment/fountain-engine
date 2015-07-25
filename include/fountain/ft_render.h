@@ -134,6 +134,7 @@ public:
 	Camera(float x = 0.0f, float y = 0.0f, float z = 1000.0f);
 	void update();
 	void setPosition(float x, float y);
+	void setPosition(ftVec2 vec);
 	void setPosition(float x, float y, float z);
 	ftVec2 getPosition();
 	void move(const ftVec2 & v);

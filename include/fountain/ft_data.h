@@ -125,7 +125,7 @@ public:
 class ftShape
 {
 private:
-	float data[32];
+	float data[64];
 	float r;
 	int n;
 	bool loop;
