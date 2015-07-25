@@ -107,6 +107,11 @@ FrameAnime::FrameAnime()
 
 FrameAnime::FrameAnime(ftRender::SubImagePool sip, double fps)
 {
+	init(sip, fps);
+}
+
+void FrameAnime::init(ftRender::SubImagePool sip, double fps)
+{
 	setState(-1.0);
 	curFrame = 0;
 	animeImage = sip;

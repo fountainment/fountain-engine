@@ -45,6 +45,7 @@ private:
 public:
 	FrameAnime();
 	FrameAnime(ftRender::SubImagePool sip, double fps = 60.0);
+	void init(ftRender::SubImagePool sip, double fps = 60.0);
 	void update();
 	void draw();
 };
