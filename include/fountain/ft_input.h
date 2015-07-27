@@ -35,8 +35,9 @@ class Keyboard
 {
 private:
 	int state[FT_KEYBOARDSTATE_SIZE];
-	char asciiIn;
+
 public:
+	char asciiIn;
 	Keyboard();
 	void setState(int ch, int st);
 	int getState(int ch);
