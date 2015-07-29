@@ -203,6 +203,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			PostQuitMessage(0);
 			break;
 		default:
+			if (wParam > 0 && wParam < 256) {
+				fountain::sysKeyboard.asciiIn = wParam;
+			}
 			fountain::sysKeyboard.setState(keymap
 			                               [wParam &
 			                                FT_KEYBOARDSTATE_SIZE],
