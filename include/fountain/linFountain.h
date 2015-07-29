@@ -251,6 +251,9 @@ int main(int argc, char **argv)
 					fountain::sysKeyboard.
 					setState(keymap[keycodeSym],
 					         FT_KeyUp);
+					if (keycodeSym > 0 && keycodeSym < 256) {
+						fountain::sysKeyboard.asciiIn = keycodeSym;
+					}
 				}
 			}
 			break;

@@ -143,6 +143,11 @@ int FontMan::drawString(const std::vector<unsigned long> & s)
 	FT_Int previous = 0;
 	FT_UInt glyphIndex;
 	for (unsigned i = 0; i < s.size(); i++) {
+		if (s[i] == '\n') {
+			pen.y -= getFontSize();
+			pen.x = 0;
+			continue;
+		}
 		charInfo ch = unicode2charInfo[s[i]];
 		ftRender::SubImage im = unicode2SubImage[s[i]];
 		ftRender::transformBegin();

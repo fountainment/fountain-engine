@@ -16,6 +16,7 @@ using ftRender::SubImage;
 using ftRender::SubImagePool;
 using ftRender::Camera;
 using ftRender::ShaderProgram;
+using ftRender::Bitmap;
 
 static bool alive = false;
 
@@ -1146,4 +1147,65 @@ void ShaderProgram::free()
 	glDeleteProgram(program);
 	vsFile.free();
 	fsFile.free();
+}
+
+//class ftRender::Bitmap
+
+Bitmap::Bitmap()
+{
+	width = 0;
+	height = 0;
+	bits = NULL;
+	type = FT_RGB;
+}
+
+void Bitmap::free()
+{
+        if (bits) {
+                delete [] bits;
+                bits = NULL;
+        }
+}
+
+int Bitmap::getPicture()
+{
+	int res = -1;
+	if (width > 0 && height > 0) {
+		res = ftRender::getPicture(bits, width, height, type);
+	}
+	return res;
+}
+
+Bitmap ftRender::getBitmapFromScreen(int x, int y, int w, int h)
+{
+	Bitmap res;
+	if (w > 0 && h > 0) {
+		res.newImage(w, h, FT_RGBA);
+		glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, res.bits);
+	}
+	return res;
+}
+
+unsigned char Bitmap::getGray(int x, int y)
+{
+        int cy = height - y - 1;
+        return bits[cy * width * 4 + x * 4];
+}
+
+void Bitmap::setGray(int x, int y, unsigned char c)
+{
+       int cy = height - y - 1;
+       for (int i = 0; i < 3; i++) {
+               bits[cy * width * 4 + x * 4 + i] = c;
+       }
+}
+
+void Bitmap::newImage(int w, int h, int type)
+{
+        this->free();
+        bits = new unsigned char [w * h * 4];
+        for (int i = 0; i < w * h * 4; i++) bits[i] = 255;
+        this->width = w;
+        this->height = h;
+        this->type = type;
 }

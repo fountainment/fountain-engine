@@ -173,5 +173,22 @@ public:
 	void free();
 };
 
+class Bitmap
+{
+public:
+	unsigned char *bits;
+	int width;
+	int height;
+	int type;
+	Bitmap();
+	void free();
+	int getPicture();
+	unsigned char getGray(int x, int y);
+	void setGray(int x, int y, unsigned char c);
+	void newImage(int w, int h, int type);
+};
+
+Bitmap getBitmapFromScreen(int x, int y, int w, int h);
+
 }
 #endif

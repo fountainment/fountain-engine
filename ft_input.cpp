@@ -23,6 +23,7 @@ void ftInput::initPerFrame()
 	int state;
 	fountain::sysMouse.setState(FT_ScrollUp, 0);
 	fountain::sysMouse.setState(FT_ScrollDown, 0);
+	fountain::sysKeyboard.asciiIn = 0;
 	while (!buttonChangeList.empty()) {
 		tmp = buttonChangeList.top();
 		state = fountain::sysMouse.getState(tmp);
@@ -110,6 +111,11 @@ void Keyboard::setState(int ch, int st)
 int Keyboard::getState(int ch)
 {
 	return state[ch];
+}
+
+char Keyboard::getAsciiInput()
+{
+        return asciiIn;
 }
 
 void Keyboard::clearState()
