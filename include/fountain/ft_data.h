@@ -189,6 +189,8 @@ public:
 	ftVec2 getPosition();
 	void setAngle(float agl);
 	float getAngle();
+	void setScale(float scl);
+	float getScale();
 	void setRectSize(const ftVec2 & rts);
 	void setRectSize(float x, float y);
 	ftVec2 getRectSize();

@@ -526,6 +526,16 @@ float ftSprite::getAngle()
 	return angle;
 }
 
+void ftSprite::setScale(float scl)
+{
+	scale = scl;
+}
+
+float ftSprite::getScale()
+{
+	return scale;
+}
+
 void ftSprite::setRectSize(const ftVec2 & rts)
 {
 	rectSize = rts;

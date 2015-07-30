@@ -219,6 +219,25 @@ void ftRender::transformBegin()
 	glPushMatrix();
 }
 
+void ftRender::transformBegin(float x, float y, float degree, float scale, ftColor c)
+{
+	ftRender::useColor(c);
+	ftRender::transformBegin();
+	ftRender::ftTranslate(x, y);
+	ftRender::ftRotate(0, 0, degree);
+	ftRender::ftScale(scale);
+}
+
+void ftRender::transformBegin(ftVec2 pos, float degree, float scale, ftColor c)
+{
+	ftRender::transformBegin(pos.x, pos.y, degree, scale, c);
+}
+
+void ftRender::transformBegin(ftSprite *sprite)
+{
+	ftRender::transformBegin(sprite->getPosition(), sprite->getAngle(), sprite->getScale(), sprite->getColor());
+}
+
 void ftRender::transformEnd()
 {
 	glPopMatrix();
@@ -833,15 +852,6 @@ void ftRender::drawImage(SubImage & im)
 	glDisable(GL_BLEND);
 
 	disableTexture2D();
-}
-
-void ftRender::transformBegin(float x, float y, float degree, float scale, ftColor c)
-{
-	ftRender::useColor(c);
-	ftRender::transformBegin();
-	ftRender::ftTranslate(x, y);
-	ftRender::ftRotate(0, 0, degree);
-	ftRender::ftScale(scale);
 }
 
 void ftRender::drawImage(SubImage & im, float x, float y, float degree, float scale, ftColor c)
