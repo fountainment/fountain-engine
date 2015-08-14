@@ -2,45 +2,47 @@
 #include "const.h"
 #include <cmath>
 
-fim::segment::segment()
+using fim::segment;
+
+segment::segment()
 {
 }
 
-fim::segment::segment(fim::vec2 pa, fim::vec2 pb)
+segment::segment(fim::vec2 pa, fim::vec2 pb)
 :a(pa),
  b(pb)
 {
 }
 
-void fim::segment::swapAB()
+void segment::swapAB()
 {
 	vec2 tmp = a;
 	a = b;
 	b = tmp;
 }
 
-const fim::vec2 fim::segment::getVector() const
+const fim::vec2 segment::getVector() const
 {
 	return (b - a);
 }
 
-double fim::segment::length() const
+double segment::length() const
 {
 	return getVector().length();
 }
 
-bool fim::segment::rectCollidePoint(const fim::vec2 & p) const
+bool segment::rectCollidePoint(const fim::vec2 & p) const
 {
 	return ((p.x - a.x) * (p.x - b.x) <= 0
 		&& (p.y - a.y) * (p.y - b.y) <= 0);
 }
 
-bool fim::segment::collidePoint(const fim::vec2 & p) const
+bool segment::collidePoint(const fim::vec2 & p) const
 {
 	return (std::abs((p - a).crossProduct(b - a)) < fim::eps) && rectCollidePoint(p);
 }
 
-bool fim::segment::collideSegment(vec2 & pt, const segment & seg) const
+bool segment::collideSegment(vec2 & pt, const segment & seg) const
 {
 	fim::vec2 pa(a), pb(b), pc(seg.a), pd(seg.b), intersection;
 	intersection.x = ((pb.x - pa.x) * (pc.x - pd.x) * (pc.y - pa.y) -
@@ -57,7 +59,7 @@ bool fim::segment::collideSegment(vec2 & pt, const segment & seg) const
 	}
 }
 
-bool fim::segment::collideRay(vec2 & pt, const vec2 & src, const vec2 & drct)
+bool segment::collideRay(vec2 & pt, const vec2 & src, const vec2 & drct)
 {
 	fim::vec2 pa(a), pb(b), pc(src), pd(src + drct), intersection;
 	intersection.x = ((pb.x - pa.x) * (pc.x - pd.x) * (pc.y - pa.y) -
@@ -74,7 +76,7 @@ bool fim::segment::collideRay(vec2 & pt, const vec2 & src, const vec2 & drct)
 	}
 }
 
-int fim::segment::leftOrRight(const fim::vec2 & pt) const
+int segment::leftOrRight(const fim::vec2 & pt) const
 {
 	int ans = 0;
 	fim::vec2 vec = getVector();

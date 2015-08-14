@@ -2,9 +2,13 @@
 #include <algorithm>
 #include <iostream>
 
-fim::PolygonList fim::Polygon::convexDecomposition()
+using fim::Polygon;
+using fim::PolygonList;
+using fim::PolygonQueue;
+
+PolygonList Polygon::convexDecomposition()
 {
-	fim::PolygonList res;
+	PolygonList res;
 	fim::PolygonQueue processQueue;
 	processQueue.push(regular());
 	while(!processQueue.empty()) {
@@ -31,9 +35,9 @@ fim::PolygonList fim::Polygon::convexDecomposition()
 	return res;
 }
 
-const fim::Polygon fim::Polygon::regular()
+const Polygon Polygon::regular()
 {
-	fim::Polygon res;
+	Polygon res;
 	for (int i = 0; i < (int)size(); i++) {
 		if (getPoint(i) != getPoint(i - 1)
 		&& getVector(i).normalize() != getVector(i - 1).normalize()) {
@@ -43,7 +47,7 @@ const fim::Polygon fim::Polygon::regular()
 	return res;
 }
 
-void fim::Polygon::print()
+void Polygon::print()
 {
 	std::cout << size() << std::endl;
 	for (auto it = begin(); it != end(); ++it) {
@@ -51,13 +55,13 @@ void fim::Polygon::print()
 	}
 }
 
-int fim::Polygon::indexNormalize(int index)
+int Polygon::indexNormalize(int index)
 {
 	int sz = (int)size();
 	return ((index % sz) + sz) % sz;
 }
 
-int fim::Polygon::insertPoint(const vec2 & p)
+int Polygon::insertPoint(const vec2 & p)
 {
 	int ans = 0;
 	fim::vec2 lastVec;
@@ -76,23 +80,23 @@ int fim::Polygon::insertPoint(const vec2 & p)
 	return ans;
 }
 
-const fim::vec2 fim::Polygon::getPoint(int index)
+const fim::vec2 Polygon::getPoint(int index)
 {
 	index = indexNormalize(index);
 	return (*this)[index];
 }
 
-const fim::vec2 fim::Polygon::getVector(int index)
+const fim::vec2 Polygon::getVector(int index)
 {
 	return getPoint(index + 1) - getPoint(index);
 }
 
-const fim::segment fim::Polygon::getSegment(int index)
+const fim::segment Polygon::getSegment(int index)
 {
 	return fim::segment(getPoint(index), getPoint(index + 1));
 }
 
-int fim::Polygon::minDistanceOfTwoPoint(int pa, int pb)
+int Polygon::minDistanceOfTwoPoint(int pa, int pb)
 {
 	int ans = pa - pb;
 	int sz = size();
@@ -101,7 +105,7 @@ int fim::Polygon::minDistanceOfTwoPoint(int pa, int pb)
 	return ans;
 }
 
-bool fim::Polygon::isConcavePoint(int index)
+bool Polygon::isConcavePoint(int index)
 {
 	auto prev = getVector(index - 1);
 	auto cur = getVector(index);
@@ -110,7 +114,7 @@ bool fim::Polygon::isConcavePoint(int index)
 	else return false;
 }
 
-int fim::Polygon::getConcavePoint()
+int Polygon::getConcavePoint()
 {
 	int ans = -1;
 	int sz = (int)size();
@@ -129,7 +133,7 @@ bool cmpDistanceToSrc(const fim::vec2 & a, const fim::vec2 & b)
 	return (a - raySrc).length() < (b - raySrc).length();
 }
 
-fim::Point2List fim::Polygon::collideRay(const fim::vec2 & src, const fim::vec2 & drct)
+fim::Point2List Polygon::collideRay(const fim::vec2 & src, const fim::vec2 & drct)
 {
 	fim::Point2List res;
 	fim::Point2List uniqueRes;
@@ -151,7 +155,7 @@ fim::Point2List fim::Polygon::collideRay(const fim::vec2 & src, const fim::vec2 
 	return uniqueRes;
 }
 
-bool fim::Polygon::isBetterPoint(int ccPoint, int pa, int pb)
+bool Polygon::isBetterPoint(int ccPoint, int pa, int pb)
 {
 	if (pb == -1) return true;
 	if (minDistanceOfTwoPoint(pa, ccPoint) < 
@@ -161,7 +165,7 @@ bool fim::Polygon::isBetterPoint(int ccPoint, int pa, int pb)
 	return false;
 }
 
-fim::IndexList fim::Polygon::getVisiblePointIndex(int ccPoint)
+fim::IndexList Polygon::getVisiblePointIndex(int ccPoint)
 {
 	fim::IndexList res;
 	auto left = getSegment(ccPoint);
@@ -186,7 +190,7 @@ fim::IndexList fim::Polygon::getVisiblePointIndex(int ccPoint)
 	return res;
 }
 
-int fim::Polygon::getBestPointIndex(int ccPoint)
+int Polygon::getBestPointIndex(int ccPoint)
 {
 	int index = -1;
 	int state = 0;
@@ -209,10 +213,10 @@ int fim::Polygon::getBestPointIndex(int ccPoint)
 	return index;
 }
 
-fim::PolygonList fim::Polygon::cutPolygon(int ccPoint, int anoPoint)
+PolygonList Polygon::cutPolygon(int ccPoint, int anoPoint)
 {
-	fim::PolygonList res;
-	fim::Polygon tmp;
+	PolygonList res;
+	Polygon tmp;
 	int cur = anoPoint;
 	tmp.push_back(getPoint(ccPoint));
 	tmp.push_back(getPoint(anoPoint));
@@ -235,9 +239,9 @@ fim::PolygonList fim::Polygon::cutPolygon(int ccPoint, int anoPoint)
 	return res;
 }
 
-fim::PolygonList fim::Polygon::cutPolygon(int ccPoint)
+PolygonList Polygon::cutPolygon(int ccPoint)
 {
-	fim::PolygonList res;
+	PolygonList res;
 	int best = getBestPointIndex(ccPoint);
 	if (best != -1) {
 		return cutPolygon(ccPoint, best);
