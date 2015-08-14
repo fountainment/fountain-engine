@@ -22,8 +22,8 @@ void ft3DModel::close()
 
 ObjModel::ObjModel()
 {
-	vtx = NULL;
-	vtxN = NULL;
+	glGenBuffers(1, &vboV);
+	glGenBuffers(1, &vboN);
 }
 
 ObjModel::ObjModel(const char *fileName)
@@ -33,18 +33,14 @@ ObjModel::ObjModel(const char *fileName)
 
 ObjModel::~ObjModel()
 {
-	if (vtx != NULL) {
-		delete [] vtx;
-		vtx = NULL;
-	}
-	if (vtxN != NULL) {
-		delete [] vtxN;
-		vtxN = NULL;
-	}
+	glDeleteBuffers(1, &vboV);
+	glDeleteBuffers(1, &vboN);
 }
 
 void ObjModel::loadObj(const char *fileName, bool smooth)
 {
+	GLfloat (*vtx)[3] = NULL;
+	GLfloat (*vtxN)[3] = NULL;
 	char tmp[10];
 	int tmpInt;
 	std::vector<ftVec3> v, vn;
@@ -98,8 +94,8 @@ void ObjModel::loadObj(const char *fileName, bool smooth)
 			        && tmp[0] != '\n');
 		}
 		std::fclose(objFile);
-		vtx = new float[indexN * 3][3];
-		vtxN = new float[indexN * 3][3];
+		vtx = new GLfloat[indexN * 3][3];
+		vtxN = new GLfloat[indexN * 3][3];
 		std::map<ftVec3, ftVec3> mapVertex2Normal;
 		std::map<ftVec3, int> mapVertex2NormalNum;
 		for (int tri = 0; tri < indexN; tri++) {
@@ -125,17 +121,41 @@ void ObjModel::loadObj(const char *fileName, bool smooth)
 	} else {
 		FT_OUT("Open \"%s\" error!\n", fileName);
 	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboV);
+	glBufferData(GL_ARRAY_BUFFER, indexN * 9 * sizeof(GLfloat), vtx, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, vboN);
+	glBufferData(GL_ARRAY_BUFFER, indexN * 9 * sizeof(GLfloat), vtxN, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	if (vtx != NULL) {
+		delete [] vtx;
+		vtx = NULL;
+	}
+	if (vtxN != NULL) {
+		delete [] vtxN;
+		vtxN = NULL;
+	}
 }
 
 void ObjModel::render()
 {
 	glEnable(GL_DEPTH_TEST);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboV);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboN);
 	glEnableClientState(GL_NORMAL_ARRAY);
-	glVertexPointer(3, GL_FLOAT, 0, vtx);
-	glNormalPointer(GL_FLOAT, 0, vtxN);
+	glNormalPointer(GL_FLOAT, 0, 0);
+
 	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);
+
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 	glDisable(GL_DEPTH_TEST);
 }

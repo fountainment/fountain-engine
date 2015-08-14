@@ -1,6 +1,8 @@
 #ifndef _FT_3DMODEL_
 #define _FT_3DMODEL_
 
+#include <GL/glew.h>
+
 namespace ft3DModel {
 
 bool init();
@@ -11,8 +13,8 @@ class ObjModel
 private:
 	int vecN;
 	int indexN;
-	float (*vtx)[3];
-	float (*vtxN)[3];
+	GLuint vboV;
+	GLuint vboN;
 public:
 	ObjModel();
 	explicit ObjModel(const char *fileName);

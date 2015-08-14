@@ -232,7 +232,7 @@ void ModelScene::customInit()
 {
 	modelCamera = ftRender::Camera(0, 0, 1000);
 	modelCamera.setProjectionType(FT_PERSPECTIVE);
-	x.loadObj("resources/model/first.obj");
+	x.loadObj("resources/model/teapot.obj");
 	lightSP.load("resources/shader/vs.vert", "resources/shader/model.frag");
 	lightSP.init();
 	rx = ry = 0;
@@ -253,7 +253,7 @@ void ModelScene::customDraw()
 	lightSP.use();
 	ftRender::useColor(FT_White);
 	ftRender::transformBegin();
-	ftRender::ftScale(150.0f);
+	ftRender::ftScale(220.0f);
 	ftRender::ftRotate(rx, ry, 0);
 	x.render();
 	ftRender::transformEnd();
@@ -430,7 +430,7 @@ void ShaderScene::customInit()
 		{"效果1", "效果2", "效果3", "高斯模糊", "法线贴图", "曼德博集", "立方贴图"},
 		{"star", "wave", "smoke", "blur", "normal", "mandelbrot", "cubemap"}
 	};
-	teaPot.loadObj("resources/model/first.obj", true);
+	teaPot.loadObj("resources/model/teapot.obj", true);
 	rx = ry = 0;
 	scale = 150.0f;
 	observePos = ftVec2(0.0, 0.0);
@@ -518,7 +518,7 @@ void ShaderScene::customDraw()
 		camera->update();
 		sp[6].setTexture("cubeTex", ftRender::getPicture("resources/image/cube.png", true));
 		ftRender::transformBegin();
-		ftRender::ftScale(150.0);
+		ftRender::ftScale(220);
 		ftRender::ftRotate(rx, ry, 0);
 		teaPot.render();
 		ftRender::transformEnd();
