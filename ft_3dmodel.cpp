@@ -142,12 +142,13 @@ void ObjModel::render()
 {
 	glEnable(GL_DEPTH_TEST);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vboV);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboV);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vboN);
-	glEnableClientState(GL_NORMAL_ARRAY);
 	glNormalPointer(GL_FLOAT, 0, 0);
 
 	glDrawArrays(GL_TRIANGLES, 0, indexN * 3);

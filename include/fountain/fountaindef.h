@@ -1,8 +1,8 @@
 #ifndef _FOUNTAINDEF_H_
 #define _FOUNTAINDEF_H_
 
-#define FOUNTAIN_VERSION "0.052"
-#define FOUNTAIN_VERSION_NUM 0.052
+#define FOUNTAIN_VERSION "0.070"
+#define FOUNTAIN_VERSION_NUM 0.070
 
 #define FT_LButton 1
 #define FT_MButton 2

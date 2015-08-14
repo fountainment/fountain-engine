@@ -232,7 +232,7 @@ void ModelScene::customInit()
 {
 	modelCamera = ftRender::Camera(0, 0, 1000);
 	modelCamera.setProjectionType(FT_PERSPECTIVE);
-	x.loadObj("resources/model/teapot.obj");
+	x.loadObj("resources/model/teapot.obj", true);
 	lightSP.load("resources/shader/vs.vert", "resources/shader/model.frag");
 	lightSP.init();
 	rx = ry = 0;
