@@ -828,22 +828,18 @@ bool ftFile::load(const char *filename)
 {
 	free();
 	std::strcpy(name, filename);
-	std::FILE *f = std::fopen(filename, "r");
+	std::FILE *f = std::fopen(filename, "rb");
 	int length;
-	int index = 0;
 	char tmpChar;
 	if (f != NULL) {
 		std::fseek(f, 0, SEEK_END);
 		length = std::ftell(f);
 		str = new char[length + 1];
-		std::fseek(f, 0, SEEK_SET);
-		while (std::fscanf(f, "%c", &tmpChar) != EOF) {
-			str[index] = tmpChar;
-			index++;
-		}
-		str[index] = '\0';
+		std::rewind(f);
+		std::fread(str, 1, length, f);
+		str[length] = '\0';
 		std::fclose(f);
-		FT_OUT("%s: size %d\n", filename, index);
+		FT_OUT("%s: size %d\n", filename, length);
 		return true;
 	} else {
 		FT_ERROR("ftData: Loading \"%s\": File not found!\n", filename);
