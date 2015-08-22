@@ -830,7 +830,6 @@ bool ftFile::load(const char *filename)
 	std::strcpy(name, filename);
 	std::FILE *f = std::fopen(filename, "rb");
 	int length;
-	char tmpChar;
 	if (f != NULL) {
 		std::fseek(f, 0, SEEK_END);
 		length = std::ftell(f);
