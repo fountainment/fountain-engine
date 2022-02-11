@@ -41,8 +41,3 @@ Box2D
 OpenAL
 
 Xlib(Linux)
-
-Our Site
-========
-
-http://www.fountainment.com/
